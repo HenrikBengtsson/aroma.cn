@@ -1,0 +1,80 @@
+Package: aroma.cn
+=================
+
+Version: 0.3.0x [2009-05-17]
+o ROBUSTNESS: Now all constructors report on unknown arguments.
+o ROBUSTNESS: Now MultiSourceCopyNumberNormalization first write
+  normalized data to a temporary file, which is then renamed. This
+  lower the risk for having incomplete data in case of interrupts.
+o Now getOutputDataSets() of  MultiSourceCopyNumberNormalization only
+  returns output data files with a matching fullname in the input set.
+o Added argument 'alignByChromosomes' to MultiSourceCopyNumberNormalization.
+  If TRUE, the signals are shifted per chromosome such that the mean 
+  of the normalized smoothed signals is the same for all sources.
+  This can for instance remove systematic effects on sex chromosomes
+  added by some ad hoc preprocessing methods.
+o Added a clearCache() to MultiSourceCopyNumberNormalization.
+o ALPHA: Added TumorBoostNormalization.
+o INTERNAL: Added foundations for TumorBoost, i.e. in 
+  memory classes such as TotalAndFracBSnpData.
+o INTERNAL: Added findPeaksAndValleys().
+o BUG FIX: Added missing argument 'verbose' in getTargetPositions() of
+  TotalCnSmoothing.  This caused unwanted verbose output in some cases.
+o BUG FIX: process() of TotalCnSmoothing would not "recognize" fullname
+  translators, that is, the output filenames were always identical to 
+  the input ones.
+
+
+Version: 0.2.2 [2009-02-23]
+o Minor update in order to work with new RawGenomicSignals.
+
+
+Version: 0.2.1 [2009-02-12]
+o Added redundancy tests to package.
+o Further cleanup.  Some functions are now in aroma.light.
+
+
+Version: 0.2.0 [2009-01-26]
+o Adopted the package to the new classes of aroma.core.
+o Several classes and methods were moved to aroma.core v1.0.0.
+o {fit|backtransform}PrincipalCurve() were moved to aroma.light v1.11.1.
+
+
+Version: 0.1.7 [2008-10-07]
+o ALPHA: Added backtransformPrincipalCurve().
+
+
+Version: 0.1.6 [2008-08-18]
+o Added alpha version of MultiSourceCopyNumberNormalization.
+
+
+Version: 0.1.5 [2008-07-30]
+o Fixed some broken cross links in the Rd help.
+  Package pass R CMD check on R v2.7.1 and v2.8.0.
+
+
+Version: 0.1.4 [2008-06-12]
+o Now extractRawCopyNumbers() of AromaTotalCnBinaryFile adds 
+  annotation data fields to the returned object, e.g. platform, 
+  chipType, and the fullname of the source file.
+
+
+Version: 0.1.3 [2008-05-28]
+o ALPHA: Added normalizePrincipalCurve() and fitPrincipalCurve().
+
+
+Version: 0.1.2 [2008-05-22]
+o ALPHA: Added extractRawCopyNumbers() to AromaTotalCnBinaryFile.
+o ALPHA: Added TotalCnSmoothing.
+
+
+Version: 0.1.1 [2008-05-18]
+o Package now provides platform-independent classes 
+  Aroma{Total|FreqB}CnSignal{File|Set}.   With the more generalized
+  aroma.core package, it is now possible retrieve the AromaUgpFile
+  for the above.  This provides the necessary basic methods for 
+  plotting data along chromosomes.
+
+
+Version: 0.1.0 [2008-05-09]
+o Created.

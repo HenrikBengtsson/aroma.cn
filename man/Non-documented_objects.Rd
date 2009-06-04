@@ -1,0 +1,123 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Do not modify this file since it was automatically generated from:
+% 
+%  999.NonDocumentedObjects.R
+% 
+% by the Rdoc compiler part of the R.oo package.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\name{Non-documented objects}
+\alias{Non-documented objects}
+\title{Non-documented objects}
+
+
+% Other missing docs
+\alias{as.character.MultiSourceCopyNumberNormalization}
+\alias{extractTupleOfDataFiles}
+\alias{fitOne}
+\alias{getAllNames}
+\alias{getAsteriskTags.TotalCnSmoothing}
+\alias{getFitAromaUgpFile}
+\alias{getInputDataSets}
+\alias{getOutputDataSets}
+\alias{getOutputDataSets.MultiSourceCopyNumberNormalization}
+\alias{getOutputFiles.TotalCnSmoothing}
+\alias{getOutputPaths}
+\alias{getOutputPaths.MultiSourceCopyNumberNormalization}
+\alias{getParameters.MultiSourceCopyNumberNormalization}
+\alias{getParameters.TotalCnSmoothing}
+\alias{getParametersAsString.MultiSourceCopyNumberNormalization}
+\alias{getPath.TotalCnSmoothing}
+\alias{getRootPath.TotalCnSmoothing}
+\alias{getSmoothedDataSets}
+\alias{getSubsetToFit}
+\alias{getTargetPositions}
+\alias{getTargetPositions.TotalCnSmoothing}
+\alias{getTargetUgpFile}
+\alias{getTargetUgpFile.TotalCnSmoothing}
+\alias{makeSmoothSplinePredict}
+\alias{makeSmoothSplinePredict.numeric}
+\alias{nbrOfDataSets}
+\alias{nbrOfDataSets.MultiSourceCopyNumberNormalization}
+\alias{normalizeOne}
+\alias{normalizeOne.MultiSourceCopyNumberNormalization}
+\alias{normalizePrincipalCurve}
+\alias{normalizePrincipalCurve.matrix}
+\alias{pairs2}
+\alias{pairs2.principal.curve}
+\alias{process.TotalCnSmoothing}
+\alias{getAsteriskTags.TotalCnKernelSmoothing}
+\alias{getParameters.TotalCnKernelSmoothing}
+\alias{smoothRawCopyNumbers}
+\alias{smoothRawCopyNumbers.TotalCnKernelSmoothing}
+\alias{smoothRawCopyNumbers.TotalCnSmoothing}
+\alias{asCartesianSnpData}
+\alias{asCartesianSnpData.CartesianSnpData}
+\alias{asCartesianSnpData.PolarSnpData}
+\alias{asCartesianSnpData.TotalFracBSnpData}
+\alias{asPolarSnpData}
+\alias{asPolarSnpData.CartesianSnpData}
+\alias{asPolarSnpData.PolarSnpData}
+\alias{asPolarSnpData.TotalFracBSnpData}
+\alias{asTotalFracBSnpData}
+\alias{asTotalFracBSnpData.CartesianSnpData}
+\alias{asTotalFracBSnpData.PolarSnpData}
+\alias{asTotalFracBSnpData.TotalFracBSnpData}
+\alias{callGenotypes}
+\alias{callGenotypes.SnpData}
+\alias{callGenotypes.TotalFracBSnpData}
+\alias{CartesianSnpData}
+\alias{findPeaksAndValleys}
+\alias{findPeaksAndValleys.numeric}
+\alias{pairedBoost}
+\alias{pairedBoost.CartesianSnpData}
+\alias{pairedBoost.PolarSnpData}
+\alias{pairedBoost.TotalFracBSnpData}
+\alias{plot.CartesianSnpData}
+\alias{plot.PolarSnpData}
+\alias{plot.SnpData}
+\alias{plot.TotalFracBSnpData}
+\alias{PolarSnpData}
+\alias{SnpData}
+\alias{TotalFracBSnpData}
+\alias{as.character.TumorBoostNormalization}
+\alias{getDataSets}
+\alias{getDataSets.TumorBoostNormalization}
+\alias{getInputDataSet.TumorBoostNormalization}
+\alias{getNormalDataSet}
+\alias{getNormalDataSet.TumorBoostNormalization}
+\alias{getNormalGenotypeCallSet}
+\alias{getNormalGenotypeCallSet.TumorBoostNormalization}
+\alias{getOutputDataSet.TumorBoostNormalization}
+\alias{getOutputPath}
+\alias{getOutputPath.TumorBoostNormalization}
+\alias{getRootPath.TumorBoostNormalization}
+\alias{nbrOfFiles.TumorBoostNormalization}
+\alias{process.TumorBoostNormalization}
+\alias{getAsteriskTags.TumorBoostNormalization}
+\alias{getFullName.TumorBoostNormalization}
+\alias{getName.TumorBoostNormalization}
+\alias{getPath.TumorBoostNormalization}
+\alias{getTags.TumorBoostNormalization}
+\alias{setTags.TumorBoostNormalization}
+\alias{getAsteriskTags.MultiSourceCopyNumberNormalization}
+\alias{getTags.MultiSourceCopyNumberNormalization}
+\alias{clearCache.MultiSourceCopyNumberNormalization}
+
+\description{
+  This page contains aliases for all "non-documented" objects that
+  \code{R CMD check} detects in this package.
+
+  Almost all of them are \emph{generic} functions that have specific
+  document for the corresponding method coupled to a specific class.
+  Other functions are re-defined by \code{setMethodS3()} to
+  \emph{default} methods. Neither of these two classes are non-documented
+  in reality.
+  The rest are deprecated methods.
+}
+
+\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+
+
+\keyword{documentation}
+\keyword{internal}
