@@ -1,7 +1,7 @@
 Package: aroma.cn
 =================
 
-Version: 0.3.0x [2009-05-17]
+Version: 0.3.0 [2009-05-29]
 o ROBUSTNESS: Now all constructors report on unknown arguments.
 o ROBUSTNESS: Now MultiSourceCopyNumberNormalization first write
   normalized data to a temporary file, which is then renamed. This
@@ -23,6 +23,7 @@ o BUG FIX: Added missing argument 'verbose' in getTargetPositions() of
 o BUG FIX: process() of TotalCnSmoothing would not "recognize" fullname
   translators, that is, the output filenames were always identical to 
   the input ones.
+o Package pass R CMD check and all redundancy tests.
 
 
 Version: 0.2.2 [2009-02-23]
