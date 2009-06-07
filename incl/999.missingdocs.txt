@@ -1,4 +1,4 @@
-  as.character.MultiSourceCopyNumberNormalization
+ as.character.MultiSourceCopyNumberNormalization
   extractTupleOfDataFiles fitOne getAllNames
   getAsteriskTags.TotalCnSmoothing getFitAromaUgpFile getInputDataSets
   getOutputDataSets
