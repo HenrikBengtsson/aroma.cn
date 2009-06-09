@@ -35,13 +35,15 @@ dsN <- extract(dsPair, 2);
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the normalized tumor data set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-dsTN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags="TBN", chipType="*", paths=rootPath);
+dsTN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags="TBN,NGC", chipType="*", paths=rootPath);
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the genotype call set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-gsN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags="Birdseed", chipType="*", paths=rootPath);
+genotypeTag <- "NGC";
+gsN <- AromaUnitGenotypeCallSet$byName(dataSet, tags=genotypeTag, chipType="*");
+print(gsN);
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -62,55 +64,21 @@ dsList <- lapply(dsList, FUN=function(ds) {
 # Plot the data
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ugp <- getAromaUgpFile(dsList$tumor);
-chromosome <- 1;
-units <- getUnitsOnChromosome(ugp, chromosome=chromosome);
+units <- getUnitsOnChromosome(ugp, 17);
 pos <- getPositions(ugp, units=units);
 
 
 kk <- 1;
 dfList <- lapply(dsList, FUN=getFile, kk);
-idx <- grep("callsN", names(dfList));
-cf <- dfList[[idx]];
-dfList <- dfList[-idx];
-callsN <- cf[units,1,drop=TRUE];
+beta <- lapply(dfList, FUN=function(df) df[units,1,drop=TRUE]);
+beta <- as.data.frame(beta);
+beta <- as.matrix(beta);
 
-# Stratify on heterozygote normal genotypes
-isHet <- whichVector(callsN == 1/2);
-
-fracBList <- lapply(dfList, FUN=function(df) {
-  y <- df[units,1,drop=TRUE];
-  RawAlleleBFractions(y, x=pos, chromosome=chromosome);
-});
-print(fracBList);
-
-
-devSet("fracB");
-subplots(length(fracBList), ncol=1);
+subplots(ncol(beta)-1, ncol=1);
 par(mar=c(3,3,1,1)+0.1);
-cols <- as.integer(1+2*callsN[isHet]);
-for (kk in seq(along=fracBList)) {
-  fracB <- fracBList[[kk]];
-  fracBT <- extractSubset(fracB, subset=isHet);
-  plot(fracBT, pch=".", col=cols);
-  stext(side=3, pos=1, names(fracBList)[kk]);
-} # for (kk ...)
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# Mirrored and stratified allele B fractions for LOH analysis
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-devSet("mFracB");
-subplots(length(fracBList), ncol=1);
-par(mar=c(3,3,1,1)+0.1);
-cols <- as.integer(1+2*callsN[isHet]);
-for (kk in seq(along=fracBList)) {
-  fracB <- fracBList[[kk]];
-  fracBT <- extractSubset(fracB, subset=isHet);
-  mFracBT <- extractRawMirroredAlleleBFractions(fracBT);
-  plot(mFracBT, pch=".", ylim=c(0,0.6), col=cols);
-  stext(side=3, pos=1, names(fracBList)[kk]);
-  fit <- segmentByCBS(mFracBT);
-  cnr <- extractCopyNumberRegions(fit);
-  drawLevels(cnr, col="black");
-} # for (kk ...)
-
+ylim <- c(-0.1,1.1);
+cols <- as.integer(1+2*beta[,"callsN"]);
+for (cc in 1:(ncol(beta)-1)) {
+  plot(pos, beta[,cc], pch=".", col=cols, ylim=ylim);
+  stext(side=3, pos=1, colnames(beta)[cc]);
+}

@@ -35,13 +35,15 @@ dsN <- extract(dsPair, 2);
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the normalized tumor data set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-dsTN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags="TBN,Birdseed", chipType="*", paths=rootPath);
+genotypeTag <- "Birdseed";
+dsTN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags=c("TBN", genotypeTag), chipType="*", paths=rootPath);
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the genotype call set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-gsN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags="Birdseed", chipType="*", paths=rootPath);
+gsN <- AromaUnitGenotypeCallSet$byName(dataSet, tags="Birdseed", chipType="*");
+print(gsN);
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -68,30 +70,31 @@ pos <- getPositions(ugp, units=units);
 
 
 kk <- 1;
+
+# Extract files of interest
 dfList <- lapply(dsList, FUN=getFile, kk);
-idx <- grep("callsN", names(dfList));
-cf <- dfList[[idx]];
-dfList <- dfList[-idx];
-callsN <- cf[units,1,drop=TRUE];
+gf <- dfList[[4]];
+dfList <- dfList[-4];
 
 # Stratify on heterozygote normal genotypes
-isHet <- whichVector(callsN == 1/2);
+hets <- whichVector(isHeterozygote(gf, units=units, drop=TRUE));
 
 fracBList <- lapply(dfList, FUN=function(df) {
   y <- df[units,1,drop=TRUE];
   RawAlleleBFractions(y, x=pos, chromosome=chromosome);
 });
+names(fracBList)[3] <- sprintf("%s (normalized using %s calls)", names(fracBList)[3], genotypeTag);
 print(fracBList);
 
 
-devSet("fracB");
+devSet(sprintf("fracB,%s", genotypeTag));
 subplots(length(fracBList), ncol=1);
 par(mar=c(3,3,1,1)+0.1);
-cols <- as.integer(1+2*callsN[isHet]);
 for (kk in seq(along=fracBList)) {
   fracB <- fracBList[[kk]];
-  fracBT <- extractSubset(fracB, subset=isHet);
-  plot(fracBT, pch=".", col=cols);
+  fracBT <- extractSubset(fracB, subset=hets);
+  plot(fracBT, pch=".");
+  stext(side=3, pos=0, "Heterozygote loci according to Birdseed");
   stext(side=3, pos=1, names(fracBList)[kk]);
 } # for (kk ...)
 
@@ -99,17 +102,18 @@ for (kk in seq(along=fracBList)) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Mirrored and stratified allele B fractions for LOH analysis
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-devSet("mFracB");
+devSet(sprintf("mFracB,%s", genotypeTag));
 subplots(length(fracBList), ncol=1);
 par(mar=c(3,3,1,1)+0.1);
-cols <- as.integer(1+2*callsN[isHet]);
 for (kk in seq(along=fracBList)) {
   fracB <- fracBList[[kk]];
-  fracBT <- extractSubset(fracB, subset=isHet);
+  fracBT <- extractSubset(fracB, subset=hets);
   mFracBT <- extractRawMirroredAlleleBFractions(fracBT);
-  plot(mFracBT, pch=".", ylim=c(0,0.6), col=cols);
+  plot(mFracBT, pch=".", ylim=c(0,0.6));
+  stext(side=3, pos=0, "Heterozygote loci according to Birdseed");
   stext(side=3, pos=1, names(fracBList)[kk]);
   fit <- segmentByCBS(mFracBT);
   cnr <- extractCopyNumberRegions(fit);
-  drawLevels(cnr, col="black");
+  drawLevels(cnr, col="red", lwd=3);
 } # for (kk ...)
+

@@ -33,7 +33,7 @@ print(dsN);
 rootPath <- "totalAndFracBData";
 fullname <- paste(c(getFullName(dsN), "NGC"), collapse=",");
 chipType <- getChipType(dsN, fullname=FALSE);
-outPath <- file.path(rootPath, fullname, chipType);
+outPath <- file.path("callData", fullname, chipType);
 
 units <- NULL;
 if (is.null(units)) {
@@ -54,6 +54,16 @@ is24 <- is.element(units, units24);
 
 for (kk in seq(dsN)) {
   dfN <- getFile(dsN, kk);
+
+  tags <- getTags(dfN);
+  tags <- setdiff(tags, "fracB");
+  tags <- c(tags, "genotypes");
+  fullname <- paste(c(getName(dfN), tags), collapse=",");
+  filename <- sprintf("%s.acf", fullname);
+  pathname <- Arguments$getWritablePathname(filename, path=outPath, mustNotExist=FALSE);
+  if (isFile(pathname)) {
+    next;
+  }
 
   betaN <- dfN[units,1,drop=TRUE];
   keep <- is.finite(betaN);
@@ -111,15 +121,40 @@ for (kk in seq(dsN)) {
   }
   print(table(mu, exclude=NULL));
 
-  filename <- getFilename(dfN);
-  pathname <- Arguments$getWritablePathname(filename, path=outPath);
-  file.copy(getPathname(dfN), pathname);
-  gfN <- AromaUnitFracBCnBinaryFile(pathname);
-  footer <- readFooter(dfN);
-  footer$method <- "NaiveGenotypeCaller";
-  writeFooter(dfN, footer);
+  # Translate genotype calls in fracB space to (AA,AB,BB,...)
+  calls <- rep(as.character(NA), times=length(mu));
+  calls[mu ==   0] <- "AA";
+  calls[mu == 1/2] <- "AB";
+  calls[mu ==   1] <- "BB";
+  print(table(calls, exclude=NULL));
 
-  gfN[unitsN,1] <- mu;
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Writing genotype calls (via temporary file)
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  pathnameT <- sprintf("%s.tmp", pathname);
+  nbrOfUnits <- nbrOfUnits(dfN);
+  gfN <- AromaUnitGenotypeCallFile$allocate(pathnameT, platform=getPlatform(dfN), chipType=getChipType(dfN), nbrOfRows=nbrOfUnits);
+  footer <- readFooter(gfN);
+  footer$method <- "NaiveGenotypeCaller";
+  writeFooter(gfN, footer);
+  rm(footer);
+
+  updateGenotypes(gfN, units=unitsN, calls=calls);
+  rm(unitsN, calls);
+
+  res <- file.rename(pathnameT, pathname);
+  if (!isFile(pathname)) {
+    throw("Failed to rename temporary file: ", pathnameT, " -> ", pathname);
+  }
+  if (isFile(pathnameT)) {
+    throw("Failed to rename temporary file: ", pathnameT, " -> ", pathname);
+  }
+  rm(pathnameT);
+
+  gfN <- AromaUnitGenotypeCallFile(pathname);
+  print(gfN);
 } # for (kk ...)
-gcN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags="NGC", chipType="*", paths=rootPath);
+
+gcN <- AromaUnitGenotypeCallSet$byName(dataSet, tags="NGC", chipType="*");
 print(gcN);

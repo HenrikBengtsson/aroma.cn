@@ -35,9 +35,9 @@ dsN <- extract(dsPair, 2);
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the genotype call set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-gsN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags="NGC", chipType="*", paths=rootPath);
+genotypeTag <- "NGC";
+gsN <- AromaUnitGenotypeCallSet$byName(dataSet, tags=genotypeTag, chipType="*");
 print(gsN);
-
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -58,6 +58,6 @@ print(dsList);
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Normalize allele B fractions for tumors given matched normals
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-tbn <- TumorBoostNormalization(dsList$tumor, dsList$normal, gcN=dsList$callsN);
+tbn <- TumorBoostNormalization(dsList$tumor, dsList$normal, gcN=dsList$callsN, tags=c("*", genotypeTag));
 dsTN <- process(tbn, verbose=log);
 print(dsTN);
