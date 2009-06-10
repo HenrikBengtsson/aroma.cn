@@ -4,8 +4,8 @@ library("aroma.cn");
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 
-dataSet <- "TCGA,GBM,onePair";
-sampleName <- "TCGA-12-0620";
+## dataSet <- "TCGA,GBM,onePair";
+dataSet <- "TCGA,OV,testSet,pairs,Broad";
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the raw (tumor,normal) data set
@@ -69,14 +69,14 @@ for (kk in seq(dsN)) {
   keep <- is.finite(betaN);
   betaN <- betaN[keep];
   unitsN <- units[keep];
-  is23 <- is23[keep];
-  is24 <- is24[keep];
+  is23k <- is23[keep];
+  is24k <- is24[keep];
 
   # Infer male or female
-  fit <- findPeaksAndValleys(betaN[is23], adjust=adjust);
+  fit <- findPeaksAndValleys(betaN[is23k], adjust=adjust);
   isXY <- (sum(fit$type == "peak") == 2);
-  if (sum(is24) > 100) {
-    fit <- findPeaksAndValleys(betaN[is24], adjust=adjust);
+  if (sum(is24k) > 100) {
+    fit <- findPeaksAndValleys(betaN[is24k], adjust=adjust);
     is24XY <- (sum(fit$type == "peak") == 2);
     if (is24XY != isXY) {
       throw("ChrX and ChrY is inconsistent");
@@ -89,10 +89,10 @@ for (kk in seq(dsN)) {
   # Call genotypes for autosomal+ChrX chromosomes
   if (isXY) {
     # All but ChrX & ChrY in male
-    isDiploid <- (!(is23 | is24));
+    isDiploid <- (!(is23k | is24k));
   } else {
     # All but ChrY in female
-    isDiploid <- (!is24);
+    isDiploid <- (!is24k);
   }
   fit <- findPeaksAndValleys(betaN[isDiploid], adjust=adjust);
   fit <- subset(fit, type == "valley");
@@ -158,3 +158,14 @@ for (kk in seq(dsN)) {
 
 gcN <- AromaUnitGenotypeCallSet$byName(dataSet, tags="NGC", chipType="*");
 print(gcN);
+
+############################################################################
+## HISTORY:
+## 2009-06-09
+## o BUG FIX: 'is23' and 'is24' were modified within the 'kk' loop, causing an
+##   error when kk>1.
+## 2009-06-08
+## o Now uses 'AromaUnitGenotypeCallFile' and 'AromaUnitGenotypeCallSet'.
+## 2009-04-29
+## o Created.
+############################################################################

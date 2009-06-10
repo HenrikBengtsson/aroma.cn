@@ -4,8 +4,12 @@ library("aroma.cn");
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 
-dataSet <- "TCGA,GBM,onePair";
-sampleName <- "TCGA-12-0620";
+## dataSet <- "TCGA,GBM,onePair";
+## sampleName <- "TCGA-12-0620";
+dataSet <- "TCGA,OV,testSet,pairs,Broad";
+sampleName <- "TCGA-04-1335"
+sampleName <- "TCGA-04-1336"
+sampleName <- "TCGA-23-1027"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the raw (tumor,normal) data set
@@ -64,7 +68,8 @@ dsList <- lapply(dsList, FUN=function(ds) {
 # Plot the data
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ugp <- getAromaUgpFile(dsList$tumor);
-units <- getUnitsOnChromosome(ugp, 1);
+chromosome <- 2;
+units <- getUnitsOnChromosome(ugp, chromosome=chromosome);
 pos <- getPositions(ugp, units=units);
 
 

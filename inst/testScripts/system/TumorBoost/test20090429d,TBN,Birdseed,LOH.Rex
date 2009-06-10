@@ -4,8 +4,12 @@ library("aroma.cn");
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 
-dataSet <- "TCGA,GBM,onePair";
-sampleName <- "TCGA-12-0620";
+## dataSet <- "TCGA,GBM,onePair";
+## sampleName <- "TCGA-12-0620";
+dataSet <- "TCGA,OV,testSet,pairs,Broad";
+sampleName <- "TCGA-04-1335"
+sampleName <- "TCGA-04-1336"
+sampleName <- "TCGA-23-1027"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the raw (tumor,normal) data set
@@ -42,7 +46,7 @@ dsTN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags=c("TBN", genotypeTag), ch
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the genotype call set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-gsN <- AromaUnitGenotypeCallSet$byName(dataSet, tags="Birdseed", chipType="*");
+gsN <- AromaUnitGenotypeCallSet$byName(dataSet, tags=genotypeTag, chipType="*");
 print(gsN);
 
 
@@ -64,7 +68,7 @@ dsList <- lapply(dsList, FUN=function(ds) {
 # Plot the data
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ugp <- getAromaUgpFile(dsList$tumor);
-chromosome <- 1;
+chromosome <- 2;
 units <- getUnitsOnChromosome(ugp, chromosome=chromosome);
 pos <- getPositions(ugp, units=units);
 
@@ -76,7 +80,7 @@ dfList <- lapply(dsList, FUN=getFile, kk);
 gf <- dfList[[4]];
 dfList <- dfList[-4];
 
-# Stratify on heterozygote normal genotypes
+# Stratify on heterozygous normal genotypes
 hets <- whichVector(isHeterozygote(gf, units=units, drop=TRUE));
 
 fracBList <- lapply(dfList, FUN=function(df) {
@@ -94,7 +98,7 @@ for (kk in seq(along=fracBList)) {
   fracB <- fracBList[[kk]];
   fracBT <- extractSubset(fracB, subset=hets);
   plot(fracBT, pch=".");
-  stext(side=3, pos=0, "Heterozygote loci according to Birdseed");
+  stext(side=3, pos=0, sprintf("Heterozygous loci according to %s", genotypeTag));
   stext(side=3, pos=1, names(fracBList)[kk]);
 } # for (kk ...)
 
@@ -110,7 +114,7 @@ for (kk in seq(along=fracBList)) {
   fracBT <- extractSubset(fracB, subset=hets);
   mFracBT <- extractRawMirroredAlleleBFractions(fracBT);
   plot(mFracBT, pch=".", ylim=c(0,0.6));
-  stext(side=3, pos=0, "Heterozygote loci according to Birdseed");
+  stext(side=3, pos=0, sprintf("Heterozygous loci according to %s", genotypeTag));
   stext(side=3, pos=1, names(fracBList)[kk]);
   fit <- segmentByCBS(mFracBT);
   cnr <- extractCopyNumberRegions(fit);
