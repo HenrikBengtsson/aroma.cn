@@ -1,6 +1,12 @@
 Package: aroma.cn
 =================
 
+Version: 0.3.1 [2009-06-08]
+o UPDATE: The constructor of TumorBoostNormalization now only takes an
+  AromaUnitGenotypeCallSet for argument 'gcN'.  It no longer takes an
+  AromaUnitFracBCnBinarySet object, which was only an ad hoc solution.
+
+
 Version: 0.3.0 [2009-05-29]
 o ROBUSTNESS: Now all constructors report on unknown arguments.
 o ROBUSTNESS: Now MultiSourceCopyNumberNormalization first write

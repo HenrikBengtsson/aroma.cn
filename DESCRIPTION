@@ -1,13 +1,13 @@
 Package: aroma.cn
-Version: 0.3.0
-Date: 2009-05-29
+Version: 0.3.1
+Date: 2009-06-08
 Title: Copy-number analysis of large microarray data sets
 Author: Henrik Bengtsson <henrikb@braju.com>
 Maintainer: Henrik Bengtsson <henrikb@braju.com>
-Depends: R (>= 2.6.0), aroma.core (>= 1.1.0), aroma.light (>= 1.12.2)
+Depends: R (>= 2.6.0), aroma.core (>= 1.1.1), aroma.light (>= 1.12.2)
 Suggests: GLAD (>= 1.12.0), DNAcopy (>= 1.12.0), princurve (>= 1.1.9)
 Description: Package for analysis of copy-number estimates obtained from various platforms.
-License: Private for now (LGPL to come)
+License: LGPL (>= 2.1)
 URL: http://www.braju.com/R/aroma.affymetrix/
 PatchURL: http://www.braju.com/R/
 LazyLoad: TRUE

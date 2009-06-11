@@ -34,9 +34,8 @@
 setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, tags="*", ...) {
   # Validate arguments
   if (!is.null(dsT)) {
-    dsList <- list(dsT=dsT, dsN=dsN, gcN=gcN);
-
-    # Assert correct classes
+    # Arguments 'dsT' and 'dsN'
+    dsList <- list(dsT=dsT, dsN=dsN);
     className <- "AromaUnitFracBCnBinarySet";
     for (kk in seq(along=dsList)) {
       key <- names(dsList)[kk];
@@ -47,7 +46,15 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
       }
     }
 
+    # Argument 'gcN':
+    className <- "AromaUnitGenotypeCallSet";
+    if (!inherits(gcN, className)) {
+      throw(sprintf("Argument '%s' is not of class %s: %s", key, 
+                                         className, class(gcN)[1]));
+    }
+
     # Assert that each data set contains the same number of files
+    dsList$gcN <- gcN;
     for (jj in 1:(length(dsList)-1)) {
       keyJJ <- names(dsList)[jj];
       dsJJ <- dsList[[jj]];
@@ -297,7 +304,8 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     verbose && str(verbose, betaN);
 
     verbose && cat(verbose, "Genotypes for the matched normal:");
-    muN <- dfList$normalCalls[unitsT,1,drop=TRUE];
+    gfN <- dfList$normalCalls;
+    muN <- extractGenotypes(gfN, units=unitsT, encoding="fracB", drop=TRUE);
     verbose && str(verbose, muN);
     verbose && exit(verbose);
 
@@ -359,6 +367,10 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
 ############################################################################
 # HISTORY:
+# 2009-06-08
+# o The constructor of TumorBoostNormalization now only takes an
+#   AromaUnitGenotypeCallSet for argument 'gcN'.  It no longer takes an
+#   AromaUnitFracBCnBinarySet object.
 # 2009-05-17
 # o Now the constructor of TumorBoostNormalization asserts that there are
 #   no stray arguments.
