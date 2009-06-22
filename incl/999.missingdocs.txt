@@ -50,3 +50,4 @@
  getAsteriskTags.MultiSourceCopyNumberNormalization
  getTags.MultiSourceCopyNumberNormalization
 clearCache.MultiSourceCopyNumberNormalization
+  getFlavor getFlavor.TumorBoostNormalization

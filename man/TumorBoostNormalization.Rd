@@ -38,12 +38,13 @@ extends \link[R.oo]{Object}\cr
   afterwards.
  }
 
- \usage{TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, tags="*", ...)}
+ \usage{TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2"), tags="*", ...)}
 
  \arguments{
   \item{dsT}{...}
   \item{dsN}{...}
   \item{gcN}{...}
+  \item{flavor}{Type of correction applied..}
   \item{tags}{(Optional) Sets the tags for the output data sets.}
   \item{...}{Not used.}
  }

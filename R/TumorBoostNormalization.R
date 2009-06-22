@@ -21,6 +21,7 @@
 #  \item{dsT}{...}
 #  \item{dsN}{...}
 #  \item{gcN}{...}
+#  \item{flavor}{Type of correction applied..}
 #  \item{tags}{(Optional) Sets the tags for the output data sets.}
 #  \item{...}{Not used.}
 # }
@@ -31,9 +32,12 @@
 #
 # @author
 #*/########################################################################### 
-setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, tags="*", ...) {
+setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2"), tags="*", ...) {
   # Validate arguments
   if (!is.null(dsT)) {
+    # Argument 'flavor':
+    flavor <- match.arg(flavor);
+
     # Arguments 'dsT' and 'dsN'
     dsList <- list(dsT=dsT, dsN=dsN);
     className <- "AromaUnitFracBCnBinarySet";
@@ -77,7 +81,7 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
         }
       } # for (kk ...)
     } # for (jj ...)
-  }
+  } # if (!is.null(dsT))
 
   # Arguments '...':
   args <- list(...);
@@ -89,7 +93,8 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
   this <- extend(Object(...), "TumorBoostNormalization",
     .dsT = dsT,
     .dsN = dsN,
-    .gcN = gcN
+    .gcN = gcN,
+    .flavor = flavor
   );
 
   setTags(this, tags);
@@ -103,6 +108,8 @@ setMethodS3("as.character", "TumorBoostNormalization", function(x, ...) {
   this <- x;
 
   s <- sprintf("%s:", class(this)[1]);
+
+  s <- c(s, sprintf("Flavor: %s", getFlavor(this)));
 
   dsList <- getDataSets(this);
 
@@ -122,6 +129,15 @@ setMethodS3("as.character", "TumorBoostNormalization", function(x, ...) {
 setMethodS3("getAsteriskTags", "TumorBoostNormalization", function(this, collapse=NULL, ...) {
   tags <- "TBN";
 
+  flavor <- getFlavor(this);
+  if (flavor != "v1") {
+    tags <- c(tags, flavor);
+  }
+
+  if (!is.null(collapse)) {
+    tags <- paste(tags, collapse=collapse);
+  }
+  
   tags;
 }, private=TRUE)
 
@@ -130,6 +146,11 @@ setMethodS3("getName", "TumorBoostNormalization", function(this, ...) {
   ds <- getInputDataSet(this);
   getName(ds);
 })
+
+setMethodS3("getFlavor", "TumorBoostNormalization", function(this, ...) {
+  this$.flavor;
+}, protected=TRUE)
+
 
 setMethodS3("getTags", "TumorBoostNormalization", function(this, collapse=NULL, ...) {
   # "Pass down" tags from input data set
@@ -263,6 +284,10 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
   verbose && enter(verbose, "TumorBoost normalization");
   nbrOfFiles <- nbrOfFiles(this);
   verbose && cat(verbose, "Number of arrays: ", nbrOfFiles);
+
+  flavor <- getFlavor(this);
+  verbose && cat(verbose, "Flavor: ", flavor);
+
   outPath <- getPath(this);
   dsList <- getDataSets(this);
   for (kk in seq(length=nbrOfFiles)) {
@@ -311,12 +336,31 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
 
     verbose && enter(verbose, "Normalizing tumor allele B fractions");
+    verbose && cat(verbose, "Flavor: ", flavor);
     verbose && enter(verbose, "Estimating SNP effects");
     delta <- (betaN - muN);
     verbose && str(verbose, delta);
     verbose && exit(verbose);
+
+    verbose && enter(verbose, "Rescaling correction factor");
+    if (flavor == "v1") {
+      b <- 1;
+    } else if (flavor == "v2") {
+      b <- rep(1, length(delta));
+      isUp <- (betaT > betaN);
+      idxs <- whichVector(isUp);
+      b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
+      idxs <- whichVector(!isUp);
+      b[idxs] <- betaT[idxs]/betaN[idxs];
+      rm(isUp,idxs);
+    }
+    verbose && cat(verbose, "Scaling factor:");
+    verbose && str(verbose, b);
+    verbose && summary(verbose, b);
+    verbose && exit(verbose);
+
     verbose && enter(verbose, "Normalizing");
-    betaTC <- betaT - delta;
+    betaTC <- betaT - b*delta;
     verbose && str(verbose, betaTC);
     verbose && exit(verbose);
     verbose && exit(verbose);
@@ -367,6 +411,8 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
 ############################################################################
 # HISTORY:
+# 2009-06-22
+# o Added model 'flavor' "v2".
 # 2009-06-08
 # o The constructor of TumorBoostNormalization now only takes an
 #   AromaUnitGenotypeCallSet for argument 'gcN'.  It no longer takes an

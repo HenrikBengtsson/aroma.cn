@@ -103,6 +103,8 @@
 \alias{getAsteriskTags.MultiSourceCopyNumberNormalization}
 \alias{getTags.MultiSourceCopyNumberNormalization}
 \alias{clearCache.MultiSourceCopyNumberNormalization}
+\alias{getFlavor}
+\alias{getFlavor.TumorBoostNormalization}
 
 \description{
   This page contains aliases for all "non-documented" objects that
