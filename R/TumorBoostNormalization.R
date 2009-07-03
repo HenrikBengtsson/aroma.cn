@@ -26,7 +26,7 @@
 #     genotypes for the normals.}
 #  \item{flavor}{A @character string specifying the type of 
 #     correction applied.}
-#  \item{collapseHomozygotes}{If @TRUE, SNPs that are homozygous in the 
+#  \item{collapseHomozygous}{If @TRUE, SNPs that are homozygous in the 
 #    matched normal are also called homozygous in the tumor, that is,
 #    it's allele B fraction is collapsed to either 0 or 1.  
 #    If @FALSE, the homozygous values are normalized according the 
@@ -42,7 +42,7 @@
 #
 # \author{Henrik Bengtsson and Pierre Neuvial}
 #*/########################################################################### 
-setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2", "v3"), collapseHomozygotes=FALSE, tags="*", ...) {
+setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2", "v3", "v4"), collapseHomozygous=FALSE, tags="*", ...) {
   # Validate arguments
   if (!is.null(dsT)) {
     # Argument 'flavor':
@@ -93,9 +93,9 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
     } # for (jj ...)
   } # if (!is.null(dsT))
 
-  collapseHomozygotes <- Arguments$getLogical(collapseHomozygotes);
-  if (collapseHomozygotes) {
-    throw("collapseHomozygotes=FALSE is currently not implemented.");
+  collapseHomozygous <- Arguments$getLogical(collapseHomozygous);
+  if (collapseHomozygous) {
+    throw("collapseHomozygous=FALSE is currently not implemented.");
   }
 
   # Arguments '...':
@@ -374,11 +374,20 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       isHomB <- (muN == 1);
       isHet <- !isHomA & !isHomB;
       isDown <- (betaT < betaN);
-      idxs <- whichVector((isHet &  isDown) | isHomB);
+      idxs <- whichVector((isHet & isDown) | isHomA);
       b[idxs] <- betaT[idxs]/betaN[idxs];
-      idxs <- whichVector((isHet & !isDown) | isHomA);
+      idxs <- whichVector((isHet & !isDown) | isHomB);
       b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
       rm(isDown,isHet,isHomA,isHomB,idxs);
+    } else if (flavor == "v4") {
+      b <- rep(1, length(delta));
+      isHet <- (muN != 0 & muN != 1);
+      isDown <- (betaT < betaN);
+      idxs <- whichVector(isHet & isDown);
+      b[idxs] <- betaT[idxs]/betaN[idxs];
+      idxs <- whichVector(isHet & !isDown);
+      b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
+      rm(isDown,isHet,idxs);
     }
     verbose && cat(verbose, "Scaling factor:");
     verbose && str(verbose, b);
@@ -438,6 +447,8 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 ############################################################################
 # HISTORY:
 # 2009-07-02
+# o Added model 'flavor' "v4" which corrects heterozygots according to "v2"
+#   and homozygotes according to "v1".
 # o Added model 'flavor' "v3".  Suggested by PN last night over a Guinness
 #   at the pub after a long day of hard work.
 # 2009-06-22

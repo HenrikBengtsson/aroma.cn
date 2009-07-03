@@ -38,7 +38,7 @@ extends \link[R.oo]{Object}\cr
   afterwards.
  }
 
- \usage{TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2", "v3"), collapseHomozygotes=FALSE, tags="*", ...)}
+ \usage{TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2", "v3", "v4"), collapseHomozygous=FALSE, tags="*", ...)}
 
  \arguments{
   \item{dsT}{An \code{\link[aroma.core]{AromaUnitFracBCnBinarySet}} of
@@ -49,7 +49,7 @@ extends \link[R.oo]{Object}\cr
      genotypes for the normals.}
   \item{flavor}{A \code{\link[base]{character}} string specifying the type of
      correction applied.}
-  \item{collapseHomozygotes}{If \code{\link[base:logical]{TRUE}}, SNPs that are homozygous in the
+  \item{collapseHomozygous}{If \code{\link[base:logical]{TRUE}}, SNPs that are homozygous in the
     matched normal are also called homozygous in the tumor, that is,
     it's allele B fraction is collapsed to either 0 or 1.
     If \code{\link[base:logical]{FALSE}}, the homozygous values are normalized according the
