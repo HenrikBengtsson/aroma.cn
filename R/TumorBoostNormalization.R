@@ -18,10 +18,20 @@
 # @synopsis
 #
 # \arguments{
-#  \item{dsT}{...}
-#  \item{dsN}{...}
-#  \item{gcN}{...}
-#  \item{flavor}{Type of correction applied..}
+#  \item{dsT}{An @see "aroma.core::AromaUnitFracBCnBinarySet" of 
+#     tumor samples.}
+#  \item{dsN}{An @see "aroma.core::AromaUnitFracBCnBinarySet" of 
+#     match normal samples.}
+#  \item{gcN}{An @see "aroma.core::AromaUnitGenotypeCallSet" of 
+#     genotypes for the normals.}
+#  \item{flavor}{A @character string specifying the type of 
+#     correction applied.}
+#  \item{collapseHomozygotes}{If @TRUE, SNPs that are homozygous in the 
+#    matched normal are also called homozygous in the tumor, that is,
+#    it's allele B fraction is collapsed to either 0 or 1.  
+#    If @FALSE, the homozygous values are normalized according the 
+#    model. [NOT USED YET]
+#  }
 #  \item{tags}{(Optional) Sets the tags for the output data sets.}
 #  \item{...}{Not used.}
 # }
@@ -30,9 +40,9 @@
 #  @allmethods "public"
 # }
 #
-# @author
+# \author{Henrik Bengtsson and Pierre Neuvial}
 #*/########################################################################### 
-setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2"), tags="*", ...) {
+setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2", "v3"), collapseHomozygotes=FALSE, tags="*", ...) {
   # Validate arguments
   if (!is.null(dsT)) {
     # Argument 'flavor':
@@ -82,6 +92,11 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
       } # for (kk ...)
     } # for (jj ...)
   } # if (!is.null(dsT))
+
+  collapseHomozygotes <- Arguments$getLogical(collapseHomozygotes);
+  if (collapseHomozygotes) {
+    throw("collapseHomozygotes=FALSE is currently not implemented.");
+  }
 
   # Arguments '...':
   args <- list(...);
@@ -347,12 +362,23 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       b <- 1;
     } else if (flavor == "v2") {
       b <- rep(1, length(delta));
-      isUp <- (betaT > betaN);
-      idxs <- whichVector(isUp);
-      b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
-      idxs <- whichVector(!isUp);
+      isDown <- (betaT < betaN);
+      idxs <- whichVector(isDown);
       b[idxs] <- betaT[idxs]/betaN[idxs];
-      rm(isUp,idxs);
+      idxs <- whichVector(!isDown);
+      b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
+      rm(isDown,isHomA,isHomB,idxs);
+    } else if (flavor == "v3") {
+      b <- rep(1, length(delta));
+      isHomA <- (muN == 0);
+      isHomB <- (muN == 1);
+      isHet <- !isHomA & !isHomB;
+      isDown <- (betaT < betaN);
+      idxs <- whichVector((isHet &  isDown) | isHomB);
+      b[idxs] <- betaT[idxs]/betaN[idxs];
+      idxs <- whichVector((isHet & !isDown) | isHomA);
+      b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
+      rm(isDown,isHet,isHomA,isHomB,idxs);
     }
     verbose && cat(verbose, "Scaling factor:");
     verbose && str(verbose, b);
@@ -411,6 +437,9 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
 ############################################################################
 # HISTORY:
+# 2009-07-02
+# o Added model 'flavor' "v3".  Suggested by PN last night over a Guinness
+#   at the pub after a long day of hard work.
 # 2009-06-22
 # o Added model 'flavor' "v2".
 # 2009-06-08
