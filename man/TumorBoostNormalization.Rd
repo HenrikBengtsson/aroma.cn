@@ -41,15 +41,19 @@ extends \link[R.oo]{Object}\cr
  \usage{TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2", "v3"), collapseHomozygotes=FALSE, tags="*", ...)}
 
  \arguments{
-  \item{dsT}{...}
-  \item{dsN}{...}
-  \item{gcN}{...}
-  \item{flavor}{Type of correction applied..}
+  \item{dsT}{An \code{\link[aroma.core]{AromaUnitFracBCnBinarySet}} of
+     tumor samples.}
+  \item{dsN}{An \code{\link[aroma.core]{AromaUnitFracBCnBinarySet}} of
+     match normal samples.}
+  \item{gcN}{An \code{\link[aroma.core]{AromaUnitGenotypeCallSet}} of
+     genotypes for the normals.}
+  \item{flavor}{A \code{\link[base]{character}} string specifying the type of
+     correction applied.}
   \item{collapseHomozygotes}{If \code{\link[base:logical]{TRUE}}, SNPs that are homozygous in the
     matched normal are also called homozygous in the tumor, that is,
     it's allele B fraction is collapsed to either 0 or 1.
     If \code{\link[base:logical]{FALSE}}, the homozygous values are normalized according the
-    model.
+    model. [NOT USED YET]
   }
   \item{tags}{(Optional) Sets the tags for the output data sets.}
   \item{...}{Not used.}
@@ -79,5 +83,5 @@ asThis, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clone
 
  }
 
- \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+ \author{Henrik Bengtsson and Pierre Neuvial}
 \keyword{classes}
