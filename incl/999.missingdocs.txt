@@ -51,3 +51,4 @@
  getTags.MultiSourceCopyNumberNormalization
 clearCache.MultiSourceCopyNumberNormalization
   getFlavor getFlavor.TumorBoostNormalization
+callNaiveGenotypes normalizeTumorBoost

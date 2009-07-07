@@ -105,6 +105,8 @@
 \alias{clearCache.MultiSourceCopyNumberNormalization}
 \alias{getFlavor}
 \alias{getFlavor.TumorBoostNormalization}
+\alias{callNaiveGenotypes}
+\alias{normalizeTumorBoost}
 
 \description{
   This page contains aliases for all "non-documented" objects that

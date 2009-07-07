@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 0.3.4 [2009-07-06]
+o Added low-level callNaiveGenotype() and normalizeTumorBoost().
+
+
 Version: 0.3.3 [2009-07-02]
 o Added model 'flavor' "v4" which corrects heterozygots according 
   to "v2" and homozygotes according to "v1".
