@@ -1,6 +1,7 @@
 ###########################################################################/**
-# @set "class=matrix"
+# @set "class=numeric"
 # @RdocMethod normalizeTumorBoost
+# @alias normalizeTumorBoost
 #
 # @title "Normalizes allele B fractions for a tumor given a match normal"
 #
@@ -17,14 +18,13 @@
 # @synopsis
 #
 # \arguments{
-#  \item{X}{A Jx2 @numeric @matrix of allele B fractions.  The first column
-#     should contain values for the tumor and the second values for the
-#     matched normal.}
-#  \item{genotypes}{An optional @numeric @vector of length J containing
-#     normal genotypes calls in (0,1/2,1) for (AA,AB,BB).}
+#  \item{betaT, betaN}{Two @numeric @vectors each of length J with 
+#     tumor and normal allele B fractions, respectively.}
+#  \item{muN}{An optional @vector of length J containing
+#     normal genotypes calls in (0,1/2,1,@NA) for (AA,AB,BB).}
 #  \item{flavor}{A @character string specifying the type of 
 #     correction applied.}
-#  \item{...}{Not used.}
+#  \item{...}{Argument passed to @see "callNaiveGenotypes", if called.}
 # }
 #
 # \value{
@@ -33,32 +33,45 @@
 #   Attribute \code{modelFit} is a @list containing model fit parameters.
 # }
 #
+# \details{
+#   Allele B fractions are defined as the ratio between the allele B signal
+#   and the sum of both (all) allele signals at the same locus.
+#   Allele B fractions are typically within [0,1], but may have a slightly 
+#   wider support due to for instance negative noise.
+#   This is typically also the case for the returned normalized 
+#   allele B fractions.
+# }
+#
+# @examples "../incl/normalizeTumorBoost.Rex"
+#
 # \author{Henrik Bengtsson and Pierre Neuvial}
 #*/########################################################################### 
-setMethodS3("normalizeTumorBoost", "matrix", function(X, genotypes=NULL, flavor=c("v4", "v3", "v2", "v1"), ...) {
+setMethodS3("normalizeTumorBoost", "numeric", function(betaT, betaN, muN=callNaiveGenotypes(betaN), flavor=c("v4", "v3", "v2", "v1"), ...) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Argument: 'X':
-  dim <- dim(X);
-  if (dim[2] < 2) {
-    stop("TumorBoost normalization requires two columns: ", dim[2]);
-  }
+  # Argument: 'betaT' & 'betaN':
+  betaT <- as.numeric(betaT);
+  betaN <- as.numeric(betaN);
 
-  # Argument: 'genotypes':
-  if (!is.null(genotypes)) {
-    if (length(genotypes) != dim[1]) {
-      stop("Argument 'genotypes' does not match the number of loci: ", 
-                                          length(genotypes), " != ", dim[1]);
-    }
-    knownGenotypes <- c(0,1/2,1,NA);
-    unknown <- which(!is.element(genotypes, knownGenotypes));
-    n <- length(unknown);
-    if (n > 0) {
-      unknown <- unique(genotypes[unknown]);
-      unknownStr <- paste(unknown, collapse=", ");
-      stop("Argument 'genotypes' contains unknown values: ", unknownStr);
-    }
+  J <- length(betaT);
+  if (length(betaN) != J) {
+    stop("The length of arguments 'betaT' and 'betaN' differ: ", 
+                                                   length(betaN), " != ", J);
+  }
+  
+  # Argument: 'muN':
+  if (length(muN) != J) {
+    stop("Argument 'muN' does not match the number of loci: ", 
+                                                   length(muN), " != ", J);
+  }
+  knownGenotypes <- c(0,1/2,1,NA);
+  unknown <- which(!is.element(muN, knownGenotypes));
+  n <- length(unknown);
+  if (n > 0) {
+    unknown <- unique(muN[unknown]);
+    unknownStr <- paste(unknown, collapse=", ");
+    stop("Argument 'muN' contains unknown values: ", unknownStr);
   }
 
   # Argument: 'flavor':
@@ -69,10 +82,6 @@ setMethodS3("normalizeTumorBoost", "matrix", function(X, genotypes=NULL, flavor=
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  betaT <- X[,1];
-  betaN <- X[,2];
-  muN <- genotypes;
-  
   # Identify set to be updated
   toUpdate <- which(is.finite(betaT) & is.finite(betaN) & is.finite(muN));
 
@@ -115,6 +124,9 @@ setMethodS3("normalizeTumorBoost", "matrix", function(X, genotypes=NULL, flavor=
   }
   delta <- b*delta;
 
+  # Sanity check
+  stopifnot(length(delta) == J);
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Normalize
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -131,12 +143,18 @@ setMethodS3("normalizeTumorBoost", "matrix", function(X, genotypes=NULL, flavor=
   );
   attr(betaTN, "modelFit") <- modelFit;
 
+  # Sanity check
+  stopifnot(length(betaTN) == J);
+
   betaTN;
 }) # normalizeTumorBoost()
 
 
 ############################################################################
 # HISTORY:
+# 2009-07-08
+# o Now the arguments are 'betaT', 'betaN' and 'muN'.
+# o Added an example() with real data.
 # 2009-07-06
 # o Created from process() of TumorBoostNormalization in aroma.cn.
 # o Added model 'flavor' "v4" which corrects heterozygots according to "v2"

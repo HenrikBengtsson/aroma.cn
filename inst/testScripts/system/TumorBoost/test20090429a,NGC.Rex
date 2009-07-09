@@ -4,8 +4,7 @@ library("aroma.cn");
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 
-## dataSet <- "TCGA,GBM,onePair";
-dataSet <- "TCGA,OV,testSet,pairs,Broad";
+dataSet <- "GSE13372,ACC,ra,-XY,BPN,-XY,AVG,A+B,FLN,-XY";
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the raw (tumor,normal) data set

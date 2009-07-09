@@ -1,6 +1,7 @@
 ###########################################################################/**
 # @set "class=numeric"
 # @RdocMethod callNaiveGenotypes
+# @alias callNaiveGenotypes
 #
 # @title "Calls genotypes in a normal sample"
 #
@@ -85,9 +86,9 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
     keep <- which(cn == cnKK);
     yKK <- y[keep];
     muKK <- rep(naValue, length(yKK));
-    fitKK <- findPeaksAndValleys(yKK, adjust=adjust);
+    fit <- findPeaksAndValleys(yKK, adjust=adjust, na.rm=TRUE);
     fit <- subset(fit, type == "valley");
-    nbrOfGenotypeGroups <- nrow(fit)+1L;
+    nbrOfGenotypeGroups <- nrow(fit) + 1L;
 
     if (cnKK == 0) {
     } else if (cnKK == 1) {
@@ -111,12 +112,17 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Return genotype calls
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Sanity check
+  stopifnot(length(mu) == J);
+
   mu;
 }) # callNaiveGenotypes()
 
 
 ###########################################################################
 # HISTORY:
+# 2009-07-08
+# o BUG FIX: Was never tested. Now tested via example(normalizeTumorBoost).
 # 2009-07-06
 # o Created from aroma.cn test script.
 ###########################################################################
