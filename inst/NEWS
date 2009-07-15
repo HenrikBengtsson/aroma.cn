@@ -2,13 +2,14 @@ Package: aroma.cn
 =================
 
 Version: 0.3.5 [2009-07-15]
+o ADDED: XYCurveNormalization and PrincipalCurveNormalization.
 o BUG FIX: TumorBoostNormalization: the 'srcFiles' attribute in file
   footer of the result files contained a duplicated default footer 
   instead of the tumor-normal pair.
 
 
 Version: 0.3.4 [2009-07-08]
-o Added low-level callNaiveGenotype() and normalizeTumorBoost().
+o ADDED: low-level callNaiveGenotype() and normalizeTumorBoost().
 
 
 Version: 0.3.3 [2009-07-02]

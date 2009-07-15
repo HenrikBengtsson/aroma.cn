@@ -105,6 +105,30 @@
 \alias{clearCache.MultiSourceCopyNumberNormalization}
 \alias{getFlavor}
 \alias{getFlavor.TumorBoostNormalization}
+\alias{as.character.AbstractCurveNormalization}
+\alias{backtransformOne}
+\alias{backtransformOne.AbstractCurveNormalization}
+\alias{backtransformOne.PrincipalCurveNormalization}
+\alias{backtransformOne.XYCurveNormalization}
+\alias{fitOne.AbstractCurveNormalization}
+\alias{fitOne.PrincipalCurveNormalization}
+\alias{fitOne.XYCurveNormalization}
+\alias{getAsteriskTags.AbstractCurveNormalization}
+\alias{getDataSets.AbstractCurveNormalization}
+\alias{getFullName.AbstractCurveNormalization}
+\alias{getInputDataSet.AbstractCurveNormalization}
+\alias{getName.AbstractCurveNormalization}
+\alias{getOutputDataSet.AbstractCurveNormalization}
+\alias{getPairedDataSet.AbstractCurveNormalization}
+\alias{getPath.AbstractCurveNormalization}
+\alias{getRootPath.AbstractCurveNormalization}
+\alias{getSubsetToFit.AbstractCurveNormalization}
+\alias{getTags.AbstractCurveNormalization}
+\alias{getTargetDataSet.AbstractCurveNormalization}
+\alias{nbrOfFiles.AbstractCurveNormalization}
+\alias{process.AbstractCurveNormalization}
+\alias{setTags.AbstractCurveNormalization}
+\alias{getSubsetToFit.PrincipalCurveNormalization}
 
 \description{
   This page contains aliases for all "non-documented" objects that

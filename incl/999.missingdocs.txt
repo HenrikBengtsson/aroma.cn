@@ -51,4 +51,27 @@
  getTags.MultiSourceCopyNumberNormalization
 clearCache.MultiSourceCopyNumberNormalization
   getFlavor getFlavor.TumorBoostNormalization
+  as.character.AbstractCurveNormalization backtransformOne
+  backtransformOne.AbstractCurveNormalization
+  backtransformOne.PrincipalCurveNormalization
+  backtransformOne.XYCurveNormalization
+  fitOne.AbstractCurveNormalization fitOne.PrincipalCurveNormalization
+  fitOne.XYCurveNormalization
+  getAsteriskTags.AbstractCurveNormalization
+  getDataSets.AbstractCurveNormalization
+  getFullName.AbstractCurveNormalization
+  getInputDataSet.AbstractCurveNormalization
+  getName.AbstractCurveNormalization
+  getOutputDataSet.AbstractCurveNormalization
+  getPairedDataSet.AbstractCurveNormalization
+  getPath.AbstractCurveNormalization
+  getRootPath.AbstractCurveNormalization
+  getSubsetToFit.AbstractCurveNormalization
+  getTags.AbstractCurveNormalization
+  getTargetDataSet.AbstractCurveNormalization
+  nbrOfFiles.AbstractCurveNormalization
+  process.AbstractCurveNormalization setTags.AbstractCurveNormalization
+  getSubsetToFit.PrincipalCurveNormalization
+getPairedDataSet getTargetDataSet
+
 
