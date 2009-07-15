@@ -303,8 +303,11 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
   flavor <- getFlavor(this);
   verbose && cat(verbose, "Flavor: ", flavor);
 
-  outPath <- getPath(this);
   dsList <- getDataSets(this);
+  chipType <- getChipType(dsList[[1]], fullname=FALSE);
+  verbose && cat(verbose, "Chip type: ", chipType);
+
+  outPath <- getPath(this);
   for (kk in seq(length=nbrOfFiles)) {
     dfList <- lapply(dsList, FUN=getFile, kk);
     dfT <- dfList$tumor;
@@ -411,9 +414,9 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     dfTC <- newInstance(dfT, pathnameT);
     srcFiles <- lapply(dfList, FUN=function(df) {
       list(
-        filename = getFilename(dfT),
-        filesize = getFileSize(dfT),
-        checksum = getChecksum(dfT)
+        filename = getFilename(df),
+        filesize = getFileSize(df),
+        checksum = getChecksum(df)
       )
     });
     footer <- readFooter(dfTC);
@@ -434,6 +437,11 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     verbose && exit(verbose);
     verbose && exit(verbose);
 
+#    verbose && enter(verbose, "Storing estimates to priorData/");
+#    path <- file.path("priorData", "chipTypes", chipType);
+#    path <- Arguments$getWritablePath(path);
+#    verbose && exit(verbose);
+
     verbose && exit(verbose);
   } # for (kk ...)
 
@@ -446,6 +454,10 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
 ############################################################################
 # HISTORY:
+# 2009-07-15
+# o BUG FIX: TumorBoostNormalization: the 'srcFiles' attribute in file
+#   footer of the result files contained a duplicated default footer 
+#   instead of the tumor-normal pair.
 # 2009-07-02
 # o Added model 'flavor' "v4" which corrects heterozygots according to "v2"
 #   and homozygotes according to "v1".
