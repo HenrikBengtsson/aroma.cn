@@ -11,4 +11,6 @@ License: LGPL (>= 2.1)
 URL: http://www.braju.com/R/aroma.affymetrix/
 PatchURL: http://www.braju.com/R/
 LazyLoad: TRUE
-biocViews: Infrastructure, Microarray, DataImport, DNACopyNumber
+biocViews: ProprietaryPlatforms, aCGH, CopyNumberVariants, SNP, Microarray, OneChannel, TwoChannel, DataImport, DataRepresentation, Preprocessing, QualityControl
+
+

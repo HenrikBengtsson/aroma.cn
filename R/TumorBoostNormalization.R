@@ -350,6 +350,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     gfN <- dfList$normalCalls;
     muN <- extractGenotypes(gfN, units=unitsT, encoding="fracB", drop=TRUE);
     verbose && str(verbose, muN);
+    verbose && print(verbose, table(muN));
     verbose && exit(verbose);
 
 
@@ -454,6 +455,9 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
 ############################################################################
 # HISTORY:
+# 2009-09-11
+# o Added table verbose output of the read genotypes.  This is just so one
+#   can verify the encoding, i.e. 0, 1/2, or 1.
 # 2009-07-15
 # o BUG FIX: TumorBoostNormalization: the 'srcFiles' attribute in file
 #   footer of the result files contained a duplicated default footer 
