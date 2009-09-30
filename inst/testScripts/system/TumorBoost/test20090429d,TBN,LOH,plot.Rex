@@ -1,20 +1,54 @@
 if (interactive()) savehistory();
 library("aroma.cn");
+library("R.menu");
 
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
+rootPath <- Arguments$getReadablePath(rootPath);
 
-## dataSet <- "TCGA,GBM,onePair";
-## sampleName <- "TCGA-12-0620";
-dataSet <- "TCGA,OV,testSet,pairs,Broad";
-sampleName <- "TCGA-04-1335"
-sampleName <- "TCGA-04-1336"
-sampleName <- "TCGA-23-1027"
+log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
+rootPath <- "totalAndFracBData";
+rootPath <- Arguments$getReadablePath(rootPath);
 
+pattern <- "^(TCGA,OV,testSet,pairs,.*),TBN,.*";
+dataSets <- list.files(path=rootPath, pattern=pattern);
+# Sanity check
+stopifnot(length(dataSets) > 0);
+
+if (interactive()) {
+  dataSet <- textMenu(dataSets, value=TRUE);
+} else {
+  ## dataSet <- "TCGA,GBM,onePair";
+  dataSet <- "TCGA,OV,testSet,pairs,Broad,ismpolish";
+  dataSet <- "TCGA,OV,testSet,pairs,Stanford";
+  dataSet <- "TCGA,OV,testSet,pairs,Broad,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY";
+}
+print(dataSet);
+ 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Load the normalized tumor data set
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+dsTN <- AromaUnitFracBCnBinarySet$byName(dataSet, chipType="*", paths=rootPath);
+setFullNamesTranslator(dsTN, function(names, ...) {
+  pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
+  gsub(pattern, "\\1,\\2,\\3", names);
+}); 
+
+sampleNames <- sort(unique(getNames(dsTN)));
+print(sampleNames);
+
+if (interactive()) {
+  sampleName <- textMenu(sampleNames, value=TRUE);
+} else {
+  sampleName <- sampleNames[1];
+}
+ 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the raw (tumor,normal) data set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-ds <- AromaUnitFracBCnBinarySet$byName(dataSet, chipType="*", paths=rootPath);
+dataSetOrg <- gsub(pattern, "\\1", dataSet);
+ds <- AromaUnitFracBCnBinarySet$byName(dataSetOrg, chipType="*", paths=rootPath);
 setFullNamesTranslator(ds, function(names, ...) {
   pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
   gsub(pattern, "\\1,\\2,\\3", names);
@@ -33,21 +67,32 @@ pair <- pair[o];
 # Extract (tumor, normal) pair
 dsPair <- extract(ds, pair);
 dsT <- extract(dsPair, 1);
-dsN <- extract(dsPair, 2);
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# Load the normalized tumor data set
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-genotypeTag <- "NGC";
-dsTN <- AromaUnitFracBCnBinarySet$byName(dataSet, tags=c("TBN", genotypeTag), chipType="*", paths=rootPath);
+dsN <- extract(dsPair, 2); 
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the genotype call set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-gsN <- AromaUnitGenotypeCallSet$byName(dataSet, tags="Birdseed", chipType="*");
-print(gsN);
+# Identify available genotype calls
+rootPath <- "callData";
+rootPath <- Arguments$getReadablePath(rootPath);
+
+pattern <- sprintf("^%s,", getFullName(ds));
+dataSets <- list.files(path=rootPath, pattern=pattern);
+callTypes <- gsub(pattern, "", dataSets);
+# Sanity check
+stopifnot(length(callTypes) > 0);
+
+if (interactive()) {
+  callType <- textMenu(callTypes, value=TRUE);
+} else {
+  callType <- callTypes[1];
+}
+print(callType);
+
+genotypeTag <- callType; 
+gsN <- AromaUnitGenotypeCallSet$byName(dataSetOrg, tags=genotypeTag, chipType="*");
+print(gsN); 
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

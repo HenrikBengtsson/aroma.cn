@@ -1,10 +1,29 @@
 if (interactive()) savehistory();
 library("aroma.cn");
+library("R.menu");
 
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
+rootPath <- Arguments$getReadablePath(rootPath);
 
-dataSet <- "GSE13372,ACC,ra,-XY,BPN,-XY,AVG,A+B,FLN,-XY";
+pattern <- "^TCGA,OV,testSet,pairs";
+dataSets <- list.files(path=rootPath, pattern=pattern);
+exclPattern <- ",TBN";
+keep <- (regexpr(exclPattern, dataSets) == -1);
+dataSets <- dataSets[keep];
+# Sanity check
+stopifnot(length(dataSets) > 0);
+
+if (interactive()) {
+  dataSet <- textMenu(dataSets, value=TRUE);
+} else {
+  ## dataSet <- "TCGA,GBM,onePair";
+  dataSet <- "TCGA,OV,testSet,pairs,Broad,ismpolish";
+  dataSet <- "TCGA,OV,testSet,pairs,Stanford";
+  dataSet <- "TCGA,OV,testSet,pairs,Broad,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY";
+}
+print(dataSet);
+
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the raw (tumor,normal) data set
@@ -66,6 +85,8 @@ for (kk in seq(dsN)) {
 
   betaN <- dfN[units,1,drop=TRUE];
   keep <- is.finite(betaN);
+  # In case there are outliers
+  keep <- keep & (-0.5 < betaN & betaN < 1.5);
   betaN <- betaN[keep];
   unitsN <- units[keep];
   is23k <- is23[keep];
