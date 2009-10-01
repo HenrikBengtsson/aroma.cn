@@ -1,6 +1,12 @@
 Package: aroma.cn
 =================
 
+Version: 0.3.6 [2009-09-30]
+o Added normalizeDifferencesToAverage().
+o BUG FIX: getTags() of MultiSourceCopyNumberNormalization would return
+  all asterisk tags as merged, e.g. c("mscn,align", "tagA", "tagB").
+
+
 Version: 0.3.5 [2009-07-15]
 o ADDED: XYCurveNormalization and PrincipalCurveNormalization.
 o BUG FIX: TumorBoostNormalization: the 'srcFiles' attribute in file

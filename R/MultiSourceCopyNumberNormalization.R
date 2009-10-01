@@ -239,10 +239,14 @@ setMethodS3("getAsteriskTags", "MultiSourceCopyNumberNormalization", function(th
 setMethodS3("getTags", "MultiSourceCopyNumberNormalization", function(this, collapse=NULL, ...) {
   tags <- this$.tags;
 
+  # Split tags
   tags <- unlist(strsplit(tags, split=","));
 
   # Asterisk tags
   tags[tags == "*"] <- getAsteriskTags(this);
+
+  # Split tags
+  tags <- unlist(strsplit(tags, split=","));
  
   # Collapse?
   if (!is.null(collapse)) {
@@ -1365,6 +1369,9 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 
 ###########################################################################
 # HISTORY:
+# 2009-09-30
+# o BUG FIX: getTags() of MultiSourceCopyNumberNormalization would return
+#   all asterisk tags as merged, e.g. c("mscn,align", "tagA", "tagB").
 # 2009-05-17
 # o Now the constructor of MultiSourceCopyNumberNormalization asserts that
 #   there are no stray arguments.

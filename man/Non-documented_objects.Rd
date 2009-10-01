@@ -129,6 +129,8 @@
 \alias{process.AbstractCurveNormalization}
 \alias{setTags.AbstractCurveNormalization}
 \alias{getSubsetToFit.PrincipalCurveNormalization}
+\alias{getPairedDataSet}
+\alias{getTargetDataSet}
 
 \description{
   This page contains aliases for all "non-documented" objects that
