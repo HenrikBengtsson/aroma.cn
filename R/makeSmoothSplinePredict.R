@@ -42,6 +42,5 @@ setMethodS3("makeSmoothSplinePredict", "numeric", function(x, y, df=5, ...) {
 # 2008-10-08
 # o Removed implementation for data.frame:s.
 # 2008-05-27
-# o Added normalizePrincipalCurve().
 # o Created.  Will probably end up in aroma.light.
 ###########################################################################

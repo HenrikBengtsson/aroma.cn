@@ -14,7 +14,7 @@
 # \arguments{
 #   \item{x}{A @numeric @list of length K.}
 #   \item{baseline}{An @integer in [1,K] specifying which channel should be
-#      the baseline.  The baseline channel will be unchanged.
+#      the baseline.  The baseline channel will be almost unchanged.
 #      If @NULL, the channels will be shifted towards median of them all.}
 #   \item{FUN}{A @function for calculating the average of one channel.}
 #   \item{...}{Additional arguments passed to the \code{avg} @function.}

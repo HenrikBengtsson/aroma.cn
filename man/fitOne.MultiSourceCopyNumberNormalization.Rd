@@ -37,7 +37,6 @@
 \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
 
 \seealso{
-  This method is called internally by \code{\link[aroma.cn:fit.MultiSourceCopyNumberNormalization]{*fit}()}.
   For more information see \code{\link{MultiSourceCopyNumberNormalization}}.
 }
 \keyword{internal}

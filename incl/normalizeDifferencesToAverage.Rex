@@ -21,6 +21,9 @@ yyN <- normalizeDifferencesToAverage(yy, baseline=1);
 # The baseline channel is not changed
 stopifnot(identical(yy[[1]], yyN[[1]]));
 
+# Get the estimated parameters
+fit <- attr(yyN, "fit");
+
 # Plot the tracks
 layout(matrix(1:2, ncol=1));
 x <- unlist(xx);

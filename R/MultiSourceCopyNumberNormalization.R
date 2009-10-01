@@ -26,9 +26,12 @@
 #    \code{dsList} to which each platform in standardize towards.
 #    If @NULL, the arbitrary scale along the fitted principal curve
 #    is used.  This always starts at zero and increases.}
-#  \item{alignByChromosome}{If @TRUE, the signals are shifted chromosome
+#  \item{align}{A @character specifying type of alignment applied, if any.
+#    If \code{"none"}, no alignment is done.
+#    If \code{"byChromosome"}, the signals are shifted chromosome
 #    by chromosome such the corresponding smoothed signals have the same
-#    mean (non-robust) across sources. For more details, see below.
+#    median signal across sources. 
+#    For more details, see below.
 #  }
 #  \item{tags}{(Optional) Sets the tags for the output data sets.}
 #  \item{...}{Not used.}
@@ -71,14 +74,14 @@
 #    strong assumption.
 #
 #    A more conservative approach is to normalize the signals such that
-#    afterward the mean of the smoothed copy-number levels are the same
+#    afterward the median of the smoothed copy-number levels are the same
 #    across sources for any particular chromosome.
-#    This is done by setting argument \code{alignByChromosome=TRUE}.
+#    This is done by setting argument \code{align="byChromosome"}.
 # }
 # 
 # @author
 #*/###########################################################################
-setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fitUgp=NULL, subsetToFit=NULL, targetDimension=1, alignByChromosome=FALSE, tags="*", ...) {
+setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fitUgp=NULL, subsetToFit=NULL, targetDimension=1, align=c("byChromosome", "none"), tags="*", ...) {
   if (!is.null(dsList)) {
     # Arguments 'dsList':
     if (is.list(dsList)) {
@@ -115,8 +118,8 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
                                           range=c(1, nbrOfUnits(fitUgp)));
     }
 
-    # Argument 'alignByChromosome'
-    alignByChromosome <- Arguments$getLogical(alignByChromosome);
+    # Argument 'align'
+    align <- match.arg(align);
 
     # Argument 'targetDimension'
     targetDimension <- Arguments$getIndex(targetDimension, range=c(1, K));
@@ -134,7 +137,7 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
     .dsList = dsList,
     .fitUgp = fitUgp,
     .subsetToFit = subsetToFit,
-    .alignByChromosome = alignByChromosome,
+    .align = align,
     .targetDimension = targetDimension,
     "cache:.dsSmoothList" = NULL
   )
@@ -146,6 +149,10 @@ setMethodS3("as.character", "MultiSourceCopyNumberNormalization", function(x, ..
   this <- x;
 
   s <- sprintf("%s:", class(this)[1]);
+
+  # Tags:
+  tags <- getTags(this, collapse=", ");
+  s <- c(s, sprintf("Tags: %s", tags));
 
   # Data sets:
   dsList <- getInputDataSets(this);
@@ -227,9 +234,9 @@ setMethodS3("getAsteriskTags", "MultiSourceCopyNumberNormalization", function(th
   tags <- "mscn";
 
   # Align-by-chromosome tag?
-  alignByChromosome <- this$.alignByChromosome;
-  if (alignByChromosome) {
-    tags <- c(tags, "align");
+  align <- this$.align;
+  if (align != "none") {
+    tags <- c(tags, align);
   }
 
   tags <- paste(tags, collapse=",");
@@ -668,7 +675,7 @@ setMethodS3("getParameters", "MultiSourceCopyNumberNormalization", function(this
   params <- list(
     subsetToFit = getSubsetToFit(this, ...),
     fitUgp = getFitAromaUgpFile(this, ...),
-    alignByChromosome = this$.alignByChromosome,
+    align = this$.align,
     targetDimension = this$.targetDimension
   );
 
@@ -714,7 +721,6 @@ setMethodS3("getParametersAsString", "MultiSourceCopyNumberNormalization", funct
 # @author
 #
 # \seealso{
-#   This method is called internally by @seemethod "fit".
 #   @seeclass
 # }
 #*/########################################################################### 
@@ -765,7 +771,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   params <- getParameters(this, verbose=less(verbose, 1));
   verbose && str(verbose, params);
   subsetToFit <- params$subsetToFit;
-  alignByChromosome <- params$alignByChromosome;
+  align <- params$align;
   targetDimension <- params$targetDimension;
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -798,8 +804,8 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
 
   key <- list(method="fitOne", class="MultiSourceCopyNumberNormalization", 
            fullnames=fullnames, chipTypes=chipTypes, checkSums=checkSums,
-           subsetToFit=subsetToFit, alignByChromosome=alignByChromosome, 
-           .retData=.retData, version="2009-05-06");
+           subsetToFit=subsetToFit, align=align, 
+           .retData=.retData, version="2009-09-30");
   dirs <- c("aroma.cn", "MultiSourceCopyNumberNormalization");
   if (!force) {
     fit <- loadCache(key=key, dirs=dirs);
@@ -893,8 +899,9 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Shift each chromosome?
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  if (alignByChromosome) {
+  if (is.element(align, c("byChromosome"))) {
     verbose && enter(verbose, "Calculating shift for each chromosome");
+    verbose && cat(verbose, "align=", align);
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Grouping units by chromosome
@@ -922,64 +929,98 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Calculating means of each chromosome in each source
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    # Allocate matrix to hold all mean values
+    verbose && enter(verbose, "Allocating matrix for smooth data");
+    dfS <- dfSList[[1]];
     naValue <- as.double(NA);
-    mus <- matrix(naValue, nrow=length(unitsS), ncol=nbrOfArrays);
-    rownames(mus) <- names(unitsS);
+    YSN <- matrix(naValue, nrow=nbrOfUnits(dfS), ncol=nbrOfArrays);
+    verbose && cat(verbose, "RAM: ", objectSize(YSN), " bytes");
+    verbose && exit(verbose);
 
-    for (kk in seq(along=dfSList)) {
+    verbose && enter(verbose, "Loading and backtransforming *smoothed* data");
+    for (kk in seq(length=nbrOfArrays)) {
       dfS <- dfSList[[kk]];
       verbose && enter(verbose, sprintf("Source #%d ('%s') of %d", kk, 
-                                          getFullName(dfS), nbrOfArrays));
+                                        getFullName(dfS), nbrOfArrays));
 
       verbose && enter(verbose, "Loading smoothed data");
       yS <- extractMatrix(dfS, column=1, drop=TRUE);
       verbose && str(verbose, yS);
       verbose && exit(verbose);
 
-      verbose && enter(verbose, "Normalizing (backtransforming) smoothed data");
+      verbose && enter(verbose, "Backtransforming smoothed data");
       ySN <- backtransformPrincipalCurve(yS, fit=fit, dimensions=kk,
-                                        targetDimension=targetDimension);
+                                      targetDimension=targetDimension);
       ySN <- ySN[,1,drop=TRUE];
       verbose && str(verbose, ySN);
       rm(yS);
       verbose && exit(verbose);
 
-      verbose && enter(verbose, "Calculating means by chromosome");
-      for (chr in seq(along=unitsS)) {
-        chrStr <- sprintf("Chr%02d", chr);
-        unitsCC <- unitsS[[chrStr]];
-        values <- ySN[unitsCC];
-        keep <- is.finite(values);
-        mu <- median(values[keep]);
-        mus[chrStr,kk] <- mu;
-      } # for (cc ...)
-      verbose && exit(verbose);
+      # Storing
+      YSN[,kk] <- ySN;
+      rm(ySN);
 
       verbose && exit(verbose);
     } # for (kk ...)
+    verbose && summary(verbose, YSN);
+    verbose && str(verbose, YSN);
+    verbose && exit(verbose);
 
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    # Calculating shifts
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    verbose && enter(verbose, "Median mean per chromosome across sources");
-    mu <- rowMedians(mus, na.rm=TRUE);
-    names(mu) <- rownames(mus);
-    verbose && print(verbose, mu);
+    verbose && enter(verbose, "Calculating shifts chromosome by chromosome");
+
+    # Allocate matrices to hold all mean and shift values
+    nbrOfChromosomes <- length(unitsS);
+    naValue <- as.double(NA);
+    mus <- matrix(naValue, nrow=nbrOfChromosomes, ncol=nbrOfArrays);
+    rownames(mus) <- names(unitsS);
+    dmus <- mus;
+
+    for (chr in seq(length=nbrOfChromosomes)) {
+      chrStr <- sprintf("Chr%02d", chr);
+      verbose && enter(verbose, sprintf("Chromosome #%d of %d", 
+                                                     chr, nbrOfChromosomes));
+      # Get the units
+      unitsCC <- unitsS[[chrStr]];
+
+      verbose && enter(verbose, "Extracting backtransformed *smoothed* data");
+      yList <- list();
+      for (kk in seq(length=nbrOfArrays)) {
+        yList[[kk]] <- YSN[unitsCC,kk,drop=TRUE];
+      } # for (kk ...)
+      verbose && str(verbose, yList);
+      verbose && exit(verbose);
+
+      verbose && enter(verbose, "Estimating averages and shifts toward targetDimension");
+      verbose && cat(verbose, "Target dimension: ", targetDimension);
+      # Estimate averages and shifts toward targetDimension
+      yNList <- normalizeDifferencesToAverage(yList, baseline=targetDimension);
+      alignFit <- attr(yNList, "fit");
+      verbose && str(verbose, alignFit);
+      verbose && exit(verbose);
+
+      mus[chrStr,] <- alignFit$mus;
+      dmus[chrStr,] <- alignFit$deltas;
+
+      rm(alignFit, yList, yNList);
+      verbose && exit(verbose);
+    } # for (chr ...)
     verbose && exit(verbose);
-    
-    verbose && enter(verbose, "Shift per chromosome across sources");
-    dmus <- mus - mu;
+
+    rm(YSN);
+
+    verbose && cat(verbose, "Overall averages:");
+    verbose && print(verbose, mus);
+    verbose && cat(verbose, "Overall shifts:");
     verbose && print(verbose, dmus);
+    verbose && cat(verbose, "Target dimension: ", targetDimension);
     verbose && exit(verbose);
-    
+
     fit$alignParams <- list(
       dmus=dmus,
-      mu=mu
+      mus=mus
     );
 
     verbose && exit(verbose);
-  } # if (alignByChromosome)
+  } # if (align ...)
 
   verbose && str(verbose, fit);
 
@@ -1034,12 +1075,15 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
   verbose && str(verbose, params);
   subsetToUpdate <- params$subsetToUpdate;
   targetDimension <- params$targetDimension;
-  alignByChromosome <- params$alignByChromosome;
+  align <- params$align;
 
   # Get (and create) the output paths
   outputPaths <- getOutputPaths(this); 
 
-  if (alignByChromosome) {
+  if (is.element(align, c("byChromosome"))) {
+    verbose && enter(verbose, "Estimate alignment parameters");
+    verbose && cat(verbose, "align=", align);
+
     verbose && enter(verbose, "Extracting align-by-chromosome parameters");
     alignParams <- fit$alignParams;
     verbose && str(verbose, alignParams);
@@ -1055,7 +1099,9 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
       throw("Internal error: No shift estimates found.");
     }
     verbose && exit(verbose);
-  }
+
+    verbose && exit(verbose);
+  } # if (align ...)
     
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1105,7 +1151,10 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       # Aligning signals chromosome by chromosome?
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      if (alignByChromosome) {
+      if (is.element(align, c("byChromosome"))) {
+        verbose && enter(verbose, "Align genomic signals");
+        verbose && cat(verbose, "align=", align);
+
         verbose && enter(verbose, "Aligning signals for each chromosome");
         ugp <- getAromaUgpFile(df);
         chromosomes <- getChromosomes(ugp);
@@ -1151,7 +1200,9 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
         verbose && str(verbose, yN);
   
         verbose && exit(verbose);
-      } # if (alignByChromosome)
+
+        verbose && exit(verbose);
+      } # if (align ...)
 
 
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1260,7 +1311,6 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
 # @author
 #
 # \seealso{
-#   @seemethod "fit".
 #   @seeclass
 # }
 #*/########################################################################### 
@@ -1370,6 +1420,11 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 ###########################################################################
 # HISTORY:
 # 2009-09-30
+# o Now the alignment is done using normalizeDifferencesToAverage(),
+#   which is robust against outliers and waviness etc.  The previous
+#   method which normalized towards the same overall median is dropped.
+# o Renamed argument 'alignByChromosome' to "align" in order to allow for
+#   more types of aligned.
 # o BUG FIX: getTags() of MultiSourceCopyNumberNormalization would return
 #   all asterisk tags as merged, e.g. c("mscn,align", "tagA", "tagB").
 # 2009-05-17

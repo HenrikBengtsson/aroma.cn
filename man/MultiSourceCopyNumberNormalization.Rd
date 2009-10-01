@@ -35,7 +35,7 @@ extends \link[R.oo]{Object}\cr
   the mean level of the normalized data are the same.
  }
 
- \usage{MultiSourceCopyNumberNormalization(dsList=NULL, fitUgp=NULL, subsetToFit=NULL, targetDimension=1, alignByChromosome=FALSE, tags="*", ...)}
+ \usage{MultiSourceCopyNumberNormalization(dsList=NULL, fitUgp=NULL, subsetToFit=NULL, targetDimension=1, align=c("byChromosome", "none"), tags="*", ...)}
 
  \arguments{
   \item{dsList}{A \code{\link[base]{list}} of K \code{\link[aroma.core]{AromaUnitTotalCnBinarySet}}:s.}
@@ -49,9 +49,12 @@ extends \link[R.oo]{Object}\cr
     \code{dsList} to which each platform in standardize towards.
     If \code{\link[base]{NULL}}, the arbitrary scale along the fitted principal curve
     is used.  This always starts at zero and increases.}
-  \item{alignByChromosome}{If \code{\link[base:logical]{TRUE}}, the signals are shifted chromosome
+  \item{align}{A \code{\link[base]{character}} specifying type of alignment applied, if any.
+    If \code{"none"}, no alignment is done.
+    If \code{"byChromosome"}, the signals are shifted chromosome
     by chromosome such the corresponding smoothed signals have the same
-    mean (non-robust) across sources. For more details, see below.
+    median signal across sources.
+    For more details, see below.
   }
   \item{tags}{(Optional) Sets the tags for the output data sets.}
   \item{...}{Not used.}
@@ -111,9 +114,9 @@ asThis, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clone
     strong assumption.
 
     A more conservative approach is to normalize the signals such that
-    afterward the mean of the smoothed copy-number levels are the same
+    afterward the median of the smoothed copy-number levels are the same
     across sources for any particular chromosome.
-    This is done by setting argument \code{alignByChromosome=TRUE}.
+    This is done by setting argument \code{align="byChromosome"}.
  }
 
  \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}

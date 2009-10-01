@@ -2,6 +2,13 @@ Package: aroma.cn
 =================
 
 Version: 0.3.6 [2009-09-30]
+o Renamed argument 'alignByChromosome' for the constructor of the
+  MultiSourceCopyNumberNormalization class to "align" in order to
+  allow for more types of aligned.
+o UPDATE: The alignment of MultiSourceCopyNumberNormalization is now
+  done using normalizeDifferencesToAverage(), which is robust against
+  outliers and waviness etc.  The previous method which normalized
+  toward the same overall median is no longer available.
 o Added normalizeDifferencesToAverage().
 o BUG FIX: getTags() of MultiSourceCopyNumberNormalization would return
   all asterisk tags as merged, e.g. c("mscn,align", "tagA", "tagB").

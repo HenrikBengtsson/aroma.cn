@@ -33,7 +33,6 @@
 \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
 
 \seealso{
-  \code{\link[aroma.cn:fit.MultiSourceCopyNumberNormalization]{*fit}()}.
   For more information see \code{\link{MultiSourceCopyNumberNormalization}}.
 }
 \keyword{internal}
