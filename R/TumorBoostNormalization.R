@@ -277,7 +277,7 @@ setMethodS3("nbrOfFiles", "TumorBoostNormalization", function(this, ...) {
 setMethodS3("getOutputDataSet", "TumorBoostNormalization", function(this, ...) {
   ds <- getInputDataSet(this);
   path <- getPath(this);
-  res <- fromFiles(ds, path=path, ...);
+  res <- byPath(ds, path=path, ...);
   res;
 })
 

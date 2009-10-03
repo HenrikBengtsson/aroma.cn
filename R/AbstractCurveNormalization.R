@@ -313,7 +313,7 @@ setMethodS3("nbrOfFiles", "AbstractCurveNormalization", function(this, ...) {
 setMethodS3("getOutputDataSet", "AbstractCurveNormalization", function(this, ...) {
   ds <- getInputDataSet(this);
   path <- getPath(this);
-  res <- fromFiles(ds, path=path, ...);
+  res <- byPath(ds, path=path, ...);
   res;
 })
 

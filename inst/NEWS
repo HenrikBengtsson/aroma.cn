@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 0.3.7 [2009-10-02]
+o CLEAN UP: Updated to use byPath() instead fromFiles().
+
+
 Version: 0.3.6 [2009-09-30]
 o Renamed argument 'alignByChromosome' for the constructor of the
   MultiSourceCopyNumberNormalization class to "align" in order to

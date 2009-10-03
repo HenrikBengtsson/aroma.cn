@@ -312,7 +312,7 @@ setMethodS3("getOutputDataSets", "MultiSourceCopyNumberNormalization", function(
       verbose && enter(verbose, "Scanning directory for matching data files");
       verbose && cat(verbose, "Path: ", path);
 
-      dsOut <- fromFiles(ds, path=path, ..., verbose=less(verbose, 10));
+      dsOut <- byPath(ds, path=path, ..., verbose=less(verbose, 10));
 
       verbose && enter(verbose, "Keeping output data files matching input data files");
       # Identify output data files that match the input data files
