@@ -131,6 +131,15 @@
 \alias{getSubsetToFit.PrincipalCurveNormalization}
 \alias{getPairedDataSet}
 \alias{getTargetDataSet}
+\alias{callGenotypes.RawAlleleBFractions}
+\alias{getCalls}
+\alias{getCalls.RawGenotypeCalls}
+\alias{getColors}
+\alias{getColors.RawGenotypeCalls}
+\alias{isHeterozygous.RawGenotypeCalls}
+\alias{isHomozygous.RawGenotypeCalls}
+\alias{RawGenotypeCalls}
+\alias{normalizeTumorBoost.RawAlleleBFractions}
 
 \description{
   This page contains aliases for all "non-documented" objects that

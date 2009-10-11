@@ -1,6 +1,12 @@
 Package: aroma.cn
 =================
 
+Version: 0.3.8 [2009-10-10]
+o Added normalizeTumorBoost() for RawAlleleBFractions.
+o Added callGenotypes() for RawAlleleBFractions.
+o Added RawGenotypeCalls. 
+
+
 Version: 0.3.7 [2009-10-02]
 o CLEAN UP: Updated to use byPath() instead fromFiles().
 
