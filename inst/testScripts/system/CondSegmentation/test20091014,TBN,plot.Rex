@@ -2,7 +2,9 @@ if (interactive()) savehistory();
 library("aroma.cn");
 library("R.menu");
 
-kappa <- 0.6;
+purify <- FALSE;
+
+kappa <- 0.5;
 #kappa <- 0.98;
 
 figPath <- Arguments$getWritablePath("figures");
@@ -27,7 +29,20 @@ if (interactive()) {
 }
 print(dataSet);
 
+getNbrOfModes <- function(y, choices=1:2, default=0) {
+  nbrOfModes <- default;
+  if ((length(y)>1) && require(mclust)) {
+    emFit <- Mclust(y, G=choices, model="E");
+    nbrOfModes <- emFit$G;
+    str(emFit);
+  }
+  nbrOfModes;
+}
 
+estimatePloidy <- function(C, weights=NULL, na.rm=TRUE) {
+  1/weightedMedian(C, weights, na.rm=na.rm)
+}
+  
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the normalized tumor data set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -142,7 +157,7 @@ dsPair <- extract(ds, pair);
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Segment the total CNs
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-Clim <- c(0,5);
+Clim <- c(0,4);
 rhoLim <- c(0,1);
 
 C1lab <- expression(C[minor]);
@@ -164,9 +179,10 @@ sampleName <- getName(dataList[[1]]);
 chipType <- getChipType(dataList[[1]]);
 
 key <- list(dataSetNames=sapply(dsList, FUN=getFullName), chipType=chipType, sampleName=sampleName, chromosomes=chromosomes);
-dirs <- c("aroma.cn", "TumorPurifier");
+dirs <- c("aroma.cn", "TumorPurifier", "test");
 
 data <- loadCache(key=key, dirs=dirs);
+## data <- NULL;
 if (is.null(data)) {
   verbose && enter(verbose, "Identifying all heterzygous SNPs");
   isHet <- isHeterozygous(dataList$dfCallN);
@@ -188,49 +204,69 @@ if (is.null(data)) {
     thetaT <- extractRawGenomicSignals(dataList$dfThetaT, chromosome=chr);
     thetaN <- extractRawGenomicSignals(dataList$dfThetaN, chromosome=chr);
     cn <- divideBy(thetaT, thetaN);
-    cn$y <- 2*cn$y;
+    cn$y <- log2(cn$y);
     verbose && exit(verbose);
     
     verbose && enter(verbose, "Segmenting");
-    cn$y <- log2(cn$y/2);
     fit <- segmentByCBS(cn, cache=TRUE);
-    cn$y <- 2*2^(cn$y);
     verbose && print(verbose, fit);
     regions <- extractCopyNumberRegions(fit);
     verbose && print(verbose, regions);
     verbose && exit(verbose);
-    
+
     verbose && enter(verbose, "Extracting tumor allele B fractions");
     fracB <- extractRawGenomicSignals(dataList$dfBetaTN, chromosome=chr, units=hets);
     verbose && exit(verbose);
     
-    verbose && enter(verbose, "Calculating average |beta| for heterozygotes region by region");
+    verbose && enter(verbose, "Extracting total copy numbers for hets only");
+    thetaT <- extractRawGenomicSignals(dataList$dfThetaT, chromosome=chr, units=hets);
+    thetaN <- extractRawGenomicSignals(dataList$dfThetaN, chromosome=chr, units=hets);
+    cnH <- divideBy(thetaT, thetaN);
+    cnH$y <- 2*cnH$y;
+    verbose && exit(verbose);
+
+    verbose && enter(verbose, "Calculating average major and minor CNs for hets region by region");
     dataCC <- as.data.frame(regions);
-    dataCC[,"mean"] <- 2*2^dataCC[,"mean"];
+    dataCC$mean <- 2*2^dataCC$mean;
+    
     for (rr in seq(length=nrow(dataCC))) {
       reg <- c(dataCC[rr,"start"], dataCC[rr,"stop"]);
       fracBRR <- extractRegion(fracB, region=reg);
+      cnHRR <- extractRegion(cnH, region=reg);
       n <- nbrOfLoci(fracBRR);
+      stopifnot(n==nbrOfLoci(cnHRR));
+      AI <- NA
       if (n > 0) {
-        rho <- abs(fracBRR$y-1/2);
+        rho <- fracBRR$y-1/2;
+        nbrOfModes <- getNbrOfModes(fracBRR$y);
+        AI <- TRUE;
+        if (nbrOfModes==1) {
+          AI <- FALSE;
+          cat(verbose, "Only one mode in rho for region ", reg);
+        } else {
+          rho <- abs(rho);
+        }
+        C1 <- (1/2-rho)*cnHRR$y;
+        C2 <- (1/2+rho)*cnHRR$y;
         avg <- mean(rho, na.rm=TRUE);
+        avgC1 <- mean(C1, na.rm=TRUE);
+        avgC2 <- mean(C2, na.rm=TRUE);
       } else {
         avg <- as.double(NA);
+        avgC1 <- as.double(NA);
+        avgC2 <- as.double(NA);
       }
       dataCC[rr,"meanRho"] <- avg;
       dataCC[rr,"nRho"] <- n;
+      dataCC[rr,"C1"] <- avgC1;
+      dataCC[rr,"C2"] <- avgC2;
+      dataCC[rr,"AI"] <- AI;
     } # for (rr ...)
     verbose && exit(verbose);
   
-    C <- dataCC[,"mean"];
-    rho <- dataCC[,"meanRho"];
-    C1 <- (1/2-rho)*C;
-    C2 <- (1/2+rho)*C;
-    dataCC[,"C1"] <- C1;
-    dataCC[,"C2"] <- C2;
     data <- rbind(data, dataCC);
   
-    xy <- cbind(x=C1,y=C2);
+    xy <- cbind(x=dataCC[,"C1"],y=dataCC[,"C2"]);
     points(xy, pch=".");
     text(xy[,1],xy[,2], dataCC$chromosome);
     verbose && exit(verbose);
@@ -240,16 +276,51 @@ if (is.null(data)) {
 
 C1t <- c(0, 0, 1, 0, 1);
 C2t <- c(0, 1, 1, 2, 2);
-C1x <- kappa*C1t + (1-kappa)*1;
-C2x <- kappa*C2t + (1-kappa)*1;
+if (!purify) {
+  C1t <- kappa*C1t + (1-kappa)*1;
+  C2t <- kappa*C2t + (1-kappa)*1;
+}
 
-nCount <- 150;
-dataT <- subset(data, count > nCount);
-dataT <- data;
+## estimate ploidy :)
+verbose && enter(verbose, "Estimating ploidy")
+isAB <- whichVector(!data$AI); ## "allelic balance"
+ploidy <- 2*2/weightedMedian(data$mean[isAB], data$nRho[isAB], na.rm=TRUE);
+## NB 2*2 is weird but true I think
+verbose && cat(verbose, "ploidy: ", ploidy)
+verbose && exit(verbose)
+
+verbose && enter(verbose, "Correcting copy numbers from ploidy")
+toCorrect <- c("mean", "C1", "C2");
+for (tt in toCorrect) {
+  data[, tt] <- data[, tt]*ploidy/2;
+}
+verbose && exit(verbose)
+
+if (purify) {
+  verbose && enter(verbose, "Correcting copy numbers from purity")
+  data[, "mean"] <- (data[, "mean"]-2*(1-kappa))/kappa;
+  data[, "C1"] <- (data[, "C1"]-(1-kappa))/kappa;
+  data[, "C2"] <- (data[, "C2"]-(1-kappa))/kappa;
+  verbose && exit(verbose)
+}
+
+nCount <- 50;
+dataT <- subset(data, nRho > nCount);
+## dataT <- data;
 C <- dataT[,"mean"];
 rho <- dataT[,"meanRho"];
-C1 <- (1/2-rho)*C;
-C2 <- (1/2+rho)*C;
+C1 <- dataT[,"C1"];
+C2 <- dataT[,"C2"];
+## isAB <- whichVector(!data$AI); ## "allelic balance"
+## C1[isAB] <- C[isAB]/2;
+## C2[isAB] <- C[isAB]/2;
+
+enter(verbose, "Defining weights for geneplotter")
+dataR <- dataT[, c("nRho", "C1", "C2")];
+weight <- dataT$nRho%/%nCount;
+C1GP <- rep(dataT$C1, times=weight);
+C2GP <- rep(dataT$C2, times=weight);
+exit(verbose);
 
 cex <- log10(data[,"count"]/10);
 
@@ -266,7 +337,7 @@ abline(a=0, b=1, lty=2);
 figName <- sprintf("C1C2,nCount=%.0f,kappa=%.2f", nCount, kappa);
 devSet(figName);
 plot(NA, xlim=Clim, ylim=Clim, xlab=C1lab, ylab=C2lab);
-points(C1x,C2x, pch=19, cex=2, col="red");
+points(C1t,C2t, pch=19, cex=2, col="red");
 points(C1, C2, pch=".", cex=cex);
 stext(side=3, pos=0, sampleName);
 stext(side=4, pos=0, cex=0.7, chipType);
@@ -275,15 +346,35 @@ stext(side=4, pos=1, cex=0.7, sprintf("At least %.0f loci in TCN", nCount));
 text(C1,C2, labels=data$chromosome, cex=0.8);
 abline(a=0, b=1, lty=2);
 
+cex <- 2;
+if (require(geneplotter)) {
+  figName <- sprintf("C1C2,nCount=%.0f,smoothScatter", nCount);
+  devSet(figName);
+  Clim <- c(0, ceiling(max(C2)));
+  fileName <- sprintf("%s,%s.png", figName, sampleName);
+  pathName <- file.path(figPath, fileName);
+  png(pathName, width=600, height=600);
+  par(mar=c(2.5,2.4,1.3,1)+0.1, mgp=c(1.4,0.3,0), cex=cex);
+  smoothScatter(C1GP, C2GP, xlim=Clim, ylim=Clim, xlab=C1lab, ylab=C2lab);
+##   stext(side=3, pos=0, sampleName);
+  stext(side=4, pos=0, sprintf("%s,%s", sampleName, chipType), cex=1);
+  stext(side=3, pos=1, sprintf("CNs corrected for ploidy (estimated as %.2f)", ploidy));
 
-stop();
+  stext(side=4, pos=1, sprintf(">%.0f heterozygous loci in each region", nCount), cex=1);
+  abline(a=0, b=1, lty=2);
+  if (purify) {
+    abline(h=seq(Clim[1], Clim[2]), lty=4, col="#999999");
+    abline(v=seq(Clim[1], Clim[2]), lty=4, col="#999999");
+  }
+  devDone();
+}
 
-figName <- sprintf("Crho");
-devSet(figName);
-plot(NA, xlim=Clim, ylim=rhoLim, xlab=expression(C), ylab=expression(rho[T]));
-stext(side=3, pos=0, sampleName);
-stext(side=4, pos=0, cex=0.7, chipType);
-stext(side=4, pos=1, cex=0.7, "At least 200 loci in TCN");
-points(xy, pch=".");
-text(xy, labels=data$chromosome);
-
+############################################################################
+## HISTORY:
+## 2009-10-14
+## o Added an estimate of ploidy and correction for ploidy.
+## o Added function 'getNbrOfModes' to test unimodality of BAF.
+## When one mode only (no AI), rho is estimated as mean(BAF)-1/2
+## (ie essentially 0) instead of mean(abs(BAF-1/2)).
+## o Created from test20090927.Rex.
+############################################################################
