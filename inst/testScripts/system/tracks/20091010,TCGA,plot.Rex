@@ -3,6 +3,12 @@ library("aroma.affymetrix");
 library("aroma.cn");
 library("R.menu");
 
+# Find the directory of this script being source():ed.
+path <- getParent(names(findSourceTraceback())[1]);
+pathname <- Arguments$getReadablePathname("utils.R", path=path);
+source(pathname);
+
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Local functions
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
