@@ -3,9 +3,26 @@ library("aroma.cn");
 
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
+rootPath <- Arguments$getReadablePath(rootPath);
 
-## dataSet <- "TCGA,GBM,onePair";
-dataSet <- "TCGA,OV,testSet,pairs,Broad";
+pattern <- "^TCGA,OV,testSet,pairs";
+dataSets <- list.files(path=rootPath, pattern=pattern);
+exclPattern <- ",TBN";
+keep <- (regexpr(exclPattern, dataSets) == -1);
+dataSets <- dataSets[keep];
+# Sanity check
+stopifnot(length(dataSets) > 0);
+
+if (interactive()) {
+  dataSet <- textMenu(dataSets, value=TRUE);
+} else {
+  ## dataSet <- "TCGA,GBM,onePair";
+  dataSet <- "TCGA,OV,testSet,pairs,Broad,ismpolish";
+  dataSet <- "TCGA,OV,testSet,pairs,Stanford";
+  dataSet <- "TCGA,OV,testSet,pairs,Broad,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY";
+}
+print(dataSet);
+
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the raw (tumor,normal) data set
@@ -202,6 +219,8 @@ csN <- AromaUnitSignalBinarySet$byName(dataSet, tags="NGC", chipType="*", patter
 print(csN);
 ############################################################################
 ## HISTORY:
+## 2009-10-28
+## o Now uses R.menu to choose data set.
 ## 2009-06-20
 ## o Added confidence scores.
 ## o Created from test20090429a,NGC.Rex.

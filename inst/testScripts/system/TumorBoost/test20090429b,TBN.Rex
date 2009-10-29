@@ -6,7 +6,7 @@ log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 rootPath <- Arguments$getReadablePath(rootPath);
 
-pattern <- "^TCGA,OV,testSet,pairs";
+pattern <- "(^TCGA,OV,testSet,pairs|TumorBoostPaper)";
 dataSets <- list.files(path=rootPath, pattern=pattern);
 exclPattern <- ",TBN";
 keep <- (regexpr(exclPattern, dataSets) == -1);
