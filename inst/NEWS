@@ -1,9 +1,11 @@
 Package: aroma.cn
 =================
 
-Version: 0.3.9 [2009-11-01]
+Version: 0.4.0 [2009-11-01]
 o CLEAN UP: Removed suggested dependency on princurve, which is
   now indirectly suggested/requested via aroma.light.
+o More recent dependencies on Bioconductor packages.
+o Package passes R CMD check on R v2.10.0.
 
 
 Version: 0.3.8 [2009-10-10]
