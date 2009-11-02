@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 0.3.9 [2009-11-01]
+o CLEAN UP: Removed suggested dependency on princurve, which is
+  now indirectly suggested/requested via aroma.light.
+
+
 Version: 0.3.8 [2009-10-10]
 o Added normalizeTumorBoost() for RawAlleleBFractions.
 o Added callGenotypes() for RawAlleleBFractions.
