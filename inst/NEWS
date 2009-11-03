@@ -1,6 +1,13 @@
 Package: aroma.cn
 =================
 
+Version: 0.4.1 [2009-11-03]
+o Added an example() to the Rd help of callNaiveGenotypes().
+o Added Rd help to findPeaksAndValleys().
+o Now argument 'tol' of findPeaksAndValleys() can be zero;
+  before it had to be at least the smallest possible double.
+
+
 Version: 0.4.0 [2009-11-01]
 o CLEAN UP: Removed suggested dependency on princurve, which is
   now indirectly suggested/requested via aroma.light.

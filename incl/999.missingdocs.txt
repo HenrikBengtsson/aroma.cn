@@ -29,7 +29,7 @@
   asTotalFracBSnpData.PolarSnpData
   asTotalFracBSnpData.TotalFracBSnpData callGenotypes
   callGenotypes.SnpData callGenotypes.TotalFracBSnpData
-  CartesianSnpData findPeaksAndValleys findPeaksAndValleys.numeric
+  CartesianSnpData 
   pairedBoost pairedBoost.CartesianSnpData pairedBoost.PolarSnpData
   pairedBoost.TotalFracBSnpData plot.CartesianSnpData plot.PolarSnpData
   plot.SnpData plot.TotalFracBSnpData PolarSnpData SnpData

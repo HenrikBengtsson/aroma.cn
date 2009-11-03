@@ -67,8 +67,6 @@
 \alias{callGenotypes.SnpData}
 \alias{callGenotypes.TotalFracBSnpData}
 \alias{CartesianSnpData}
-\alias{findPeaksAndValleys}
-\alias{findPeaksAndValleys.numeric}
 \alias{pairedBoost}
 \alias{pairedBoost.CartesianSnpData}
 \alias{pairedBoost.PolarSnpData}

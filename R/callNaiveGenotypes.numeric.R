@@ -21,7 +21,7 @@
 #  \item{flavor}{A @character string specifying the type of algorithm used.}
 #  \item{adjust}{A postive @double specifying the amount smoothing for
 #    the empirical density estimator.}
-#  \item{...}{Not used.}
+#  \item{...}{Additional arguments passed to @see "findPeaksAndValleys".}
 # }
 #
 # \value{
@@ -32,7 +32,13 @@
 #   Non called genotypes have value @NA.
 # }
 #
+# @examples "..\incl\callNaiveGenotypes.Rex"
+#
 # @author
+#
+# \seealso{
+#   Internally @see "findPeaksAndValleys" is used to identify the thresholds.
+# }
 #*/########################################################################### 
 setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), flavor=c("density"), adjust=1.5, ...) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -86,7 +92,7 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
     keep <- which(cn == cnKK);
     yKK <- y[keep];
     muKK <- rep(naValue, length(yKK));
-    fit <- findPeaksAndValleys(yKK, adjust=adjust, na.rm=TRUE);
+    fit <- findPeaksAndValleys(yKK, adjust=adjust, na.rm=TRUE, ...);
     fit <- subset(fit, type == "valley");
     nbrOfGenotypeGroups <- nrow(fit) + 1L;
 
@@ -121,6 +127,8 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
 
 ###########################################################################
 # HISTORY:
+# 2009-11-03
+# o Added an example() to the Rd help of callNaiveGenotypes().
 # 2009-07-08
 # o BUG FIX: Was never tested. Now tested via example(normalizeTumorBoost).
 # 2009-07-06
