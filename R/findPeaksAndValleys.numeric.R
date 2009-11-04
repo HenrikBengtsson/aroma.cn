@@ -13,6 +13,7 @@
 #
 # \arguments{
 #  \item{x}{A @numeric @vector containing data points.}
+#  \item{na.rm}{If @TRUE, missing values are dropped, otherwise not.}
 #  \item{...}{Arguments passed to @see "stats::density".}
 #  \item{tol}{A non-negative @numeric threshold specifying the minimum
 #    density at the extreme point in order to accept it.}
@@ -26,11 +27,14 @@
 #
 # @author
 #*/########################################################################### 
-setMethodS3("findPeaksAndValleys", "numeric", function(x, ..., tol=0.01) {
+setMethodS3("findPeaksAndValleys", "numeric", function(x, na.rm=TRUE, ..., tol=0) {
+  # Argument 'na.rm':
+  na.rm <- Arguments$getLogical(na.rm);
+
   # Argument 'tol':
   tol <- Arguments$getDouble(tol, range=c(0, Inf));
 
-  d <- density(x, ...);
+  d <- density(x, na.rm=na.rm, ...);
   delta <- diff(d$y);
   n <- length(delta);
 
@@ -46,7 +50,7 @@ setMethodS3("findPeaksAndValleys", "numeric", function(x, ..., tol=0.01) {
   y <- d$y[idxs];
   res <- data.frame(type=types, x=x, density=y);
 
-  # Filter by density?
+  # Filter valleys by density?
   if (tol > 0) {
     res <- subset(res, density >= tol);
   }

@@ -22,6 +22,10 @@
 #  \item{adjust}{A postive @double specifying the amount smoothing for
 #    the empirical density estimator.}
 #  \item{...}{Additional arguments passed to @see "findPeaksAndValleys".}
+#  \item{censorAt}{A @double @vector of length two specifying the range
+#    for which values are considered finite.  Values below (above) this 
+#    range are treated as -@Inf (+@inf).}
+#  \item{verbose}{A @logical or a @see "R.utils::Verbose" object.}
 # }
 #
 # \value{
@@ -34,13 +38,19 @@
 #
 # @examples "..\incl\callNaiveGenotypes.Rex"
 #
+# \section{Missing and non-finite values}{
+#   A missing value always gives a missing (@NA) genotype call.
+#   Negative infinity (-@Inf) always gives genotype call 0.
+#   Positive infinity (+@Inf) alwsys gives genotype call 1.
+# }
+#
 # @author
 #
 # \seealso{
 #   Internally @see "findPeaksAndValleys" is used to identify the thresholds.
 # }
 #*/########################################################################### 
-setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), flavor=c("density"), adjust=1.5, ...) {
+setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), flavor=c("density"), adjust=1.5, ..., censorAt=c(-0.5,+1.5), verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -50,7 +60,9 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
 
   # Argument 'cn':
   cn <- as.integer(cn);
-  if (length(cn) != J) {
+  if (length(cn) == 1) {
+    cn <- rep(cn, J);
+  } else if (length(cn) != J) {
     stop("The length of argument 'cn' does not match 'y': ",
                                             length(cn), " != ", J);
   }
@@ -73,6 +85,18 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
     stop("Argument 'adjust' must be positive: ", adjust);
   }
 
+  # Argument 'censorAt':
+  censorAt <- Arguments$getDoubles(censorAt, length=c(2,2));
+
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  } 
+ 
+
+  verbose && enter(verbose, "Calling genotypes from allele B fractions (BAFs)");
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Allocate result
@@ -80,6 +104,17 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
   naValue <- as.double(NA);
   mu <- rep(naValue, times=J);
 
+  verbose && enter(verbose, "Censoring BAFs");
+  verbose && cat(verbose, "Before:");
+  verbose && summary(verbose, y);
+  verbose && print(verbose, sum(is.finite(y)));
+  # Censor values
+  y[y < censorAt[1]] <- -Inf;
+  y[y > censorAt[2]] <- +Inf;
+  verbose && cat(verbose, "After:");
+  verbose && summary(verbose, y);
+  verbose && print(verbose, sum(is.finite(y)));
+  verbose && exit(verbose);
 
   # To please R CMD check
   type <- NULL; rm(type);
@@ -89,21 +124,35 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   for (kk in seq(along=uniqueCNs)) {
     cnKK <- uniqueCNs[kk];
+    verbose && enter(verbose, sprintf("Copy number level #%d (C=%g) of %d", kk, cnKK, length(uniqueCNs)));
+
     keep <- which(cn == cnKK);
     yKK <- y[keep];
-    muKK <- rep(naValue, length(yKK));
-    fit <- findPeaksAndValleys(yKK, adjust=adjust, na.rm=TRUE, ...);
+
+    # Exclude missing and non-finited values when fitting the density
+    yT <- yKK[is.finite(yKK)];
+    fit <- findPeaksAndValleys(yT, adjust=adjust, ...);
+    verbose && cat(verbose, "Identified extreme points in density of BAF:");
+    verbose && print(verbose, fit);
+
     fit <- subset(fit, type == "valley");
     nbrOfGenotypeGroups <- nrow(fit) + 1L;
+    verbose && cat(verbose, "Local minimas (\"valleys\") in BAF:");
+    verbose && print(verbose, fit);
 
+    # Call genotypes
+    muKK <- rep(naValue, length(yKK));
     if (cnKK == 0) {
+      verbose && cat(verbose, "TCN=0 => BAF not defined. Skipping.");
     } else if (cnKK == 1) {
+      verbose && cat(verbose, "TCN=1 => BAF in {0,1}.");
       # Sanity check
       stopifnot(nbrOfGenotypeGroups == 2);
       a <- fit$x[1];
       muKK[yKK <= a] <- 0;
       muKK[a < yKK] <- 1;
     } else if (cnKK == 2) {
+      verbose && cat(verbose, "TCN=2 => BAF in {0,1/2,1}.");
       # Sanity check
       stopifnot(nbrOfGenotypeGroups == 3);
       a <- fit$x[1];
@@ -113,6 +162,8 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
       muKK[b < yKK] <- 1;
     }
     mu[keep] <- muKK;
+
+    verbose && exit(verbose);
   } # for (kk ...)
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -120,6 +171,8 @@ setMethodS3("callNaiveGenotypes", "numeric", function(y, cn=rep(2L, length(y)), 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Sanity check
   stopifnot(length(mu) == J);
+
+  verbose && exit(verbose);
 
   mu;
 }) # callNaiveGenotypes()

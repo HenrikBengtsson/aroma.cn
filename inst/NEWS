@@ -2,6 +2,10 @@ Package: aroma.cn
 =================
 
 Version: 0.4.1 [2009-11-03]
+o Now callXXorXY() and callNaiveGenotypes() handles
+  missing values and non-finite values.  They also
+  censor outliers to become infinite/extreme values.
+o Added callXXorXY().
 o Added an example() to the Rd help of callNaiveGenotypes().
 o Added Rd help to findPeaksAndValleys().
 o Now argument 'tol' of findPeaksAndValleys() can be zero;

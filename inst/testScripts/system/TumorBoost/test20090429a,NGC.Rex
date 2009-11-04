@@ -84,60 +84,31 @@ for (kk in seq(dsN)) {
   }
 
   betaN <- dfN[units,1,drop=TRUE];
-  keep <- is.finite(betaN);
-  # In case there are outliers
-  keep <- keep & (-0.5 < betaN & betaN < 1.5);
-  betaN <- betaN[keep];
-  unitsN <- units[keep];
-  is23k <- is23[keep];
-  is24k <- is24[keep];
 
-  # Infer male or female
-  fit <- findPeaksAndValleys(betaN[is23k], adjust=adjust);
-  isXY <- (sum(fit$type == "peak") == 2);
-  if (sum(is24k) > 100) {
-    fit <- findPeaksAndValleys(betaN[is24k], adjust=adjust);
-    is24XY <- (sum(fit$type == "peak") == 2);
-    if (is24XY != isXY) {
-      throw("ChrX and ChrY is inconsistent");
-    }
-  }
+  # Call gender
+  gender <- callXXorXY(betaN[is23], betaN[is24], adjust=adjust);
 
+  # Call genotypes 
   naValue <- as.double(NA);
-  mu <- rep(naValue, times=length(unitsN));
-
-  # Call genotypes for autosomal+ChrX chromosomes
-  if (isXY) {
+  mu <- rep(naValue, times=length(units));
+  if (gender == "XY") {
     # All but ChrX & ChrY in male
-    isDiploid <- (!(is23k | is24k));
+    isDiploid <- (!(is23 | is24));
+    use <- which(isDiploid);
+    muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, 
+                                          verbose=less(verbose,10));
+    mu[use] <- muT;
+    use <- which(!isDiploid);
+    muT <- callNaiveGenotypes(betaN[use], cn=1, adjust=adjust, 
+                                           verbose=less(verbose,10));
+    mu[use] <- muT;
   } else {
     # All but ChrY in female
-    isDiploid <- (!is24k);
-  }
-  fit <- findPeaksAndValleys(betaN[isDiploid], adjust=adjust);
-  fit <- subset(fit, type == "valley");
-  # Sanity check
-  nbrOfGenotypeGroups <- nrow(fit)+1; 
-  stopifnot(nbrOfGenotypeGroups == 3);
-  a <- fit$x[1];
-  b <- fit$x[2]; 
-  mu[isDiploid & (betaN < a)] <- 0;
-  mu[isDiploid & (betaN > b)] <- 1; 
-  mu[isDiploid & (a <= betaN & betaN <= b)] <- 1/2;
-  print(table(mu, exclude=NULL));
-
-  # Call genotypes for ChrX+ChrY chromosomes
-  if (isXY) {
-    fit <- findPeaksAndValleys(betaN[!isDiploid], adjust=adjust);
-    fit <- subset(fit, type == "valley");
-    nbrOfGenotypeGroups <- nrow(fit)+1; 
-    stopifnot(nbrOfGenotypeGroups == 2);
-    a <- fit$x[1];
-    mu[!isDiploid & (betaN <= a)] <- 0;
-    mu[!isDiploid & (betaN  > a)] <- 1;
-  } else {
-    # ChrY on female
-    mu[!isDiploid] <- NA;
+    isDiploid <- (!is24);
+    use <- which(isDiploid);
+    muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, 
+                                          verbose=less(verbose,10));
+    mu[use] <- muT;
   }
   print(table(mu, exclude=NULL));
 
@@ -160,8 +131,8 @@ for (kk in seq(dsN)) {
   writeFooter(gfN, footer);
   rm(footer);
 
-  updateGenotypes(gfN, units=unitsN, calls=calls);
-  rm(unitsN, calls);
+  updateGenotypes(gfN, units=units, calls=calls);
+  rm(calls);
 
   res <- file.rename(pathnameT, pathname);
   if (!isFile(pathname)) {
@@ -179,13 +150,17 @@ for (kk in seq(dsN)) {
 gcN <- AromaUnitGenotypeCallSet$byName(dataSet, tags="NGC", chipType="*");
 print(gcN);
 
+
+
 ############################################################################
-## HISTORY:
-## 2009-06-09
-## o BUG FIX: 'is23' and 'is24' were modified within the 'kk' loop, causing an
-##   error when kk>1.
-## 2009-06-08
-## o Now uses 'AromaUnitGenotypeCallFile' and 'AromaUnitGenotypeCallSet'.
-## 2009-04-29
-## o Created.
+# HISTORY:
+# 2009-11-03
+# o Updated to make use of new/updated callXXorXY() & callNaiveGenotypes().
+# 2009-06-09
+# o BUG FIX: 'is23' and 'is24' were modified within the 'kk' loop, 
+#   causing an error when kk>1.
+# 2009-06-08
+# o Now uses 'AromaUnitGenotypeCallFile' and 'AromaUnitGenotypeCallSet'.
+# 2009-04-29
+# o Created.
 ############################################################################

@@ -19,7 +19,7 @@
    Calls genotypes in a normal sample.
  }
 
- \usage{\method{callNaiveGenotypes}{numeric}(y, cn=rep(2, length(y)), flavor=c("density"), adjust=1.5, ...)}
+ \usage{\method{callNaiveGenotypes}{numeric}(y, cn=rep(2, length(y)), flavor=c("density"), adjust=1.5, ..., censorAt=c(-0.5, +1.5), verbose=FALSE)}
 
  \arguments{
   \item{y}{A \code{\link[base]{numeric}} \code{\link[base]{vector}} of length J containing allele B fractions
@@ -32,6 +32,10 @@
   \item{adjust}{A postive \code{\link[base]{double}} specifying the amount smoothing for
     the empirical density estimator.}
   \item{...}{Additional arguments passed to \code{\link{findPeaksAndValleys}}().}
+  \item{censorAt}{A \code{\link[base]{double}} \code{\link[base]{vector}} of length two specifying the range
+    for which values are considered finite.  Values below (above) this
+    range are treated as -\code{\link[base:is.finite]{Inf}} (+@inf).}
+  \item{verbose}{A \code{\link[base]{logical}} or a \code{\link[R.utils]{Verbose}} object.}
  }
 
  \value{
@@ -49,48 +53,57 @@ par(mar=c(2,4,4,1)+0.1)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # A bimodal distribution
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-x1 <- rnorm(n=10000, mean=0, sd=1)
-x2 <- rnorm(n=10000, mean=4, sd=1)
-x <- c(x1,x2)
+xAA <- rnorm(n=10000, mean=0, sd=0.1)
+xBB <- rnorm(n=10000, mean=1, sd=0.1)
+x <- c(xAA,xBB)
 fit <- findPeaksAndValleys(x)
-calls <- callNaiveGenotypes(x, cn=rep(1,length(x)))
-xc <- split(x, calls)
 print(fit)
+calls <- callNaiveGenotypes(x, cn=rep(1,length(x)), verbose=-20)
+xc <- split(x, calls)
 print(table(calls))
 xx <- c(list(x),xc)
-plotDensity(xx, adjust=1.5, lwd=2, col=seq(along=xx), main="c(x1,x2)")
+plotDensity(xx, adjust=1.5, lwd=2, col=seq(along=xx), main="(AA,BB)")
 abline(v=fit$x)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# A trimodal distribution
+# A trimodal distribution with missing values
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-x3 <- rnorm(n=10000, mean=8, sd=1)
-x <- c(x1,x2,x3)
+xAB <- rnorm(n=10000, mean=1/2, sd=0.1)
+x <- c(xAA,xAB,xBB)
+x[sample(length(x), size=0.05*length(x))] <- NA;
+x[sample(length(x), size=0.01*length(x))] <- -Inf;
+x[sample(length(x), size=0.01*length(x))] <- +Inf;
 fit <- findPeaksAndValleys(x)
+print(fit)
 calls <- callNaiveGenotypes(x)
 xc <- split(x, calls)
-print(fit)
 print(table(calls))
 xx <- c(list(x),xc)
-plotDensity(xx, adjust=1.5, lwd=2, col=seq(along=xx), main="c(x1,x2,x3)")
+plotDensity(xx, adjust=1.5, lwd=2, col=seq(along=xx), main="(AA,AB,BB)")
 abline(v=fit$x)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # A trimodal distribution with clear separation
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-x1b <- rnorm(n=10000, mean=0, sd=0.1)
-x2b <- rnorm(n=10000, mean=4, sd=0.1)
-x3b <- rnorm(n=10000, mean=8, sd=0.1)
-x <- c(x1b,x2b,x3b)
-fit <- findPeaksAndValleys(x, tol=0)
-calls <- callNaiveGenotypes(x, tol=0)
-xc <- split(x, calls)
+xAA <- rnorm(n=10000, mean=0, sd=0.02)
+xAB <- rnorm(n=10000, mean=1/2, sd=0.02)
+xBB <- rnorm(n=10000, mean=1, sd=0.02)
+x <- c(xAA,xAB,xBB)
+fit <- findPeaksAndValleys(x)
 print(fit)
+calls <- callNaiveGenotypes(x)
+xc <- split(x, calls)
 print(table(calls))
 xx <- c(list(x),xc)
-plotDensity(xx, adjust=1.5, lwd=2, col=seq(along=xx), main="c(x1b,x2b,x3b)")
+plotDensity(xx, adjust=1.5, lwd=2, col=seq(along=xx), main="(AA',AB',BB')")
 abline(v=fit$x)
 }
+
+ \section{Missing and non-finite values}{
+   A missing value always gives a missing (\code{\link[base]{NA}}) genotype call.
+   Negative infinity (-\code{\link[base:is.finite]{Inf}}) always gives genotype call 0.
+   Positive infinity (+\code{\link[base:is.finite]{Inf}}) alwsys gives genotype call 1.
+ }
 
  \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
 

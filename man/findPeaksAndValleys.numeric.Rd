@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Do not modify this file since it was automatically generated from:
 % 
-%  findPeaksAndValleys.R
+%  findPeaksAndValleys.numeric.R
 % 
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -19,10 +19,11 @@
    Finds extreme points in the empirical density estimated from data.
  }
 
- \usage{\method{findPeaksAndValleys}{numeric}(x, ..., tol=0.01)}
+ \usage{\method{findPeaksAndValleys}{numeric}(x, na.rm=TRUE, ..., tol=0)}
 
  \arguments{
   \item{x}{A \code{\link[base]{numeric}} \code{\link[base]{vector}} containing data points.}
+  \item{na.rm}{If \code{\link[base:logical]{TRUE}}, missing values are dropped, otherwise not.}
   \item{...}{Arguments passed to \code{\link[stats]{density}}.}
   \item{tol}{A non-negative \code{\link[base]{numeric}} threshold specifying the minimum
     density at the extreme point in order to accept it.}
