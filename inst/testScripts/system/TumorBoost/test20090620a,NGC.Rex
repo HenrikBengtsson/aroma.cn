@@ -1,11 +1,14 @@
 if (interactive()) savehistory();
 library("aroma.cn");
+library(R.menu);
 
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 rootPath <- Arguments$getReadablePath(rootPath);
 
 pattern <- "^TCGA,OV,testSet,pairs";
+## pattern <- "^broad.mit.edu_(GBM|OV).Genome_Wide_SNP_6(.*),(.*)";
+
 dataSets <- list.files(path=rootPath, pattern=pattern);
 exclPattern <- ",TBN";
 keep <- (regexpr(exclPattern, dataSets) == -1);
@@ -97,10 +100,10 @@ for (kk in seq(dsN)) {
   is24k <- is24[keep];
 
   # Infer male or female
-  fit <- findPeaksAndValleys(betaN[is23k], adjust=adjust);
+  fit <- findPeaksAndValleys(betaN[is23k], adjust=adjust, from=0, to=1);
   isXY <- (sum(fit$type == "peak") == 2);
   if (sum(is24k) > 100) {
-    fit <- findPeaksAndValleys(betaN[is24k], adjust=adjust);
+    fit <- findPeaksAndValleys(betaN[is24k], adjust=adjust, from=0, to=1);
     is24XY <- (sum(fit$type == "peak") == 2);
     if (is24XY != isXY) {
       throw("ChrX and ChrY is inconsistent");
@@ -119,7 +122,7 @@ for (kk in seq(dsN)) {
     # All but ChrY in female
     isDiploid <- (!is24k);
   }
-  fit <- findPeaksAndValleys(betaN[isDiploid], adjust=adjust);
+  fit <- findPeaksAndValleys(betaN[isDiploid], adjust=adjust, from=0, to=1);
   fit <- subset(fit, type == "valley");
   # Sanity check
   nbrOfGenotypeGroups <- nrow(fit)+1; 
@@ -136,7 +139,7 @@ for (kk in seq(dsN)) {
 
   # Call genotypes for ChrX+ChrY chromosomes
   if (isXY) {
-    fit <- findPeaksAndValleys(betaN[!isDiploid], adjust=adjust);
+    fit <- findPeaksAndValleys(betaN[!isDiploid], adjust=adjust, from=0, to=1);
     fit <- subset(fit, type == "valley");
     nbrOfGenotypeGroups <- nrow(fit)+1; 
     stopifnot(nbrOfGenotypeGroups == 2);
@@ -219,6 +222,9 @@ csN <- AromaUnitSignalBinarySet$byName(dataSet, tags="NGC", chipType="*", patter
 print(csN);
 ############################################################################
 ## HISTORY:
+## 2009-11-05
+## o BUG FIX: Now use findPeakAndValleys(..., from=0, to=1) to prevent
+## points outside [0,1] to fool density estimation.
 ## 2009-10-28
 ## o Now uses R.menu to choose data set.
 ## 2009-06-20

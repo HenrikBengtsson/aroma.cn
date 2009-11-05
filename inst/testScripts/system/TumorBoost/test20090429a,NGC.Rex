@@ -7,6 +7,8 @@ rootPath <- "totalAndFracBData";
 rootPath <- Arguments$getReadablePath(rootPath);
 
 pattern <- "^TCGA,OV,testSet,pairs";
+pattern <- "^broad.mit.edu_(GBM|OV).Genome_Wide_SNP_6(.*),(.*)";
+
 dataSets <- list.files(path=rootPath, pattern=pattern);
 exclPattern <- ",TBN";
 keep <- (regexpr(exclPattern, dataSets) == -1);
@@ -43,6 +45,7 @@ types <- sapply(ds, FUN=function(df) getTags(df)[1]);
 normals <- grep("(10|11)[A-Z]", types);
 dsN <- extract(ds, normals);
 print(dsN);
+
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -86,7 +89,7 @@ for (kk in seq(dsN)) {
   betaN <- dfN[units,1,drop=TRUE];
 
   # Call gender
-  gender <- callXXorXY(betaN[is23], betaN[is24], adjust=adjust);
+  gender <- callXXorXY(betaN[is23], betaN[is24], adjust=adjust, from=0, to=1);
 
   # Call genotypes 
   naValue <- as.double(NA);
@@ -95,18 +98,18 @@ for (kk in seq(dsN)) {
     # All but ChrX & ChrY in male
     isDiploid <- (!(is23 | is24));
     use <- which(isDiploid);
-    muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, 
+    muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, from=0, to=1,
                                           verbose=less(verbose,10));
     mu[use] <- muT;
     use <- which(!isDiploid);
-    muT <- callNaiveGenotypes(betaN[use], cn=1, adjust=adjust, 
+    muT <- callNaiveGenotypes(betaN[use], cn=1, adjust=adjust, from=0, to=1,
                                            verbose=less(verbose,10));
     mu[use] <- muT;
   } else {
     # All but ChrY in female
     isDiploid <- (!is24);
     use <- which(isDiploid);
-    muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, 
+    muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, from=0, to=1,
                                           verbose=less(verbose,10));
     mu[use] <- muT;
   }
