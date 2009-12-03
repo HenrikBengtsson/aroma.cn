@@ -83,7 +83,7 @@ loadData <- function(...) {
 } # loadData();
 
 
-main <- function(data, pa=NULL, region=NULL) {
+main <- function(data, pa=NULL, region=NULL, tracks=NULL) {
   if (is.null(pa)) {
     pa <- textPlotAnnotations(pa="default");
   }
@@ -105,7 +105,9 @@ main <- function(data, pa=NULL, region=NULL) {
   tracksDefault <- names(data);
   tracksDefault[is.element(tracksDefault, c("muN", "rhoN", "rhoT", "rhoTN"))] <- NA;
   tracksDefault <- tracksDefault[!is.na(tracksDefault)];
-  tracks <- tracksDefault;
+  if (is.null(tracks)) {
+    tracks <- tracksDefault;
+  }
   #selected <- is.element(names(data), tracksDefault);
   #tracks <- selectMenu(names(data), selected=selected);
   
@@ -168,16 +170,33 @@ main <- function(data, pa=NULL, region=NULL) {
         } else if (plot == "sceen") {
           devSet(figName);
         }
-  
-        par(mar=c(3.5,3.5,1.3,1.1), mgp=c(1.8, 0.8, 0));
-        par(cex.axis=1.5, cex.lab=1.5);
-        par(las=1); # Horizontal numbering of axes
+
         ylim <- gs$ylim;
         yAt <- gs$yAt;
+  
+        par(mar=c(3.5,3.5,1.3,1.1));
+        par(mgp=c(1.8, 0.8, 0));
+        par(cex.axis=1.5, cex.lab=1.5);
         axes <- (is.null(yAt));
+
+        par(mar=c(3.0,4.5,1.3,1.2));
+        par(mgp=c(3.1, 0.9, 0));
+        par(cex.axis=2.0, cex.lab=2.0);
+        axes <- FALSE;
+
+#        par(las=1); # Horizontal numbering of axes
+
+        if (inherits(gs, "RawAlleleBFractions")) {
+          ylab <- "Allele B fraction";
+        } else if (inherits(gs, "RawCopyNumbers")) {
+          ylab <- "Copy number";
+        } else {
+        }
+
+        pch <- ".";
         if (smoothCol != "NA") {
           col <- rawCol;
-          plot(gs, col=col, xlab=xlab, ylab=ylab, ylim=ylim, xScale=xScale, axes=axes);
+          plot(gs, pch=pch, col=col, xlab=xlab, ylab=ylab, ylim=ylim, xScale=xScale, axes=axes);
           gsS <- gs$smooth;
           points(gsS, cex=1.5*smoothCex, col="white", xScale=xScale);
           points(gsS, cex=smoothCex, col=smoothCol, xScale=xScale);
@@ -186,10 +205,10 @@ main <- function(data, pa=NULL, region=NULL) {
           if (is.null(col)) {
             col <- rawCol;
           }
-          plot(gs, col=col, xlab=xlab, ylab=ylab, ylim=ylim, xScale=xScale, axes=axes);
+          plot(gs, pch=pch, col=col, xlab=xlab, ylab=ylab, ylim=ylim, xScale=xScale, axes=axes);
         }
         if (!axes) {
-          box();
+#          box();
           axis(side=1);
           axis(side=2, at=yAt);
         }
@@ -204,7 +223,7 @@ main <- function(data, pa=NULL, region=NULL) {
         devDone();
       } # for (kk ...)
       plot <- "";
-    }
+    } # if (plot != "")
   
     choices <- c("Change chromosome", "Change region", "Change tracks", "Settings", "Plot on screen", "Write PNG", "Close all figures");
     ans <- textMenu(choices);
@@ -256,8 +275,10 @@ if (!exists("pa", mode="list")) {
 }
 
 if (!exists("data", mode="list")) {
-  data <- loadData(kappa=0.68);
-  data <- loadData(kappa=0.58);
+#  data <- loadData(kappa=0.68);
+  data <- loadData();
 }
 
+pa$width <- 840;
+pa$height <- 280;
 main(data=data, pa=pa);

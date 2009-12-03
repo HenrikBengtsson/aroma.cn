@@ -55,7 +55,7 @@ textCharacterVector <- function(query="Enter character vector: ", default=NULL, 
     if (identical(ans, "@@@")) {
       return(default);
     }
-    ans <- strsplit(ans, split="[, ]")[[1]];
+    ans <- strsplit(ans, split="[,]")[[1]];
     # Return default value
     ans <- sapply(ans, FUN=trim);
     ans0 <- ans;
@@ -74,7 +74,7 @@ textCharacterVector <- function(query="Enter character vector: ", default=NULL, 
 textPlotAnnotations <- function(pa=NULL, ...) {
   paDefault <- list(
     xScale = 1e-6,
-    Clim = c(0,5),
+    Clim = c(0,6),
     width = 640,
     height = 240,
     rawCol = "#999999",
@@ -138,31 +138,41 @@ textPlotAnnotations <- function(pa=NULL, ...) {
 
 extractTcgaSignals <- function(dsList, chromosome, region=NULL, kappa=1, ...) {
   ugp <- getAromaUgpFile(dsList$total);
-  units <- getUnitsOnChromosome(ugp, chromosome=chromosome, region=region);
-
-  # Extract total CNs
-  ds <- dsList$total;
-  dfT <- getFile(ds, 1);
-  dfN <- getFile(ds, 2);
-  thetaN <- extractRawCopyNumbers(dfN, chromosome=chromosome, units=units);
-  thetaT <- extractRawCopyNumbers(dfT, chromosome=chromosome, units=units);
-  thetaT$y <- 2* thetaT$y/thetaN$y;
-  C <- thetaT;
-
-  sampleName <- getName(dfN);
-  C$name <- sampleName;
-  C$col <- "black";
-  C$ylim <- c(0,5);
+  units0 <- getUnitsOnChromosome(ugp, chromosome=chromosome, region=region);
 
   # Extract allele B fractions
   ds <- dsList$fracB;
   dfT <- getFile(ds, 1);
   dfN <- getFile(ds, 2);
+
+  # Identify SNPs only
+  units <- units0;
+str(units);
+  betaN <- extractRawAlleleBFractions(dfN, chromosome=chromosome, units=units);
+  units <- units[!is.na(getSignals(betaN))];
+str(units);
+
   betaN <- extractRawAlleleBFractions(dfN, chromosome=chromosome, units=units);
   betaT <- extractRawAlleleBFractions(dfT, chromosome=chromosome, units=units);
 
+  sampleName <- getName(dfN);
   betaN$name <- betaT$name <- sampleName;
-  betaN$ylim <- betaT$ylim <- c(0,1);
+  betaN$ylim <- betaT$ylim <- c(-0.1,1.1);
+
+  # Extract total CNs
+  ds <- dsList$total;
+  dfT <- getFile(ds, 1);
+  dfN <- getFile(ds, 2);
+  thetaN <- extractRawCopyNumbers(dfN, chromosome=chromosome, units=units, logBase=NULL);
+#print(thetaN$.yLogBase);
+  thetaT <- extractRawCopyNumbers(dfT, chromosome=chromosome, units=units, logBase=NULL);
+#print(thetaT$.yLogBase);
+  thetaT$y <- 2 * thetaT$y/thetaN$y;
+  C <- thetaT;
+
+  C$name <- sampleName;
+  C$col <- "black";
+  C$ylim <- c(0,6);
 
   #Purify
   c <- C$y;
@@ -194,7 +204,9 @@ extractTcgaSignals <- function(dsList, chromosome, region=NULL, kappa=1, ...) {
                    betaTp=betaTp, betaTpN=betaTpN);
 
   # Add colors
-  col <- getColors(muN);
+  colorMap <- c(AA="red", AB="black", BB="red", "NA"="#999999");
+  colorMap <- c(AA="#999999", AB="#000000", BB="#999999", "NA"="#cccccc");
+  col <- getColors(muN, colorMap=colorMap);
   betaList <- lapply(betaList, FUN=function(beta) {
     beta$col <- col;
     addLocusFields(beta, "col");
