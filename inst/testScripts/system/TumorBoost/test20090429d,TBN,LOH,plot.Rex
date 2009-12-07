@@ -2,6 +2,15 @@ if (interactive()) savehistory();
 library("aroma.cn");
 library("R.menu");
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Local functions
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Fullnames translator
+fnt <- function(names, ...) {
+  pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
+  gsub(pattern, "\\1,\\2,\\3", names);
+} # fnt()
+
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 rootPath <- Arguments$getReadablePath(rootPath);
@@ -30,10 +39,7 @@ print(dataSet);
 # Load the normalized tumor data set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 dsTN <- AromaUnitFracBCnBinarySet$byName(dataSet, chipType="*", paths=rootPath);
-setFullNamesTranslator(dsTN, function(names, ...) {
-  pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
-  gsub(pattern, "\\1,\\2,\\3", names);
-}); 
+setFullNamesTranslator(dsTN, fnt);
 
 sampleNames <- sort(unique(getNames(dsTN)));
 print(sampleNames);
@@ -49,10 +55,7 @@ if (interactive()) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 dataSetOrg <- gsub(pattern, "\\1", dataSet);
 ds <- AromaUnitFracBCnBinarySet$byName(dataSetOrg, chipType="*", paths=rootPath);
-setFullNamesTranslator(ds, function(names, ...) {
-  pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
-  gsub(pattern, "\\1,\\2,\\3", names);
-});
+setFullNamesTranslator(ds, fnt);
 print(ds);
 
 pair <- indexOf(ds, sampleName);
@@ -92,7 +95,13 @@ print(callType);
 
 genotypeTag <- callType; 
 gsN <- AromaUnitGenotypeCallSet$byName(dataSetOrg, tags=genotypeTag, chipType="*");
-print(gsN); 
+setFullNamesTranslator(gsN, fnt);
+# Keep only normal genotype files
+types <- sapply(gsN, FUN=function(df) getTags(df)[1]);
+types <- gsub("[A-Z]$", "", types);
+keep <- which(is.element(types, c("10", "11")));
+gsN <- extract(gsN, keep);
+print(gsN);
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -100,10 +109,6 @@ print(gsN);
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 dsList <- list(normal=dsN, tumor=dsT, tumorN=dsTN, callsN=gsN);
 dsList <- lapply(dsList, FUN=function(ds) {
-  ds <- setFullNamesTranslator(ds, function(names, ...) {
-    pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
-    gsub(pattern, "\\1,\\2,\\3", names);
-  });
   idxs <- indexOf(ds, getNames(dsList$normal));
   extract(ds, idxs);
 });
@@ -165,4 +170,3 @@ for (kk in seq(along=fracBList)) {
   cnr <- extractCopyNumberRegions(fit);
   drawLevels(cnr, col="red", lwd=3);
 } # for (kk ...)
-

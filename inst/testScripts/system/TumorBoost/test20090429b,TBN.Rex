@@ -2,6 +2,15 @@ if (interactive()) savehistory();
 library("aroma.cn");
 library("R.menu");
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Local functions
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# Fullnames translator
+fnt <- function(names, ...) {
+  pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
+  gsub(pattern, "\\1,\\2,\\3", names);
+} # fnt()
+
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 rootPath <- Arguments$getReadablePath(rootPath);
@@ -29,10 +38,7 @@ print(dataSet);
 # Load the raw (tumor,normal) data set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
 ds <- AromaUnitFracBCnBinarySet$byName(dataSet, chipType="*", paths=rootPath);
-setFullNamesTranslator(ds, function(names, ...) {
-  pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
-  gsub(pattern, "\\1,\\2,\\3", names);
-});
+setFullNamesTranslator(ds, fnt);
 print(ds);
 
 sampleNames <- sort(unique(getNames(ds)));
@@ -88,8 +94,14 @@ print(callType);
 
 genotypeTag <- callType;
 gsN <- AromaUnitGenotypeCallSet$byName(dataSet, tags=genotypeTag, chipType="*");
-print(gsN);
+setFullNamesTranslator(gsN, fnt);
 
+# Keep only normal genotype files
+types <- sapply(gsN, FUN=function(df) getTags(df)[1]);
+types <- gsub("[A-Z]$", "", types);
+keep <- which(is.element(types, c("10", "11")));
+gsN <- extract(gsN, keep);
+print(gsN);
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -97,15 +109,12 @@ print(gsN);
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 dsList <- list(normal=dsN, tumor=dsT, callsN=gsN);
 dsList <- lapply(dsList, FUN=function(ds) {
-  ds <- setFullNamesTranslator(ds, function(names, ...) {
-    pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
-    gsub(pattern, "\\1,\\2,\\3", names);
-  });
   idxs <- indexOf(ds, getNames(dsList$normal));
   extract(ds, idxs);
 });
 print(dsList);
 
+dummy <- lapply(dsList, FUN=function(ds) print(getFile(ds,1)));
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Normalize allele B fractions for tumors given matched normals
