@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 0.4.2 [2009-12-09]
+o Made flavor="v4" of TumorBoostNormalization the default, and if 
+  used then no "flavor" tag is added.
+
+
 Version: 0.4.1 [2009-11-03]
 o Now callXXorXY() and callNaiveGenotypes() handles
   missing values and non-finite values.  They also

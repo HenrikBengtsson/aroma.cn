@@ -38,7 +38,7 @@ extends \link[R.oo]{Object}\cr
   afterwards.
  }
 
- \usage{TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2", "v3", "v4"), collapseHomozygous=FALSE, tags="*", ...)}
+ \usage{TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), collapseHomozygous=FALSE, tags="*", ...)}
 
  \arguments{
   \item{dsT}{An \code{\link[aroma.core]{AromaUnitFracBCnBinarySet}} of

@@ -42,7 +42,7 @@
 #
 # \author{Henrik Bengtsson and Pierre Neuvial}
 #*/########################################################################### 
-setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v1", "v2", "v3", "v4"), collapseHomozygous=FALSE, tags="*", ...) {
+setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), collapseHomozygous=FALSE, tags="*", ...) {
   # Validate arguments
   if (!is.null(dsT)) {
     # Argument 'flavor':
@@ -145,7 +145,7 @@ setMethodS3("getAsteriskTags", "TumorBoostNormalization", function(this, collaps
   tags <- "TBN";
 
   flavor <- getFlavor(this);
-  if (flavor != "v1") {
+  if (flavor != "v4") {
     tags <- c(tags, flavor);
   }
 
@@ -455,6 +455,9 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
 ############################################################################
 # HISTORY:
+# 2009-12-09
+# o Made flavor="v4" of TumorBoostNormalization the default, and if used
+#   then no "flavor" tag is added.
 # 2009-09-11
 # o Added table verbose output of the read genotypes.  This is just so one
 #   can verify the encoding, i.e. 0, 1/2, or 1.
