@@ -89,11 +89,8 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
 
       className <- "AromaUnitTotalCnBinarySet";
       for (kk in seq(length=K)) {
-        dataSet <- dsList[[kk]];
-        if (!inherits(dataSet, className)) {
-          throw("Argument 'dsList' contains a non-", className, " object: ", 
-                                                          class(dataSet)[1]);
-        }
+        ds <- dsList[[kk]];
+        ds <- Arguments$getInstanceOf(ds, className, .name="dsList");
       }
       if (length(dsList) < 2) {
         throw("Argument 'dsList' must contain more than one ", 
@@ -104,25 +101,21 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
     }
 
     # Arguments 'fitUgp':
-    className <- "AromaUgpFile";
-    if (!inherits(fitUgp, className)) {
-      throw("Argument 'fitUgp' is not an ", className, ": ", class(fitUgp)[1]);
-    }
+    fitUgp <- Arguments$getInstanceOf(fitUgp, "AromaUgpFile");
 
     # Argument 'subsetToFit':
     if (is.null(subsetToFit)) {
     } else if (is.character(subsetToFit)) {
       throw("Yet not implemented: Argument 'subsetToFit' is of type character.");
     } else {
-      subsetToFit <- Arguments$getIndices(subsetToFit, 
-                                          range=c(1, nbrOfUnits(fitUgp)));
+      subsetToFit <- Arguments$getIndices(subsetToFit, max=nbrOfUnits(fitUgp));
     }
 
     # Argument 'align'
     align <- match.arg(align);
 
     # Argument 'targetDimension'
-    targetDimension <- Arguments$getIndex(targetDimension, range=c(1, K));
+    targetDimension <- Arguments$getIndex(targetDimension, max=K);
   }
 
   # Arguments '...':
@@ -451,11 +444,8 @@ setMethodS3("extractTupleOfDataFiles", "MultiSourceCopyNumberNormalization", fun
   if (is.list(dsList)) {
     className <- "AromaUnitTotalCnBinarySet";
     for (kk in seq(along=dsList)) {
-      dataSet <- dsList[[kk]];
-      if (!inherits(dataSet, className)) {
-        throw("Argument 'dsList' contains a non-", className, " object: ", 
-                                                        class(dataSet)[1]);
-      }
+      ds <- dsList[[kk]];
+      ds <- Arguments$getInstanceOf(ds, className, .name="dsList");
     }
     if (length(dsList) < 2) {
       throw("Argument 'dsList' must contain more than one ", className, 

@@ -1,10 +1,10 @@
 Package: aroma.cn
-Version: 0.4.2
-Date: 2009-12-09
+Version: 0.4.3
+Date: 2010-01-01
 Title: Copy-number analysis of large microarray data sets
 Author: Henrik Bengtsson and Pierre Neuvial
 Maintainer: Henrik Bengtsson <henrikb@braju.com>
-Depends: R (>= 2.8.0), aroma.core (>= 1.3.1), aroma.light (>= 1.14.0)
+Depends: R (>= 2.8.0), aroma.core (>= 1.3.7), aroma.light (>= 1.14.0)
 Suggests: GLAD (>= 1.12.0), DNAcopy (>= 1.20.0)
 Description: Package for analysis of copy-number estimates obtained from various platforms.
 License: LGPL (>= 2.1)

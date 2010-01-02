@@ -39,7 +39,7 @@ setMethodS3("normalizeDifferencesToAverage", "list", function(x, baseline=1, FUN
 
   # Argument 'baseline':
   if (!is.null(baseline)) {
-    baseline <- Arguments$getIndex(baseline, range=c(1,ndim));
+    baseline <- Arguments$getIndex(baseline, max=ndim);
   }
 
 

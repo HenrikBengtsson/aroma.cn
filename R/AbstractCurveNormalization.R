@@ -43,10 +43,7 @@ setConstructorS3("AbstractCurveNormalization", function(dataSet=NULL, targetSet=
     for (kk in seq(along=dsList)) {
       key <- names(dsList)[kk];
       ds <- dsList[[kk]];
-      if (!inherits(ds, className)) {
-        throw(sprintf("Argument '%s' is not of class %s: %s", key, 
-                                         className, class(ds)[1]));
-      }
+      ds <- Arguments$getInstanceOf(ds, className, .name=key);
     } # for (kk ...)
 
     # Assert that each data set contains the same number of files
@@ -81,8 +78,7 @@ setConstructorS3("AbstractCurveNormalization", function(dataSet=NULL, targetSet=
     } else if (is.character(subsetToFit)) {
       throw("Yet not implemented: Argument 'subsetToFit' is of type character.");
     } else {
-      subsetToFit <- Arguments$getIndices(subsetToFit, 
-                                          range=c(1, nbrOfUnits(ugp)));
+      subsetToFit <- Arguments$getIndices(subsetToFit, max=nbrOfUnits(ugp));
     }
   } # if (!is.null(dataSet))
 
@@ -323,7 +319,7 @@ setMethodS3("getPairedDataSet", "AbstractCurveNormalization", function(this, arr
   nbrOfArrays <-nbrOfFiles(ds);
 
   # Argument 'array':
-  array <- Arguments$getIndex(array, range=c(1, nbrOfArrays));
+  array <- Arguments$getIndex(array, max=nbrOfArrays);
 
   df <- getFile(ds, array);
   name <- getName(df);

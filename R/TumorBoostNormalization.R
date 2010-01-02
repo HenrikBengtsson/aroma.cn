@@ -54,18 +54,11 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
     for (kk in seq(along=dsList)) {
       key <- names(dsList)[kk];
       ds <- dsList[[kk]];
-      if (!inherits(ds, className)) {
-        throw(sprintf("Argument '%s' is not of class %s: %s", key, 
-                                         className, class(ds)[1]));
-      }
+      ds <- Arguments$getInstanceOf(ds, className, .name="key");
     }
 
     # Argument 'gcN':
-    className <- "AromaUnitGenotypeCallSet";
-    if (!inherits(gcN, className)) {
-      throw(sprintf("Argument '%s' is not of class %s: %s", key, 
-                                         className, class(gcN)[1]));
-    }
+    gcN <- Arguments$getInstanceOf(gcN, "AromaUnitGenotypeCallSet");
 
     # Assert that each data set contains the same number of files
     dsList$gcN <- gcN;

@@ -1,6 +1,13 @@
 Package: aroma.cn
 =================
 
+Version: 0.4.3 [2010-01-01]
+o ROBUSTNESS: Using new Arguments$getInstanceOf() were possible.
+o ROBUSTNESS: Now all index arguments are validated correctly 
+  using the new 'max' argument of Arguments$getIndices().  Before
+  the case where "max == 0" was not handled correctly.  
+
+
 Version: 0.4.2 [2009-12-09]
 o Made flavor="v4" of TumorBoostNormalization the default, and if 
   used then no "flavor" tag is added.

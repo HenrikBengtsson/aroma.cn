@@ -28,10 +28,7 @@
 setConstructorS3("TotalCnSmoothing", function(dataSet=NULL, ..., bandwidth=50e3, targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet") {
   if (!is.null(dataSet)) {
     # Argument 'targetUgp':
-    if (!inherits(targetUgp, "AromaUgpFile")) {
-      throw("Argument 'targetUgp' is not an AromaUgpFile: ", 
-                                                    class(targetUgp)[1]);
-    }
+    targetUgp <- Arguments$getInstanceOf(targetUgp, "AromaUgpFile");
   }
 
   # Argument 'bandwidth':
