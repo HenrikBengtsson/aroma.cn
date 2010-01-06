@@ -306,10 +306,43 @@ setMethodS3("nbrOfFiles", "AbstractCurveNormalization", function(this, ...) {
 })
 
 
-setMethodS3("getOutputDataSet", "AbstractCurveNormalization", function(this, ...) {
+setMethodS3("getOutputDataSet", "AbstractCurveNormalization", function(this, ..., verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  } 
+
+
+  verbose && enter(verbose, "Getting output data set");
   ds <- getInputDataSet(this);
   path <- getPath(this);
-  res <- byPath(ds, path=path, ...);
+  verbose && cat(verbose, "Output path: ", path);
+  res <- byPath(ds, path=path, ..., verbose=less(verbose, 20));
+
+  verbose && enter(verbose, "Keeping output data files matching input data files");
+  # Identify output data files that match the input data files
+  fullnames <- getFullNames(ds);
+  df <- getFile(ds, 1);
+  translator <- getFullNameTranslator(df);
+  setFullNamesTranslator(res, translator);
+  fullnamesOut <- getFullNames(res);
+  idxs <- match(fullnames, fullnamesOut);
+  verbose && str(verbose, idxs);
+  if (anyMissing(idxs)) {
+    throw("Should not happen.");
+  }
+  verbose && cat(verbose, "Number of files dropped: ", nbrOfFiles(res) - length(idxs));
+  verbose && cat(verbose, "Number of files kept: ", length(idxs));
+  res <- extract(res, idxs);
+  verbose && exit(verbose);
+
+  verbose && exit(verbose);
+
   res;
 })
 
@@ -585,6 +618,8 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 ############################################################################
 # HISTORY:
 # 2010-01-05
+# o BUG FIX: getOutputDataSet() of AbstractCurveNormalization returned all
+#   files, not just the ones matching the input set.
 # o Added support for transform/untransform functions h(.) and g(.) to
 #   AbstractCurveNormalization, which allows us to fit say on the log
 #   scale, e.g. h(x)=log2(x), g(y)=2^y.
