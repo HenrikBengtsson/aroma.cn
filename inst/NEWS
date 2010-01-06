@@ -1,6 +1,12 @@
 Package: aroma.cn
 =================
 
+Version: 0.4.4 [2010-01-05]
+o Added support for transform/untransform functions h(.) and g(.) to
+  AbstractCurveNormalization, which allows us to fit say on the log
+  scale, e.g. h(x)=log2(x), g(y)=2^y.
+
+
 Version: 0.4.3 [2010-01-01]
 o ROBUSTNESS: Using new Arguments$getInstanceOf() were possible.
 o ROBUSTNESS: Now all index arguments are validated correctly 

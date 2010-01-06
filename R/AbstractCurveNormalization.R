@@ -343,7 +343,6 @@ setMethodS3("fitOne", "AbstractCurveNormalization", abstract=TRUE, protected=TRU
 setMethodS3("backtransformOne", "AbstractCurveNormalization", abstract=TRUE, protected=TRUE);
 
 
-
 setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=FALSE, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
@@ -368,6 +367,23 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
   verbose && cat(verbose, "Chip type: ", chipType);
 
   outPath <- getPath(this);
+  verbose && cat(verbose, "Output path: ", outPath);
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Optional function h() and g() for transforming and backtransform 
+  # signals.  Typically x = g(h(x)), although maybe only for positive
+  # values, e.g. h(x) = log2(x) and g(y) = 2^x.
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  hFcn <- this$.transformFcn;
+  gFcn <- this$.untransformFcn;
+  
+  # Sanity check (none or both functions must be specified)
+  if (is.function(hFcn) || is.function(gFcn)) {
+    if (!is.function(hFcn) || !is.function(gFcn)) {
+      throw("Either none or both h(.) and g(.) functions must be given.");
+    }
+  }
+
 
   for (kk in seq(length=nbrOfFiles)) {
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -432,30 +448,49 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
     verbose && str(verbose, theta);
     verbose && exit(verbose);
 
-    verbose && enter(verbose, "Identifying subset to fit");
-    subsetToFit <- getSubsetToFit(this);
-    verbose && cat(verbose, "Subset to fit:");
-    verbose && str(verbose, subsetToFit);
-    verbose && exit(verbose);
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    # Transforming data
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    if (is.function(hFcn)) {
+      verbose && enter(verbose, "Transforming");
+      verbose && cat(verbose, "Function y <- h(x):");
+      verbose && str(verbose, hFcn);
+      theta <- hFcn(theta);
+      verbose && str(verbose, theta);
+      verbose && exit(verbose);
+    }
 
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Fitting
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     verbose && enter(verbose, "Fitting");
+
+    verbose && enter(verbose, "Identifying subset to fit");
+    subsetToFit <- getSubsetToFit(this);
+    verbose && cat(verbose, "Subset to fit:");
+    verbose && str(verbose, subsetToFit);
+    verbose && exit(verbose);
+
+    verbose && enter(verbose, "Extracting subset used for fitting normalization function");
     thetaFit <- theta[subsetToFit,,drop=FALSE];
     rm(subsetToFit);
     verbose && str(verbose, thetaFit);
+    verbose && exit(verbose);
+    
+    verbose && enter(verbose, "Calling fit function");
     fit <- fitOne(this, theta=thetaFit, ..., verbose=verbose);
     rm(thetaFit);
     verbose && str(verbose, fit);
-
-    verbose && enter(verbose, "Saving fit");
-    filename <- sprintf("%s,fit.Rbin", fullname);
-    pathnameF <- Arguments$getWritablePathname(filename, path=outPath, mustNotExist=FALSE);
-    verbose && cat(verbose, "Fit pathname: ", pathnameF);
-#    saveObject(fit, file=pathnameF);
     verbose && exit(verbose);
+
+#    verbose && enter(verbose, "Saving fit");
+#    filename <- sprintf("%s,fit.Rbin", fullname);
+#    pathnameF <- Arguments$getWritablePathname(filename, path=outPath, mustNotExist=FALSE);
+#    verbose && cat(verbose, "Fit pathname: ", pathnameF);
+#    saveObject(fit, file=pathnameF);
+#    verbose && exit(verbose);
 
     verbose && exit(verbose);
 
@@ -463,7 +498,7 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Normalizing
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    verbose && enter(verbose, "Backtransforming all data (normalizing)");
+    verbose && enter(verbose, "Normalizing all data (using fitted normalization function)");
     verbose && cat(verbose, "theta:");
     verbose && str(verbose, theta);
     verbose && cat(verbose, "fit:");
@@ -475,6 +510,18 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
     thetaN <- thetaN[,2,drop=TRUE];
     verbose && str(verbose, thetaN);
     verbose && exit(verbose);
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    # Back-transforming data
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    if (is.function(gFcn)) {
+      verbose && enter(verbose, "Backtransforming");
+      verbose && cat(verbose, "Function x* <- g(y*) where g(h(x)) = x (should be):");
+      verbose && str(verbose, gFcn);
+      thetaN <- gFcn(thetaN);
+      verbose && str(verbose, thetaN);
+      verbose && exit(verbose);
+    }
 
     # Sanity check
     stopifnot(length(thetaN) == nbrOfUnits);
@@ -537,6 +584,10 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 
 ############################################################################
 # HISTORY:
+# 2010-01-05
+# o Added support for transform/untransform functions h(.) and g(.) to
+#   AbstractCurveNormalization, which allows us to fit say on the log
+#   scale, e.g. h(x)=log2(x), g(y)=2^y.
 # 2009-07-15
 # o Created.
 ############################################################################ 

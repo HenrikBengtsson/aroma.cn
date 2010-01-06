@@ -1,6 +1,6 @@
 if (interactive()) savehistory();
 library("aroma.cn");
-library("DNAcopy");
+library("mpcbs");
 
 log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 fig <- 1;
@@ -36,12 +36,12 @@ widths[widths < 420] <- 420;
 
 
 if (interactive()) {
-  ans <- textMenu(sprintf("Chr%02d", chromosomes));
-  chromosome <- chromosomes[ans];
+  choices <- sprintf("Chr%02d", chromosomes);
+  ans <- selectMenu(choices);
+  chromosomes <- chromosomes[match(ans, choices)];
 } else {
-  chromosome <- 20;
+  chromosomes <- 20;
 }
-chromosomes <- chromosome;
 
 tagsList <- list("MSKCC", "Harvard", "Stanford", "Broad");
 tagsList <- lapply(tagsList, FUN=c, "mscn");
@@ -79,15 +79,18 @@ methods <- list(
   },
   wCBS=function(...) {
     segmentByCBS(...)
+  },
+  mpCBS=function(...) {
+    segmentByMPCBS(...)
   }
 );
 
-segCols <- c(HaarSeg=2, CBS=3, wCBS=4, GLAD=5);
+segCols <- c(HaarSeg=2, CBS=3, wCBS=4, GLAD=5, mpCBS=6);
 
 srcCols <- gray(seq(from=0.3, to=0.8, length.out=5));
 
-  
-
+methodNames <- names(methods);
+segCols <- segCols[methodNames];
 
 for (ii in seq(along=sampleNames)) {
   sampleName <- sampleNames[ii];
@@ -125,20 +128,23 @@ for (ii in seq(along=sampleNames)) {
       label <- sprintf("Chr%02d (n=%d)", chromosome, nbrOfLoci(cnM));
       stext(side=3, pos=1, cex=2, label);
       stext(side=3, pos=1, line=-1, cex=cex, sprintf("s*=%.3f", cnM$sigma));
-      legend("topleft", lwd=3, col=segCols, names(methods), horiz=TRUE, 
-             bty="n", x.intersp=0.5, cex=cex);
+      legend("topleft", lwd=3, col=segCols, methodNames, 
+             horiz=TRUE, bty="n", x.intersp=0.5, cex=cex);
       
       fitList <- list();
       for (mm in seq(along=methods)) {
-        methodName <- names(methods)[mm];
+        methodName <- methodNames[mm];
         segmentByFcn <- methods[[mm]];
         verbose && enter(verbose, sprintf("Segmentation #%d ('%s') of %d", 
                                              mm, methodName, length(methods)));
-        fit <- segmentByFcn(cnM, verbose=less(verbose, 5));
-        fit$call <- NULL;
-        fitList[[methodName]] <- fit;
-        drawCnRegions(fit, lwd=5, col="white");
-        drawCnRegions(fit, lwd=3, col=segCols[methodName]);
+        fit <- fitList[[methodName]];
+        if (is.null(fit)) {
+          fit <- segmentByFcn(cnM, verbose=less(verbose, 5));
+          fit$call <- NULL;
+          fitList[[methodName]] <- fit;
+        }
+#        drawCnRegions(fit, lwd=5, col="white");
+        drawCnRegions(fit, lwd=6, col=segCols[methodName]);
         t <- attr(fit, "processingTime");
         verbose && cat(verbose, "Processing time:");
         verbose && print(verbose, t);
@@ -147,8 +153,8 @@ for (ii in seq(along=sampleNames)) {
         verbose && exit(verbose);
       } # for (mm ...)
       
-      legend("topleft", lwd=3, col=segCols, names(methods), horiz=TRUE, 
-             bty="n", x.intersp=0.5, cex=cex);
+      legend("topleft", lwd=3, col=segCols, methodNames, 
+             horiz=TRUE, bty="n", x.intersp=0.5, cex=cex);
       
       devDone();
     } # if (!figForce && isFile(pathname))
@@ -161,8 +167,11 @@ for (ii in seq(along=sampleNames)) {
 
 ############################################################################
 # HISTORY:
-# 2009-05-13
-# o Added generation of PNGs.
-# 2009-05-11
-# o Created.
+# 2010-01-02
+# o It was actually very straightforward to get this done.  All that was
+#   needed was to create a segmentByMPCBS() for the above cnM object, which
+#   is all that is needed because it contains 'id' for each "platform".
+#   The fitted object was wrapped up in a MPCBS class structure for which
+#   we provide a extractCopyNumberRegions() method.  Took only ~1h :)
+# o Created from ditto for wCBS.
 ############################################################################ 
