@@ -28,7 +28,7 @@
  \section{Installation and updates}{
 
    To install this package, see instructions at
-   \url{http://www.braju.com/R/}.
+   \url{http://www.aroma-project.org/}.
  }
 
  \section{To get started}{
@@ -39,7 +39,7 @@
  }
 
  \author{
-   Henrik Bengtsson <henrikb@braju.com>
+   Henrik Bengtsson.
  }
 
  \section{License}{
