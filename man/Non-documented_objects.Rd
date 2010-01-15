@@ -138,6 +138,14 @@
 \alias{isHomozygous.RawGenotypeCalls}
 \alias{RawGenotypeCalls}
 \alias{normalizeTumorBoost.RawAlleleBFractions}
+\alias{plotSmoothedPairsOne}
+\alias{plotSmoothedPairsOne.MultiSourceCopyNumberNormalization}
+\alias{getBacktransforms}
+\alias{getBacktransforms.PrincipalCurve}
+\alias{getPrincipalCurveEstimator}
+\alias{getPrincipalCurveEstimator.MultiSourceCopyNumberNormalization}
+\alias{plotBacktransforms}
+\alias{plotBacktransforms.PrincipalCurve}
 
 \description{
   This page contains aliases for all "non-documented" objects that

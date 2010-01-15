@@ -78,3 +78,10 @@ getPairedDataSet getTargetDataSet
   isHeterozygous.RawGenotypeCalls isHomozygous.RawGenotypeCalls
   RawGenotypeCalls 
  normalizeTumorBoost.RawAlleleBFractions
+  plotSmoothedPairsOne
+  plotSmoothedPairsOne.MultiSourceCopyNumberNormalization
+  getBacktransforms getBacktransforms.PrincipalCurve
+  getPrincipalCurveEstimator
+  getPrincipalCurveEstimator.MultiSourceCopyNumberNormalization
+  plotBacktransforms plotBacktransforms.PrincipalCurve
+

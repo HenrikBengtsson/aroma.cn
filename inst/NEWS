@@ -1,6 +1,12 @@
 Package: aroma.cn
 =================
 
+Version: 0.4.5 [2010-01-14]
+o Added (for now internal) option to change the degrees of freedom
+  of the fitted principal curves in MSCN.
+o Added plotSmoothedPairsOne() to MultiSourceCopyNumberNormalization.
+
+
 Version: 0.4.4 [2010-01-05]
 o Added support for transform/untransform functions h(.) and g(.) to
   AbstractCurveNormalization, which allows us to fit say on the log

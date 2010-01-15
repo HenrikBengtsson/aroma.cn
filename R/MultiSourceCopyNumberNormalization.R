@@ -559,8 +559,9 @@ setMethodS3("getSmoothedDataSets", "MultiSourceCopyNumberNormalization", functio
     targetUgp <- getFitAromaUgpFile(this);
     verbose && print(verbose, targetUgp);
 
+    kernel <- "gaussian";
     sd <- 50e3;
-    verbose && printf(verbose, "Kernel: %s\n", "Gaussian");
+    verbose && printf(verbose, "Kernel: %s\n", kernel);
     verbose && printf(verbose, "Bandwidth (sd): %.2f\n", sd);
 
     dsSmoothList <- list();
@@ -569,7 +570,7 @@ setMethodS3("getSmoothedDataSets", "MultiSourceCopyNumberNormalization", functio
       verbose && enter(verbose, sprintf("Data set %d ('%s') of %d",
                                          kk, getFullName(ds), length(dsList)));
       sm <- TotalCnKernelSmoothing(ds, targetUgp=targetUgp, 
-                                       kernel="gaussian", bandwidth=sd);
+                                       kernel=kernel, bandwidth=sd);
       verbose && print(verbose, sm);
       dsSmoothList[[kk]] <- process(sm, verbose=less(verbose, 1));
       verbose && exit(verbose);
@@ -666,7 +667,8 @@ setMethodS3("getParameters", "MultiSourceCopyNumberNormalization", function(this
     subsetToFit = getSubsetToFit(this, ...),
     fitUgp = getFitAromaUgpFile(this, ...),
     align = this$.align,
-    targetDimension = this$.targetDimension
+    targetDimension = this$.targetDimension,
+    pcBandwidth = this$.pcBandwidth
   );
 
   params;
@@ -681,6 +683,44 @@ setMethodS3("getParametersAsString", "MultiSourceCopyNumberNormalization", funct
   params <- gsub("[ ]*:", ":", params);
   params;
 }, private=TRUE) 
+
+
+setMethodS3("getPrincipalCurveEstimator", "MultiSourceCopyNumberNormalization", function(this, ...) {
+  params <- getParameters(this, verbose=less(verbose, 1));
+  df <- params$pcBandwidth;
+  if (is.null(df)) {
+    df <- 5;
+  }
+  df <- Arguments$getDouble(df);
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Local functions
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  smoother <- function(lambda, xj, ...) {
+    o <- order(lambda);
+    lambda <- lambda[o];
+    xj <- xj[o];
+    fit <- smooth.spline(lambda, xj, ..., df=df, keep.data=FALSE);
+    predict(fit, x=lambda)$y;
+  }
+
+  robustSmoother <- function(lambda, xj, ...) {
+    o <- order(lambda);
+    lambda <- lambda[o];
+    xj <- xj[o];
+    fit <- robustSmoothSpline(lambda, xj, ..., df=df);
+    predict(fit, x=lambda)$y;
+  }
+
+  # Create principal curve estimator
+  fcn <- function(Y, ...) {
+    fitPrincipalCurve(Y, smoother=smoother, ...);
+  }
+  attr(fcn, "smoother") <- smoother;
+  attr(fcn, "df") <- df;
+
+  fcn;
+}, protected=TRUE);
 
 
 
@@ -763,6 +803,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   subsetToFit <- params$subsetToFit;
   align <- params$align;
   targetDimension <- params$targetDimension;
+  pcEstimator <- getPrincipalCurveEstimator(this);
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Identify list of data files to fit model to
@@ -792,10 +833,12 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   checkSums <- sapply(dfSList, getChecksum);
   checkSums <- unname(checkSums);
 
+  df <- params$pcBandwidth;
+
   key <- list(method="fitOne", class="MultiSourceCopyNumberNormalization", 
            fullnames=fullnames, chipTypes=chipTypes, checkSums=checkSums,
-           subsetToFit=subsetToFit, align=align, 
-           .retData=.retData, version="2009-09-30");
+           subsetToFit=subsetToFit, align=align, df=df,
+           .retData=.retData, version="2010-01-14");
   dirs <- c("aroma.cn", "MultiSourceCopyNumberNormalization");
   if (!force) {
     fit <- loadCache(key=key, dirs=dirs);
@@ -831,13 +874,14 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   verbose && summary(verbose, Y);
   verbose && exit(verbose);
 
-
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Fit principal curve to smoothed data (Y[,1], Y[,2], ..., Y[,K]) 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Fitting across-source normalization function");
+  verbose && cat(verbose, "Estimator for principal curves:");
+  verbose && str(verbose, pcEstimator);
   t <- system.time({
-    fit <- fitPrincipalCurve(Y);
+    fit <- pcEstimator(Y);
   });
   verbose && cat(verbose, "Fitting time:");
   verbose && print(verbose, t);
@@ -1369,7 +1413,7 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
     } else {
       verbose && enter(verbose, "Fitting model");
       fit <- fitOne(this, dfList=dfList, ..., force=force, 
-                                           verbose=less(verbose, 1));
+                                           verbose=less(verbose, 1))
       verbose && str(verbose, fit);
       verbose && exit(verbose);
   
@@ -1409,6 +1453,10 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 
 ###########################################################################
 # HISTORY:
+# 2010-01-14
+# o Added protected getPrincipalCurveEstimator() for the
+#   MultiSourceCopyNumberNormalization class.  This is done in order to
+#   one day support custom principal-curve estimators.
 # 2009-09-30
 # o Now the alignment is done using normalizeDifferencesToAverage(),
 #   which is robust against outliers and waviness etc.  The previous
