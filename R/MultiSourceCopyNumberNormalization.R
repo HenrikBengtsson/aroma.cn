@@ -1206,7 +1206,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
           listOfUnits[[chrStr]] <- subset;
         }
         rm(values);
-        verbose && str(verbose, units);
+        verbose && str(verbose, listOfUnits);
 
         # Dropping chromosomes with too few units
         ns <- sapply(listOfUnits, FUN=length);
@@ -1229,7 +1229,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
           yN[subset] <- yN[subset] - dmu;
         } # for (chrStr ...)
 
-        rm(units, listOfUnits);
+        rm(listOfUnits);
 
         verbose && str(verbose, yN);
   
@@ -1380,7 +1380,6 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 
 
   verbose && enter(verbose, "Processing each array");
-  units <- NULL;
   for (kk in seq(length=nbrOfSamples)) {
     name <- allNames[kk];
     verbose && enter(verbose, sprintf("Sample #%d ('%s') of %d", 
