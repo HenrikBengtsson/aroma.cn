@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 0.4.6 [2010-03-18]
+o BUG FIX: For flavors "v2" and "v3", normalizeTumorBoost() could
+  introduce NaN:s if betaN was exactly zero or exactly one.
+
+
 Version: 0.4.5 [2010-01-14]
 o Added (for now internal) option to change the degrees of freedom
   of the fitted principal curves in MSCN.

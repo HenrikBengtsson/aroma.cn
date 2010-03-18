@@ -6,13 +6,13 @@
 # @title "Normalizes allele B fractions for a tumor given a match normal"
 #
 # \description{
-#  TumorBoost is normalization method that normalizes the allele B fractions
-#  of a tumor sample given the allele B fractions and genotypes of a 
-#  matched normal.
+#  TumorBoost [1] is a normalization method that normalizes the allele B
+#  fractions of a tumor sample given the allele B fractions and genotypes 
+#  of a matched normal.
 #  The method is a single-sample (single-pair) method. 
 #  It does not require total copy-number estimates.
-#  The normalization is done such that the total copy number is unchanged
-#  afterwards.
+#  The normalization is done such that the total copy number is 
+#  unchanged afterwards.
 # }
 # 
 # @synopsis
@@ -42,9 +42,31 @@
 #   allele B fractions.
 # }
 #
+# \section{Flavors}{
+#  This method provides a few different "flavors" for normalizing the
+#  data.  The following values of argument \code{flavor} are accepted:
+#  \itemize{
+#   \item{v4: (default) The TumorBoost method, i.e. Eqns. (8)-(9) in [1].}
+#   \item{v3: Eqn (9) in [1] is applied to both heterozygous and homozygous 
+#             SNPs, which effectly is v4 where the normalized allele B
+#             fractions for homozygous SNPs becomes 0 and 1.}
+#   \item{v2: ...}
+#   \item{v1: TumorBoost where correction factor is force to one, i.e.
+#             \eqn{\eta_j=1}.  As explained in [1], this is a suboptimal
+#             normalization method.  See also the discussion in the
+#             paragraph following Eqn (12) in [1].}
+#  }
+# }
+#
 # @examples "../incl/normalizeTumorBoost.Rex"
 #
 # \author{Henrik Bengtsson and Pierre Neuvial}
+#
+# \references{
+#  [1] H. Bengtsson, P. Neuvial & T.P. Speed, \emph{TumorBoost: Normalization
+#      of allele-specific tumor copy numbers from a single pair of 
+#      tumor-normal genotyping microarrays}, 2010 (submitted)\cr
+# }
 #*/########################################################################### 
 setMethodS3("normalizeTumorBoost", "numeric", function(betaT, betaN, muN=callNaiveGenotypes(betaN), flavor=c("v4", "v3", "v2", "v1"), ...) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -65,7 +87,7 @@ setMethodS3("normalizeTumorBoost", "numeric", function(betaT, betaN, muN=callNai
     stop("Argument 'muN' does not match the number of loci: ", 
                                                    length(muN), " != ", J);
   }
-  knownGenotypes <- c(0,1/2,1,NA);
+  knownGenotypes <- c(0, 1/2, 1, NA);
   unknown <- which(!is.element(muN, knownGenotypes));
   n <- length(unknown);
   if (n > 0) {
@@ -96,23 +118,33 @@ setMethodS3("normalizeTumorBoost", "numeric", function(betaT, betaN, muN=callNai
   } else if (flavor == "v2") {
     b <- rep(1, length(delta));
     isDown <- (betaT < betaN);
-    idxs <- whichVector(isDown);
+    isBetaNZero <- (betaN == 0);
+    isBetaNOne <- (betaN == 1);
+    idxs <- whichVector(isDown & !isBetaNZero);
     b[idxs] <- betaT[idxs]/betaN[idxs];
-    idxs <- whichVector(!isDown);
+    idxs <- whichVector(!isDown & !isBetaNOne);
     b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
-    rm(isDown,isHomA,isHomB,idxs);
+    rm(isDown, idxs);
+
+    # Treat the case when the estimated SNP effect is zero
+    # Then we want the normalized value to be exactly zero or one.
+    idxs <- whichVector(delta == 0);
+    
   } else if (flavor == "v3") {
     b <- rep(1, length(delta));
     isHomA <- (muN == 0);
     isHomB <- (muN == 1);
-    isHet <- !isHomA & !isHomB;
+    isHet <- (!isHomA & !isHomB);
     isDown <- (betaT < betaN);
-    idxs <- whichVector((isHet & isDown) | isHomA);
+    isBetaNZero <- (betaN == 0);
+    isBetaNOne <- (betaN == 1);
+    idxs <- whichVector((isHet & isDown & !isBetaNZero) | (isHomA & !isBetaNZero));
     b[idxs] <- betaT[idxs]/betaN[idxs];
-    idxs <- whichVector((isHet & !isDown) | isHomB);
+    idxs <- whichVector((isHet & !isDown & !isBetaNOne) | (isHomB & !isBetaNOne));
     b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
-    rm(isDown,isHet,isHomA,isHomB,idxs);
+    rm(isDown, isHet, isHomA, isHomB, idxs);
   } else if (flavor == "v4") {
+    # This is the published TumorBoost normalization method
     b <- rep(1, length(delta));
     isHet <- (muN != 0 & muN != 1);
     isDown <- (betaT < betaN);
@@ -120,9 +152,10 @@ setMethodS3("normalizeTumorBoost", "numeric", function(betaT, betaN, muN=callNai
     b[idxs] <- betaT[idxs]/betaN[idxs];
     idxs <- whichVector(isHet & !isDown);
     b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
-    rm(isDown,isHet,idxs);
+    rm(isDown, isHet, idxs);
   }
-  delta <- b*delta;
+
+  delta <- b * delta;
 
   # Sanity check
   stopifnot(length(delta) == J);
@@ -152,6 +185,9 @@ setMethodS3("normalizeTumorBoost", "numeric", function(betaT, betaN, muN=callNai
 
 ############################################################################
 # HISTORY:
+# 2010-03-18
+# o BUG FIX: For flavors "v2" and "v3" NaN:s could be introduced if betaN
+#   was exactly zero or exactly one.
 # 2009-07-08
 # o Now the arguments are 'betaT', 'betaN' and 'muN'.
 # o Added an example() with real data.
