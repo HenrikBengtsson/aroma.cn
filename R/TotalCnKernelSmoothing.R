@@ -14,8 +14,9 @@
 #  \item{...}{Arguments passed to @see "TotalCnSmoothing".}
 #  \item{kernel}{A @character string specifying the type of kernel
 #     to be used.}
-#  \item{censorH}{}
-#  \item{robust}{}
+#  \item{censorH}{A positive @double specifying the bandwidth threshold
+#     where values outside are ignored (zero weight).}
+#  \item{robust}{If @TRUE, a robust smoother is used, otherwise not.}
 # }
 #
 # \section{Fields and Methods}{

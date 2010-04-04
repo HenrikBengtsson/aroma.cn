@@ -56,6 +56,10 @@
  
 Please cite aroma.cn as
 
+  H. Bengtsson, P. Neuvial and T.P. SpeedTumorBoost: Normalization of
+  allele-specific tumor copy numbers from a single pair of tumor-normal
+  genotyping microarrays, (revised), 2010
+
   H. Bengtsson, A. Ray, P. Spellman and T.P. Speed. A single-sample
   method for normalizing and combining full-resolutioncopy numbers from
   multiple platforms, labs and analysis methods, Bioinformatics, 2009

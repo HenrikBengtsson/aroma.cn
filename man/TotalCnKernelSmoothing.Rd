@@ -41,8 +41,9 @@ extends \emph{\link[aroma.cn]{TotalCnSmoothing}}\cr
   \item{...}{Arguments passed to \code{\link{TotalCnSmoothing}}.}
   \item{kernel}{A \code{\link[base]{character}} string specifying the type of kernel
      to be used.}
-  \item{censorH}{}
-  \item{robust}{}
+  \item{censorH}{A positive \code{\link[base]{double}} specifying the bandwidth threshold
+     where values outside are ignored (zero weight).}
+  \item{robust}{If \code{\link[base:logical]{TRUE}}, a robust smoother is used, otherwise not.}
  }
 
  \section{Fields and Methods}{
