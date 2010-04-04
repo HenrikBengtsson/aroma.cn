@@ -6,7 +6,8 @@
 # \description{
 #  @classhierarchy
 #
-#  A normalization method that normalizes copy-number estimates measured
+#  The multi-source copy-number normalization (MSCN) method [1] is a 
+#  normalization method that normalizes copy-number estimates measured
 #  by multiple sites and/or platforms for common samples.  It normalizes the
 #  estimates toward a common scale such that for any copy-number level 
 #  the mean level of the normalized data are the same.
@@ -77,6 +78,14 @@
 #    afterward the median of the smoothed copy-number levels are the same
 #    across sources for any particular chromosome.
 #    This is done by setting argument \code{align="byChromosome"}.
+# }
+#
+# \references{
+#   [1] H. Bengtsson, A. Ray, P. Spellman & T.P. Speed, 
+#       \emph{A single-sample method for normalizing and combining 
+#         full-resolution copy numbers from multiple platforms, 
+#         labs and analysis methods}, 
+#       Bioinformatics 2009. \cr
 # }
 # 
 # @author
@@ -1452,6 +1461,8 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 
 ###########################################################################
 # HISTORY:
+# 2010-04-04
+# o Added citation for MSCN to the Rdocs.
 # 2010-01-14
 # o Added protected getPrincipalCurveEstimator() for the
 #   MultiSourceCopyNumberNormalization class.  This is done in order to

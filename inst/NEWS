@@ -1,6 +1,12 @@
 Package: aroma.cn
 =================
 
+Version: 0.5.0 [2010-04-04]
+o Moved normalizeDifferencesToAverage(), normalizeTumorBoost(), 
+  callNaiveGenotypes() and internal findPeaksAndValleys()
+  to aroma.light v1.5.3.
+
+
 Version: 0.4.6 [2010-03-18]
 o BUG FIX: For flavors "v2" and "v3", normalizeTumorBoost() could
   introduce NaN:s if betaN was exactly zero or exactly one.
