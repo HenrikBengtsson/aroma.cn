@@ -1,7 +1,14 @@
 Package: aroma.cn
 =================
 
-Version: 0.5.0 [2010-04-04]
+Version: 0.5.0 [2010-05-14]
+o Package submitted to CRAN.
+o Updated citation information.
+o Package now requires aroma.core v1.6.0.
+o Package pass R CMD check on R v2.11.0 and v2.12.0 devel. 
+
+
+Version: 0.4.7 [2010-04-04]
 o Moved normalizeDifferencesToAverage(), normalizeTumorBoost(), 
   callNaiveGenotypes() and internal findPeaksAndValleys()
   to aroma.light v1.5.3.
