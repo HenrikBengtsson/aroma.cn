@@ -120,8 +120,6 @@ setMethodS3("as.character", "TumorBoostNormalization", function(x, ...) {
   s <- c(s, sprintf("Flavor: %s", getFlavor(this)));
 
   dsList <- getDataSets(this);
-
-  dsList <- getDataSets(this);
   s <- c(s, sprintf("Data sets (%d):", length(dsList)));
   for (kk in seq(along=dsList)) {
     ds <- dsList[[kk]];
@@ -448,6 +446,8 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
 ############################################################################
 # HISTORY:
+# 2010-06-20
+# o CLEAN UP: Removed a duplicated line of code.
 # 2009-12-09
 # o Made flavor="v4" of TumorBoostNormalization the default, and if used
 #   then no "flavor" tag is added.
