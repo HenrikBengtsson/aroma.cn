@@ -1,11 +1,11 @@
-if (interactive()) savehistory();
+## if (interactive()) savehistory();
 library("aroma.cn");
 library("R.menu");
 
 purify <- FALSE;
 
-kappa <- 0.5;
-#kappa <- 0.98;
+purity <- 0.5;
+purity <- 1;
 
 figPath <- Arguments$getWritablePath("figures");
 
@@ -13,8 +13,9 @@ log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 rootPath <- Arguments$getReadablePath(rootPath);
 
-pattern <- "^(TCGA,OV,testSet,pairs,[^,]*),(.*),TBN(,|)(v[0-9]|),.*";
-#pattern <- "^(TCGA,OV,testSet,pairs,[^,]*),(.*)(,TBN,.*|)$";
+## pattern <- "^(TCGA,OV,testSet,pairs,[^,]*),(.*),TBN(,|)(v[0-9]|),.*";
+## pattern <- "^(TCGA,OV,testSet,pairs,[^,]*),(.*)(,TBN,.*|)$";
+pattern <- "^(broad.mit.edu_(GBM|OV).Genome_Wide_SNP_6(.*),(.*)),TBN(,|)(v[0-9]|),.*";
 dataSets <- list.files(path=rootPath, pattern=pattern);
 # Sanity check
 stopifnot(length(dataSets) > 0);
@@ -64,7 +65,8 @@ if (interactive()) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the raw (tumor,normal) data set
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-dataSetOrg <- gsub(pattern, "\\1,\\2", dataSet);
+## dataSetOrg <- gsub(pattern, "\\1,\\2", dataSet);
+dataSetOrg <- gsub(pattern, "\\1", dataSet);
 ds <- AromaUnitFracBCnBinarySet$byName(dataSetOrg, chipType="*");
 setFullNamesTranslator(ds, function(names, ...) {
   pattern <- "^(TCGA-[0-9]{2}-[0-9]{4})-([0-9]{2}[A-Z])[-]*(.*)";
@@ -85,11 +87,6 @@ pair <- pair[o];
 dsPair <- extract(ds, pair);
 dsT <- extract(dsPair, 1);
 dsN <- extract(dsPair, 2);
-
-
-siteTag <- getTags(ds);
-siteTag <- siteTag[4];
-
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Load the genotype call set
@@ -191,7 +188,7 @@ if (is.null(data)) {
   verbose && str(verbose, hets);
   verbose && exit(verbose);
   
-  figName <- sprintf("C1C2,kappa=%.2f", kappa);
+  figName <- sprintf("C1C2,purity=%.2f", purity);
   plot(NA, pch=".", xlim=Clim, ylim=Clim, xlab=C1lab, ylab=C2lab);
   abline(a=0, b=1, lty=2);
   stext(side=3, pos=0, sampleName);
@@ -209,6 +206,7 @@ if (is.null(data)) {
     
     verbose && enter(verbose, "Segmenting");
     fit <- segmentByCBS(cn, cache=TRUE);
+    cn$y <- 2*2^cn$y;
     verbose && print(verbose, fit);
     regions <- extractCopyNumberRegions(fit);
     verbose && print(verbose, regions);
@@ -277,9 +275,22 @@ if (is.null(data)) {
 C1t <- c(0, 0, 1, 0, 1);
 C2t <- c(0, 1, 1, 2, 2);
 if (!purify) {
-  C1t <- kappa*C1t + (1-kappa)*1;
-  C2t <- kappa*C2t + (1-kappa)*1;
+  C1t <- purity*C1t + (1-purity)*1;
+  C2t <- purity*C2t + (1-purity)*1;
 }
+
+## correction for different amounts of DNA in t/n pair...
+verbose && enter(verbose, "Accounting for different DNA amount between tumor and normal");
+sf <- 1/2*weightedMean(data$mean, data$stop-data$start);
+verbose && cat(verbose, "Estimated scaling factor: ", round(sf, 3));
+
+verbose && enter(verbose, "Correcting copy numbers")
+toCorrect <- c("mean", "C1", "C2");
+for (tt in toCorrect) {
+  data[, tt] <- data[, tt]/sf;
+}
+verbose && exit(verbose);
+verbose && exit(verbose);
 
 ## estimate ploidy :)
 verbose && enter(verbose, "Estimating ploidy")
@@ -298,9 +309,9 @@ verbose && exit(verbose)
 
 if (purify) {
   verbose && enter(verbose, "Correcting copy numbers from purity")
-  data[, "mean"] <- (data[, "mean"]-2*(1-kappa))/kappa;
-  data[, "C1"] <- (data[, "C1"]-(1-kappa))/kappa;
-  data[, "C2"] <- (data[, "C2"]-(1-kappa))/kappa;
+  data[, "mean"] <- (data[, "mean"]-2*(1-purity))/purity;
+  data[, "C1"] <- (data[, "C1"]-(1-purity))/purity;
+  data[, "C2"] <- (data[, "C2"]-(1-purity))/purity;
   verbose && exit(verbose)
 }
 
@@ -334,14 +345,14 @@ stext(side=4, pos=1, cex=0.7, sprintf("At least %.0f loci in TCN", nCount));
 text(C1,C2, labels=data$chromosome, cex=0.8);
 abline(a=0, b=1, lty=2);
 
-figName <- sprintf("C1C2,nCount=%.0f,kappa=%.2f", nCount, kappa);
+figName <- sprintf("C1C2,nCount=%.0f,purity=%.2f", nCount, purity);
 devSet(figName);
 plot(NA, xlim=Clim, ylim=Clim, xlab=C1lab, ylab=C2lab);
 points(C1t,C2t, pch=19, cex=2, col="red");
 points(C1, C2, pch=".", cex=cex);
 stext(side=3, pos=0, sampleName);
 stext(side=4, pos=0, cex=0.7, chipType);
-stext(side=3, pos=1, sprintf("kappa=%.2f", kappa));
+stext(side=3, pos=1, sprintf("purity=%.2f", purity));
 stext(side=4, pos=1, cex=0.7, sprintf("At least %.0f loci in TCN", nCount));
 text(C1,C2, labels=data$chromosome, cex=0.8);
 abline(a=0, b=1, lty=2);
@@ -368,6 +379,125 @@ if (require(geneplotter)) {
   }
   devDone();
 }
+
+C1 <- dataCC[, "C1"];
+C2 <- dataCC[, "C2"];
+C <- dataCC[, "mean"];
+AI <- dataCC[, "AI"];
+begin <- dataCC[, "start"];
+end <- dataCC[, "stop"];
+
+reg <- c(68,71)*1e6;
+plot(cn, ylim=c(0, 5), xlim=reg);
+segments(begin, 0, end, 0, col=AI+1, lwd=4);
+segments(begin, C, end, C, col=2, lwd=4);
+segments(begin, C1, end, C1, col=3, lwd=4);
+segments(begin, C2, end, C2, col=4, lwd=4, lty=2);
+
+
+
+## all chromosomes;
+C1 <- data[, "C1"];
+C2 <- data[, "C2"];
+C <- data[, "mean"];
+AI <- data[, "AI"];
+
+## calling regions
+plot(C1, C2, cex=log10(data$nRho))
+text(C1, C2, labels=data$chromosome, cex=log10(data$nRho)/3);
+abline(a=0, b=1);
+
+## calling CPs
+data <- loadCache(key=key, dirs=dirs);
+
+idx <- 2:nrow(data);
+diffs <- data[idx, ]-data[idx-1, ];
+sameChr <- (diffs$chromosome==0);
+
+diffs$chromosome <- data$chromosome[idx];
+for (cc in c("count", "nRho")) {
+  diffs[, cc] <- data[idx, cc]+data[idx-1, cc];
+}
+diffs <- diffs[sameChr,];
+
+isLong <- (diffs$nRho > 1e3);
+diffs <- diffs[isLong, ];
+plot(diffs$C1, diffs$C2, t='n');
+text(diffs$C1, diffs$C2, labels=diffs$chromosome, cex=log10(diffs$nRho)/3);
+
+hist(abs(diffs$C1), breaks=50);
+hist(abs(diffs$C2), breaks=50);
+sf <- weightedMedian(abs(diffs$C1), abs(diffs$meanRho), na.rm=TRUE);
+## weightedMedian(abs(diffs$C2), 1-abs(diffs$meanRho), na.rm=TRUE); ## does not work...
+## plot(abs(diffs$C2), 1-abs(diffs$meanRho));
+
+## consistency w/ Broad:
+puB <- 0.756;
+plB <- 1.812;
+ppRatioBroad <- puB/(puB*plB+2*(1-puB));
+
+wm <- weightedMean(data$mean, data$stop-data$start);
+ppRatio <- sf/wm;
+ppRatio
+
+weightedMedian(data$mean, 1-data$meanRho, na.rm=TRUE);
+
+data <- loadCache(key=key, dirs=dirs);
+verbose && enter(verbose, "Correcting copy numbers from ploidy/purity ratio")
+toCorrect <- c("mean", "C1", "C2");
+for (tt in toCorrect) {
+  data[, tt] <- data[, tt]/sf;
+}
+verbose && exit(verbose)
+
+## FIND THE NORMAL AS THE MODE OF REGIONS WITH ALLELIC BALANCE
+## breaks if high ploidy ???
+## weighted histogram...
+a <- unlist(apply(data, 1, function(x) {rep(x[["mean"]], round(x[["count"]]/10))}));
+hist(a, breaks=1000);
+
+isAB <- whichVector(!data$AI); ## "allelic balance"
+avgNormals <- weightedMedian(data$mean[isAB], data$nRho[isAB], na.rm=TRUE);
+abline(v=avgNormals, col=2)
+
+## translation factor:
+tf <- avgNormals-2;
+
+verbose && enter(verbose, "Correcting copy numbers from normal comtamination")
+toCorrect <- c("mean", "C1", "C2");
+for (tt in toCorrect) {
+  data[, tt] <- data[, tt]-tf;
+}
+verbose && exit(verbose)
+
+purity <- 2/(2+tf);
+verbose && cat(verbose, "Purity: ", round(purity, 2));
+
+ploidy <- purity/ppRatio;
+verbose && cat(verbose, "ploidy: ", round(ploidy, 2));
+
+## final check:
+data <- loadCache(key=key, dirs=dirs);
+verbose && enter(verbose, "Correcting copy numbers from ploidy and purity")
+toCorrect <- c("mean", "C1", "C2");
+for (tt in toCorrect) {
+  data[, tt] <- data[, tt]/(wm*purity/ploidy)-2*(1-purity)/purity;
+}
+verbose && exit(verbose)
+a <- unlist(apply(data, 1, function(x) {rep(x[["mean"]], round(x[["count"]]/10))}));
+hist(a, breaks=1000);
+
+## final check: (broad)
+data <- loadCache(key=key, dirs=dirs);
+verbose && enter(verbose, "Correcting copy numbers from ploidy and purity")
+toCorrect <- c("mean", "C1", "C2");
+for (tt in toCorrect) {
+  data[, tt] <- data[, tt]/(2*puB/plB)-2*(1-puB)/puB;
+}
+verbose && exit(verbose)
+a <- unlist(apply(data, 1, function(x) {rep(x[["mean"]], round(x[["count"]]/10))}));
+hist(a, breaks=1000);
+
 
 ############################################################################
 ## HISTORY:

@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 0.5.1 [2010-07-25]
+o callXXorXY() no longer calls gender from chr Y when 
+  gender is estimated as "XX" from chr X [PN].
+
 Version: 0.5.0 [2010-05-14]
 o Package submitted to CRAN.
 o Updated citation information.

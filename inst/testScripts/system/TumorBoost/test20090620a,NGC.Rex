@@ -6,15 +6,8 @@ log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 rootPath <- Arguments$getReadablePath(rootPath);
 
-pattern <- "^TCGA,OV,testSet,pairs";
-## pattern <- "^broad.mit.edu_(GBM|OV).Genome_Wide_SNP_6(.*),(.*)";
-
-dataSets <- list.files(path=rootPath, pattern=pattern);
-exclPattern <- ",TBN";
-keep <- (regexpr(exclPattern, dataSets) == -1);
-dataSets <- dataSets[keep];
-# Sanity check
-stopifnot(length(dataSets) > 0);
+## dataSet <- "TCGA,GBM,onePair";
+dataSet <- "TCGA,OV,testSet,pairs,Broad,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY";
 
 if (interactive()) {
   dataSet <- textMenu(dataSets, value=TRUE);
@@ -77,8 +70,8 @@ for (kk in seq(dsN)) {
 
   tags <- getTags(dfN);
   tags <- setdiff(tags, "fracB");
-  genTags <- c(tags, "genotypes");
-  fullname <- paste(c(getName(dfN), genTags), collapse=",");
+  tags <- c(tags, "genotypes");
+  fullname <- paste(c(getName(dfN), tags), collapse=",");
   filename <- sprintf("%s.acf", fullname);
   gcPathname <- Arguments$getWritablePathname(filename, path=outPath, mustNotExist=FALSE);
 
@@ -91,65 +84,37 @@ for (kk in seq(dsN)) {
     next;
   }
 
-
   betaN <- dfN[units,1,drop=TRUE];
-  keep <- is.finite(betaN);
-  betaN <- betaN[keep];
-  unitsN <- units[keep];
-  is23k <- is23[keep];
-  is24k <- is24[keep];
 
-  # Infer male or female
-  fit <- findPeaksAndValleys(betaN[is23k], adjust=adjust, from=0, to=1);
-  isXY <- (sum(fit$type == "peak") == 2);
-  if (sum(is24k) > 100) {
-    fit <- findPeaksAndValleys(betaN[is24k], adjust=adjust, from=0, to=1);
-    is24XY <- (sum(fit$type == "peak") == 2);
-    if (is24XY != isXY) {
-      throw("ChrX and ChrY is inconsistent");
-    }
-  }
+  # Call gender
+  gender <- callXXorXY(betaN[is23], betaN[is24], adjust=adjust, from=0, to=1);
 
+  # Call genotypes 
   naValue <- as.double(NA);
-  mu <- rep(naValue, times=length(unitsN));
-  cs <- rep(naValue, times=length(unitsN));
+  fit <- NULL;
+  mu <- rep(naValue, times=length(units));
+  cs <- rep(naValue, times=length(units));
 
-  # Call genotypes for autosomal+ChrX chromosomes
-  if (isXY) {
+  if (gender == "XY") {
     # All but ChrX & ChrY in male
-    isDiploid <- (!(is23k | is24k));
+    isDiploid <- (!(is23 | is24));
+    use <- which(isDiploid);
+    muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, from=0, to=1,
+                                          verbose=less(verbose,10));
+    fit <- attr(muT, 'modelFit');
+    mu[use] <- muT;
+    use <- which(!isDiploid);
+    muT <- callNaiveGenotypes(betaN[use], cn=1, adjust=adjust, from=0, to=1,
+                                           verbose=less(verbose,10));
+    mu[use] <- muT;
   } else {
     # All but ChrY in female
-    isDiploid <- (!is24k);
-  }
-  fit <- findPeaksAndValleys(betaN[isDiploid], adjust=adjust, from=0, to=1);
-  fit <- subset(fit, type == "valley");
-  # Sanity check
-  nbrOfGenotypeGroups <- nrow(fit)+1; 
-  stopifnot(nbrOfGenotypeGroups == 3);
-  a <- fit$x[1];
-  b <- fit$x[2]; 
-  mu[isDiploid & (betaN < a)] <- 0;
-  mu[isDiploid & (betaN > b)] <- 1; 
-  mu[isDiploid & (a <= betaN & betaN <= b)] <- 1/2;
-  print(table(mu, exclude=NULL));
-
-  cs[isDiploid] <- rowMins(abs(cbind(betaN[isDiploid]-a, betaN[isDiploid]-b)));
-  print(table(mu, exclude=NULL));
-
-  # Call genotypes for ChrX+ChrY chromosomes
-  if (isXY) {
-    fit <- findPeaksAndValleys(betaN[!isDiploid], adjust=adjust, from=0, to=1);
-    fit <- subset(fit, type == "valley");
-    nbrOfGenotypeGroups <- nrow(fit)+1; 
-    stopifnot(nbrOfGenotypeGroups == 2);
-    a <- fit$x[1];
-    mu[!isDiploid & (betaN <= a)] <- 0;
-    mu[!isDiploid & (betaN  > a)] <- 1;
-    cs[!isDiploid] <- abs(betaN[!isDiploid]-a);
-  } else {
-    # ChrY on female
-    mu[!isDiploid] <- NA;
+    isDiploid <- (!is24);
+    use <- which(isDiploid);
+    muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, from=0, to=1,
+                                          verbose=less(verbose,10));
+    fit <- attr(muT, 'modelFit');
+    mu[use] <- muT;
   }
   print(table(mu, exclude=NULL));
 
@@ -160,11 +125,16 @@ for (kk in seq(dsN)) {
   calls[mu ==   1] <- "BB";
   print(table(calls, exclude=NULL));
 
+  # Calculate confidence scores
+  a <- fit$x[1];
+  b <- fit$x[2]; 
+  cs[isDiploid] <- rowMins(abs(cbind(betaN[isDiploid]-a, betaN[isDiploid]-b)));
+  print(table(mu, exclude=NULL));
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Writing genotype calls (via temporary file)
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  pathname <- gcPathname
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  pathname <- gcPathname;
   pathnameT <- sprintf("%s.tmp", pathname);
   nbrOfUnits <- nbrOfUnits(dfN);
   gfN <- AromaUnitGenotypeCallFile$allocate(pathnameT, platform=getPlatform(dfN), chipType=getChipType(dfN), nbrOfRows=nbrOfUnits);
@@ -173,7 +143,7 @@ for (kk in seq(dsN)) {
   writeFooter(gfN, footer);
   rm(footer);
 
-  updateGenotypes(gfN, units=unitsN, calls=calls);
+  updateGenotypes(gfN, units=units, calls=calls);
   rm(calls);
 
   res <- file.rename(pathnameT, pathname);
@@ -188,19 +158,20 @@ for (kk in seq(dsN)) {
   gfN <- AromaUnitGenotypeCallFile(pathname);
   print(gfN);
 
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Writing confidence scores (via temporary file)
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  pathname <- csPathname
+  pathname <- csPathname;
   pathnameT <- sprintf("%s.tmp", pathname);
   nbrOfUnits <- nbrOfUnits(dfN);
   csfN <- AromaUnitSignalBinaryFile$allocate(pathnameT, platform=getPlatform(dfN), chipType=getChipType(dfN), nbrOfRows=nbrOfUnits, types="double", size=4, signed=TRUE);
   footer <- readFooter(csfN);
-  footer$method <- "NaiveGenotypeCaller";
+  footer$method <- "NaiveGenotypeConfidenceScoreEstimator";
   writeFooter(csfN, footer);
   rm(footer);
 
-  csfN[unitsN, 1] <- cs
+  csfN[units, 1] <- cs
   rm(cs);
 
   res <- file.rename(pathnameT, pathname);
@@ -212,7 +183,8 @@ for (kk in seq(dsN)) {
   }
   rm(pathnameT);
 
-  rm(unitsN);
+  rm(units);
+
 } # for (kk ...)
 
 gcN <- AromaUnitGenotypeCallSet$byName(dataSet, tags="NGC", chipType="*");
@@ -222,6 +194,8 @@ csN <- AromaUnitSignalBinarySet$byName(dataSet, tags="NGC", chipType="*", patter
 print(csN);
 ############################################################################
 ## HISTORY:
+## 2010-07-25
+## o Now use callNaiveGenotypes (wrapper) to call naive genotypes.
 ## 2009-11-05
 ## o BUG FIX: Now use findPeakAndValleys(..., from=0, to=1) to prevent
 ## points outside [0,1] to fool density estimation.

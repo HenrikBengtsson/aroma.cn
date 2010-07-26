@@ -91,8 +91,9 @@ for (kk in seq(dsN)) {
   # Call gender
   gender <- callXXorXY(betaN[is23], betaN[is24], adjust=adjust, from=0, to=1);
 
-  # Call genotypes 
+  # Call genotypes
   naValue <- as.double(NA);
+  fit <- NULL;
   mu <- rep(naValue, times=length(units));
   if (gender == "XY") {
     # All but ChrX & ChrY in male
@@ -100,6 +101,7 @@ for (kk in seq(dsN)) {
     use <- which(isDiploid);
     muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, from=0, to=1,
                                           verbose=less(verbose,10));
+    fit <- attr(muT, 'modelFit');
     mu[use] <- muT;
     use <- which(!isDiploid);
     muT <- callNaiveGenotypes(betaN[use], cn=1, adjust=adjust, from=0, to=1,
@@ -111,6 +113,7 @@ for (kk in seq(dsN)) {
     use <- which(isDiploid);
     muT <- callNaiveGenotypes(betaN[use], cn=2, adjust=adjust, from=0, to=1,
                                           verbose=less(verbose,10));
+    fit <- attr(muT, 'modelFit');
     mu[use] <- muT;
   }
   print(table(mu, exclude=NULL));

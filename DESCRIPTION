@@ -1,6 +1,6 @@
 Package: aroma.cn
-Version: 0.5.0
-Date: 2010-05-14
+Version: 0.5.1
+Date: 2010-07-25
 Title: Copy-number analysis of large microarray data sets
 Author: Henrik Bengtsson and Pierre Neuvial
 Maintainer: Henrik Bengtsson <henrikb@braju.com>

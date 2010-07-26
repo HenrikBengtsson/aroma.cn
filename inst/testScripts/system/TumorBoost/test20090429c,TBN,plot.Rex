@@ -17,7 +17,8 @@ log <- verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 rootPath <- "totalAndFracBData";
 rootPath <- Arguments$getReadablePath(rootPath);
 
-pattern <- "^(TCGA,OV,testSet,pairs,[^,]*),(.*),TBN(,|)(v[0-9]|),.*";
+## pattern <- "^(TCGA,OV,testSet,pairs,[^,]*),(.*),TBN(,|)(v[0-9]|),.*";
+pattern <- "^(TCGA,GBM,onePair,[^,]*),(.*),TBN(,|)(v[0-9]|),.*";
 dataSets <- list.files(path=rootPath, pattern=pattern);
 # Sanity check
 stopifnot(length(dataSets) > 0);
@@ -112,7 +113,7 @@ print(gsN);
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# Create an list of matched data sets
+# Create a list of matched data sets
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 dsList <- list(normal=dsN, tumor=dsT, tumorN=dsTN, callsN=gsN);
 rm(dsN, dsT, dsTN, gsN);
@@ -189,6 +190,12 @@ beta <- as.matrix(beta);
 names <- colnames(beta);
 names[names == "tumorN"] <- "normalized tumor";
 
+# Allelic imbalances
+isHet <- (beta[,"callsN"] != 1);
+idxs <- whichVector(isHet);
+rho <- abs(beta[, c("tumor", "tumorN")]-1/2);
+rho[idxs,] <- NA;
+
 # Plot dimensions
 x <- pos/1e6;
 xlim <- range(x, na.rm=TRUE);
@@ -257,3 +264,30 @@ for (tag in c("tumor", "tumorN")) {
   }
 }
 
+# Plot allelic imbalances
+ylim <- c(-0.1,0.5);
+ylab <- "Allelic imbalance";
+cols <- as.integer(beta[,"callsN"] != 1) + 1L;
+
+names <- colnames(rho);
+names[names == "tumorN"] <- "normalized tumor";
+
+for (cc in 1:2) {
+  tag <- colnames(rho)[cc];
+  name <- names[cc];
+  figName <- sprintf("%s,%s,%s,%s,rho", siteTag, sampleName, tag, chrTag);
+  pathname <- filePath(figPath, sprintf("%s.png", figName));
+  if (!isFile(pathname)) {
+    fig <- devNew("png", pathname, label=figName, width=width, height=aspect*width);
+    par(mar=c(2.7,2.5,1.1,1)+0.1, tcl=-0.3, mgp=c(1.4,0.4,0), cex=2);
+    par(mar=c(1.7,2.5,1.1,1)+0.1);
+    plot(NA, xlim=xlim, ylim=ylim, xlab=xlab, ylab=ylab, axes=FALSE);
+    axis(side=1);
+    axis(side=2, at=c(0,1/2,1));
+    points(x, rho[,cc], pch=".");
+    label <- sprintf("%s (%s)", sampleName, name);
+    stext(side=3, pos=0, label);
+    stext(side=3, pos=1, chrTag);
+    devDone();
+  }
+}
