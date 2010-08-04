@@ -424,7 +424,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       betaTC[idxs] <- 1/2 - sf * (1/2 - betaTC[idxs]);
       idxs <- whichVector(isHet & !isDown);
       betaTC[idxs] <- 1/2 + sf * (betaTC[idxs] - 1/2);
-      rm(isDown, isUp, isHom, isHet, idxs, eta, etaC, sf);
+      rm(isDown, isHom, isHet, idxs, eta, etaC, sf);
       verbose && exit(verbose);
     }
     verbose && str(verbose, betaTC);
@@ -483,6 +483,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 ############################################################################
 # HISTORY:
 # 2010-08-04 [PN]
+# o CLEAN UP: Removed an unnecessary 'rm'.
 # o Added option 'preserveScale' to correct for signal compression in
 #   heterozygous SNPs.  Defaults to 'TRUE'.
 # 2010-06-20
