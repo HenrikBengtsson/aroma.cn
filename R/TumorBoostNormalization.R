@@ -415,7 +415,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       verbose && cat(verbose, "Signal compression in homozygous SNPs before TBN");
       verbose && str(verbose, 1/2-eta);
       etaC <- median(abs(betaTC[isHom]-1/2), na.rm=TRUE);
-      verbose && cat(verbose, "Signal compression in homozygous SNPs before TBN");
+      verbose && cat(verbose, "Signal compression in homozygous SNPs after TBN");
       verbose && str(verbose, 1/2-etaC);
       sf <- etaC/eta;
       
