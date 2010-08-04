@@ -32,6 +32,11 @@
 #    If @FALSE, the homozygous values are normalized according the 
 #    model. [NOT USED YET]
 #  }
+#  \item{preserveScale}{If @TRUE, SNPs that are heterozygous in the
+#    matched normal are corrected for signal compression using an estimate
+#    of signal compression based on the amount of correction performed
+#    by TumorBoost on SNPs that are homozygous in the matched normal.
+#    Defaults to @TRUE.}
 #  \item{tags}{(Optional) Sets the tags for the output data sets.}
 #  \item{...}{Not used.}
 # }
@@ -42,7 +47,7 @@
 #
 # \author{Henrik Bengtsson and Pierre Neuvial}
 #*/########################################################################### 
-setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), collapseHomozygous=FALSE, tags="*", ...) {
+setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), collapseHomozygous=FALSE, preserveScale=TRUE, tags="*", ...) {
   # Validate arguments
   if (!is.null(dsT)) {
     # Argument 'flavor':
@@ -91,6 +96,8 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
     throw("collapseHomozygous=FALSE is currently not implemented.");
   }
 
+  preserveScale <- Arguments$getLogical(preserveScale);
+
   # Arguments '...':
   args <- list(...);
   if (length(args) > 0) {
@@ -102,7 +109,8 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
     .dsT = dsT,
     .dsN = dsN,
     .gcN = gcN,
-    .flavor = flavor
+    .flavor = flavor,
+    .preserveScale = preserveScale
   );
 
   setTags(this, tags);
@@ -140,10 +148,15 @@ setMethodS3("getAsteriskTags", "TumorBoostNormalization", function(this, collaps
     tags <- c(tags, flavor);
   }
 
+  preserveScale <- this$.preserveScale;
+  if (!preserveScale) {
+    tags <- c(tags, "ns");
+  }
+  
   if (!is.null(collapse)) {
     tags <- paste(tags, collapse=collapse);
   }
-  
+
   tags;
 }, private=TRUE)
 
@@ -391,6 +404,29 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
     verbose && enter(verbose, "Normalizing");
     betaTC <- betaT - b*delta;
+
+    preserveScale <- this$.preserveScale;
+    if (preserveScale) {
+      verbose && enter(verbose, "Correcting for signal compression");
+      isHom <- (muN == 0 | muN == 1);
+      isHet <- (muN != 0 & muN != 1);
+      idxs <- whichVector(isHom);
+      eta <- median(abs(betaT[isHom]-1/2));
+      verbose && cat(verbose, "Signal compression in homozygous SNPs before TBN");
+      verbose && str(verbose, 1/2-eta);
+      etaC <- median(abs(betaTC[isHom]-1/2));
+      verbose && cat(verbose, "Signal compression in homozygous SNPs before TBN");
+      verbose && str(verbose, 1/2-etaC);
+      sf <- etaC/eta;
+      
+      isDown <- (betaTC < 1/2);
+      idxs <- whichVector(isHet & isDown);
+      betaTC[idxs] <- 1/2 - sf * (1/2 - betaTC[idxs]);
+      idxs <- whichVector(isHet & !isDown);
+      betaTC[idxs] <- 1/2 + sf * (betaTC[idxs] - 1/2);
+      rm(isDown, isUp, isHom, isHet, idxs, eta, etaC, sf);
+      verbose && exit(verbose);
+    }
     verbose && str(verbose, betaTC);
     verbose && exit(verbose);
     verbose && exit(verbose);
@@ -446,6 +482,9 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
 ############################################################################
 # HISTORY:
+# 2010-08-04 [PN]
+# o Added option 'preserveScale' to correct for signal compression in
+#   heterozygous SNPs.  Defaults to 'TRUE'.
 # 2010-06-20
 # o CLEAN UP: Removed a duplicated line of code.
 # 2009-12-09

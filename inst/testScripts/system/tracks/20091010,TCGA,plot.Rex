@@ -43,9 +43,9 @@ loadData <- function(...) {
   
   dsList <- list(total=dsT, fracB=dsB);
   
-  if (getName(dsList$total) == "TCGA") {
+##  if (getName(dsList$total) == "TCGA") {
     dsList <- lapply(dsList, FUN=extractTcgaPairs);
-  }
+##  }
   
   print(dsList);
   

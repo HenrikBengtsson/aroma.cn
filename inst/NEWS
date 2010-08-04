@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 0.5.2 [2010-08-04]
+o Added option 'preserveScale' to correct for signal compression in
+  heterozygous SNPs.  Defaults to 'TRUE' [PN].
+
 Version: 0.5.1 [2010-07-25]
 o callXXorXY() no longer calls gender from chr Y when 
   gender is estimated as "XX" from chr X [PN].
