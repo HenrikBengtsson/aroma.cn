@@ -38,7 +38,7 @@ extends \link[R.oo]{Object}\cr
   afterwards.
  }
 
- \usage{TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), collapseHomozygous=FALSE, tags="*", ...)}
+ \usage{TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), collapseHomozygous=FALSE, preserveScale=TRUE, tags="*", ...)}
 
  \arguments{
   \item{dsT}{An \code{\link[aroma.core]{AromaUnitFracBCnBinarySet}} of
@@ -55,6 +55,10 @@ extends \link[R.oo]{Object}\cr
     If \code{\link[base:logical]{FALSE}}, the homozygous values are normalized according the
     model. [NOT USED YET]
   }
+  \item{preserveScale}{If \code{\link[base:logical]{TRUE}}, SNPs that are heterozygous in the
+    matched normal are corrected for signal compression using an estimate
+    of signal compression based on the amount of correction performed
+    by TumorBoost on SNPs that are homozygous in the matched normal.}
   \item{tags}{(Optional) Sets the tags for the output data sets.}
   \item{...}{Not used.}
  }
