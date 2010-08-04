@@ -410,7 +410,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
     verbose && enter(verbose, "Normalizing");
     # NOTE: It is possible that we introduce NA:s via 'b' and 'delta'.
-    betaTC <- betaT - b*delta;
+    betaTN <- betaT - b*delta;
 
     preserveScale <- this$.preserveScale;
     if (preserveScale) {
@@ -421,7 +421,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       eta <- median(abs(betaT[idxs]-1/2), na.rm=TRUE);
       verbose && cat(verbose, "Signal compression in homozygous SNPs before TBN");
       verbose && str(verbose, 1/2-eta);
-      etaC <- median(abs(betaTC[idxs]-1/2), na.rm=TRUE);
+      etaC <- median(abs(betaTN[idxs]-1/2), na.rm=TRUE);
       verbose && cat(verbose, "Signal compression in homozygous SNPs after TBN");
       verbose && str(verbose, 1/2-etaC);
 
@@ -429,16 +429,16 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       sf <- etaC/eta;
       
       isHet <- !isHom;
-      isDown <- (betaTC < 1/2);
+      isDown <- (betaTN < 1/2);
       idxs <- whichVector(isHet & isDown);
-      betaTC[idxs] <- 1/2 - sf * (1/2 - betaTC[idxs]);
+      betaTN[idxs] <- 1/2 - sf * (1/2 - betaTN[idxs]);
       idxs <- whichVector(isHet & !isDown);
-      betaTC[idxs] <- 1/2 + sf * (betaTC[idxs] - 1/2);
+      betaTN[idxs] <- 1/2 + sf * (betaTN[idxs] - 1/2);
 
       rm(isDown, isHom, isHet, idxs, eta, etaC, sf);
       verbose && exit(verbose);
     }
-    verbose && str(verbose, betaTC);
+    verbose && str(verbose, betaTN);
     verbose && exit(verbose);
     verbose && exit(verbose);
 
@@ -464,7 +464,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     verbose && exit(verbose);
 
     verbose && enter(verbose, "Writing to temporary file");
-    dfTC[unitsT,1] <- betaTC;
+    dfTC[unitsT,1] <- betaTN;
     verbose && exit(verbose);
 
     # Renaming
