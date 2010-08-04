@@ -411,10 +411,10 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       isHom <- (muN == 0 | muN == 1);
       isHet <- (muN != 0 & muN != 1);
       idxs <- whichVector(isHom);
-      eta <- median(abs(betaT[isHom]-1/2));
+      eta <- median(abs(betaT[isHom]-1/2), na.rm=TRUE);
       verbose && cat(verbose, "Signal compression in homozygous SNPs before TBN");
       verbose && str(verbose, 1/2-eta);
-      etaC <- median(abs(betaTC[isHom]-1/2));
+      etaC <- median(abs(betaTC[isHom]-1/2), na.rm=TRUE);
       verbose && cat(verbose, "Signal compression in homozygous SNPs before TBN");
       verbose && str(verbose, 1/2-etaC);
       sf <- etaC/eta;
@@ -483,6 +483,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 ############################################################################
 # HISTORY:
 # 2010-08-04 [PN]
+# o ROBUSTNESS: Added 'na.rm=TRUE' to 'median'.
 # o CLEAN UP: Removed an unnecessary 'rm'.
 # o Added option 'preserveScale' to correct for signal compression in
 #   heterozygous SNPs.  Defaults to 'TRUE'.
