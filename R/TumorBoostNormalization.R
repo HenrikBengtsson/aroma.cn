@@ -26,16 +26,16 @@
 #     genotypes for the normals.}
 #  \item{flavor}{A @character string specifying the type of 
 #     correction applied.}
+#  \item{preserveScale}{If @TRUE, SNPs that are heterozygous in the
+#    matched normal are corrected for signal compression using an estimate
+#    of signal compression based on the amount of correction performed
+#    by TumorBoost on SNPs that are homozygous in the matched normal.}
 #  \item{collapseHomozygous}{If @TRUE, SNPs that are homozygous in the 
 #    matched normal are also called homozygous in the tumor, that is,
 #    it's allele B fraction is collapsed to either 0 or 1.  
 #    If @FALSE, the homozygous values are normalized according the 
 #    model. [NOT USED YET]
 #  }
-#  \item{preserveScale}{If @TRUE, SNPs that are heterozygous in the
-#    matched normal are corrected for signal compression using an estimate
-#    of signal compression based on the amount of correction performed
-#    by TumorBoost on SNPs that are homozygous in the matched normal.}
 #  \item{tags}{(Optional) Sets the tags for the output data sets.}
 #  \item{...}{Not used.}
 # }
@@ -46,7 +46,7 @@
 #
 # \author{Henrik Bengtsson and Pierre Neuvial}
 #*/########################################################################### 
-setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), collapseHomozygous=FALSE, preserveScale=TRUE, tags="*", ...) {
+setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), preserveScale=TRUE, collapseHomozygous=FALSE, tags="*", ...) {
   # Validate arguments
   if (!is.null(dsT)) {
     # Argument 'flavor':
@@ -90,12 +90,12 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
     } # for (jj ...)
   } # if (!is.null(dsT))
 
+  preserveScale <- Arguments$getLogical(preserveScale);
+
   collapseHomozygous <- Arguments$getLogical(collapseHomozygous);
   if (collapseHomozygous) {
     throw("collapseHomozygous=FALSE is currently not implemented.");
   }
-
-  preserveScale <- Arguments$getLogical(preserveScale);
 
   # Arguments '...':
   args <- list(...);
