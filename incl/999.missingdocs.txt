@@ -84,4 +84,9 @@ getPairedDataSet getTargetDataSet
   getPrincipalCurveEstimator
   getPrincipalCurveEstimator.MultiSourceCopyNumberNormalization
   plotBacktransforms plotBacktransforms.PrincipalCurve
-
+  getDataSet getDataSet.NaiveFracBGenotyping getGenotypeCallSet
+  getGenotypeCallSet.NaiveFracBGenotyping NaiveFracBGenotyping
+  nbrOfLoci.NaiveFracBGenotyping nbrOfSNPs
+  nbrOfSNPs.NaiveFracBGenotyping process.NaiveFracBGenotyping
+  processOne processOne.NaiveFracBGenotyping segmentByPruneCBS
+  segmentByPruneCBS.RawGenomicSignals

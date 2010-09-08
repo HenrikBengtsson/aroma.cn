@@ -146,6 +146,19 @@
 \alias{getPrincipalCurveEstimator.MultiSourceCopyNumberNormalization}
 \alias{plotBacktransforms}
 \alias{plotBacktransforms.PrincipalCurve}
+\alias{getDataSet}
+\alias{getDataSet.NaiveFracBGenotyping}
+\alias{getGenotypeCallSet}
+\alias{getGenotypeCallSet.NaiveFracBGenotyping}
+\alias{NaiveFracBGenotyping}
+\alias{nbrOfLoci.NaiveFracBGenotyping}
+\alias{nbrOfSNPs}
+\alias{nbrOfSNPs.NaiveFracBGenotyping}
+\alias{process.NaiveFracBGenotyping}
+\alias{processOne}
+\alias{processOne.NaiveFracBGenotyping}
+\alias{segmentByPruneCBS}
+\alias{segmentByPruneCBS.RawGenomicSignals}
 
 \description{
   This page contains aliases for all "non-documented" objects that
