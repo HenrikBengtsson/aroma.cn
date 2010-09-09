@@ -1,7 +1,7 @@
 ###########################################################################/**
-# @RdocDefault testAllelicImbalanceByAlleleBFractions
+# @RdocDefault testAllelicBalanceByBAFs
 #
-# @title "Tests for allelic imbalance in a genomic region"
+# @title "Tests for allelic balance in a genomic region"
 #
 # \description{
 #  @get "title".
@@ -10,7 +10,7 @@
 # @synopsis
 #
 # \arguments{
-#   \item{betaT}{A @numeric @vector of J tumor allele B fractions.}
+#   \item{betaT}{A @numeric @vector of J tumor allele B fractions (BAFs).}
 #   \item{muN}{A @numeric @vector of J normal (germline) genotypes.}
 #   \item{flavor}{A @character specifying the type of test to be performed.}
 #   \item{...}{Not used.}
@@ -21,9 +21,13 @@
 #   A @list of class "htest".
 # }
 #
+# @examples "../incl/callAllelicBalanceByBAFs.PairedPSCBS.Rex"
+#
 # @author
+#
+# @keyword internal
 #*/########################################################################### 
-setMethodS3("testAllelicImbalanceByAlleleBFractions", "default", function(betaT, muN, flavor=c("var", "mean"), ..., verbose=FALSE) {
+setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c("var", "mean"), ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -46,7 +50,7 @@ setMethodS3("testAllelicImbalanceByAlleleBFractions", "default", function(betaT,
   } 
  
 
-  verbose && enter(verbose, "Testing for allelic imbalance by allele B fractions");
+  verbose && enter(verbose, "Testing for allelic balance by allele B fractions (BAFs)");
 
   verbose && cat(verbose, "Number of loci: ", nbrOfLoci);
   verbose && cat(verbose, "Requested flavor: ", flavor);
@@ -123,6 +127,9 @@ setMethodS3("testAllelicImbalanceByAlleleBFractions", "default", function(betaT,
   verbose && exit(verbose);
 
 
+  # Default statistics
+  res <- list(statistic=NA, p.value=NA);
+
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Sanity checks
@@ -131,13 +138,14 @@ setMethodS3("testAllelicImbalanceByAlleleBFractions", "default", function(betaT,
 
   # Sanity check
   if (nMin <= 1) {
-    throw(sprintf("Cannot infer allelic imbalance. Too few (homozygous, heterozygous) data points: (%d,%d)", nHoms, nHets));
+    warning(sprintf("Cannot infer allelic balance. Too few (homozygous, heterozygous) data points. Will return NA: (%d,%d)", nHoms, nHets));
+    return(res);
   }
 
   # Need to fall back on another test than the requested one?
   if (flavor == "var") {
     if (nMin <= 2) {
-      warning(sprintf("Cannot infer allelic imbalance using the heterozygous-homozygous variance test. Will use the mean test instead. Too few (homozygous, heterozygous) data points: (%d,%d)", nHoms, nHets));
+      warning(sprintf("Cannot infer allelic balance using the heterozygous-homozygous variance test. Will use the mean test instead. Too few (homozygous, heterozygous) data points: (%d,%d)", nHoms, nHets));
       flavor <- "mean";
      verbose && cat(verbose, "Adjusted flavor: ", flavor);
     }
@@ -146,11 +154,8 @@ setMethodS3("testAllelicImbalanceByAlleleBFractions", "default", function(betaT,
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Testing for allelic imbalance
+  # Testing for allelic balance
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Default statistics
-  res <- list(statistic=NA, p.value=NA);
-
   if (flavor == "var") {
     res <- var.test(hets, homs, alternative="greater");
   } else if (flavor == "mean") {
@@ -163,17 +168,19 @@ setMethodS3("testAllelicImbalanceByAlleleBFractions", "default", function(betaT,
 
   verbose && str(verbose, res);
 
+  # Sanity check
+
   verbose && exit(verbose);
   
   res;
-}, protected=TRUE) # testAllelicImbalanceByAlleleBFractions()
+}, protected=TRUE) # testAllelicBalanceByBAFs()
 
 
 #############################################################################
 # HISTORY
 # 2010-09-08 [PN,HB]
 # o Harmonized code. Added more verbose output. Added more code comments.
-# o Renamed to testAllelicImbalanceByAlleleBFractions() from AI.test().
+# o Renamed to testAllelicBalanceByBAFs() from AI.test().
 # o Added an Rdoc skeleton.
 # o Renamed arguments. 
 # 2010-08-25 [PN]

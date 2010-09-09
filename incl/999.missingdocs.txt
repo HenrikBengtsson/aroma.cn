@@ -90,3 +90,7 @@ getPairedDataSet getTargetDataSet
   nbrOfSNPs.NaiveFracBGenotyping process.NaiveFracBGenotyping
   processOne processOne.NaiveFracBGenotyping segmentByPruneCBS
   segmentByPruneCBS.RawGenomicSignals
+normalizeBAFsByRegions
+  callAllelicBalanceByBAFs callAllelicBalanceByBAFs.PairedPSCBS
+  callCopyNeutralRegions callCopyNeutralRegions.PairedPSCBS
+  subsetBySegments subsetBySegments.PairedPSCBS

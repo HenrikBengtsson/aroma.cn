@@ -1,3 +1,5 @@
+#
+# @keyword internal
 setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       strict=FALSE, normalMean=0.0, debugPlot=FALSE, ylim=c(0,6), verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments

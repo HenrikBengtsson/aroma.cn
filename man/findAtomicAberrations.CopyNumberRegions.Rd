@@ -103,7 +103,7 @@ par(mar=c(2,4,1,1)+0.1);
 plot(cn, col="#aaaaaa", ylim=c(0,5));
 drawLevels(t, col="white", lwd=4, lty=1);
 drawLevels(t, col="black", lwd=3, lty=6);
-stext(side=3, pos=1, line=-1, "Truth", cex=1.5);
+stext(side=3, pos=1, line=-1, "\"H=0\"", cex=1.5);
 
 for (H in 1:3) {
   plot(cn, col="#aaaaaa", ylim=c(0,5));
@@ -147,5 +147,7 @@ for (H in 1:3) {
 \seealso{
   ...
 }
+
+
 \keyword{internal}
 \keyword{methods}

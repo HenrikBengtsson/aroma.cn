@@ -159,6 +159,7 @@
 \alias{processOne.NaiveFracBGenotyping}
 \alias{segmentByPruneCBS}
 \alias{segmentByPruneCBS.RawGenomicSignals}
+\alias{normalizeBAFsByRegions}
 
 \description{
   This page contains aliases for all "non-documented" objects that

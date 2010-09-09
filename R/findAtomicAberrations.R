@@ -58,6 +58,8 @@
 # \seealso{
 #   ...
 # }
+#
+# @keyword internal
 #*/########################################################################### 
 setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=1, alpha=0.02, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
