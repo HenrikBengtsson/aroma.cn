@@ -91,6 +91,6 @@ getPairedDataSet getTargetDataSet
   processOne processOne.NaiveFracBGenotyping segmentByPruneCBS
   segmentByPruneCBS.RawGenomicSignals
 normalizeBAFsByRegions
-  callAllelicBalanceByBAFs callAllelicBalanceByBAFs.PairedPSCBS
+  callAllelicBalanceByBAFs
   callCopyNeutralRegions callCopyNeutralRegions.PairedPSCBS
   subsetBySegments subsetBySegments.PairedPSCBS

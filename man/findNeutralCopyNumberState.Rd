@@ -1,0 +1,37 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Do not modify this file since it was automatically generated from:
+% 
+%  findCopyNumberNeutralState.R
+% 
+% by the Rdoc compiler part of the R.oo package.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\name{findNeutralCopyNumberState}
+\alias{findNeutralCopyNumberState}
+
+
+\title{Call segments to be copy neutral based on allelic imbalance calls and total copy number estimates}
+
+\description{
+ Call segments to be copy neutral based on allelic imbalance calls and total copy number estimates.
+}
+
+\usage{findNeutralCopyNumberState(C, isAI, weights=NULL, ..., densityThreshold=1e-10, verbose=FALSE)}
+
+\arguments{
+  \item{C}{A \code{\link[base]{numeric}} \code{\link[base]{vector}} of region-level total copy number estimates.}
+  \item{isAI}{A \code{\link[base]{logical}} \code{\link[base]{vector}} of "allelic imbalance" calls.}
+  \item{weights}{An optional \code{\link[base]{numeric}} \code{\link[base]{vector}} of non-negative weights.}
+  \item{...}{Further argumants to be passed to the density estimation
+    function.}
+  \item{densityThreshold}{A \code{\link[base]{numeric}} value, below which density peaks are
+    discarded.}
+  \item{verbose}{If \code{\link[base:logical]{TRUE}}, extra information is output.}
+}
+
+\value{
+  A \code{\link[base]{logical}} \code{\link[base]{vector}} of "neutral copy number state" calls.
+}
+
+\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+

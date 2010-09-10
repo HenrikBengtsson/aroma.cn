@@ -12,7 +12,7 @@
 #
 # \arguments{
 #   \item{fit}{A PairedPSCBS fit object as returned by 
-#     @see "psCBS::segmentByPairedCBS".}
+#     @see "psCBS::segmentByPairedPSCBS".}
 #   \item{by}{A @character string specifying if the normalization function
 #     should be estimated based on TumorBoost normalized or non-normalized
 #     tumor allele B fractions (BAFs).}
@@ -229,10 +229,9 @@ setMethodS3("subsetBySegments", "PairedPSCBS", function(fit, idxs, ..., verbose=
 #
 # \arguments{
 #   \item{fit}{A PairedPSCBS fit object as returned by 
-#     @see "psCBS::segmentByPairedCBS".}
+#     @see "psCBS::segmentByPairedPSCBS".}
 #   \item{maxScore}{A positive @double threshold.}
 #   \item{...}{Not used.}
-#     @see "aroma.cn::normalizeMirroredBAFsByRegions".}
 #   \item{force}{If @TRUE, an already called object is skipped, otherwise not.}
 #   \item{verbose}{See @see "R.utils::Verbose".}
 # }
