@@ -53,7 +53,7 @@ cnT2 <- simulateRawCopyNumbers(pT2, n=2000, sd=1/3);
 
 profiles <- list(
   "Tumor clone #1"=list(cnr=pT1, cn=cnT1, col="blue"),
-  "Tumor clone #2"=list(cnr=pT2, cn=cnT2, col="magenta")
+  "Tumor clone #2 (independent)"=list(cnr=pT2, cn=cnT2, col="magenta")
 );
 
 

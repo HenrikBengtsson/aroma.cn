@@ -52,8 +52,8 @@ cnT2 <- simulateRawCopyNumbers(pT2, n=2000, sd=1/3);
 
 
 profiles <- list(
-  "Tumor clone #1"=list(cnr=pT1, cn=cnT1, col="blue"),
-  "Tumor clone #2"=list(cnr=pT2, cn=cnT2, col="magenta")
+  "Tumor t=1"=list(cnr=pT1, cn=cnT1, col="blue"),
+  "Tumor t=2"=list(cnr=pT2, cn=cnT2, col="magenta")
 );
 
 
@@ -64,7 +64,7 @@ kappas <- c(0.5, 0.3);
 ltys <- c(1,1,1);
 for (kk in seq(along=kappas)) {
   kappa <- kappas[kk];
-  key <- sprintf("%d%% Tumor #1 + %d%% Tumor #2", 
+  key <- sprintf("%d%% Tumor t=1 + %d%% Tumor t=2", 
                    round(100*kappa), round(100*(1-kappa)));
   cnr <- kappa *  pT1 + (1-kappa)* pT2;
   cn  <- kappa * cnT1 + (1-kappa)*cnT2;
