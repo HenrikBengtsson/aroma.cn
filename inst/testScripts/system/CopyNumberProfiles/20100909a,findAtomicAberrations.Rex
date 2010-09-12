@@ -1,3 +1,4 @@
+library("aroma.cn");
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Local functions
