@@ -79,7 +79,8 @@ subplots(length(profiles), ncol=1);
 par(mar=c(0.1,4,2,2)+0.1);
 for (kk in seq(along=profiles)) {
   p <- profiles[[kk]];
-  plot(p$cn, col="gray", ylim=c(0,4.5), axes=FALSE);
+  xlim <- c(-50, xMax(p$cn)/1e6);
+  plot(p$cn, col="gray", xlim=xlim, ylim=c(0,4.5), axes=FALSE);
   axis(side=2);
   lines(p$cnr, col="white", lty=1, lwd=8);
   lines(p$cnr, col=p$col, lty=1, lwd=5);
@@ -87,5 +88,6 @@ for (kk in seq(along=profiles)) {
     lines(pT1, col="blue", lty=3, lwd=3);
     lines(pT2, col="magenta", lty=3, lwd=3);
   }
+  drawDensity(p$cnr, col=p$col, height=50, offset=5);
   stext(side=3, pos=0.5, names(profiles)[kk], cex=1);
 } # for (kk ...)

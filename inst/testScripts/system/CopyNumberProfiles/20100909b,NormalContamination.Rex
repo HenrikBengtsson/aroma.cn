@@ -67,36 +67,38 @@ for (kk in seq(along=kappas)) {
 }
 
 
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Plot profiles
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-subplots(length(profiles)-1, ncol=1);
-par(mar=c(0.1,4,2,2)+0.1);
-for (kk in 2:length(profiles)) {
-  ps <- profiles[unique(c(1,2,kk))];
-  plot(ps[[1]]$cnr, col=ps[[1]]$col, lty=ps[[1]]$lty, lwd=5, axes=FALSE);
-  axis(side=2);
-  lapply(ps[-1], FUN=function(p) lines(p$cnr, col=p$col, lty=p$lty, lwd=5));
-  legend("topright", names(ps), col=gapply(ps,"col"), lty=gapply(ps,"lty"), lwd=5, bty="n");
-} # for (kk ...)
-
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Plot profiles with data
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-par(ask=TRUE);
 subplots(length(profiles), ncol=1);
 par(mar=c(0.1,4,2,2)+0.1);
 for (kk in seq(along=profiles)) {
   p <- profiles[[kk]];
-  plot(p$cn, col="gray", ylim=c(0,5), axes=FALSE);
+  xlim <- c(-50, xMax(p$cn)/1e6);
+  plot(p$cn, col="gray", xlim=xlim, ylim=c(0,5), axes=FALSE);
   axis(side=2);
   lines(p$cnr, col="white", lty=1, lwd=8);
   lines(p$cnr, col=p$col, lty=1, lwd=5);
   if (kk >= 3) {
     lines(pT, col="blue", lty=3, lwd=3);
   }
+
+  drawDensity(p$cnr, col=p$col, height=50, offset=5);
+
   title(main=names(profiles)[kk]);
 } # for (kk ...)
+
+
+## # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## # Plot profiles
+## # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## subplots(length(profiles)-1, ncol=1);
+## par(mar=c(0.1,4,2,2)+0.1);
+## for (kk in 2:length(profiles)) {
+##   ps <- profiles[unique(c(1,2,kk))];
+##   plot(ps[[1]]$cnr, col=ps[[1]]$col, lty=ps[[1]]$lty, lwd=5, axes=FALSE);
+##   axis(side=2);
+##   lapply(ps[-1], FUN=function(p) lines(p$cnr, col=p$col, lty=p$lty, lwd=5));
+##   legend("topright", names(ps), col=gapply(ps,"col"), lty=gapply(ps,"lty"), lwd=5, bty="n");
+## } # for (kk ...)
 
