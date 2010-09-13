@@ -63,3 +63,11 @@ for (kk in seq(along=profiles)) {
 
   title(main=names(profiles)[kk]);
 } # for (kk ...)
+
+
+ par(mar=c(4,5,3,2)+0.1);
+ x <- seq(0,1, by=0.1);
+ y <- saturate(x, gamma=0.1); 
+ plot(x,y, type="l", lwd=5, xlim=c(0,1), ylim=c(0,1), 
+      ylab=expression(f(x)), axes=FALSE, cex.lab=2);
+ abline(a=0, b=1, lty=3, lwd=3);
