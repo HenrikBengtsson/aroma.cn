@@ -32,8 +32,8 @@ profiles <- list(
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 w <- 1 / getLength(pT); w <- w / sum(w, na.rm=TRUE);
 eps <- rnorm(length(w), mean=0, sd=w);
-cols <- c("magenta", "red", "orange");
-sigmas <- c(1,2,3);
+cols <- c("magenta", "red", "orange")[2];
+sigmas <- c(1,2,3)[2];
 for (kk in seq(along=sigmas)) {
   sigma <- sigmas[kk];
   key <- sprintf("Tumor w/ %.1fx noise", sigma);

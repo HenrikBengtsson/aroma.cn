@@ -30,7 +30,7 @@ verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 pN <- cnr(1,1000, 2);
 print(pN);
 
-flavor <- "A";
+flavor <- "B";
 if (flavor == "A") {
   # Tumor clone #1
   pT1 <- pN +

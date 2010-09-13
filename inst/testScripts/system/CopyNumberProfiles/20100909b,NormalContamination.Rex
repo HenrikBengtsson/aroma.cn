@@ -70,9 +70,9 @@ for (kk in seq(along=kappas)) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Plot profiles with data
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-subplots(length(profiles), ncol=1);
+subplots(length(profiles)-1, ncol=1);
 par(mar=c(0.1,4,2,2)+0.1);
-for (kk in seq(along=profiles)) {
+for (kk in seq(along=profiles)[(-1)]) {
   p <- profiles[[kk]];
   xlim <- c(-50, xMax(p$cn)/1e6);
   plot(p$cn, col="gray", xlim=xlim, ylim=c(0,5), axes=FALSE);
