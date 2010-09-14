@@ -85,10 +85,10 @@ findNeutralCopyNumberState <- function(C, isAI, weights=NULL, ..., densityThresh
     # is to call that segment neutral.
     verbose && exit(verbose);
     return(isNeutral);
+  } else if (n < 5) {
+    # What to do when the number of segments is really low? /HB 2010-09-09
+    warning("The calling of regions in a copy-neutral state is uncertain, because there are less than five (5) regions in allelic balance: ", n);
   }
-
-  # What to do when the number of segments is really low? /HB 2010-09-09
-
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Look only segments in allelic balance
