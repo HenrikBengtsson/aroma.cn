@@ -70,10 +70,10 @@ findNeutralCopyNumberState <- function(C, isAI, weights=NULL, ..., densityThresh
   # Only segments in allelic balance can be considered to be neutral
   isNeutral <- isAB;
 
-  # Extracting SNPs in allelic balance
+  # Extracting segments in allelic balance
   idxs <- whichVector(isAB);
   n <- length(idxs);
-  verbose && cat(verbose, "Numbef of segments in allelic balance: ", n);
+  verbose && cat(verbose, "Number of segments in allelic balance: ", n);
 
   # Special cases?
   if (n == 0) {

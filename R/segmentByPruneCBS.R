@@ -87,8 +87,9 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
 #      if (depth > 1 && (depth-1) %% np == 0) {
 #        readline("wait...");
 #      }
-      plot(cn, col="#aaaaaa", ylim=ylim);
-      drawLevels(cnr, col="black");
+      plot(cn, col="#aaaaaa", ylim=ylim, axes=FALSE);
+      axis(side=2);
+      drawLevels(cnr, col="black", lwd=3);
       verbose && print(verbose, cnr);
     }
   
