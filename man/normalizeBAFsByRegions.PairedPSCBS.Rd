@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Do not modify this file since it was automatically generated from:
 % 
-%  PairedPSCBS.NORM.R
+%  PairedPSCBS.EXTS2.R
 % 
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,10 +61,17 @@ fit <- segmentByPairedPSCBS(CT, betaT=betaT, betaN=betaN, x=x, verbose=-10);
 # Normalize
 fitN <- normalizeBAFsByRegions(fit, verbose=-10);
 
+par(ask=TRUE);
+
 subplots(10, ncol=2, byrow=FALSE);
 par(mar=c(1,3.5,1,0.5)+1);
 plot(fit, add=TRUE);
 plot(fitN, add=TRUE);
+
+subplots(4, ncol=2, byrow=FALSE);
+par(mar=c(1,3.5,1,0.5)+1);
+plotC1C2(fitN);
+linesC1C2(fitN);
 
 } # if (require("psCBS"))
 }

@@ -6,34 +6,32 @@
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\name{callAllelicBalanceByBAFs.PairedPSCBS}
-\alias{callAllelicBalanceByBAFs.PairedPSCBS}
-\alias{PairedPSCBS.callAllelicBalanceByBAFs}
-\alias{callAllelicBalanceByBAFs.PairedPSCBS}
-\alias{callAllelicBalanceByBAFs,PairedPSCBS-method}
+\name{callCopyNeutralRegions.PairedPSCBS}
+\alias{callCopyNeutralRegions.PairedPSCBS}
+\alias{PairedPSCBS.callCopyNeutralRegions}
+\alias{callCopyNeutralRegions.PairedPSCBS}
+\alias{callCopyNeutralRegions,PairedPSCBS-method}
 
 
-\title{Calls regions that are in allelic balance}
+\title{Calls regions that are copy neutral}
 
 \description{
- Calls regions that are in allelic balance from the allele B fractions (BAF).
+ Calls regions that are copy neutral from the allele B fractions (BAF).
 }
 
-\usage{\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore=4, ..., force=FALSE, verbose=FALSE)}
+\usage{\method{callCopyNeutralRegions}{PairedPSCBS}(fit, ..., force=FALSE, verbose=FALSE)}
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
     \code{\link[psCBS]{segmentByPairedPSCBS}}.}
-  \item{maxScore}{A positive \code{\link[base]{double}} threshold.}
-  \item{...}{Not used.}
+  \item{...}{Additional arguments passed to
+    \code{\link[aroma.cn]{findNeutralCopyNumberState}}.}
   \item{force}{If \code{\link[base:logical]{TRUE}}, an already called object is skipped, otherwise not.}
   \item{verbose}{See \code{\link[R.utils]{Verbose}}.}
 }
 
 \value{
-  Returns a PairedPSCBS fit object where columns for
-  allelic imbalance scores and p-values as well as allelic
-  balance calls are added.
+  Returns a PairedPSCBS fit object where a column with the copy-neutral call.
 }
 
 \examples{
@@ -51,7 +49,7 @@ fit <- segmentByPairedPSCBS(CT, betaT=betaT, betaN=betaN, x=x, verbose=-10);
 # Normalize
 fitN <- normalizeBAFsByRegions(fit, verbose=-10);
 
-fitN2 <- callAllelicBalanceByBAFs(fitN, verbose=-10);
+fitN2 <- callCopyNeutralRegions(fitN, verbose=-10);
 print(fitN2);
 
 } # if (require("psCBS"))

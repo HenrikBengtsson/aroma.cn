@@ -92,5 +92,7 @@ getPairedDataSet getTargetDataSet
   segmentByPruneCBS.RawGenomicSignals
 normalizeBAFsByRegions
   callAllelicBalanceByBAFs
-  callCopyNeutralRegions callCopyNeutralRegions.PairedPSCBS
-  subsetBySegments subsetBySegments.PairedPSCBS
+  callCopyNeutralRegions 
+  getXScale.CopyNumberRegions getYScale.CopyNumberRegions
+  plot.CopyNumberRegions segmentByPruneCBSv1
+  segmentByPruneCBSv1.RawGenomicSignals

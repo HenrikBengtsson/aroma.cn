@@ -166,56 +166,6 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 }) # normalizeBAFsByRegions()
 
 
-setMethodS3("subsetBySegments", "PairedPSCBS", function(fit, idxs, ..., verbose=FALSE) {
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Extract the segmentation result
-  segs <- fit$output;
-  stopifnot(!is.null(segs));
-  nbrOfSegments <- nrow(segs);
-
-  # Argument 'idxs':
-  idxs <- Arguments$getIndices(idxs, max=nbrOfSegments);
-
-
-  # Extract the data
-  data <- fit$data;
-  stopifnot(!is.null(data));
-  x <- data$x;
-  nbrOfLoci <- length(x);
-
-  # Subset the region-level data
-  segs <- segs[idxs,,drop=FALSE];
-
-  nbrOfSegments <- nrow(segs);
-
-  # Subset the locus-level data
-  keep <- logical(nbrOfLoci);
-  for (kk in seq(length=nbrOfSegments)) {
-    xRange <- as.numeric(segs[kk,c("dh.loc.start", "dh.loc.end")]);
-    # Identify all SNPs in the region
-    keep <- keep | (xRange[1] <= x & x <= xRange[2]);
-  } # for (kk ...)
-  keep <- whichVector(keep);
-
-  for (ff in seq(along=data)) {
-    values <- data[[ff]];
-    if (length(values) == nbrOfLoci) {
-      values <- values[keep];
-      data[[ff]] <- values;
-    }
-  }
-  rm(keep, values); # Not needed anymore
-
-  fitS <- fit;
-  fitS$data <- data;
-  fitS$output <- segs;
-
-  fitS;
-})
-
-
 ###########################################################################/**
 # @RdocMethod callAllelicBalanceByBAFs
 #
@@ -301,6 +251,37 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
 })
 
 
+
+###########################################################################/**
+# @RdocMethod callCopyNeutralRegions
+#
+# @title "Calls regions that are copy neutral"
+#
+# \description{
+#  @get "title" from the allele B fractions (BAF).
+# }
+#
+# @synopsis
+#
+# \arguments{
+#   \item{fit}{A PairedPSCBS fit object as returned by 
+#     @see "psCBS::segmentByPairedPSCBS".}
+#   \item{...}{Additional arguments passed to 
+#     @see "aroma.cn::findNeutralCopyNumberState".}
+#   \item{force}{If @TRUE, an already called object is skipped, otherwise not.}
+#   \item{verbose}{See @see "R.utils::Verbose".}
+# }
+#
+# \value{
+#   Returns a PairedPSCBS fit object where a column with the copy-neutral call.
+# }
+#
+# @examples "../incl/callCopyNeutralRegions.PairedPSCBS.Rex"
+#
+# @author
+#
+# @keyword internal
+#*/########################################################################### 
 setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FALSE, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
@@ -340,6 +321,8 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FA
 
 ##############################################################################
 # HISTORY
+# 2010-09-15 [HB]
+# o Added Rdocs for callCopyNeutralRegions().
 # 2010-09-09 [HB]
 # o Added callCopyNeutralRegions() for PairedPSCBS.
 # 2010-09-08 [HB]

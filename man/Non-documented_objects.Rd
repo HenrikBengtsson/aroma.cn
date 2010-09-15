@@ -162,9 +162,11 @@
 \alias{normalizeBAFsByRegions}
 \alias{callAllelicBalanceByBAFs}
 \alias{callCopyNeutralRegions}
-\alias{callCopyNeutralRegions.PairedPSCBS}
-\alias{subsetBySegments}
-\alias{subsetBySegments.PairedPSCBS}
+\alias{getXScale.CopyNumberRegions}
+\alias{getYScale.CopyNumberRegions}
+\alias{plot.CopyNumberRegions}
+\alias{segmentByPruneCBSv1}
+\alias{segmentByPruneCBSv1.RawGenomicSignals}
 
 \description{
   This page contains aliases for all "non-documented" objects that

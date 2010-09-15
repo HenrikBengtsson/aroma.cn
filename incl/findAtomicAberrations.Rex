@@ -60,7 +60,7 @@ for (H in 1:3) {
     segments <- as.integer(dfKK[,c("firstRegion", "lastRegion")]);
     segments <- segments[1]:segments[2];
     xRange <- as.double(dfKK[,c("start", "stop")]);
-    cnrKK <- subset(t, subset=segments);
+    cnrKK <- subset(pT, subset=segments);
     drawLevels(cnrKK, col=col, lwd=3);
     x <- xRange/1e6;
     y <- y0 + 0.2*dy;
