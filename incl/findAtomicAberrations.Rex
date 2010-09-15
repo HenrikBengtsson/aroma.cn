@@ -43,8 +43,8 @@ stext(side=3, pos=1, line=-1, "\"H=0\"", cex=1.5);
 
 for (H in 1:3) {
   plot(cn, col="#aaaaaa", ylim=c(0,5));
-  drawLevels(t, col="white", lwd=4, lty=1);
-  drawLevels(t, col="black", lwd=3, lty=6);
+  drawLevels(pT, col="white", lwd=4, lty=1);
+  drawLevels(pT, col="black", lwd=3, lty=6);
   col <- H+1;
   stext(side=3, pos=1, line=-1, sprintf("H=%d", H), cex=1.5, col=col);
   par <- par("usr");
