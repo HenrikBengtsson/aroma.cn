@@ -1,0 +1,209 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Author: Pierre Neuvial, pierre@stat.berkeley.edu
+% Created on: 2010-08-27
+%
+% Usage:
+%  library("R.rsp");
+%  rsptex("genomicPlots.tex.rsp");  # => *.tex.rsp => ... => *.dvi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+<%
+sourceDirectory("vignettes/R");
+%>
+
+
+\title{Genomic plots}
+\author{HB, PN}
+
+\documentclass[landscape]{article}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\graphicspath{{<%=figPath%>/} {../<%=figPath%>/}}
+
+\setlength{\oddsidemargin}{-0.5in}
+\setlength{\evensidemargin}{-0.5in}
+\setlength{\textwidth}{10in}
+\setlength{\textheight}{8in}
+\setlength{\headsep}{0in}
+\setlength{\topmargin}{-0.7in}	
+
+\begin{document}
+
+\maketitle
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Setup
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<%
+dsName <- getFullName(dsList$fracBT);
+ugp <- getAromaUgpFile(dsList$fracBT);
+snpPattern <- "^SNP";
+cnPattern <- "^CN";
+unf <- getUnitNamesFile(ugp);
+
+chrs <- 1:24;
+
+dfList <- lapply(dsList, getFile, 1);
+dfListB <- dfList[c("fracBN", "fracBT", "genotypeN")];
+dfListC <- dfList[c("totalT", "totalN")];
+%>
+
+
+<%
+for (chr in chrs) {
+%>
+
+ \section*{Chromosome <%=chr%>}
+
+<%
+verbose && cat(verbose, "Chromosome ", chr);
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ## Extract data
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  chrTag <- sprintf("Chr%02d", chr);
+  units <- getUnitsOnChromosome(ugp, chromosome=chr);
+  pos <- getPositions(ugp, units=units);
+
+  ## Identify SNP and CN units
+  unitNames <- getUnitNames(unf, units=units);
+  isSNP <- (regexpr(snpPattern, unitNames) != -1);
+  isCN <- (regexpr(cnPattern, unitNames) != -1);
+
+  ## Extract Total copy numbers
+  C <- sapply(dfListC, extractMatrix, units=units);
+  C <- 2*C[,1]/C[,2];
+
+  ## Extract Allele B fractions
+  beta <- sapply(dfListB, FUN=function(df) df[units, 1, drop=TRUE]);
+  names <- colnames(beta);
+%>
+  
+<%
+  ## Plot dimensions
+  x <- pos/1e6;
+  xlim <- range(x, na.rm=TRUE);
+  xlab <- "Position (Mb)";
+
+  width <- 840;
+  width <- 1280;
+  aspect <- 0.6*1/3;
+
+  cols <- rep(NA, length=length(x));
+  cols[beta[,"genotypeN"] == 0] <- "#999999";
+  cols[beta[,"genotypeN"] == 1] <- "black";
+  cols[beta[,"genotypeN"] == 2] <- "#999999";
+  cols[isCN] <- "lightblue";
+
+  pch <- 19; cex <- 0.15;
+%>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BEGIN PLOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[htp]
+  \centering
+<%
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ## Plot total CNs
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  ylim <- c(0,6);
+  ylab <- "Copy number";
+
+  figName <- sprintf("%s,%s,CN", dataSet, chrTag);
+  pathname <- filePath(figPath, sprintf("%s.png", figName));
+  if (!isFile(pathname) || figForce) {
+    verbose && print(verbose, pathname);
+    fig <- devNew("png", pathname, label=figName, width=width, height=aspect*width);
+    par(mar=c(2.7,2.5,1.2,2)+0.1, tcl=-0.3, mgp=c(1.4,0.4,0), cex=2);
+    par(mar=c(1.7,2.5,1.2,2)+0.1);
+    plot(NA, xlim=xlim, ylim=ylim, xlab=xlab, ylab=ylab, axes=FALSE);
+    axis(side=1);
+    axis(side=2, at=seq(from=ylim[1], to=ylim[2], length=4));
+
+    points(x[isCN], C[isCN], pch=pch, col=cols[isCN], cex=cex);
+    points(x[!isCN], C[!isCN], pch=pch, col=cols[!isCN], cex=cex);
+    label <- sprintf("%s", dataSet);
+    stext(side=3, pos=0, label);
+    stext(side=3, pos=1, chrTag);
+    stext(side=4, pos=0, fracBTag);
+    devDone();
+  }%>
+    \includegraphics[width=\textwidth,trim=0 0 30 30, clip=true]{<%=figName%>}
+  <%
+
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ## Plot Allele B fractions
+  ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  ylim <- c(-0.05,1.05);
+  ylim <- c(-0.1,1.1);
+  ylab <- "Allele B Fraction";
+  ylabs <- list(fracBN="Normal BAF", fracBT="Tumor BAF");
+  cols <- rep(NA, length=nrow(beta));
+  cols[beta[,"genotypeN"] == 1] <- "black";
+  cols[beta[,"genotypeN"] != 1] <- "#999999";
+
+  for (cc in 1:2) {
+    tag <- colnames(beta)[cc];
+    ylab <- ylabs[[tag]];
+    name <- names[cc];
+    figName <- sprintf("%s,%s,%s,fracB", dataSet, chrTag, tag);
+    pathname <- filePath(figPath, sprintf("%s.png", figName));
+    if (!isFile(pathname) || figForce) {
+      fig <- devNew("png", pathname, label=figName, width=width, height=aspect*width);
+      par(mar=c(2.7,2.5,1.1,1)+0.1, tcl=-0.3, mgp=c(1.4,0.4,0), cex=2);
+      par(mar=c(1.7,2.5,1.1,1)+0.1);
+      plot(NA, xlim=xlim, ylim=ylim, xlab=xlab, ylab=ylab, axes=FALSE);
+      axis(side=1);
+      axis(side=2, at=c(0,1/2,1));
+      points(x, beta[,cc], pch=pch, col=cols, cex=cex);
+      label <- sprintf("%s (%s)", dataSet, name);
+      stext(side=3, pos=0, label);
+      stext(side=3, pos=1, chrTag);
+      stext(side=4, pos=0, dsName);
+      devDone();
+    }%>
+  \includegraphics[width=\textwidth,trim=0 0 0 30, clip=true]{<%=figName%>}
+<%
+  }  ## for (cc in...
+%>
+  \caption{Total copy numbers (top panel), Allele B fractions in the normal (second panel) and in the tumor (third panel). SNPs called homozygous in the normal sample are colored in gray.  Copy number probes are colored in light blue.}
+  \label{fig:<%=figName%>}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% END PLOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+<%
+} ## for (chr in ...
+%>
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Data sets
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Data sets}
+\begin{Verbatim}[fontfamily=helvetica,fontsize=\small]
+<%
+x <- capture.output(print(dsList));
+x <- paste(x, collapse="\n");
+%>
+<%=x%>
+\end{Verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Session information
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Session information}
+This report was automatically generated using the R.rsp package.
+<%=toLatex(sessionInfo())%>
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% HISTORY:
+% 2010-08-27
+% o Created.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
