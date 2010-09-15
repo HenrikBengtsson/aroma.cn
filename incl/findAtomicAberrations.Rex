@@ -52,7 +52,7 @@ for (H in 1:3) {
   y1 <- par("usr")[4];
   dy <- 0.05*(y1-y0);
   
-  fit <- findAtomicAberrations(cnr=t, data=cn, H=H, verbose=verbose);
+  fit <- findAtomicAberrations(cnr=pT, data=cn, H=H, verbose=verbose);
   df <- fit$res;
   
   for (kk in seq(length=nrow(df))) {
