@@ -167,6 +167,7 @@
 \alias{plot.CopyNumberRegions}
 \alias{segmentByPruneCBSv1}
 \alias{segmentByPruneCBSv1.RawGenomicSignals}
+\alias{orthogonalizeC1C2}
 
 \description{
   This page contains aliases for all "non-documented" objects that

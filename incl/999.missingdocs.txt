@@ -96,3 +96,4 @@ normalizeBAFsByRegions
   getXScale.CopyNumberRegions getYScale.CopyNumberRegions
   plot.CopyNumberRegions segmentByPruneCBSv1
   segmentByPruneCBSv1.RawGenomicSignals
+orthogonalizeC1C2
