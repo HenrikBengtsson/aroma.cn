@@ -166,6 +166,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 }) # normalizeBAFsByRegions()
 
 
+
 ###########################################################################/**
 # @RdocMethod callAllelicBalanceByBAFs
 #
@@ -208,6 +209,13 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
   # Extract segments
   segs <- as.data.frame(fit);
 
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  }
+
 
   # Nothing to do?
   if (!force && !is.null(segs$ab.call)) {
@@ -215,6 +223,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
     return(fit);
   }
 
+  verbose && enter(verbose, "Calling allelic balance by BAFs");
 
   # Extract data
   betaTN <- fit$data$betaTN;
@@ -224,10 +233,25 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
   naValue <- as.double(NA);
   df <- NULL;
   for (kk in seq(length=nbrOfSegments)) {
+    verbose && enter(verbose, sprintf("Segment #%d of %d", kk, nbrOfSegments));
+
     fitS <- subsetBySegments(fit, idxs=kk);
+    verbose && print(verbose, fitS);
+
     dataS <- fitS$data;
     betaTN <- dataS$betaTN;
     muN <- dataS$muN;
+
+    verbose && summary(verbose, betaTN);
+    verbose && summary(verbose, muN);
+
+    # AD HOC: For some unknown reason does resample() introduce NAs.
+    # /HB 2010-09-15
+    keep <- is.finite(betaTN) & is.finite(muN);
+    keep <- whichVector(keep);
+    betaTN <- betaTN[keep];
+    muN <- muN[keep];
+
     fitKK <- testAllelicBalanceByBAFs(betaTN, muN=muN);
 
     dfKK <- data.frame(
@@ -236,6 +260,8 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
     );
 
     df <- rbind(df, dfKK);
+
+    verbose && exit(verbose);
   } # for (kk ...)
   rownames(df) <- NULL;
 
@@ -246,6 +272,8 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
 
   fitC <- fit;
   fitC$output <- segs;
+
+  verbose && exit(verbose);
 
   fitC;
 })
@@ -315,8 +343,6 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FA
   
   fitC;
 })
-
-
 
 
 ##############################################################################
