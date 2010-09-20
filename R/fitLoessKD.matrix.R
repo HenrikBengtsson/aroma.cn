@@ -48,7 +48,7 @@ setMethodS3("fitLoessKD", "matrix", function(X, Y, ...) {
 
   fit <- list(data=data, fitList=fitList, predictY=predictY);
 
-  class(fit) <- c(class(fit), "LoessKDFit");
+  class(fit) <- c("LoessKDFit", class(fit));
 
   fit;
 });
