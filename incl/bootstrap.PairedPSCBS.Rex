@@ -51,11 +51,5 @@ dd <- lapply(fitBList, FUN=function(f) {
 pointsC1C2(fitN);
 linesC1C2(fitN);
 
-plotC1C2(fitN, Clim=c(0,3));
-dd <- lapply(fitBList, FUN=function(f) { 
-  linesC1C2(f, col="gray");
-});
-pointsC1C2(fitN);
-linesC1C2(fitN);
 
 } # if (require("psCBS"))
