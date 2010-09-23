@@ -21,10 +21,6 @@ fracBPath <- rootPath;
 
 dataSet <- sprintf("%s,%s", dsName, dsTags);
 
-figPath <- "figures";
-figPath <- file.path(figPath, postProcPath);
-figPath <- Arguments$getWritablePath(figPath);
-
 ############################################################################
 ## 2010-09-15
 ## o Created.

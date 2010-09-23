@@ -514,9 +514,182 @@ setMethodS3("orthogonalizeC1C2", "PairedPSCBS", function(fit, ..., debugPlot=TRU
 }) # orthogonalizeC1C2()
 
 
+###########################################################################/**
+# @set "class=PairedPSCBS"
+# @RdocMethod deShearC1C2
+#
+# @title "Correct for shearing in (C1,C2) space based on region-based PSCN estimates"
+#
+# \description{
+#  @get "title" as given by the PSCBS segmentation method.
+# }
+#
+# @synopsis
+#
+# \arguments{
+#   \item{fit}{A PairedPSCBS fit object as returned by 
+#     @see "psCBS::segmentByPairedPSCBS".}
+#   \item{...}{Not used.}
+#   \item{verbose}{See @see "R.utils::Verbose".}
+# }
+#
+# \value{
+#   Returns a PairedPSCBS fit object.
+# }
+#
+# @examples "../incl/deShearC1C2.PairedPSCBS.Rex"
+#
+# @author
+#
+# @keyword internal
+#*/###########################################################################
+setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "sum"), ..., verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  }
+
+  # Argument 'weightFlavor':
+  weightFlavor <- match.arg(weightFlavor);
+  
+  verbose && enter(verbose, "Correct for shearing in (C1,C2) space at the region level ");
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Extract data
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  data <- fit$data;
+  stopifnot(!is.null(data));
+
+  segs <- as.data.frame(fit);
+  stopifnot(!is.null(segs));
+
+  nbrOfSegments <- nrow(segs);
+  verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
+
+  # (C1,C2,...)
+  X <- extractMinorMajorCNs(fit);
+
+  # Number of TCN and DH data points
+  counts <- X[,3:4, drop=FALSE];
+
+  # Region weights from DH counts
+  w <- counts[,2];
+  w <- sqrt(w);
+  w <- w / sum(w, na.rm=TRUE);
+
+  ## Change-point weights
+  if (weightFlavor=="min") {
+    ## smallest of the two flanking (DH) counts 
+    cpw <- cbind(w[1:(length(w)-1)], w[2:length(w)]);
+    cpw <- rowMins(cpw);
+    cpw <- sqrt(cpw);
+  } else if (weightFlavor=="sum") {
+    ## sum of region weights
+    cpw <- w[1:(length(w)-1)] + w[2:length(w)];
+  }
+  
+  # (C1,C2)
+  C1C2 <- X[,1:2, drop=FALSE];
+  D <- colDiffs(C1C2);
+  alpha <- atan(D[, 2]/D[, 1]);
+
+  verbose && enter(verbose, "Represent change points as angles");
+  verbose && str(verbose, alpha);
+
+  # Keep only finite data points
+  ok <- (is.finite(alpha) & is.finite(cpw));
+  alphaT <- alpha[ok];
+  verbose && cat(verbose, "Finite slopes in (C1,C2):");
+  cpwT <- cpw[ok];
+  cpwT <- cpwT / sum(cpwT);
+  verbose && print(verbose, cbind(alphaT=alphaT,wT=cpwT));
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Adjust modes in {alpha} to their expect locations
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  ## The signal is pi-periodic.
+  ## we are looking at from -pi/2 to pi/2.
+  ## we expect a peak near -pi/2 (or pi/2...)
+  ## in order to estimate it correctly, transform the signal so that it is
+  ## in -pi/2-pi/8, pi/2-pi/8
+  aa <- alphaT;
+  ww <- which(alphaT > (pi/2+pi/4)/2) ## half way to both expected peaks
+  aa[ww] <- aa[ww]-pi;
+  rg <- range(aa, na.rm=TRUE);
+
+  fp <- findPeaksAndValleys(aa, weights=cpwT, from=rg[1], to=rg[2], ...);
+  verbose && cat(verbose, "Peaks and valleys:");
+  verbose && print(verbose, fp);
+  type <- NULL; rm(type); # To please R CMD check
+  pfp <- subset(fp, type == "peak");
+
+  xPeaks <- pfp[,"x"];
+  
+  ## Call modes
+  expected <- c(-1/2,-1/4,0,+1/4,+1/2)*pi;
+  xs <- xPeaks;
+  calls <- sapply(xs, FUN=function(x) {
+    dist <- abs(x - expected);
+    which.min(dist);
+  });
+  names(xs) <- expected[calls];
+  ## TODO: more robust ?
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Orthogonalize
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  verbose && enter(verbose, "Remove shearing from the (C1,C2) space by independent linear adjustment in x and y");
+  ## Fit backtransform
+  H <- function(xy, thetaXY) {
+    sx <- tan(thetaXY[1]+pi/2);
+    sy <- tan(thetaXY[2]+pi/2);
+    cbind(xy[, 1]+xy[, 2]*sx, xy[, 1]*sy + xy[, 2]);
+  }
+
+  ## Backtransform
+  ## Use -pi/2 and 0 to correct for shearing
+  wx <- calls[match(-pi/2, expected)];
+  wy <- calls[match(0, expected)];
+  
+  tX <- xPeaks[wx]
+  tY <- pi/2 - xPeaks[wy]
+
+  C1C2o <- H(C1C2, c(tX, tY));
+  verbose && exit(verbose);
+
+  verbose && enter(verbose, "Transform orthogonalized (C1,C2) to (TCN,DH)");
+  # (C1,C2) -> (TCN,DH)
+  gamma <- rowSums(C1C2o, na.rm=TRUE);
+  dh <- 2*(C1C2o[,2]/gamma - 1/2);
+  verbose && exit(verbose);
+
+  # Update segmentation means
+  segs[,"tcn.mean"] <- gamma;
+  segs[,"dh.mean"] <- dh;
+
+  # Update data [TO DO]
+
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Return results
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  fitO <- fit;
+  fitO$output <- segs;
+
+  verbose && exit(verbose);
+
+  fitO;
+}) # deShearC1C2()
 
 ##############################################################################
 # HISTORY
+# 2010-09-22 [PN]
+# o Added deShearC1C2() for PairedPSCBS.
 # 2010-09-19 [HB+PN]
 # o Added orthogonalizeC1C2() for PairedPSCBS.
 # 2010-09-15 [HB]
