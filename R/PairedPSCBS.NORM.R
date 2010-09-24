@@ -617,11 +617,15 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "s
   ## we expect a peak near -pi/2 (or pi/2...)
   ## in order to estimate it correctly, transform the signal so that it is
   ## in -pi/2-pi/8, pi/2-pi/8
+  lag <- pi/8;
   aa <- alphaT;
-  ww <- which(alphaT > (pi/2+pi/4)/2) ## half way to both expected peaks
+  ww <- which(alphaT > pi/2-lag) ## half way to both expected peaks
   aa[ww] <- aa[ww]-pi;
-  rg <- range(aa, na.rm=TRUE);
 
+  ## xlim <- c(-pi/2, pi/2)-lag;
+  ## rg <- xlim;
+  rg <- range(aa);
+  
   fp <- findPeaksAndValleys(aa, weights=cpwT, from=rg[1], to=rg[2], ...);
   verbose && cat(verbose, "Peaks and valleys:");
   verbose && print(verbose, fp);
