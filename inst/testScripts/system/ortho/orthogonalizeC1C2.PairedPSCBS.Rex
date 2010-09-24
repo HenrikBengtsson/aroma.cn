@@ -24,6 +24,10 @@ if (!exists("fitList", mode="list")) {
   }
 }
 
+if (!exists("fit2List", mode="list")) {
+  fit2List <- list();
+}
+
 if (!exists("fitNList", mode="list")) {
   fitNList <- list();
 }
@@ -51,14 +55,31 @@ for (chr in 1:22) {
                                 chromosome=chr, x=x, verbose=-10);
     fitList[[chrTag]] <- fit;
   }
+  rm(dataC, fit);  
+} # for (chr ...)
 
+
+for (chr in 1:22) {
+  chrTag <- sprintf("chr%02d", chr);
+  fit2 <- fit2List[[chrTag]];
+  if (is.null(fit2)) {
+    fit <- fitList[[chrTag]];
+    fit2 <- postsegmentTCN(fit);
+    fit2List[[chrTag]] <- fit2;
+  }
+  rm(fit2);  
+} # for (chr ...)
+
+
+for (chr in 1:22) {
+  chrTag <- sprintf("chr%02d", chr);
   fitN <- fitNList[[chrTag]];
   if (is.null(fitN)) {
-    fitN <- normalizeBAFsByRegions(fit, verbose=-10);
+    fit2 <- fit2List[[chrTag]];
+    fitN <- normalizeBAFsByRegions(fit2, verbose=-10);
     fitNList[[chrTag]] <- fitN;
   }
-
-  rm(dataC, fit, fitN);  
+  rm(fitN);  
 } # for (chr ...)
 
 
