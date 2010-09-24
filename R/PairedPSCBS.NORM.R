@@ -250,6 +250,9 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 # @keyword internal
 #*/###########################################################################
 setMethodS3("orthogonalizeC1C2", "PairedPSCBS", function(fit, ..., debugPlot=TRUE, verbose=FALSE) {
+  pkgName <- "circular"; # To hide it from R CMD check /HB 2010-09-24
+  require(pkgName, character.only=TRUE) || throw("Package not loaded: circular");
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -339,12 +342,24 @@ setMethodS3("orthogonalizeC1C2", "PairedPSCBS", function(fit, ..., debugPlot=TRU
   # Adjust modes in {b} to their expect locations
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Estimate density
-  jitter <- 0;
+#  jitter <- 0;
 #  jitter <- rnorm(length(bT), mean=0, sd=0.1);
 #  bT <- bT + jitter;
   adjust <- 0.8;
 
-  if (debugPlot) {
+##   if (debugPlot) {
+##     cs <- circular(bT, type="angles", modulo="pi");
+##     plot(cs, shrink=2);
+##     r <- 2;
+##     for (theta in seq(from=0, to=pi, by=pi/4)) {
+##       lines(x=c(0,r*cos(theta)),y=c(0,r*sin(theta)), lty=3, col="gray");
+##     }
+##     d <- density(cs, from=0, to=pi, bw=50, adjust=1);
+##     lines(d, lwd=2);
+##   }
+
+  bLim <- c(-pi/2, pi/2);
+  if (debugPlot && FALSE) {
     bLim <- c(-pi/2, pi/2);
     xlim <- bLim + 0.1*bLim;
     # Draw density before adjustment
@@ -369,6 +384,7 @@ setMethodS3("orthogonalizeC1C2", "PairedPSCBS", function(fit, ..., debugPlot=TRU
     xx <- +pi/4 + c(0,+0.05*dx) - 0.05/2*dx;
     arrows(x0=xx[1], x1=xx[2], y0=yy[1], y1=yy[2], code=2, lwd=2, length=0.05, col="blue");
   }
+
 
   # Find modes in {b}
   fp <- findPeaksAndValleys(bT, weights=cpwT, from=bLim[1], to=bLim[2], tol=0.05, adjust=adjust);

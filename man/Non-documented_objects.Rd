@@ -168,6 +168,31 @@
 \alias{segmentByPruneCBSv1}
 \alias{segmentByPruneCBSv1.RawGenomicSignals}
 \alias{orthogonalizeC1C2}
+\alias{ABtoC1C2}
+\alias{bootstrap}
+\alias{bootstrap.PairedPSCBS}
+\alias{C1C2toAB}
+\alias{deShearC1C2}
+\alias{extractC1C2}
+\alias{extractC1C2.list}
+\alias{fitLoess2D}
+\alias{fitLoess2D.C1C2}
+\alias{fitLoessKD}
+\alias{fitLoessKD.data.frame}
+\alias{fitLoessKD.matrix}
+\alias{normalizeLoess2D}
+\alias{normalizeLoess2D.C1C2}
+\alias{normalizeLoessKD}
+\alias{normalizeLoessKD.data.frame}
+\alias{normalizeLoessKD.matrix}
+\alias{plot.C1C2}
+\alias{points.C1C2}
+\alias{resampleA}
+\alias{resampleA.PairedPSCBS}
+\alias{resampleB}
+\alias{resampleB.PairedPSCBS}
+\alias{resampleC}
+\alias{resampleC.PairedPSCBS}
 
 \description{
   This page contains aliases for all "non-documented" objects that

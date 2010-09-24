@@ -97,3 +97,10 @@ normalizeBAFsByRegions
   plot.CopyNumberRegions segmentByPruneCBSv1
   segmentByPruneCBSv1.RawGenomicSignals
 orthogonalizeC1C2
+  ABtoC1C2 bootstrap bootstrap.PairedPSCBS C1C2toAB deShearC1C2
+  extractC1C2 extractC1C2.list fitLoess2D
+  fitLoess2D.C1C2 fitLoessKD fitLoessKD.data.frame fitLoessKD.matrix
+  normalizeLoess2D normalizeLoess2D.C1C2 normalizeLoessKD
+  normalizeLoessKD.data.frame normalizeLoessKD.matrix plot.C1C2
+  points.C1C2 resampleA resampleA.PairedPSCBS resampleB
+  resampleB.PairedPSCBS resampleC resampleC.PairedPSCBS

@@ -1,8 +1,9 @@
 Package: aroma.cn
 =================
 
-Version: 0.6.2 [2010-09-22]
+Version: 0.6.2 [2010-09-24]
 o Added more internal utility functions for future usage.
+
 
 Version: 0.6.1 [2010-09-19]
 o Added more internal utility functions for future usage.
