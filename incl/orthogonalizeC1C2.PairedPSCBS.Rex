@@ -12,6 +12,8 @@ CT[CT > 30] <- 30;
 
 # PSCBS segmentation
 fit <- segmentByPairedPSCBS(CT, betaT=betaT, betaN=betaN, x=x, verbose=-10); 
+fit <- postsegmentTCN(fit);
+print(fit);
 
 # Normalize
 fitN <- normalizeBAFsByRegions(fit, verbose=-10);
