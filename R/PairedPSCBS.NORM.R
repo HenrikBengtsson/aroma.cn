@@ -358,19 +358,21 @@ setMethodS3("orthogonalizeC1C2", "PairedPSCBS", function(fit, ..., debugPlot=TRU
 ##     lines(d, lwd=2);
 ##   }
 
-  bLim <- c(-pi/2, pi/2);
-  if (debugPlot && FALSE) {
+  if (debugPlot) {
     bLim <- c(-pi/2, pi/2);
     xlim <- bLim + 0.1*bLim;
+    x0 <- par("usr")[1]; x1 <- par("usr")[2];
+    y0 <- par("usr")[3]; y1 <- par("usr")[4];
+    dx <- (x1-x0); dy <- (y1-y0);
+  }
+
+  if (debugPlot && FALSE) {
     # Draw density before adjustment
     plotDensity(bT, weights=cpwT, lwd=2, from=bLim[1], to=bLim[2], xlim=xlim, ylim=c(0,2), xlab="slopes", adjust=adjust);
 #    plotDensity(bT, adjust=2);
     abline(v=0, lty=3); # Vertical lines
     abline(v=c(-pi/2,pi/2), lty=1); # Horizontal lines
     abline(v=c(-pi/4,pi/4), lty=3); # Diagonal lines
-    x0 <- par("usr")[1]; x1 <- par("usr")[2];
-    y0 <- par("usr")[3]; y1 <- par("usr")[4];
-    dx <- (x1-x0); dy <- (y1-y0);
     # Annotate slopes
     yy <- c(0.85,0.90)*dy;
     xx <- 0 + c(0,0);

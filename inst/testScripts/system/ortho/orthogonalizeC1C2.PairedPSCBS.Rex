@@ -23,6 +23,7 @@ if (!exists("fitList", mode="list")) {
     fitList <- list();
   }
 }
+    fitList <- list();
 
 if (!exists("fit2List", mode="list")) {
   fit2List <- list();
@@ -87,8 +88,15 @@ if (!isFile(pathname2)) {
   saveObject(fitList, file=pathname2);
 }
 
-c1c2 <- extractC1C2(fitList);
-c1c2N <- extractC1C2(fitNList);
+fit <- Reduce(append, fitList);
+str(fit);
+
+fitN <- Reduce(append, fitNList);
+str(fitN);
+
+
+c1c2 <- extractC1C2(fit);
+c1c2N <- extractC1C2(fitN);
 
 fit2D <- fitLoess2D(X=c1c2, Y=c1c2N);
 c1c2N2 <- normalizeLoess2D(c1c2, fit=fit2D);
