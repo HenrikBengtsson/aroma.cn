@@ -678,8 +678,8 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "s
   wx <- calls[match(-pi/2, expected)];
   wy <- calls[match(0, expected)];
   
-  tX <- xPeaks[wx]
-  tY <- pi/2 - xPeaks[wy]
+  tX <- xPeaks[wx];
+  tY <- pi/2 - xPeaks[wy];
 
   C1C2o <- H(C1C2, c(tX, tY));
   verbose && exit(verbose);
