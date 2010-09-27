@@ -192,8 +192,12 @@ devSet("C1C2");
 Clim <- c(0,4);
 subplots(4, ncol=2, byrow=TRUE);
 par(mar=c(1,3.5,1,0.5)+1);
-plotC1C2(fitSeg, Clim=Clim);
-title(main="(C1,C2) - raw");
+plotC1C2(fitSeg2, Clim=Clim);
+title(main="(C1,C2)");
+plotC1C2(fitSegN, Clim=Clim);
+title(main="(C1,C2) - BAF normalized");
+plotC1C2(fitSegC, Clim=Clim);
+title(main="(C1,C2) - AB adjusted");
 plotC1C2(fitSegS, Clim=Clim);
 title(main="(C1,C2) - desheared");
 
@@ -201,91 +205,70 @@ title(main="(C1,C2) - desheared");
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Plot (C1,C2) chromosome by chromosome
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+devSet("C1C2,byChromosome");
+par(ask=TRUE);
 for (chr in 1:22) {
   chrTag <- sprintf("chr%02d", chr);
 
-  fit <- extractByChromosome(fitSeg, chr);
-  fit2 <- extractByChromosome(fitSeg2, chr);
-  fitS <- extractByChromosome(fitSegS, chr);
+  fitList <- list(
+    extractByChromosome(fitSeg2, chr),
+    extractByChromosome(fitSegN, chr),
+    extractByChromosome(fitSegC, chr),
+    extractByChromosome(fitSegS, chr)
+  );
 
-  devSet(sprintf("C1C2,%s", chrTag));
   Clim <- c(0,4);
   subplots(4, ncol=2, byrow=TRUE);
   par(mar=c(1,3.5,1,0.5)+1);
-  plotC1C2(fit, Clim=Clim);
-  stext(side=1, pos=1, line=-1, chrTag);
-  linesC1C2(fit);
-  title(main="(C1,C2)");
 
-  plotC1C2(fitS, Clim=Clim);
-  stext(side=1, pos=1, line=-1, chrTag);
-  linesC1C2(fitS);
-  title(main="(C1,C2) - desheared");
+  for (fit in fitList) {
+    plotC1C2(fit, Clim=Clim);
+    stext(side=1, pos=1, line=-1, chrTag);
+    linesC1C2(fit);
+  }
 } # for (chr ...)
 
 
-devSet("tracks");
-subplots(10, ncol=2, byrow=FALSE);
-par(mar=c(1,3.5,1,0.5)+1);
-plot(fit, add=TRUE)
-plot(fitS, add=TRUE)
 
-
-
-stop()
-stop()
-stop()
-
-
-
-if (!exists("fitNList", mode="list")) {
-  fitNList <- list();
-}
-
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Plot (x,C1,C2) chromosome by chromosome
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+devSet("C1C2,byChromosome,tracks");
+par(ask=TRUE);
 for (chr in 1:22) {
   chrTag <- sprintf("chr%02d", chr);
-  fitN <- fitNList[[chrTag]];
-  if (is.null(fitN)) {
-    fit2 <- fit2List[[chrTag]];
-    fitN <- normalizeBAFsByRegions(fit2, verbose=-10);
-    fitNList[[chrTag]] <- fitN;
+
+  fitList <- list(
+    extractByChromosome(fitSeg2, chr),
+    extractByChromosome(fitSegN, chr),
+    extractByChromosome(fitSegC, chr),
+    extractByChromosome(fitSegS, chr)
+  );
+
+  c1c2List <- lapply(fitList, FUN=function(fit) {
+    xx <- as.data.frame(fit)[,c("tcn.loc.start", "tcn.loc.end"),drop=FALSE];
+    c1c2 <- extractC1C2(fit)[,1:2];
+    cbind(xx, c1c2);
+  });
+
+  c1c2 <- c1c2List[[1]];
+  xrange <- as.matrix(c1c2[,c("tcn.loc.start", "tcn.loc.end")]);
+  xrange <- range(xrange, na.rm=TRUE);
+
+  subplots(length(c1c2List), ncol=1, byrow=FALSE);
+  par(mar=c(1,3.5,1,0.5)+1);
+
+  for (c1c2 in c1c2List) {
+    plot(NA, xlim=xrange, ylim=Clim);
+    stext(side=3, pos=1, chrTag);
+    dd <- apply(c1c2, MARGIN=1, FUN=function(df) {
+      xx <- as.numeric(df[1:2]);
+      c1 <- rep(as.numeric(df[3]), times=2);
+      c2 <- rep(as.numeric(df[4]), times=2);
+      c <- c1+c2;
+      lines(xx, c, lwd=2, col=1);
+      lines(xx, c1, lwd=2, col=2);
+      lines(xx, c2, lwd=2, col=3);
+    });
   }
-  rm(fitN);  
 } # for (chr ...)
-
-
-c1c2 <- extractC1C2(fitList);
-c1c2N <- extractC1C2(fitNList);
-
-fit2D <- fitLoess2D(X=c1c2, Y=c1c2N);
-c1c2N2 <- normalizeLoess2D(c1c2, fit=fit2D);
-
-AB <- C1C2toAB(c1c2N2);
-
-devSet("C1C2");
-plot(c1c2N2);
-lines(c1c2N2);
-plot(AB[,c("l","b")], cex=sqrt(c1c2N2[,"w"])+1/2);
-
-
-fitT <- fitList[[1]];
-C1C2 <- extractC1C2(fitT);
-
-# Orthogonalize
-devSet("ortho");
-subplots(4, ncol=2, byrow=TRUE);
-par(mar=c(1,3.5,1,0.5)+1);
-
-stop()
-
-devSet("tracks");
-subplots(10, ncol=2, byrow=FALSE);
-par(mar=c(1,3.5,1,0.5)+1);
-plot(fitT, add=TRUE);
-plot(fitO, add=TRUE);
-
-plotC1C2(fitT, col="gray", Clim=Clim);
-linesC1C2(fitT, col="gray");
-pointsC1C2(fitO);
-linesC1C2(fitO);
-title(main="(C1,C2) - both");
