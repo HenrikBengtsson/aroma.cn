@@ -128,13 +128,62 @@ if (!exists("fitSeg2") || !inherits(fitSeg2, "PairedPSCBS")) {
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Normalize BAF
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+if (!exists("fitSegN") || !inherits(fitSegN, "PairedPSCBS")) {
+  pathnameT <- gsub(".xdr", ",PairedPSCBS,psTCN,nBAF.xdr", pathname, fixed=TRUE);
+  if (isFile(pathnameT)) {
+    verbose && enter(verbose, "Loading BAF-normalized TCN-post-segmented PairedPSCBS results");
+    fitSegN <- loadObject(pathnameT);
+    verbose && print(verbose, fitSegN);
+    verbose && exit(verbose);
+  } else {
+    verbose && enter(verbose, "Normalizing BAF by regions");
+    fitSegN <- normalizeBAFsByRegions(fitSeg2, verbose=-10);
+    verbose && print(verbose, fitSegN);
+
+    verbose && enter(verbose, "Saving PairedPSCBS object");
+    saveObject(fitSegN, file=pathnameT);
+    verbose && exit(verbose);
+
+    verbose && exit(verbose);
+  }
+  rm(pathnameT);
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Call allelic balance (AB) and adjust for AB biases
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+if (!exists("fitSegC") || !inherits(fitSegC, "PairedPSCBS")) {
+  pathnameT <- gsub(".xdr", ",PairedPSCBS,psTCN,nBAF,AB.xdr", pathname, fixed=TRUE);
+  if (isFile(pathnameT)) {
+    verbose && enter(verbose, "Loading AB-called BAF-normalized TCN-post-segmented PairedPSCBS results");
+    fitSegC <- loadObject(pathnameT);
+    verbose && print(verbose, fitSegC);
+    verbose && exit(verbose);
+  } else {
+    verbose && enter(verbose, "Normalizing for allelic-balance biases");
+    fitSegC <- callAllelicBalanceByBAFs(fitSegN, verbose=-10);
+    ww <- which(fitSegC$output$ab.call);
+    fitSegC$output[ww, "dh.mean"] <- 0;
+    verbose && print(verbose, fitSegC);
+
+    verbose && enter(verbose, "Saving PairedPSCBS object");
+    saveObject(fitSegC, file=pathnameT);
+    verbose && exit(verbose);
+
+    verbose && exit(verbose);
+  }
+}
+ 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Deshear
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 verbose && enter(verbose, "Deshearing in (C1,C2) space");
-fitSegS <- deShearC1C2(fitSeg2, verbose=-10);
+fitSegS <- deShearC1C2(fitSegC, verbose=-10);
 verbose && exit(verbose);
 
-stop()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Plot genomewide (C1,C2)
@@ -144,7 +193,7 @@ Clim <- c(0,4);
 subplots(4, ncol=2, byrow=TRUE);
 par(mar=c(1,3.5,1,0.5)+1);
 plotC1C2(fitSeg, Clim=Clim);
-title(main="(C1,C2)");
+title(main="(C1,C2) - raw");
 plotC1C2(fitSegS, Clim=Clim);
 title(main="(C1,C2) - desheared");
 
@@ -240,4 +289,3 @@ linesC1C2(fitT, col="gray");
 pointsC1C2(fitO);
 linesC1C2(fitO);
 title(main="(C1,C2) - both");
-

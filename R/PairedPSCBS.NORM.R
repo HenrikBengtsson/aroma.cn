@@ -118,12 +118,18 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   segs <- fit$output;
   stopifnot(!is.null(segs));
 
+  chromosomes <- getChromosomes(fit);
+  nbrOfChromosomes <- length(chromosomes);
+  verbose && cat(verbose, "Number of chromosomes: ", nbrOfChromosomes);
+  verbose && print(verbose, chromosomes);
+
   nbrOfSegments <- nrow(segs);
   verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  chromosome <- data$chromosome;
   x <- data$x;
   betaT <- data$betaT;
   betaTN <- data$betaTN;
@@ -147,12 +153,14 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   naValue <- as.double(NA);
   X <- matrix(naValue, nrow=nbrOfSegments, ncol=3);
   for (kk in seq(length=nbrOfSegments)) {
+    chrKK <- as.numeric(segs[kk,"chromosome"]);
     xRange <- as.numeric(segs[kk,c("dh.loc.start", "dh.loc.end")]);
     tcn <- segs[kk,"tcn.mean"];
     dh <- segs[kk,"dh.mean"];
     # Identify all homozygous SNPs in the region
-    idxs <- whichVector(xRange[1] <= x & x <= xRange[2] & isHom);
-    mBAFhom <- mean(rho[idxs], na.rm=TRUE);
+    keep <- (chromosome == chrKK & xRange[1] <= x & x <= xRange[2] & isHom);
+    keep <- whichVector(keep);
+    mBAFhom <- mean(rho[keep], na.rm=TRUE);
     X[kk,] <- c(dh, mBAFhom, tcn);
   } # for (kk ...)
 
@@ -186,10 +194,12 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   naValue <- as.double(NA);
   scales <- rep(naValue, times=length(data$betaT));
   for (kk in seq(length=nbrOfSegments)) {
+    chrKK <- as.numeric(segs[kk,"chromosome"]);
     xRange <- as.numeric(segs[kk,c("dh.loc.start", "dh.loc.end")]);
     # Identify all SNPs in the region
-    idxs <- whichVector(xRange[1] <= x & x <= xRange[2]);
-    scales[idxs] <- scale[kk];
+    keep <- (chromosome == chrKK & xRange[1] <= x & x <= xRange[2]);
+    keep <- whichVector(keep);
+    scales[keep] <- scale[kk];
   } # for (kk ...)
 
   # Update tumor allele B fractions
@@ -235,7 +245,8 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 # \arguments{
 #   \item{fit}{A PairedPSCBS fit object as returned by 
 #     @see "psCBS::segmentByPairedPSCBS".}
-#   \item{...}{Not used.}
+#   \item{...}{Additional arguments passed
+#     @see "aroma.light::findPeaksAndValleys".}
 #   \item{verbose}{See @see "R.utils::Verbose".}
 # }
 #
@@ -547,6 +558,10 @@ setMethodS3("orthogonalizeC1C2", "PairedPSCBS", function(fit, ..., debugPlot=TRU
 # \arguments{
 #   \item{fit}{A PairedPSCBS fit object as returned by 
 #     @see "psCBS::segmentByPairedPSCBS".}
+#   \item{adjust}{A @numeric adjusting the bandwidth of the empirical
+#     density estimator of line (changepoint) directions.}
+#   \item{weightFlavor}{A @character string specifying how weights are
+#     generated for lines (changepoints).}
 #   \item{...}{Not used.}
 #   \item{verbose}{See @see "R.utils::Verbose".}
 # }
@@ -561,10 +576,16 @@ setMethodS3("orthogonalizeC1C2", "PairedPSCBS", function(fit, ..., debugPlot=TRU
 #
 # @keyword internal
 #*/###########################################################################
-setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "sum"), ..., verbose=FALSE) {
+setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, adjust=0.5, weightFlavor=c("min", "sum"), ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Argument 'adjust':
+  adjust <- Arguments$getDouble(adjust, range=c(0,Inf));
+
+  # Argument 'weightFlavor':
+  weightFlavor <- match.arg(weightFlavor);
+  
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
   if (verbose) {
@@ -572,9 +593,7 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "s
     on.exit(popState(verbose));
   }
 
-  # Argument 'weightFlavor':
-  weightFlavor <- match.arg(weightFlavor);
-  
+
   verbose && enter(verbose, "Correct for shearing in (C1,C2) space at the region level ");
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -601,12 +620,13 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "s
   w <- w / sum(w, na.rm=TRUE);
 
   ## Change-point weights
-  if (weightFlavor=="min") {
+  if (weightFlavor == "min") {
     ## smallest of the two flanking (DH) counts 
     cpw <- cbind(w[1:(length(w)-1)], w[2:length(w)]);
-    cpw <- rowMins(cpw);
+    cpw <- rowMins(cpw, na.rm=TRUE);
+    cpw[is.infinite(cpw)] <- NA;
     cpw <- sqrt(cpw);
-  } else if (weightFlavor=="sum") {
+  } else if (weightFlavor == "sum") {
     ## sum of region weights
     cpw <- w[1:(length(w)-1)] + w[2:length(w)];
   }
@@ -625,7 +645,7 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "s
   verbose && cat(verbose, "Finite slopes in (C1,C2):");
   cpwT <- cpw[ok];
   cpwT <- cpwT / sum(cpwT);
-  verbose && print(verbose, cbind(alphaT=alphaT,wT=cpwT));
+  verbose && print(verbose, cbind(alphaT=alphaT, wT=cpwT));
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Adjust modes in {alpha} to their expect locations
@@ -644,7 +664,7 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "s
   ## rg <- xlim;
   rg <- range(aa);
   
-  fp <- findPeaksAndValleys(aa, weights=cpwT, from=rg[1], to=rg[2], ...);
+  fp <- findPeaksAndValleys(aa, weights=cpwT, from=rg[1], to=rg[2], adjust=adjust, ...);
   verbose && cat(verbose, "Peaks and valleys:");
   verbose && print(verbose, fp);
   type <- NULL; rm(type); # To please R CMD check
@@ -660,6 +680,8 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "s
     which.min(dist);
   });
   names(xs) <- expected[calls];
+  verbose && cat(verbose, "Calls:");
+  verbose && print(verbose, xs);
   ## TODO: more robust ?
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -677,11 +699,23 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "s
   ## Use -pi/2 and 0 to correct for shearing
   wx <- calls[match(-pi/2, expected)];
   wy <- calls[match(0, expected)];
+
+  # Sanity checks
+  stopifnot(is.finite(wx));
+  stopifnot(wx <= length(xPeaks));
+  stopifnot(is.finite(wy));
+  stopifnot(wy <= length(xPeaks));
   
   tX <- xPeaks[wx];
   tY <- pi/2 - xPeaks[wy];
 
+  # Sanity checks
+  stopifnot(is.finite(tX));
+  stopifnot(is.finite(tY));
+
   C1C2o <- H(C1C2, c(tX, tY));
+  # Sanity checks
+  stopifnot(dim(C1C2o) == dim(C1C2));
   verbose && exit(verbose);
 
   verbose && enter(verbose, "Transform orthogonalized (C1,C2) to (TCN,DH)");
@@ -710,6 +744,10 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, weightFlavor=c("min", "s
 
 ##############################################################################
 # HISTORY
+# 2010-09-26 [HB]
+# o Added argument 'adjust' to deShearC1C2() with new default.
+# o Added sanity checks to deShearC1C2().
+# o Now normalizeBAFsByRegions() for PairedPSCBS handles multiple chromosomes.
 # 2010-09-22 [PN]
 # o Added deShearC1C2() for PairedPSCBS.
 # 2010-09-19 [HB+PN]
