@@ -111,3 +111,8 @@ orthogonalizeC1C2
   fitC1C2ShearModel.PairedPSCBS
  fitDeltaC1C2ShearModel fitDeltaC1C2ShearModel.PairedPSCBS
  fitDeltaXYShearModel fitDeltaXYShearModel.matrix
+  calibrateC1C2 estimateC2Bias estimateC2Bias.PairedPSCBS
+  fitC1C2Densities fitC1C2Densities.PairedPSCBS fitC1C2Peaks
+  fitC1C2Peaks.PairedPSCBS plotC1C2Grid plotC1C2Grid.PairedPSCBS
+  translateC1C2 translateC1C2.PairedPSCBS
+

@@ -208,6 +208,17 @@
 \alias{fitDeltaC1C2ShearModel.PairedPSCBS}
 \alias{fitDeltaXYShearModel}
 \alias{fitDeltaXYShearModel.matrix}
+\alias{calibrateC1C2}
+\alias{estimateC2Bias}
+\alias{estimateC2Bias.PairedPSCBS}
+\alias{fitC1C2Densities}
+\alias{fitC1C2Densities.PairedPSCBS}
+\alias{fitC1C2Peaks}
+\alias{fitC1C2Peaks.PairedPSCBS}
+\alias{plotC1C2Grid}
+\alias{plotC1C2Grid.PairedPSCBS}
+\alias{translateC1C2}
+\alias{translateC1C2.PairedPSCBS}
 
 \description{
   This page contains aliases for all "non-documented" objects that

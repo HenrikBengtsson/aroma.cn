@@ -26,9 +26,6 @@ fitC <- callAllelicBalanceByBAFs(fitN);
 ww <- which(fitC$output$ab.call);
 fitC$output[ww, "dh.mean"] <- 0;
 
-# Orthogonalize
-fitO <- orthogonalizeC1C2(fitC);
-
 # deShear
 fitD <- deShearC1C2(fitC, verbose=verbose);
 
@@ -40,24 +37,14 @@ plotTracks(fitD, add=TRUE);
 
 devSet("C1C2");
 Clim <- c(0,4);
-subplots(4, ncol=2, byrow=TRUE);
-par(mar=c(1,3.5,1,0.5)+1);
 plotC1C2(fitC, Clim=Clim);
 linesC1C2(fitC);
 title(main="(C1,C2) - adjusted");
 
-plotC1C2(fitO, Clim=Clim);
-linesC1C2(fitO);
-title(main="(C1,C2) - orthogonalized");
-
+devSet("C1C2,deShear");
+Clim <- c(0,4);
 plotC1C2(fitD, Clim=Clim);
 linesC1C2(fitD);
 title(main="(C1,C2) - deSheared");
-
-plotC1C2(fitO, col="gray", Clim=Clim);
-linesC1C2(fitO, col="gray");
-pointsC1C2(fitD);
-linesC1C2(fitD);
-title(main="(C1,C2) - orthogonalized vs deSheared");
 
 } # if (require("psCBS"))

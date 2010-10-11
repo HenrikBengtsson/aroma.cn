@@ -133,12 +133,14 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "
 
 
 
-setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, ..., verbose=FALSE) {
+setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, sC2=1, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   dC1 <- Arguments$getNumeric(dC1);
   dC2 <- Arguments$getNumeric(dC2);
+  sC1 <- Arguments$getNumeric(sC1);
+  sC2 <- Arguments$getNumeric(sC2);
 
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
@@ -148,7 +150,9 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, ..., ver
   }
 
 
-  verbose && enter(verbose, "Translating by (C1,C2)");
+  verbose && enter(verbose, "Scaling and translating by (C1,C2)");
+  verbose && cat(verbose, "sC1: ", sC1);
+  verbose && cat(verbose, "sC2: ", sC2);
   verbose && cat(verbose, "dC1: ", dC1);
   verbose && cat(verbose, "dC2: ", dC2);
 
@@ -167,8 +171,8 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, ..., ver
   # (C1,C2)
   C1C2 <- X[,1:2, drop=FALSE];
 
-  C1C2[,1] <- C1C2[,1] + dC1;
-  C1C2[,2] <- C1C2[,2] + dC2;
+  C1C2[,1] <- dC1 + sC1*C1C2[,1];
+  C1C2[,2] <- dC2 + sC2*C1C2[,2];
 
   verbose && enter(verbose, "(C1,C2) to (TCN,DH)");
   # (C1,C2) -> (TCN,DH)
@@ -190,6 +194,7 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, ..., ver
 
   fitO;
 })
+
 
 
 setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), weightFlavor=c("min", "sum"), ..., verbose=FALSE) {
