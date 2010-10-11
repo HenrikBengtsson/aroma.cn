@@ -20,7 +20,7 @@
  Calls regions that are in allelic balance from the allele B fractions (BAF).
 }
 
-\usage{\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore=4, ..., force=FALSE, verbose=FALSE)}
+\usage{\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore=4, ..., force=FALSE, cache=TRUE, verbose=FALSE)}
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by

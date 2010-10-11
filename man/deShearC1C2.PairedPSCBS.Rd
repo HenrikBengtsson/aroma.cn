@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Do not modify this file since it was automatically generated from:
 % 
-%  PairedPSCBS.NORM.R
+%  PairedPSCBS.deShearC1C2.R
 % 
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -20,7 +20,7 @@
  Correct for shearing in (C1,C2) space based on region-based PSCN estimates as given by the PSCBS segmentation method.
 }
 
-\usage{\method{deShearC1C2}{PairedPSCBS}(fit, adjust=0.5, weightFlavor=c("min", "sum"), ..., verbose=FALSE)}
+\usage{\method{deShearC1C2}{PairedPSCBS}(fit, ..., dirs=c("|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE)}
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
@@ -73,10 +73,10 @@ fitO <- orthogonalizeC1C2(fitC);
 fitD <- deShearC1C2(fitC, verbose=verbose);
 
 devSet("tracks");
-subplots(10, ncol=2, byrow=FALSE);
+subplots(2*3, ncol=2, byrow=FALSE);
 par(mar=c(1,3.5,1,0.5)+1);
-plot(fit, add=TRUE);
-plot(fitD, add=TRUE);
+plotTracks(fit, add=TRUE);
+plotTracks(fitD, add=TRUE);
 
 devSet("C1C2");
 Clim <- c(0,4);

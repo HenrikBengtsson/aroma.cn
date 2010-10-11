@@ -20,7 +20,7 @@
  Normalizes allele B fractions (BAFs) based on region-based PSCN estimates as given by the PSCBS segmentation method.
 }
 
-\usage{\method{normalizeBAFsByRegions}{PairedPSCBS}(fit, by=c("betaTN", "betaT"), ..., verbose=FALSE)}
+\usage{\method{normalizeBAFsByRegions}{PairedPSCBS}(fit, by=c("betaTN", "betaT"), ..., force=FALSE, cache=TRUE, verbose=FALSE)}
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by

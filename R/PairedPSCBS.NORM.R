@@ -95,12 +95,18 @@
 #
 # @keyword internal
 #*/###########################################################################
-setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), ..., verbose=FALSE) {
+setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), ..., force=FALSE, cache=TRUE, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Argument 'by':
   by <- match.arg(by);
+
+  # Argument 'force':
+  force <- Arguments$getLogical(force);
+
+  # Argument 'cache':
+  cache <- Arguments$getLogical(cache);
 
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
@@ -111,6 +117,24 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 
 
   verbose && enter(verbose, "Normalizes region-level mirrored allele B fractions (mBAFs)");
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Check for cached results
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  key <- list(method="normalizeBAFsByRegions", class=class(fit)[1], 
+    data=as.data.frame(fit),
+    version="2010-10-10"
+  );
+  dirs <- c("aroma.cn", "ortho");
+  if (!force) {
+    res <- loadCache(key=key, dirs=dirs);
+    if (!is.null(res)) {
+      verbose && cat(verbose, "Cached results found.");
+      verbose && exit(verbose);
+      return(res);
+    }
+  }
+
 
   data <- fit$data;
   stopifnot(!is.null(data));
@@ -148,6 +172,9 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   muN <- data$muN;
   isHom <- (muN == 0 | muN == 1);
   rm(muN);
+
+  # Drop all homozygous SNPs already here.
+  # TO DO
 
   # Allocate
   naValue <- as.double(NA);
@@ -221,6 +248,14 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   fitN$data <- data;
   fitN$output <- segs;
 
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Save to cache
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  if (cache) {
+    saveCache(key=key, dirs=dirs, fitN);
+  }
+
   verbose && exit(verbose);
 
   fitN;
@@ -228,323 +263,10 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 
 
 
-
-
-###########################################################################/**
-# @set "class=PairedPSCBS"
-# @RdocMethod orthogonalizeC1C2
-#
-# @title "Orthogonalizes (C1,C2) based on region-based PSCN estimates"
-#
-# \description{
-#  @get "title" as given by the PSCBS segmentation method.
-# }
-#
-# @synopsis
-#
-# \arguments{
-#   \item{fit}{A PairedPSCBS fit object as returned by 
-#     @see "psCBS::segmentByPairedPSCBS".}
-#   \item{...}{Additional arguments passed
-#     @see "aroma.light::findPeaksAndValleys".}
-#   \item{verbose}{See @see "R.utils::Verbose".}
-# }
-#
-# \value{
-#   Returns a PairedPSCBS fit object.
-# }
-#
-# @examples "../incl/orthogonalizeC1C2.PairedPSCBS.Rex"
-#
-# @author
-#
-# @keyword internal
-#*/###########################################################################
-setMethodS3("orthogonalizeC1C2", "PairedPSCBS", function(fit, ..., debugPlot=TRUE, verbose=FALSE) {
-  pkgName <- "circular"; # To hide it from R CMD check /HB 2010-09-24
-  require(pkgName, character.only=TRUE) || throw("Package not loaded: circular");
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
-  if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
-  }
-
-
-  verbose && enter(verbose, "Orthogonalizes region-level minor and major CNs (C1,C2)");
-
-  data <- fit$data;
-  stopifnot(!is.null(data));
-
-  segs <- as.data.frame(fit);
-  stopifnot(!is.null(segs));
-
-  nbrOfSegments <- nrow(segs);
-  verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
-
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Extract data
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # (C1,C2,...)
-  X <- extractC1C2(fit);
-
-  # Number of TCN and DH data points
-  counts <- X[,3:4, drop=FALSE];
-
-  # Regions weights
-  w <- counts[,2];
-  w <- sqrt(w);
-  w <- w / sum(w, na.rm=TRUE);
-
-  # (C1,C2)
-  C1C2 <- X[,1:2, drop=FALSE];
-
-  if (debugPlot) {
-    Clim <- c(0,4);
-    cex <- w / mean(w, na.rm=TRUE) + 1/2;
-    plot(C1C2, cex=cex, xlim=Clim, ylim=Clim);
-    lines(C1C2);
-    abline(a=0, b=1, lty=3);
-  }
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Transform (C1,C2) -> (dC1, dC2) -> (a,b) line space
-  #
-  # Lines can be represented as:
-  #  (1) Two points (x0,y0) and (x1,y1).
-  #  (2) Intercept and slope (a,b).
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  verbose && enter(verbose, "Represent change points in line space");
-  # Change-point weights
-  cpw <- w[1:(length(w)-1)] + w[2:length(w)];
-
-  # Alternative (1a): y = a + b*x
-  # Slope    : b = dy/dx, where dy=(y1-y0) and dx=(x1-x0)
-  # Intercept: a = y - b*x = y0 - b*x0
-
-  # Alternative (1b): y = a + b*x
-  # Slope    : beta = arctan(dx/dy)
-  #              s.t. beta=0 <=> vertical, beta=pi/2 <=> horizontal
-  # Intercept: a = y - b*x = y0 - b*x0
-
-  AB <- C1C2toAB(X);
-
-  verbose && cat(verbose, "(C1,C2) -> (A,B):");
-  verbose && print(verbose, AB);
-
-  verbose && cat(verbose, "Slopes in (C1,C2) for all change points:");
-  b <- AB[,"b"];
-  verbose && print(verbose, b);
-
-  # Keep only finite data points
-  ok <- (is.finite(b) & is.finite(cpw));
-  bT <- b[ok];
-  verbose && cat(verbose, "Finite slopes in (C1,C2):");
-  cpwT <- cpw[ok];
-  cpwT <- cpwT / sum(cpwT);
-  verbose && print(verbose, cbind(bT=bT,wT=cpwT));
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Adjust modes in {b} to their expect locations
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Estimate density
-#  jitter <- 0;
-#  jitter <- rnorm(length(bT), mean=0, sd=0.1);
-#  bT <- bT + jitter;
-  adjust <- 0.8;
-
-##   if (debugPlot) {
-##     cs <- circular(bT, type="angles", modulo="pi");
-##     plot(cs, shrink=2);
-##     r <- 2;
-##     for (theta in seq(from=0, to=pi, by=pi/4)) {
-##       lines(x=c(0,r*cos(theta)),y=c(0,r*sin(theta)), lty=3, col="gray");
-##     }
-##     d <- density(cs, from=0, to=pi, bw=50, adjust=1);
-##     lines(d, lwd=2);
-##   }
-
-  if (debugPlot) {
-    bLim <- c(-pi/2, pi/2);
-    xlim <- bLim + 0.1*bLim;
-    x0 <- par("usr")[1]; x1 <- par("usr")[2];
-    y0 <- par("usr")[3]; y1 <- par("usr")[4];
-    dx <- (x1-x0); dy <- (y1-y0);
-  }
-
-  if (debugPlot && FALSE) {
-    # Draw density before adjustment
-    plotDensity(bT, weights=cpwT, lwd=2, from=bLim[1], to=bLim[2], xlim=xlim, ylim=c(0,2), xlab="slopes", adjust=adjust);
-#    plotDensity(bT, adjust=2);
-    abline(v=0, lty=3); # Vertical lines
-    abline(v=c(-pi/2,pi/2), lty=1); # Horizontal lines
-    abline(v=c(-pi/4,pi/4), lty=3); # Diagonal lines
-    # Annotate slopes
-    yy <- c(0.85,0.90)*dy;
-    xx <- 0 + c(0,0);
-    arrows(x0=xx[1], x1=xx[2], y0=yy[1], y1=yy[2], code=2, lwd=2, length=0.05, col="blue");
-    xx <- -pi/2 + c(0,-0.05*dx) + 0.05/2*dx;
-    arrows(x0=xx[1], x1=xx[2], y0=yy[1], y1=yy[1], code=2, lwd=2, length=0.05, col="blue");
-    xx <- +pi/2 + c(0,+0.05*dx) - 0.05/2*dx;
-    arrows(x0=xx[1], x1=xx[2], y0=yy[1], y1=yy[1], code=2, lwd=2, length=0.05, col="blue");
-    xx <- -pi/4 + c(0,-0.05*dx) + 0.05/2*dx;
-    arrows(x0=xx[1], x1=xx[2], y0=yy[1], y1=yy[2], code=2, lwd=2, length=0.05, col="blue");
-    xx <- +pi/4 + c(0,+0.05*dx) - 0.05/2*dx;
-    arrows(x0=xx[1], x1=xx[2], y0=yy[1], y1=yy[2], code=2, lwd=2, length=0.05, col="blue");
-  }
-
-
-  # Find modes in {b}
-  fp <- findPeaksAndValleys(bT, weights=cpwT, from=bLim[1], to=bLim[2], tol=0.05, adjust=adjust);
-  verbose && cat(verbose, "Peaks and valleys:");
-  verbose && print(verbose, fp);
-  type <- NULL; rm(type); # To please R CMD check
-  pfp <- subset(fp, type == "peak");
-  xPeaks <- pfp[,"x"];
-  verbose && cat(verbose, "Slopes for all modes: ", 
-                        paste(sprintf("%.3f", xPeaks), collapse=", "));
-
-  # Call modes
-  # Alt 1
-  expected <- c(-1/2,-1/4,0,+1/4,+1/2)*pi;
-  xs <- xPeaks;
-  calls <- sapply(xs, FUN=function(x) {
-    dist <- abs(x - expected);
-    which.min(dist);
-  });
-  names(xs) <- expected[calls];
-  # Alt 2:
-  # It is probably better to call the strongest peaks first for which
-  # we have more confidence, and then call the other relative to those.
-  # /HB 2010-09-19
-  expected <- c(-1/2,-1/4,0,+1/4,+1/2)*pi;
-  xd <- pfp[,c("x", "density"),drop=FALSE];
-#  xd[,"x"] <- xd[,"x"];
-  xd <- xd[order(xd[,"density"], decreasing=TRUE),,drop=FALSE];
-  calls <- rep(NA, times=nrow(xd));
-  expectedLeft <- expected;
-  for (kk in seq(length=nrow(xd))) {
-    # Mode #kk
-    x <- xd[kk,"x"];
-    dx <- abs(x - expectedLeft);
-    call <- which.min(dx);
-    expectedLeft[call] <- NA;
-    calls[kk] <- call;
-  } # for (kk ...)
-  xde <- cbind(xd, expected=expected[calls]);
-  if (debugPlot) {
-    # Highlight and annotate modes
-    d <- apply(xde[,c("x", "density")], MARGIN=1, FUN=function(xd) {
-      lines(x=rep(xd[1], times=2), y=c(y0,xd[2]), lwd=2);
-    });
-    text(xde[,c("x","density")], labels=seq(length=nrow(xde)), adj=c(0.5,-1));
-
-    # Annotate deviance from estimated slopes
-    yT <- y0 + 0.05*dy;
-    apply(xde[,c("x", "expected")], MARGIN=1, FUN=function(xy) {
-      arrows(x0=xy[1], x1=xy[2], y0=yT, y1=yT, code=2, lwd=2, length=0.08, col="red");
-    });
-  }
-
-  # Fit backtransform
-  X <- as.matrix(xde[,c("x","expected")]);
-  w <- xde[,"density",drop=TRUE];
-  w <- w / sum(w);
-  n <- nrow(X);
-  if (n == 1) {
-    # Global shift
-    shift <- X[,"expected"] - X[,"x"];
-    fitB <- list(predictY = function(x) x+shift);
-  } else if (n == 2) {
-    x <- X[,1];
-    y <- X[,2];
-    fitB <- lm(y~x, weights=w);
-    fitB$predictY <- function(x) {
-      predict(fitB, newdata=data.frame(x=x));
-    }
-  } else {
-  #  fitB <- fitXYCurve(X, weights=w, method="loess"); # ?!?
-    fitB <- fitXYCurve(X, method="lowess");
-  }
-
-  # Backtransform
-  bTHat <- fitB$predictY(bT);
-
-  if (debugPlot) {
-    ok <- (is.finite(bTHat) & is.finite(cpwT));
-    # Draw density after adjustment
-    plotDensity(bTHat[ok], weights=cpwT[ok], from=bLim[1], to=bLim[2], adjust=adjust, col="red", lty=3, add=TRUE);
-  }
-
-  if (debugPlot) {
-    plot(X, cex=2*w+1/2, xlim=bLim, ylim=bLim, xlab="slopes", ylab="expected");
-    abline(a=0, b=1, lty=3, col="gray");
-    x <- seq(from=bLim[1],to=bLim[2], by=0.01);
-    y <- fitB$predictY(x);
-    lines(x,y, lwd=2);
-  }
-
-  verbose && exit(verbose);
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Orthogonalize
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  verbose && enter(verbose, "Orthogonalize the (C1,C2) space by adjusting slopes to their expected locations");
-  # Backtransform
-  bHat <- fitB$predictY(b);
-  verbose && print(verbose, b);
-  verbose && print(verbose, bHat);
-
-  # Verticalization
-  #  b = atan(dC1C2[,1]/dC1C2[,2]);
-  #  tan(b) = dC1/dC2;
-  #  dC2*tan(b) = dC1;
-  abHat <- AB;
-  abHat[,2] <- bHat;
-  C1C2o <- ABtoC1C2(abHat, C1C2=C1C2);
-  verbose && print(verbose, C1C2o-C1C2);
-
-  if (debugPlot) {
-    Clim <- c(0,4);
-    plot(C1C2o, cex=cex, xlim=Clim, ylim=Clim);
-    lines(C1C2o);
-    abline(a=0, b=1, lty=3);
-  }
-
-  verbose && exit(verbose);
-
-  verbose && enter(verbose, "Transform orthogonalized (C1,C2) to (TCN,DH)");
-  # (C1,C2) -> (TCN,DH)
-  gamma <- rowSums(C1C2o, na.rm=TRUE);
-  dh <- 2*(C1C2o[,2]/gamma - 1/2);
-  verbose && exit(verbose);
-
-  # Update segmentation means
-  segs[,"tcn.mean"] <- gamma;
-  segs[,"dh.mean"] <- dh;
-
-  # Update data [TO DO]
-
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Return results
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  fitO <- fit;
-  fitO$output <- segs;
-
-  verbose && exit(verbose);
-
-  fitO;
-}) # orthogonalizeC1C2()
-
-
 ##############################################################################
 # HISTORY
+# 2010-10-10 [HB]
+# o Added memoization to normalizeBAFsByRegions().
 # 2010-09-26 [HB]
 # o Added argument 'adjust' to deShearC1C2() with new default.
 # o Added sanity checks to deShearC1C2().

@@ -31,18 +31,13 @@
 #
 # @keyword internal
 #*/###########################################################################
-setMethodS3("deShearC1C2_v0", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), weightFlavor=c("min", "sum"), ..., verbose=FALSE) {
+setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Argument 'adjust':
-  adjust <- Arguments$getDouble(adjust, range=c(0,Inf));
+  # Argument 'dirs':
+  dirs <- match.arg(dirs);
 
-  flavor <- match.arg(flavor);
-
-  # Argument 'weightFlavor':
-  weightFlavor <- match.arg(weightFlavor);
-  
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
   if (verbose) {
@@ -52,13 +47,34 @@ setMethodS3("deShearC1C2_v0", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02,
 
 
   verbose && enter(verbose, "Correct for shearing in (C1,C2) space at the region level ");
+  verbose && cat(verbose, "Directions: ", paste(dirs, collapse=","));
+
+  # First one dimension, then the other?
+  dirs <- unlist(strsplit(dirs, split=",", fixed=TRUE));
+  if (length(dirs) > 1) {
+    verbose && enter(verbose, "Deshearing direction by direction");
+    fitT <- fit;
+    for (kk in seq(along=dirs)) {
+      dir <- dirs[kk];
+      verbose && enter(verbose, sprintf("Direction #%d ('%s') of %d", kk, dir, length(dirs)));
+      fitT <- deShearC1C2(fitT, dirs=dir, ..., verbose=verbose);
+      verbose && exit(verbose);
+    }
+    verbose && exit(verbose);
+
+    verbose && exit(verbose);
+    return(fitT);
+  }
+
+  verbose && enter(verbose, "Fitting (C1,C2) shear model");
+  modelFit <- fitDeltaC1C2ShearModel(fit, ..., verbose=verbose);
+  verbose && print(verbose, modelFit);
+  verbose && exit(verbose);
+
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  data <- fit$data;
-  stopifnot(!is.null(data));
-
   segs <- as.data.frame(fit);
   stopifnot(!is.null(segs));
 
@@ -68,138 +84,23 @@ setMethodS3("deShearC1C2_v0", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02,
   # (C1,C2,...)
   X <- extractC1C2(fit);
 
-  # Number of TCN and DH data points
-  counts <- X[,3:4, drop=FALSE];
-
-  # Region weights from DH counts
-  w <- counts[,2];
-  w <- sqrt(w);
-  w <- w / sum(w, na.rm=TRUE);
-
-  ## Change-point weights
-  if (weightFlavor == "min") {
-    ## smallest of the two flanking (DH) counts 
-    cpw <- cbind(w[1:(length(w)-1)], w[2:length(w)]);
-    cpw <- rowMins(cpw, na.rm=TRUE);
-    cpw[is.infinite(cpw)] <- NA;
-    cpw <- sqrt(cpw);
-  } else if (weightFlavor == "sum") {
-    ## sum of region weights
-    cpw <- w[1:(length(w)-1)] + w[2:length(w)];
-  }
-  
   # (C1,C2)
   C1C2 <- X[,1:2, drop=FALSE];
-  dC1C2 <- colDiffs(C1C2);
-  alpha <- atan(dC1C2[,2]/dC1C2[,1]);
-  radius <- sqrt(dC1C2[,2]^2 + dC1C2[,1]^2);
-
-  verbose && enter(verbose, "Represent change points as angles");
-  verbose && str(verbose, alpha);
-
-  # Keep only finite data points
-  ok <- (is.finite(alpha) & is.finite(cpw));
-  alphaT <- alpha[ok];
-  verbose && cat(verbose, "Finite slopes in (C1,C2):");
-  cpwT <- cpw[ok];
-  cpwT <- cpwT / sum(cpwT);
-  verbose && print(verbose, cbind(alphaT=alphaT, wT=cpwT));
-
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Adjust modes in {alpha} to their expect locations
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  verbose && enter(verbose, "Shift, modulo pi/8:th, and unshift");
-  ## The signal is pi-periodic.
-  ## we are looking at from -pi/2 to pi/2.
-  ## we expect a peak near -pi/2 (or pi/2...)
-  ## in order to estimate it correctly, transform the signal so that it is
-  ## in -pi/2-pi/8, pi/2-pi/8
-  ## /PN 2010-09-22
-  lag <- pi/8;
-  aa <- alphaT;
-  ww <- which(alphaT > pi/2-lag) ## half way to both expected peaks
-  aa[ww] <- aa[ww]-pi;
-  verbose && exit(verbose);
-
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Find modes
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  verbose && enter(verbose, "Finding modes (peaks & valleys)");
-  rg <- range(aa);
-  fp <- findPeaksAndValleys(aa, weights=cpwT, from=rg[1], to=rg[2], adjust=adjust, tol=tol, ...);
-  verbose && cat(verbose, "Peaks and valleys:");
-  verbose && print(verbose, fp);
-
-  verbose && cat(verbose, "Peaks:");
-  type <- NULL; rm(type); # To please R CMD check
-  pfp <- subset(fp, type == "peak");
-  verbose && print(verbose, pfp);
-  nbrOfPeaks <- nrow(pfp);
-  verbose && exit(verbose);
-
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Call modes
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  verbose && enter(verbose, "Calling modes");
-  expected <- c(-1/2,-1/4,0,+1/4,+1/2)*pi;
-  pfp <- callPeaks(pfp, expected=expected, flavor=flavor, verbose=verbose);
-  verbose && cat(verbose, "Calls:");
-  verbose && print(verbose, pfp);
-  verbose && exit(verbose);
-
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Estimate (C1,C2) shear model
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  verbose && enter(verbose, "Estimate (C1,C2) shear model");
-  ## Use -pi/2 and 0 to correct for shearing
-
-  # (a) Vertical shear (based on horizontal information)
-  pfpT <- subset(pfp, call == -pi/2);
-  # Sanity checks
-  stopifnot(nrow(pfpT) == 1);
-  # Shear parameter
-  tX <- pfpT$x;
-#  residual <- (pfpT$x - -pi/2);
-#  tX <- pi - residual;
-  # Sanity checks
-  stopifnot(is.finite(tX));
-
-  # (b) Horizontal shear (based on vertical information)
-  pfpT <- subset(pfp, call == 0);
-  # Sanity checks
-  stopifnot(nrow(pfpT) == 1);
-  # Shear parameter
-  tY <- pi/2 - pfpT$x;
-#  residual <- (pfpT$x - 0);
-#  tY <- pi - residual;
-  # Sanity checks
-  stopifnot(is.finite(tY));
-
-  # Create backtransform function
-  H <- function(xy) {
-    sx <- tan(tX+pi/2);
-    sy <- tan(tY+pi/2);
-#    sx <- tan(tX);
-#    sy <- tan(tY);
-    cbind(xy[, 1]+xy[, 2]*sx, xy[, 1]*sy + xy[, 2]);
-  } # H()
-
-  verbose && cat(verbose, "Model fit:");
-  modelFit <- list(H=H, parameters=c(tX=tX, tY=tY), debug=list(pfp=pfp));
-  verbose && str(verbose, modelFit);
-
-  # Not needed anymore
-  rm(pfpT);
-  verbose && exit(verbose);
-
 
 
   verbose && enter(verbose, "Remove shearing from the (C1,C2) space by independent linear adjustment in x and y");
+
   ## Backtransform
+  if (dirs == "|-") {
+    H <- modelFit$H;
+  } else if (dirs == "-") {
+    H <- modelFit$Hx;
+  } else if (dirs == "|") {
+    H <- modelFit$Hy;
+  } else if (dirs == "X") {
+    H <- modelFit$Hd;
+  }
+
   C1C2o <- H(C1C2);
   # Sanity checks
   stopifnot(dim(C1C2o) == dim(C1C2));
@@ -223,19 +124,75 @@ setMethodS3("deShearC1C2_v0", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02,
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   fitO <- fit;
   fitO$output <- segs;
-  fitO$deshearModelFit <- modelFit;
+  fitO$modelFit <- modelFit;
 
   verbose && exit(verbose);
 
   fitO;
-}) # deShearC1C2_v0()
+}) # deShearC1C2()
 
 
 
+setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, ..., verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  dC1 <- Arguments$getNumeric(dC1);
+  dC2 <- Arguments$getNumeric(dC2);
+
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  }
 
 
+  verbose && enter(verbose, "Translating by (C1,C2)");
+  verbose && cat(verbose, "dC1: ", dC1);
+  verbose && cat(verbose, "dC2: ", dC2);
 
-setMethodS3("fitC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), weightFlavor=c("min", "sum"), ..., verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Extract data
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  segs <- as.data.frame(fit);
+  stopifnot(!is.null(segs));
+
+  nbrOfSegments <- nrow(segs);
+  verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
+
+  # (C1,C2,...)
+  X <- extractC1C2(fit);
+
+  # (C1,C2)
+  C1C2 <- X[,1:2, drop=FALSE];
+
+  C1C2[,1] <- C1C2[,1] + dC1;
+  C1C2[,2] <- C1C2[,2] + dC2;
+
+  verbose && enter(verbose, "(C1,C2) to (TCN,DH)");
+  # (C1,C2) -> (TCN,DH)
+  gamma <- rowSums(C1C2, na.rm=TRUE);
+  dh <- 2*(C1C2[,2]/gamma - 1/2);
+  verbose && exit(verbose);
+
+  # Update segmentation means
+  segs[,"tcn.mean"] <- gamma;
+  segs[,"dh.mean"] <- dh;
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Return results
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  fitO <- fit;
+  fitO$output <- segs;
+
+  verbose && exit(verbose);
+
+  fitO;
+})
+
+
+setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), weightFlavor=c("min", "sum"), ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -256,15 +213,11 @@ setMethodS3("fitC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.
   }
 
 
-  verbose && enter(verbose, "Fitting (C1,C2) shear model");
+  verbose && enter(verbose, "Fitting (C1,C2) shear model by (dC1,dC2)");
 
-  verbose && enter(verbose, "Extracting (C1,C2) => (radius,alpha)");
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  data <- fit$data;
-  stopifnot(!is.null(data));
-
   segs <- as.data.frame(fit);
   stopifnot(!is.null(segs));
 
@@ -277,30 +230,84 @@ setMethodS3("fitC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.
   # Number of TCN and DH data points
   counts <- X[,3:4, drop=FALSE];
 
+  # (C1,C2)
+  X <- X[,1:2,drop=FALSE];
+  X <- as.matrix(X);
+
   # Region weights from DH counts
   w <- counts[,2];
   w <- sqrt(w);
-  w <- w / sum(w, na.rm=TRUE);
+  rm(counts);
 
   ## Change-point weights
   if (weightFlavor == "min") {
     ## smallest of the two flanking (DH) counts 
-    cpw <- cbind(w[1:(length(w)-1)], w[2:length(w)]);
-    cpw <- rowMins(cpw, na.rm=TRUE);
-    cpw[is.infinite(cpw)] <- NA;
-    cpw <- sqrt(cpw);
+    w <- cbind(w[1:(length(w)-1)], w[2:length(w)]);
+    w <- rowMins(w, na.rm=TRUE);
+    w[is.infinite(w)] <- NA;
+    dw <- sqrt(w);
   } else if (weightFlavor == "sum") {
     ## sum of region weights
-    cpw <- w[1:(length(w)-1)] + w[2:length(w)];
+    dw <- w[1:(length(w)-1)] + w[2:length(w)];
   }
+
+
+  modelFit <- fitDeltaXYShearModel(X, weights=dw, ..., verbose=less(verbose, 1));
+
+  verbose && cat(verbose, "Model fit:");
+  verbose && str(verbose, modelFit);
+
+  verbose && exit(verbose);
+
+  modelFit;
+}) # fitDeltaC1C2ShearModel()
+
+
+
+setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), ..., verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Argument 'X':
+  dim <- dim(X);
+  if (dim[2] != 2) {
+    throw("Argument 'X' is not a Jx2 matrix: ", paste(dim, collapse="x"));
+  }
+  J <- dim[1];
+
+  # Argument 'weights':
+  length2 <- rep(J-1L, times=2);
+  if (!is.null(weights)) {
+    weights <- Arguments$getDoubles(weights, range=c(0,Inf), 
+                                       length=length2, disallow=NULL);
+  }
+
+  # Argument 'adjust':
+  adjust <- Arguments$getDouble(adjust, range=c(0,Inf));
+
+  # Argument 'flavor':
+  flavor <- match.arg(flavor);
   
-  # (C1,C2)
-  C1C2 <- X[,1:2, drop=FALSE];
-  dC1C2 <- colDiffs(C1C2);
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  }
+
+
+  verbose && enter(verbose, "Fitting (x,y) shear model");
+
+  verbose && enter(verbose, "Extracting (radius,alpha)");
+  verbose && cat(verbose, "Number of (x,y) data points: ", J);
+  verbose && cat(verbose, "Number of (dx,dy) data points: ", J-1L);
+
+  # (dX,dY)
+  dXY <- colDiffs(X);
 
   # (radius,alpha)  # 'radius' is not really used
-  radius <- sqrt(dC1C2[,2]^2 + dC1C2[,1]^2);
-  alpha <- atan(dC1C2[,2]/dC1C2[,1]);
+  radius <- sqrt(dXY[,2]^2 + dXY[,1]^2);
+  alpha <- atan(dXY[,2]/dXY[,1]);
 
   verbose && cat(verbose, "(radius,alpha):");
   verbose && str(verbose, radius);
@@ -313,14 +320,17 @@ setMethodS3("fitC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   verbose && enter(verbose, "Dropping non-finite signals");
   # Keep only finite data points
-  ok <- (is.finite(radius) & is.finite(alpha) & is.finite(cpw));
-  radiusT <- radius[ok];
-  alphaT <- alpha[ok];
-  verbose && cat(verbose, "Finite slopes in (C1,C2):");
-  cpwT <- cpw[ok];
-  cpwT <- cpwT / sum(cpwT);
+  ok <- (is.finite(radius) & is.finite(alpha) & is.finite(weights));
+  radius <- radius[ok];
+  alpha <- alpha[ok];
+  verbose && cat(verbose, "Finite *transitions* in (C1,C2):");
+  weights <- weights[ok];
+
+  # Standardize weights to [0,1]
+  weights <- weights / sum(weights, na.rm=TRUE);
+
   verbose && cat(verbose, "(radius,alpha,weights):");
-  verbose && print(verbose, cbind(radiusT=radiusT, alphaT=alphaT, wT=cpwT));
+  verbose && print(verbose, cbind(radius=radius, alpha=alpha, weights=weights));
   rm(ok);
   verbose && exit(verbose);
 
@@ -336,9 +346,9 @@ setMethodS3("fitC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.
   ## in -pi/2-pi/8, pi/2-pi/8
   ## /PN 2010-09-22
   lag <- pi/8;
-  aa <- alphaT;
+  alphaT <- alpha;
   ww <- which(alphaT > pi/2-lag) ## half way to both expected peaks
-  aa[ww] <- aa[ww]-pi;
+  alphaT[ww] <- alphaT[ww]-pi;
   verbose && exit(verbose);
 
 
@@ -347,7 +357,10 @@ setMethodS3("fitC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   verbose && enter(verbose, "Finding modes (peaks & valleys)");
   rg <- c(-pi/2,pi/2)-pi/8;
-  fp <- findPeaksAndValleys(aa, weights=cpwT, from=rg[1], to=rg[2], adjust=adjust, tol=tol, ...);
+  fp <- findPeaksAndValleys(alphaT, weights=weights, from=rg[1], to=rg[2], adjust=adjust, tol=tol, ...);
+  # Not needed anymore
+  rm(alphaT, rg);
+
   verbose && cat(verbose, "Peaks and valleys:");
   verbose && print(verbose, fp);
 
@@ -364,53 +377,105 @@ setMethodS3("fitC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   verbose && enter(verbose, "Calling modes");
   expected <- c(-1/2,-1/4,0,+1/4,+1/2)*pi;
+
   verbose && cat(verbose, "Expected locations of peaks:");
   verbose && print(verbose, expected);
+
   pfp <- callPeaks(pfp, expected=expected, flavor=flavor, verbose=verbose);
+
   verbose && cat(verbose, "Calls:");
   verbose && print(verbose, pfp);
   verbose && exit(verbose);
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Estimate (C1,C2) shear model
+  # Estimate (x,y) shear model
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  verbose && enter(verbose, "Estimate (C1,C2) shear model");
+  verbose && enter(verbose, "Estimate (x,y) shear model");
   ## Use -pi/2 and 0 to correct for shearing
 
   # (a) Vertical shear (based on horizontal information)
   pfpT <- subset(pfp, call == -pi/2);
+  verbose && cat(verbose, "Horizontal peak:");
+  verbose && print(verbose, pfpT);
   # Sanity checks
-  stopifnot(nrow(pfpT) == 1);
+  if (nrow(pfpT) < 1) {
+    throw(sprintf("Cannot fit vertical shear parameter. No lines where called to horizontal (angle=-pi/2=%f).", -pi/2));
+  }
   # Shear parameter
   tX <- pfpT$x;
 #  residual <- (pfpT$x - -pi/2);
 #  tX <- pi - residual;
   # Sanity checks
   stopifnot(is.finite(tX));
+  # Shear parameter
+  sx <- tan(tX+pi/2);
+  stopifnot(is.finite(sx));
 
   # (b) Horizontal shear (based on vertical information)
   pfpT <- subset(pfp, call == 0);
+  verbose && cat(verbose, "Vertical peak:");
+  verbose && print(verbose, pfpT);
   # Sanity checks
-  stopifnot(nrow(pfpT) == 1);
+  if (nrow(pfpT) < 1) {
+    throw("Cannot fit horizontal shear parameter. No lines where called to vertical (angle=0).");
+  }
   # Shear parameter
   tY <- pi/2 - pfpT$x;
 #  residual <- (pfpT$x - 0);
 #  tY <- pi - residual;
   # Sanity checks
   stopifnot(is.finite(tY));
+  # Shear parameter
+  sy <- tan(tY+pi/2);
+  stopifnot(is.finite(sy));
 
+  # (c) Vertical scale (based on diagonal information)
+  pfpT <- subset(pfp, call == -pi/4);
+  # Sanity checks
+  stopifnot(nrow(pfpT) == 1);
+  # Shear parameter
+  tX <- pfpT$x;
+  scaleY <- (-pi/4)/tX;
+
+  # Preserve (dx^2 + dy^2) before and after
+  scale <- 1/sqrt(1+sx^2);
+  
   # Create backtransform function
   H <- function(xy) {
-    sx <- tan(tX+pi/2);
-    sy <- tan(tY+pi/2);
-#    sx <- tan(tX);
-#    sy <- tan(tY);
     cbind(xy[, 1]+xy[, 2]*sx, xy[, 1]*sy + xy[, 2]);
   } # H()
 
+
+  Hx <- function(xy) {
+    cbind(xy[, 1]+xy[, 2]*sx, xy[, 2]);
+  } # Hx()
+
+  Hy <- function(xy) {
+    cbind(xy[, 1], xy[, 1]*sy + xy[, 2]);
+  } # Hy()
+
+  Hd <- function(xy) {
+    y <- xy[,2];
+    mu0 <- min(y, na.rm=TRUE);
+    y <- scaleY * y;
+    mu1 <- min(y, na.rm=TRUE);
+    dmu <- mu1 - mu0;
+    # Preserve y offset
+    y <- y - dmu;
+    xy[,2] <- y;
+    xy;
+  } # Hy()
+
+  # Alternative?!?
+  T <- matrix(c(1,sx, sy,1), nrow=2, ncol=2, byrow=FALSE);
+  H2 <- function(xy) {
+    xy <- as.matrix(xy);
+    xy %*% t(T);
+  } # H2()
+
   verbose && cat(verbose, "Model fit:");
-  modelFit <- list(H=H, parameters=c(tX=tX, tY=tY), debug=list(pfp=pfp));
+  modelFit <- list(H=H, Hx=Hx, Hy=Hy, Hd=Hd, parameters=c(sx=sx, sy=sy, scaleY=scaleY, scale=scale, tX=tX, tY=tY), debug=list(pfp=pfp));
   verbose && str(verbose, modelFit);
 
   # Not needed anymore
@@ -420,89 +485,47 @@ setMethodS3("fitC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.
   verbose && exit(verbose);
 
   modelFit;
-}) # fitC1C2ShearModel()
+}) # fitDeltaXYShearModel()
 
 
-
-setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., verbose=FALSE) {
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
-  if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
-  }
-
-
-  verbose && enter(verbose, "Correct for shearing in (C1,C2) space at the region level ");
-
-  verbose && enter(verbose, "Fitting (C1,C2) shear model");
-  modelFit <- fitC1C2ShearModel(fit, ..., verbose=verbose);
-  verbose && print(verbose, modelFit);
-  verbose && exit(verbose);
-
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Extract data
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  data <- fit$data;
-  stopifnot(!is.null(data));
-
+setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
+  # Identify region in allelic balance
   segs <- as.data.frame(fit);
-  stopifnot(!is.null(segs));
+  ab.call <- segs$ab.call;
+  if (is.null(ab.call)) {
+    throw("Allelic balance has not been called.");
+  }
+  idxs <- which(segs$ab.call);
+  segs <- segs[idxs,,drop=FALSE];
 
-  nbrOfSegments <- nrow(segs);
-  verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
+  # Extract (TCN,DH)
+  gamma <- segs[, "tcn.mean"];
+  rho <- segs[, "dh.mean"];
 
-  # (C1,C2,...)
-  X <- extractC1C2(fit);
+  # Calculate (C1,C2)
+  C1 <- 1/2 * (1 - rho) * gamma;
+  C2 <- gamma - C1;
 
-  # (C1,C2)
-  C1C2 <- X[,1:2, drop=FALSE];
+  # Calculate bias in C2 
+  dC2 <- C2 - C1;
 
+  # Calculate weighted average of all C2 biases
+  w <- segs[,"dh.num.mark"];
+  w <- w / sum(w, na.rm=TRUE);
+  dC2 <- weightedMedian(dC2, w=w);
 
-  verbose && enter(verbose, "Remove shearing from the (C1,C2) space by independent linear adjustment in x and y");
-  ## Backtransform
-  H <- modelFit$H;
+  dC2;
+}) # estimateC2Bias()
 
-  C1C2o <- H(C1C2);
-  # Sanity checks
-  stopifnot(dim(C1C2o) == dim(C1C2));
-  verbose && exit(verbose);
-
-  verbose && enter(verbose, "Transform orthogonalized (C1,C2) to (TCN,DH)");
-  # (C1,C2) -> (TCN,DH)
-  gamma <- rowSums(C1C2o, na.rm=TRUE);
-  dh <- 2*(C1C2o[,2]/gamma - 1/2);
-  verbose && exit(verbose);
-
-  # Update segmentation means
-  segs[,"tcn.mean"] <- gamma;
-  segs[,"dh.mean"] <- dh;
-
-  # Update data [TO DO]
-
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  # Return results
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  fitO <- fit;
-  fitO$output <- segs;
-  fitO$deshearModelFit <- modelFit;
-
-  verbose && exit(verbose);
-
-  fitO;
-}) # deShearC1C2()
 
 
 ##############################################################################
 # HISTORY
 # 2010-10-08 [HB]
-# o Now deShearC1C2() uses fitC1C2ShearModel().
-# o Added fitC1C2ShearModel().
+# o Added estimateC2Bias().
+# o Added fitDeltaXYShearModel().
+# o Now deShearC1C2() uses fitDeltaC1C2ShearModel().
+# o Added fitDeltaC1C2ShearModel().
 # o Now deShearC1C2() returns the 'modelFit'.
 # o Now deShearC1C2() calls peaks using callPeaks() for PeaksAndValleys.
 # 2010-09-26 [HB]

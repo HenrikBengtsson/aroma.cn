@@ -31,7 +31,7 @@
 #
 # @keyword internal
 #*/########################################################################### 
-setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4, ..., force=FALSE, verbose=FALSE) {
+setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4, ..., force=FALSE, cache=TRUE, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -40,6 +40,12 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
 
   # Extract segments
   segs <- as.data.frame(fit);
+
+  # Argument 'force':
+  force <- Arguments$getLogical(force);
+
+  # Argument 'cache':
+  cache <- Arguments$getLogical(cache);
 
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
@@ -60,6 +66,26 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
   # Extract data
   betaTN <- fit$data$betaTN;
   muN <- fit$data$muN;
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Check for cached results
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  key <- list(method="callAllelicBalanceByBAFs", class=class(fit)[1], 
+    data=list(betaTN=betaTN, muN=muN, segments=as.data.frame(fit)),
+    maxScore = maxScore,
+    version="2010-10-10"
+  );
+  dirs <- c("aroma.cn", "ortho");
+  if (!force) {
+    res <- loadCache(key=key, dirs=dirs);
+    if (!is.null(res)) {
+      verbose && cat(verbose, "Cached results found.");
+      verbose && exit(verbose);
+      return(res);
+    }
+  }
+
+
 
   nbrOfSegments <- nrow(segs);
   naValue <- as.double(NA);
@@ -104,6 +130,14 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
 
   fitC <- fit;
   fitC$output <- segs;
+
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Save to cache
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  if (cache) {
+    saveCache(key=key, dirs=dirs, fitC);
+  }
 
   verbose && exit(verbose);
 
@@ -176,8 +210,44 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FA
   fitC;
 })
 
+
+setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., Clim=c(0,4), main=NULL) {
+  plotC1C2(fit, Clim=Clim);
+  title(main=main);
+  data <- extractC1C2(fit);
+  n <- data[,4, drop=TRUE];
+  n <- sqrt(n);
+  w <- n/sum(n, na.rm=TRUE);
+  adjust <- 0.2;
+  for (cc in 1:2) {
+    y <- data[,cc];
+    ok <- is.finite(y) & is.finite(w);
+    y <- y[ok];
+    wt <- w[ok]/sum(w[ok]);
+    d <- density(y, weights=wt, adjust=adjust);
+    draw(d, side=cc, height=0.3, col="gray", lwd=2, xpd=FALSE);
+    if (cc == 2) {
+      draw(d, side=1, height=0.3, col="lightblue", lwd=2, xpd=FALSE);
+    }
+    p <- findPeaksAndValleys(d, tol=0.05);
+    p <- subset(p, type == "peak");
+    p <- p[order(p$density, decreasing=TRUE),,drop=FALSE];
+    p <- head(p, n=8);
+    if (cc == 1) {
+      abline(v=p$x, lty=3, col="gray");
+    } else {
+      abline(h=p$x, lty=3, col="gray");
+    }
+  }
+  box();
+})
+
 ##############################################################################
 # HISTORY
+# 2010-10-10 [HB]
+# o Added memoization to callAllelicBalanceByBAFs().
+# 2010-10-08 [HB]
+# o Added plotC1C2Grid() for PairedPSCBS.
 # 2010-09-15 [HB]
 # o Added Rdocs for callCopyNeutralRegions().
 # 2010-09-09 [HB]

@@ -193,6 +193,21 @@
 \alias{resampleB.PairedPSCBS}
 \alias{resampleC}
 \alias{resampleC.PairedPSCBS}
+\alias{callPeaks}
+\alias{callPeaks.PeaksAndValleys}
+\alias{callPeaks.data.frame}
+\alias{deShearC1C2_v0}
+\alias{deShearC1C2_v0.PairedPSCBS}
+\alias{extractDeltaC1C2}
+\alias{extractDeltaC1C2.PairedPSCBS}
+\alias{extractPolarDeltaC1C2}
+\alias{extractPolarDeltaC1C2.PairedPSCBS}
+\alias{fitC1C2ShearModel}
+\alias{fitC1C2ShearModel.PairedPSCBS}
+\alias{fitDeltaC1C2ShearModel}
+\alias{fitDeltaC1C2ShearModel.PairedPSCBS}
+\alias{fitDeltaXYShearModel}
+\alias{fitDeltaXYShearModel.matrix}
 
 \description{
   This page contains aliases for all "non-documented" objects that

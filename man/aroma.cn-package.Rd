@@ -73,6 +73,5 @@ Please cite aroma.cn as
   assessment of raw copy numbers at the single locus level,
   Bioinformatics, 2008
 
-
  }
 \keyword{package}

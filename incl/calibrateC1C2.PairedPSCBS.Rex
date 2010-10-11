@@ -18,46 +18,25 @@ ww <- which(data$chromosome == cc);
 fit <- segmentByPairedPSCBS(CT[ww], betaT=betaT[ww], betaN=betaN[ww], x=x[ww], chromosome=cc, verbose=-10);
 fit <- postsegmentTCN(fit);
 
-## Normalize
-fitN <- normalizeBAFsByRegions(fit, verbose=-10);
-
-# Call allelic balance
-fitC <- callAllelicBalanceByBAFs(fitN);
-ww <- which(fitC$output$ab.call);
-fitC$output[ww, "dh.mean"] <- 0;
-
-# Orthogonalize
-fitO <- orthogonalizeC1C2(fitC);
-
-# deShear
-fitD <- deShearC1C2(fitC, verbose=verbose);
+# Calibrate in (C1,C2) space
+fitC <- calibrateC1C2(fit, verbose=verbose);
 
 devSet("tracks");
-subplots(2*3, ncol=2, byrow=FALSE);
+subplots(10, ncol=2, byrow=FALSE);
 par(mar=c(1,3.5,1,0.5)+1);
-plotTracks(fit, add=TRUE);
-plotTracks(fitD, add=TRUE);
+plot(fit, add=TRUE);
+plot(fitC, add=TRUE);
 
 devSet("C1C2");
 Clim <- c(0,4);
 subplots(4, ncol=2, byrow=TRUE);
 par(mar=c(1,3.5,1,0.5)+1);
+plotC1C2(fit, Clim=Clim);
+linesC1C2(fit);
+title(main="(C1,C2) - raw");
+
 plotC1C2(fitC, Clim=Clim);
 linesC1C2(fitC);
-title(main="(C1,C2) - adjusted");
-
-plotC1C2(fitO, Clim=Clim);
-linesC1C2(fitO);
-title(main="(C1,C2) - orthogonalized");
-
-plotC1C2(fitD, Clim=Clim);
-linesC1C2(fitD);
-title(main="(C1,C2) - deSheared");
-
-plotC1C2(fitO, col="gray", Clim=Clim);
-linesC1C2(fitO, col="gray");
-pointsC1C2(fitD);
-linesC1C2(fitD);
-title(main="(C1,C2) - orthogonalized vs deSheared");
+title(main="(C1,C2) - calibrated");
 
 } # if (require("psCBS"))
