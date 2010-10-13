@@ -132,8 +132,10 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # Remove offset in (C1,C2)
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Removing offset (C1,C2) space");
-  ff <- fitC1C2Densities(fit9);
-  offset <- ff$pList$C1$x[1];
+  ff <- fitC1C2Densities(fit9, orderBy="x");
+  pp <- ff$pList$C1;
+  pp <- subset(pp, density > 0.5);
+  offset <- sort(pp$x)[1];
   verbose && cat(verbose, "Offset: ", offset);
 
   shift <- -offset;
@@ -148,8 +150,10 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # Rescale (1,1) in (C1,C2)
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Removing offset (C1,C2) space");
-  ff <- fitC1C2Densities(fit10);
-  scale <- ff$pList$C1$x[2];
+  ff <- fitC1C2Densities(fit10, orderBy="x");
+  pp <- ff$pList$C1;
+  pp <- subset(pp, density > 0.5);
+  scale <- sort(pp$x)[2];
   verbose && cat(verbose, "Scale: ", scale);
 
   scale <- 1/scale;
@@ -159,10 +163,8 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   fit11 <- translateC1C2(fit10, sC1=scale, sC2=scale, verbose=verbose);
   verbose && exit(verbose);
 
-
   verbose && exit(verbose);
 
- 
   fit11;
 })
 
@@ -192,7 +194,9 @@ setMethodS3("fitC1C2Peaks", "PairedPSCBS", function(fit, ..., tol=0.05) {
 }) # fitC1C2Peaks()
 
 
-setMethodS3("fitC1C2Densities", "PairedPSCBS", function(fit, adjust=0.2, tol=0.05, ...) {
+setMethodS3("fitC1C2Densities", "PairedPSCBS", function(fit, adjust=0.2, tol=0.05, orderBy=c("density", "x"), ...) {
+  orderBy <- match.arg(orderBy);
+
   data <- extractC1C2(fit);
   n <- data[,4, drop=TRUE];
   n <- sqrt(n);
@@ -214,7 +218,7 @@ setMethodS3("fitC1C2Densities", "PairedPSCBS", function(fit, adjust=0.2, tol=0.0
   pList <- lapply(dList, FUN=function(d) {
     p <- findPeaksAndValleys(d, tol=tol);
     p <- subset(p, type == "peak");
-    p <- p[order(p$density, decreasing=TRUE),,drop=FALSE];
+    p <- p[order(p[[orderBy]], decreasing=c("x"=FALSE, "density"=TRUE)[orderBy]),,drop=FALSE];
   });
   names(pList) <- names(dList);
 
