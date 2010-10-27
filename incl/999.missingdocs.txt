@@ -116,4 +116,4 @@ orthogonalizeC1C2
   fitC1C2Peaks.PairedPSCBS plotC1C2Grid plotC1C2Grid.PairedPSCBS
   translateC1C2 translateC1C2.PairedPSCBS
 extractDhSegment extractDhSegment.PairedPSCBS
-
+transformC1C2 transformC1C2.PairedPSCBS

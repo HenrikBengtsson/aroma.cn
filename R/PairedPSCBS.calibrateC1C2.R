@@ -68,16 +68,21 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   }
 
   if (is.null(fit2)) {
+    verbose && enter(verbose, "Updating TCN statistics per DH segment");
     fit2 <- postsegmentTCN(fit, verbose=verbose);
     if (cache) {
       saveCache(key=key, dirs=dirs, fit2);
     }
+    verbose && exit(verbose);
   }
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Remove effects in BAF that are dependent on TCN.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  verbose && enter(verbose, "Normalizing BAFs by segment");
   fit3 <- normalizeBAFsByRegions(fit2, force=force, cache=cache, verbose=verbose);
+  verbose && exit(verbose);
+
   if (debug) {
     ff <- fit3;
     figName <- "debug,fit3";
@@ -89,9 +94,11 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Call regions in allelic balance and shift them to (C1 = C2)
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  verbose && enter(verbose, "Adjusting for biases in allelic-balance segments");
   fit4 <- callAllelicBalanceByBAFs(fit3, verbose=verbose);
   ww <- which(fit4$output$ab.call);
   fit4$output[ww, "dh.mean"] <- 0;
+  verbose && exit(verbose);
 
   if (debug) {
     ff <- fit4;
@@ -178,6 +185,26 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Call regions in allelic balance and shift them to (C1 = C2)
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  verbose && enter(verbose, "Adjusting for biases in allelic-balance segments");
+  fit10 <- callAllelicBalanceByBAFs(fit9, force=TRUE, verbose=verbose);
+  ww <- which(fit10$output$ab.call);
+  fit10$output[ww, "dh.mean"] <- 0;
+  verbose && exit(verbose);
+
+  if (debug) {
+    ff <- fit10;
+    figName <- "debug,fit9b";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
+
+  fit9 <- fit10;
+
+
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Remove offset in (C1,C2)
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Removing offset (C1,C2) space");
@@ -206,7 +233,7 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Rescale (1,1) in (C1,C2)
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  verbose && enter(verbose, "Removing offset (C1,C2) space");
+  verbose && enter(verbose, "Rescaling (1,1) cluster in (C1,C2) space");
   ff <- fitC1C2Densities(fit10, orderBy="x");
   pp <- ff$pList$C1;
   pp <- subset(pp, density > 0.5);
@@ -228,9 +255,35 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
 
   verbose && exit(verbose);
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Align C2 peaks to C1 peaks
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  peakFit <- fitC1C2Peaks(fit11, tol=0.1, onError="skip", verbose=verbose);
+  if (!is.null(peakFit)) {
+    a <- peakFit$params$a;
+    b <- peakFit$params$b;
+    scale <- 1/b;
+    shift <- -a/b;
+  
+    # Sanity check
+    shift <- Arguments$getDouble(shift, range=c(-3,3));
+    scale <- Arguments$getDouble(scale, range=c(0.1,3));
+    fit12 <- translateC1C2(fit11, sC2=scale, dC2=shift, verbose=verbose);
+  } else {
+    fit12 <- fit11;
+  }
+
+  if (debug) {
+    ff <- fit12;
+    figName <- "debug,fit12";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
+
+
   verbose && exit(verbose);
 
-  fit11;
+  fit12;
 })
 
 

@@ -13,7 +13,8 @@
 # \arguments{
 #   \item{fit}{A PairedPSCBS fit object as returned by 
 #     @see "psCBS::segmentByPairedPSCBS".}
-#   \item{maxScore}{A positive @double threshold.}
+#   \item{maxScore}{A positive @double threshold. 
+#     If \code{"auto"}, the threshold is estimated empirically.}
 #   \item{...}{Not used.}
 #   \item{force}{If @TRUE, an already called object is skipped, otherwise not.}
 #   \item{verbose}{See @see "R.utils::Verbose".}
@@ -31,12 +32,16 @@
 #
 # @keyword internal
 #*/########################################################################### 
-setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4, ..., force=FALSE, cache=TRUE, verbose=FALSE) {
+setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="auto", ..., force=FALSE, cache=TRUE, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Argument 'maxScore':
-  maxScore <- Arguments$getDouble(maxScore, range=c(0,Inf));
+  if (is.character(maxScore)) {
+    maxScore <- match.arg(maxScore);
+  } else {
+    maxScore <- Arguments$getDouble(maxScore, range=c(0,Inf));
+  }
 
   # Extract segments
   segs <- as.data.frame(fit);
@@ -135,12 +140,37 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
   rownames(df) <- NULL;
 
   colnames(df) <- c("ai", "ai.p.value");
+
+  if (maxScore == "auto") {
+    verbose && enter(verbose, "Estimating 'maxScore' cutoff empirically");
+    d <- density(na.omit(df$ai), from=0, to=10, adjust=0.1);
+    pvs <- findPeaksAndValleys(d);
+    verbose && print(verbose, pvs);
+
+    type <- NULL; rm(type); # To please R CMD check
+    vs <- subset(pvs, type == "valley");
+    v <- vs[1,];
+
+    maxScore <- v$x;
+
+    # Sanity check
+    maxScore <- Arguments$getDouble(maxScore, range=c(0,Inf));
+
+    attr(maxScore, "modelFit") <- list(density=d, pvs=pvs, v=v);
+
+    verbose && cat(verbose, "maxScore: ", maxScore);
+    verbose && exit(verbose);
+  }
+
+  params <- list(maxScore=maxScore);
+
   df$ab.call <- (df$ai <= maxScore);
 
   segs <- cbind(segs, df);
 
   fitC <- fit;
   fitC$output <- segs;
+  fitC$params <- params;
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -380,6 +410,9 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
 ##############################################################################
 # HISTORY
 # 2010-10-26 [HB]
+# o Now argument 'maxScore' for callAllelicBalanceByBAFs() defaults 
+#   to "auto", which corresponds to estimating the score empirically
+#   from the allelic imbalance scores ('ai').
 # o Added extractDhSegment() for PairedPSCBS.
 # 2010-10-10 [HB]
 # o Added memoization to callAllelicBalanceByBAFs().

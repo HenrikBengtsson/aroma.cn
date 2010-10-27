@@ -20,12 +20,13 @@
  Calls regions that are in allelic balance from the allele B fractions (BAF).
 }
 
-\usage{\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore=4, ..., force=FALSE, cache=TRUE, verbose=FALSE)}
+\usage{\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore="auto", ..., force=FALSE, cache=TRUE, verbose=FALSE)}
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
     \code{\link[psCBS]{segmentByPairedPSCBS}}.}
-  \item{maxScore}{A positive \code{\link[base]{double}} threshold.}
+  \item{maxScore}{A positive \code{\link[base]{double}} threshold.
+    If \code{"auto"}, the threshold is estimated empirically.}
   \item{...}{Not used.}
   \item{force}{If \code{\link[base:logical]{TRUE}}, an already called object is skipped, otherwise not.}
   \item{verbose}{See \code{\link[R.utils]{Verbose}}.}

@@ -197,6 +197,63 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, s
 
 
 
+setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Argument 'fcn':
+  stopifnot(is.function(fcn));
+
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  }
+
+
+  verbose && enter(verbose, "Transform (C1,C2) by a function");
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Extract data
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  segs <- as.data.frame(fit);
+  stopifnot(!is.null(segs));
+
+  nbrOfSegments <- nrow(segs);
+  verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
+
+  # (C1,C2,...)
+  X <- extractC1C2(fit);
+
+  # (C1,C2)
+  C1C2 <- X[,1:2, drop=FALSE];
+
+  C1C2 <- fcn(C1C2, ...);
+
+  verbose && enter(verbose, "(C1,C2) to (TCN,DH)");
+  # (C1,C2) -> (TCN,DH)
+  gamma <- rowSums(C1C2, na.rm=TRUE);
+  dh <- 2*(C1C2[,2]/gamma - 1/2);
+  verbose && exit(verbose);
+
+  # Update segmentation means
+  segs[,"tcn.mean"] <- gamma;
+  segs[,"dh.mean"] <- dh;
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Return results
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  fitO <- fit;
+  fitO$output <- segs;
+
+  verbose && exit(verbose);
+
+  fitO;
+})
+
+
+
 setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), weightFlavor=c("min", "sum"), ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
