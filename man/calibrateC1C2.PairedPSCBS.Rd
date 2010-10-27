@@ -20,7 +20,7 @@
  Calibrates ASCN signals in (C1,C2) space based on region-based PSCN estimates as given by the PSCBS segmentation method.
 }
 
-\usage{\method{calibrateC1C2}{PairedPSCBS}(fit, ..., force=FALSE, cache=TRUE, verbose=FALSE)}
+\usage{\method{calibrateC1C2}{PairedPSCBS}(fit, ..., force=FALSE, cache=TRUE, debug=FALSE, verbose=FALSE)}
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by

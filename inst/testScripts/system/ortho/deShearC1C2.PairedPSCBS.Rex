@@ -18,7 +18,7 @@ pathname <- Arguments$getReadablePathname(filename, path=path);
 if (!exists("data", mode="list")) {
   verbose && enter(verbose, "Loading ASCN data");
   data <- loadObject(pathname);
-  rm(fitList);
+  rm(fitSeg);
   verbose && exit(verbose);
 }
 
@@ -26,59 +26,10 @@ if (!exists("data", mode="list")) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Paired PSCN segmentation
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-pathnameT <- gsub(".xdr", ",fitList.xdr", pathname, fixed=TRUE);
-if (!exists("fitList", mode="list")) {
-  if (isFile(pathnameT)) {
-    verbose && enter(verbose, "Loading PSCN results");
-    fitList <- loadObject(pathnameT);
-    verbose && exit(verbose);
-  } else {
-    fitList <- list();
-  }
-}
+# AD HOC: Robustification
+CT[CT < 0] <- 0;
+CT[CT > 30] <- 30;
 
-wasUpdated <- FALSE;
-for (chr in 1:22) {
-  chrTag <- sprintf("chr%02d", chr);
-  verbose && enter(verbose, sprintf("Chromosome %d ('%s') of %d", chr, chrTag, 22));
-
-  fit <- fitList[[chrTag]];
-  if (is.null(fit)) {
-    verbose && enter(verbose, "Segmenting");
-    units <- whichVector(data$chromosome == chr);
-    verbose && cat(verbose, "Units:");
-    verbose && str(verbose, units);
-    dataC <- data[units,,drop=FALSE];
-    attachLocally(dataC);
-    x <- position;
-    # AD HOC: Robustification
-    CT[CT < 0] <- 0;
-    CT[CT > 30] <- 30;
-    fit <- segmentByPairedPSCBS(CT, betaT=betaT, betaN=betaN, 
-                                chromosome=chr, x=x, verbose=-10);
-    fitList[[chrTag]] <- fit;
-    rm(units, CT, betaT, betaN, chr, x, dataC);
-    wasUpdated <- TRUE;
-    verbose && exit(verbose);
-  } else {
-    verbose && cat(verbose, "Already segmented.");
-  }
-  rm(fit);  
-  verbose && exit(verbose);
-} # for (chr ...)
-
-if (!isFile(pathnameT) || wasUpdated) {
-  verbose && enter(verbose, "Saving PSCN results");
-  saveObject(fitList, file=pathnameT);
-  rm(fitSeg);
-  verbose && exit(verbose);
-}
-rm(pathnameT);
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Reduce list
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 if (!exists("fitSeg") || !inherits(fitSeg, "PairedPSCBS")) {
   pathnameT <- gsub(".xdr", ",PairedPSCBS.xdr", pathname, fixed=TRUE);
   if (isFile(pathnameT)) {
@@ -87,21 +38,15 @@ if (!exists("fitSeg") || !inherits(fitSeg, "PairedPSCBS")) {
     verbose && print(verbose, fitSeg);
     verbose && exit(verbose);
   } else {
-    verbose && enter(verbose, "Reducing list of PSCN results to PairedPSCBS object");
-    fitSeg <- Reduce(append, fitList);
-    verbose && print(verbose, fitSeg);
+    fitSeg <- segmentByPairedPSCBS(CT, betaT=betaT, betaN=betaN, chromosome=chromosome, x=position, verbose=verbose);
 
     verbose && enter(verbose, "Saving PairedPSCBS object");
     saveObject(fitSeg, file=pathnameT);
     verbose && exit(verbose);
-
-    verbose && exit(verbose);
   }
-  rm(fitSeg2);
-  rm(pathnameT);
+  rm(fitSeg2, pathnameT);
 }
-
-
+ 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Post-segmentation of TCNs

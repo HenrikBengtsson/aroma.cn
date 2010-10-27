@@ -29,7 +29,7 @@
 #
 # @keyword internal
 #*/###########################################################################
-setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cache=TRUE, verbose=FALSE) {
+setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cache=TRUE, debug=FALSE, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -63,6 +63,8 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
     if (!is.null(fit2)) {
       verbose && cat(verbose, "Cached results found.");
     }
+  } else {
+    fit2 <- NULL;
   }
 
   if (is.null(fit2)) {
@@ -76,6 +78,12 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # Remove effects in BAF that are dependent on TCN.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   fit3 <- normalizeBAFsByRegions(fit2, force=force, cache=cache, verbose=verbose);
+  if (debug) {
+    ff <- fit3;
+    figName <- "debug,fit3";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -85,23 +93,47 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   ww <- which(fit4$output$ab.call);
   fit4$output[ww, "dh.mean"] <- 0;
 
+  if (debug) {
+    ff <- fit4;
+    figName <- "debug,fit4";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
+
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Deshear by (C1,C2)
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   fit5 <- deShearC1C2(fit4, dirs="|-", verbose=verbose);
+  if (debug) {
+    ff <- fit5;
+    figName <- "debug,fit5";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Deshear by (C1,C2) - diagonals
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   fit6 <- deShearC1C2(fit5, dirs="X", verbose=verbose);
-
+  if (debug) {
+    ff <- fit6;
+    figName <- "debug,fit6";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Deshear by (C1,C2) - vertical, horizontal, diagonals
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  fit7 <- deShearC1C2(fit6, dirs="|,-,X");
+  fit7 <- deShearC1C2(fit6, dirs="|,-,X", verbose=verbose);
+  if (debug) {
+    ff <- fit7;
+    figName <- "debug,fit7";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -111,21 +143,38 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # Sanity check
   dC2 <- Arguments$getDouble(dC2, range=c(-3,3));
   fit8 <- translateC1C2(fit7, dC2=-dC2, verbose=verbose);
+  if (debug) {
+    ff <- fit8;
+    figName <- "debug,fit8";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Align C2 peaks to C1 peaks
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  peakFit <- fitC1C2Peaks(fit8);
-  a <- peakFit$params$a;
-  b <- peakFit$params$b;
-  scale <- 1/b;
-  shift <- -a/b;
+  peakFit <- fitC1C2Peaks(fit8, onError="skip", verbose=verbose);
+  if (!is.null(peakFit)) {
+    a <- peakFit$params$a;
+    b <- peakFit$params$b;
+    scale <- 1/b;
+    shift <- -a/b;
+  
+    # Sanity check
+    shift <- Arguments$getDouble(shift, range=c(-3,3));
+    scale <- Arguments$getDouble(scale, range=c(0.1,3));
+    fit9 <- translateC1C2(fit8, sC2=scale, dC2=shift, verbose=verbose);
+  } else {
+    fit9 <- fit8;
+  }
 
-  # Sanity check
-  shift <- Arguments$getDouble(shift, range=c(-3,3));
-  scale <- Arguments$getDouble(scale, range=c(0.1,3));
-  fit9 <- translateC1C2(fit8, sC2=scale, dC2=shift, verbose=verbose);
+  if (debug) {
+    ff <- fit9;
+    figName <- "debug,fit9";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -143,6 +192,14 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   shift <- Arguments$getDouble(shift, range=c(-3,3));
 
   fit10 <- translateC1C2(fit9, dC1=shift, dC2=shift, verbose=verbose);
+
+  if (debug) {
+    ff <- fit10;
+    figName <- "debug,fit10";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
+
   verbose && exit(verbose);
 
 
@@ -161,6 +218,14 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   scale <- Arguments$getDouble(scale, range=c(0.1,10));
 
   fit11 <- translateC1C2(fit10, sC1=scale, sC2=scale, verbose=verbose);
+
+  if (debug) {
+    ff <- fit11;
+    figName <- "debug,fit11";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
+
   verbose && exit(verbose);
 
   verbose && exit(verbose);
@@ -170,14 +235,43 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
 
 
 
-setMethodS3("fitC1C2Peaks", "PairedPSCBS", function(fit, ..., tol=0.05) {
-  d1d2 <- fitC1C2Densities(fit);
+setMethodS3("fitC1C2Peaks", "PairedPSCBS", function(fit, ..., tol=0.05, onError=c("error", "warning", "skip"), verbose=FALSE) {
+  # Argument 'onError':
+  onError <- match.arg(onError);
+
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  }
+
+
+  verbose && enter(verbose, "Fitting the relationship between peaks in C1 and C2");
+
+  d1d2 <- fitC1C2Densities(fit, orderBy="x");
   pList <- d1d2$pList;
+  verbose && print(verbose, pList);
+
   D <- outer(pList$C1$x, pList$C2$x, FUN="-");
   idxs <- which(abs(D) < tol, arr.ind=TRUE);
+  verbose && print(verbose, idxs);
 
-  if (length(idxs) < 2) {
-    throw("Cannot fit relationship. Too few common peaks: ", length(idxs));
+  if (nrow(idxs) < 2) {
+    msg <- sprintf("Cannot fit relationship between C1 and C2. Too few common peaks: %d", nrow(idxs));
+    if (onError == "error") {
+      devSet("Exception"); devSet("Exception"); plotC1C2Grid(fit);
+      throw(msg);
+    }
+    if (onError == "warning") {
+      warning(msg);
+    }
+
+    msg <- sprintf("Skipping fitting the relationship between peaks in C1 and C2. %s", msg);
+    verbose && cat(verbose, msg);
+    warning(msg);
+    verbose && exit(verbose);
+    return(NULL);
   }
 
   c1 <- pList$C1$x[idxs[,1]];
@@ -185,12 +279,22 @@ setMethodS3("fitC1C2Peaks", "PairedPSCBS", function(fit, ..., tol=0.05) {
   dd <- cbind(pList$C1$density[idxs[,1]], pList$C2$density[idxs[,2]]);
   dd <- rowSums(dd^2);
   w <- dd / sum(dd);
+  verbose && print(verbose, cbind(c1=c1, c2=c2, weights=w));
+
   f <- lm(c2 ~ 1 + c1, weights=w);
-  print(f);
+  verbose && print(verbose, f);
+
   a <- coef(f)[1];
   b <- coef(f)[2];
   params <- list(a=a, b=b);
-  list(fit=f, params=params);
+  verbose && print(verbose, params);
+  res <- list(fit=f, params=params);
+
+  verbose && str(verbose, res);
+
+  verbose && exit(verbose);
+
+  res;
 }) # fitC1C2Peaks()
 
 

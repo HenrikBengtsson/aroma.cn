@@ -257,7 +257,7 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
   }
 
 
-  modelFit <- fitDeltaXYShearModel(X, weights=dw, ..., verbose=less(verbose, 1));
+  modelFit <- fitDeltaXYShearModel(X, weights=dw, adjust=adjust, ..., verbose=less(verbose, 1));
 
   verbose && cat(verbose, "Model fit:");
   verbose && str(verbose, modelFit);
@@ -356,13 +356,14 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   alphaT[ww] <- alphaT[ww]-pi;
   verbose && exit(verbose);
 
-
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Find modes
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   verbose && enter(verbose, "Finding modes (peaks & valleys)");
   rg <- c(-pi/2,pi/2)-pi/8;
-  fp <- findPeaksAndValleys(alphaT, weights=weights, from=rg[1], to=rg[2], adjust=adjust, tol=tol, ...);
+  d <- density(alphaT, weights=weights, from=rg[1], to=rg[2], adjust=adjust);
+
+  fp <- findPeaksAndValleys(d, tol=tol, ...);
   # Not needed anymore
   rm(alphaT, rg);
 
@@ -381,7 +382,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   # Call modes
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   verbose && enter(verbose, "Calling modes");
-  expected <- c(-1/2,-1/4,0,+1/4,+1/2)*pi;
+  expected <- c("-"=-1/2, "\\"=-1/4, "|"=0, "/"=+1/4, "-"=+1/2)*pi;
 
   verbose && cat(verbose, "Expected locations of peaks:");
   verbose && print(verbose, expected);
@@ -392,6 +393,14 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   verbose && print(verbose, pfp);
   verbose && exit(verbose);
 
+  if (TRUE) {
+    devSet(sprintf("d,%s", digest(d)));
+    plot(d, lwd=2);
+    abline(v=expected);
+    text(x=expected, y=par("usr")[4], names(expected), adj=c(0.5,-0.5), cex=1, xpd=TRUE);
+    idxs <- match(pfp$call, expected);
+    text(x=pfp$x, y=pfp$density, names(expected)[idxs], adj=c(0.5, -0.5), cex=1, col="blue");
+  }
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Estimate (x,y) shear model
@@ -436,15 +445,40 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   stopifnot(is.finite(sy));
 
   # (c) Vertical scale (based on diagonal information)
-  pfpT <- subset(pfp, call == -pi/4);
+  pfpT <- subset(pfp, call %in% c(-pi/4, +pi/4));
+  verbose && cat(verbose, "Diagonal peak:");
+  verbose && print(verbose, pfpT);
   # Sanity checks
-  stopifnot(nrow(pfpT) == 1);
-  # Shear parameter
-  tX <- pfpT$x;
-  scaleY <- (-pi/4)/tX;
+  if (nrow(pfpT) < 1) {
+    msg <- "Cannot fit diagonal shear scale parameter. No lines where called to diagonal (angle=-pi/4 or +pi/4).";
+    warning(msg);
 
-  # Preserve (dx^2 + dy^2) before and after
-  scale <- 1/sqrt(1+sx^2);
+    scale <- scaleY <- as.double(NA);
+    Hd <- NULL;
+  } else {
+    # Shear parameter
+    tX <- pfpT$x;
+    scaleY <- pfpT$call/pfpT$x;
+    verbose && cat(verbose, "scaleY:");
+    verbose && print(verbose, scaleY);
+    scaleY <- weighted.mean(scaleY, w=pfpT$density);
+    verbose && print(verbose, scaleY);
+  
+    # Preserve (dx^2 + dy^2) before and after
+    scale <- 1/sqrt(1+sx^2);
+
+    Hd <- function(xy) {
+      y <- xy[,2];
+      mu0 <- min(y, na.rm=TRUE);
+      y <- scaleY * y;
+      mu1 <- min(y, na.rm=TRUE);
+      dmu <- mu1 - mu0;
+      # Preserve y offset
+      y <- y - dmu;
+      xy[,2] <- y;
+      xy;
+    } # Hd()
+  }
   
   # Create backtransform function
   H <- function(xy) {
@@ -460,17 +494,6 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     cbind(xy[, 1], xy[, 1]*sy + xy[, 2]);
   } # Hy()
 
-  Hd <- function(xy) {
-    y <- xy[,2];
-    mu0 <- min(y, na.rm=TRUE);
-    y <- scaleY * y;
-    mu1 <- min(y, na.rm=TRUE);
-    dmu <- mu1 - mu0;
-    # Preserve y offset
-    y <- y - dmu;
-    xy[,2] <- y;
-    xy;
-  } # Hy()
 
   # Alternative?!?
   T <- matrix(c(1,sx, sy,1), nrow=2, ncol=2, byrow=FALSE);
@@ -482,6 +505,11 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   verbose && cat(verbose, "Model fit:");
   modelFit <- list(H=H, Hx=Hx, Hy=Hy, Hd=Hd, parameters=c(sx=sx, sy=sy, scaleY=scaleY, scale=scale, tX=tX, tY=tY), debug=list(pfp=pfp));
   verbose && str(verbose, modelFit);
+
+  # Sanity checks
+  range <- c(-3,3);
+  sx <- Arguments$getDouble(sx, range=range);
+  sy <- Arguments$getDouble(sy, range=range);
 
   # Not needed anymore
   rm(pfpT);
@@ -526,6 +554,9 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 ##############################################################################
 # HISTORY
+# 2010-10-20 [HB]
+# o Now fitDeltaXYShearModel() uses both -pi/4 and +pi/4 to estimate
+#   the diagonal parameters.
 # 2010-10-08 [HB]
 # o Added estimateC2Bias().
 # o Added fitDeltaXYShearModel().

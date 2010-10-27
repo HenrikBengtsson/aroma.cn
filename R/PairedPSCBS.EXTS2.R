@@ -93,7 +93,18 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore=4,
   for (kk in seq(length=nbrOfSegments)) {
     verbose && enter(verbose, sprintf("Segment #%d of %d", kk, nbrOfSegments));
 
-    fitS <- subsetBySegments(fit, idxs=kk);
+    fitS <- extractDhSegment(fit, idx=kk, what="SNPs");
+    if (is.null(fitS)) {
+      verbose && cat(verbose, "A divider. Skipping.");
+      dfKK <- data.frame(
+        statistic=as.double(NA),
+        p.value=as.double(NA)
+      );
+      df <- rbind(df, dfKK);
+      verbose && exit(verbose);
+      next;
+    }
+
     verbose && print(verbose, fitS);
 
     dataS <- fitS$data;
@@ -243,8 +254,133 @@ setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., Clim=c(0,4), main=
   box();
 })
 
+
+setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets", "SNPs", "all"), ..., verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Argument 'what':
+  what <- match.arg(what);
+
+
+  segs <- fit$output;
+  stopifnot(!is.null(segs)); 
+  nbrOfSegments <- nrow(segs);
+
+  # Argument 'idx':
+  idx <- Arguments$getIndex(idx, max=nbrOfSegments);
+
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  } 
+
+
+
+  verbose && enter(verbose, "Extracting a specific DH segment");
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Extract the data and segmentation results
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  data <- fit$data;
+  stopifnot(!is.null(data));
+
+  segs <- fit$output;
+  stopifnot(!is.null(segs));
+
+  verbose && enter(verbose, "Subsetting segment");
+  # Subset the region-level data
+  seg <- segs[idx,,drop=FALSE];
+
+  isDivider <- all(is.na(seg));
+  if (isDivider) {
+    verbose && cat("Cannot extract DH segment. Not a valid segment: ", idx);
+    verbose && exit(verbose);
+    return(NULL);
+  }
+
+  verbose && print(verbose, seg);
+  verbose && cat(verbose, "Number of TCN markers: ", sum(seg[["tcn.num.mark"]], na.rm=TRUE));
+  verbose && exit(verbose);
+
+  verbose && enter(verbose, "Subsetting data");
+  units <- seq(length=nrow(data));
+
+  # Keep only chromosome of interest
+  chr <- as.numeric(seg[,"chromosome"]);
+  if (!is.na(chr)) {
+    keep <- whichVector(data$chromosome == chr);
+    units <- units[keep];
+    data <- data[keep,];
+  }
+
+  # Keep only loci within the segment
+  xRange <- as.numeric(seg[,c("dh.loc.start", "dh.loc.end")]);
+  keep <- whichVector(xRange[1] <= data$x & data$x <= xRange[2]);
+  units <- units[keep];
+  data <- data[keep,];
+
+  muN <- data$muN;
+  isSnp <- is.finite(muN);
+
+  # Keep only SNPs?
+  if (is.element(what, c("SNPs", "hets"))) {
+    keep <- whichVector(isSnp);
+    units <- units[keep];
+    data <- data[keep,];
+  }
+
+  # Keep only heterozygous SNPs?
+  if (what == "hets") {
+    isHet <- (muN == 1/2);
+    keep <- whichVector(isHet);
+    units <- units[keep];
+    data <- data[keep,];
+  }
+  verbose && exit(verbose);
+
+  n <- nrow(data);
+  verbose && cat(verbose, "Number of loci in DH segment: ", n);
+
+  # Special case?
+  listOfDhLociNotPartOfSegment <- fit$listOfDhLociNotPartOfSegment;
+  if (!is.null(listOfDhLociNotPartOfSegment)) {
+    tcnId <- seg[,"tcn.id"];
+    dhId <- seg[,"dh.id"];
+    dhLociNotPartOfSegment <- listOfDhLociNotPartOfSegment[[tcnId]];
+    if (!is.null(dhLociNotPartOfSegment)) {
+      lociToExclude <- dhLociNotPartOfSegment[[dhId]];
+      verbose && cat(verbose, "Excluding loci that belongs to a flanking segment: ", length(lociToExclude));
+      drop <- match(lociToExclude, units);
+      units <- units[-drop];
+      data <- data[-drop,];
+      n <- nrow(data);
+    }
+  }
+
+  verbose && cat(verbose, "Number of units: ", n);
+  verbose && cat(verbose, "Number of TCN markers: ", seg[,"tcn.num.mark"]);
+
+  # Sanity check
+  if (what == "hets" && n > 0) stopifnot(n == seg[,"dh.num.mark"]);
+
+  fitS <- fit;
+  fitS$data <- data;
+  fitS$output <- seg;
+
+  verbose && exit(verbose);
+
+  fitS;
+})
+
+
+
 ##############################################################################
 # HISTORY
+# 2010-10-26 [HB]
+# o Added extractDhSegment() for PairedPSCBS.
 # 2010-10-10 [HB]
 # o Added memoization to callAllelicBalanceByBAFs().
 # 2010-10-08 [HB]
