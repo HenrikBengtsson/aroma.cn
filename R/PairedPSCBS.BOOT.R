@@ -81,7 +81,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     if (length(units) > 1) {
       # Resample
-      unitsS <- sample(units, replace=TRUE);
+      unitsS <- resample(units, replace=TRUE);
   
       # Resample data
       for (field in npFields) {
@@ -117,7 +117,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     if (length(units) > 1) {
       # Resample
-      unitsS <- sample(units, replace=TRUE);
+      unitsS <- resample(units, replace=TRUE);
   
       # Resample data
       for (field in snpFields) {
@@ -319,7 +319,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     dhHetsList <- lapply(dhHetsList, FUN=sample, replace=TRUE);
 
     # Resample (c)
-    nonDhHets <- sample(nonDhHets, replace=TRUE);
+    nonDhHets <- resample(nonDhHets, replace=TRUE);
 
     # "Resample" (a)
     tcnUnits <- c(nonDhHets, dhHets);
@@ -489,7 +489,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     if (length(units) > 1) {
       # Resample
-      unitsS <- sample(units, replace=TRUE);
+      unitsS <- resample(units, replace=TRUE);
   
       # Resample data
       for (ff in seq(along=fields)) {
@@ -525,7 +525,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     if (length(units) > 1) {
       # Resample
-      unitsS <- sample(units, replace=TRUE);
+      unitsS <- resample(units, replace=TRUE);
   
       # Resample data
       for (ff in seq(along=fields)) {
@@ -609,6 +609,8 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
 ##############################################################################
 # HISTORY
+# 2010-11-04 [HB]
+# o ROBUSTNESS: Now all bootstrap methods utilize resample().
 # 2010-09-16 [HB]
 # o Added bootstrap().
 # o Added resampleC().
