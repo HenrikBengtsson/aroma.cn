@@ -223,6 +223,21 @@
 \alias{extractDhSegment.PairedPSCBS}
 \alias{transformC1C2}
 \alias{transformC1C2.PairedPSCBS}
+\alias{PairedPSCBSFile}
+\alias{PairedPSCBSFileSet}
+\alias{byName.PairedPSCBSFileSet}
+\alias{byPath.PairedPSCBSFileSet}
+\alias{findAtomicAberrations.PairedPSCBS}
+\alias{findByName.PairedPSCBSFileSet}
+\alias{loadObject.PairedPSCBSFile}
+\alias{plotTracks}
+\alias{plotTracks.PruneCNA}
+\alias{pruneCNA}
+\alias{pruneCNA.PairedPSCBS}
+\alias{testEqualityC1C2ByChiSquare}
+\alias{testEqualityC1C2ByMean}
+\alias{testEqualityTcnByMean}
+\alias{testEqualityTcnByT}
 
 \description{
   This page contains aliases for all "non-documented" objects that

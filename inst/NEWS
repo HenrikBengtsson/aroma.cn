@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 0.7.0 [2011-01-19]
+o Added beta classes PairedPSCBSFile and PairedPSCBSFileSet.
+o Removed a NOTE from R CMD check.
+
+
 Version: 0.6.4 [2010-11-04]
 o ROBUSTNESS: Now all bootstrap methods utilize resample().
 o Added more internal utility functions for future usage.

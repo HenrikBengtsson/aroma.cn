@@ -147,7 +147,7 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
     if (nMin <= 2) {
       warning(sprintf("Cannot infer allelic balance using the heterozygous-homozygous variance test. Will use the mean test instead. Too few (homozygous, heterozygous) data points: (%d,%d)", nHoms, nHets));
       flavor <- "mean";
-     verbose && cat(verbose, "Adjusted flavor: ", flavor);
+      verbose && cat(verbose, "Adjusted flavor: ", flavor);
     }
   } else if (flavor == "mean") {
   }

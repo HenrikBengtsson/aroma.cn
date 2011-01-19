@@ -117,3 +117,12 @@ orthogonalizeC1C2
   translateC1C2 translateC1C2.PairedPSCBS
 extractDhSegment extractDhSegment.PairedPSCBS
 transformC1C2 transformC1C2.PairedPSCBS
+ PairedPSCBSFile PairedPSCBSFileSet byName.PairedPSCBSFileSet
+ byPath.PairedPSCBSFileSet
+ findAtomicAberrations.PairedPSCBS findByName.PairedPSCBSFileSet
+ loadObject.PairedPSCBSFile
+ plotTracks plotTracks.PruneCNA
+ pruneCNA pruneCNA.PairedPSCBS
+ testEqualityC1C2ByChiSquare testEqualityC1C2ByMean
+ testEqualityTcnByMean testEqualityTcnByT 
+

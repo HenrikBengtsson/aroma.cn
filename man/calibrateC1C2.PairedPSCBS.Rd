@@ -60,8 +60,8 @@ fitC <- calibrateC1C2(fit, verbose=verbose);
 devSet("tracks");
 subplots(10, ncol=2, byrow=FALSE);
 par(mar=c(1,3.5,1,0.5)+1);
-plot(fit, add=TRUE);
-plot(fitC, add=TRUE);
+plot(fit, subplots=TRUE);
+plot(fitC, subplots=TRUE);
 
 devSet("C1C2");
 Clim <- c(0,4);

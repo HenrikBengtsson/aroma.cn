@@ -25,8 +25,8 @@ fitO <- orthogonalizeC1C2(fitN);
 devSet("tracks");
 subplots(10, ncol=2, byrow=FALSE);
 par(mar=c(1,3.5,1,0.5)+1);
-plot(fitN, add=TRUE);
-plot(fitO, add=TRUE);
+plot(fitN, subplots=TRUE);
+plot(fitO, subplots=TRUE);
 
 devSet("C1C2");
 Clim <- c(0,4);

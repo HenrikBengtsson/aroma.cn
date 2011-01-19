@@ -68,8 +68,8 @@ fitN <- normalizeBAFsByRegions(fit, verbose=-10);
 devSet("tracks");
 subplots(10, ncol=2, byrow=FALSE);
 par(mar=c(1,3.5,1,0.5)+1);
-plot(fit, add=TRUE);
-plot(fitN, add=TRUE);
+plot(fit, subplots=TRUE);
+plot(fitN, subplots=TRUE);
 
 
 devSet("C1C2");

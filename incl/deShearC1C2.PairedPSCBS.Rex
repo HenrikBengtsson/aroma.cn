@@ -32,8 +32,8 @@ fitD <- deShearC1C2(fitC, verbose=verbose);
 devSet("tracks");
 subplots(2*3, ncol=2, byrow=FALSE);
 par(mar=c(1,3.5,1,0.5)+1);
-plotTracks(fit, add=TRUE);
-plotTracks(fitD, add=TRUE);
+plotTracks(fit, subplots=FALSE);
+plotTracks(fitD, subplots=FALSE);
 
 devSet("C1C2");
 Clim <- c(0,4);
