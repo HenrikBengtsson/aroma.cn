@@ -52,29 +52,48 @@ setMethodS3("pruneCNA", "PairedPSCBS", function(fit, ..., maxGeneration=Inf, onA
         atomicIslands <- sort(atomicIslands, decreasing=TRUE);
         for (kk in seq(along=atomicIslands)) {
           atomicIsland <- atomicIslands[kk];
-          verbose && enter(verbose, sprintf("Atomic island %d (%d) of %d", 
-                           kk, atomicIsland, length(atomicIslands)));
-          verbose && cat(verbose, "Number of segments before: ", nbrOfSegments(fitT));
+          if (hh == 0) {
+            atomicIslandTag <- sprintf("change point #%d", atomicIsland);
+          } else if (hh == 1) {
+            atomicIslandTag <- sprintf("segment #%d", atomicIsland);
+          } else {
+            atomicIslandTag <- sprintf("segments #%d-#%d", atomicIsland, atomicIsland+(hh-1L));
+          }
+          verbose && enter(verbose, sprintf("Atomic island #%d ('%s') of %d", kk, atomicIslandTag, length(atomicIslands)));
+          n0 <- nbrOfSegments(fitT);
+          verbose && cat(verbose, "Number of segments before: ", n0);
           fitTT <- fitT;
 
-
-          fitTT <- dropByRegions(fitTT, regions=atomicIsland, H=hh);
+          if (hh > 0) {
+            verbose && enter(verbose, sprintf("Dropping %d segments (%s)", hh, atomicIslandTag));
+            fitTT <- dropByRegions(fitTT, regions=atomicIsland, H=hh);
+            nT <- nbrOfSegments(fitTT);
+            verbose && exit(verbose);
+            verbose && cat(verbose, "Number of segments left: ", nT);
+            # Sanity check
+            stopifnot(n0-nT == hh);
+          }
 
           fitDrop <- fitTT$dropped;
           fitTT$dropped <- NULL;
           dropList[[kk]] <- fitDrop;
     
-          # Merge
+          verbose && enter(verbose, sprintf("Merging segments (#%d and #%d)", atomicIsland-1L, atomicIsland));
           fitTT <- mergeTwoSegments(fitTT, left=atomicIsland-1L);
 
           if (is.function(onAtomicIsland)) {
             onAtomicIsland(fit0=fitT, fit1=fitTT, fitD=fitDrop,
                            atomicIsland=atomicIsland, H=hh);
           }
+          n1 <- nbrOfSegments(fitTT);
+          verbose && exit(verbose);
+          verbose && cat(verbose, "Number of segments left: ", n1);
+          # Sanity check
+          stopifnot(n0-n1 == hh+1);
+
 
           fitT <- fitTT;
 
-          verbose && cat(verbose, "Number of segments after: ", nbrOfSegments(fitT));
           verbose && exit(verbose);
         } # for (kk ...)
   

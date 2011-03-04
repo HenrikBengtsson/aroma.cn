@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 0.7.1 [2011-03-03]
+o Fixed a small code typo that didn't make a difference.
+
+
 Version: 0.7.0 [2011-01-19]
 o Added beta classes PairedPSCBSFile and PairedPSCBSFileSet.
 o Removed a NOTE from R CMD check.

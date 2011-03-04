@@ -78,7 +78,7 @@ setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("densi
   betaT <- betaX;
   betaT[betaT < censorAt[1]] <- -Inf;
   betaT[betaT > censorAt[2]] <- +Inf;
-  betaT <- betaX[is.finite(betaT)];
+  betaT <- betaT[is.finite(betaT)];
   fit <- findPeaksAndValleys(betaT, adjust=adjust, ...);
   isXYByChrX <- (sum(fit$type == "peak") == 2);
 
@@ -103,7 +103,10 @@ setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("densi
 
 ###########################################################################
 # HISTORY:
-# 2010-07-22 [PN]:
+# 2011-03-03 [HB]
+# o TYPO: Used betaX[is.finite(betaT)] instead of betaT[is.finite(betaT)],
+#   but the results would have been identical either way.
+# 2010-07-22 [PN]
 # o No longer calling gender from chr Y when gender is estimated as
 # "XX" from chr X.
 # 2009-11-03
