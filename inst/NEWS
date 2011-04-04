@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 0.7.2 [2011-04-03]
+o CLEANUP: Utilizing hpaste() internally wherever applicable.
+
+
 Version: 0.7.1 [2011-03-03]
 o Fixed a small code typo that didn't make a difference.
 

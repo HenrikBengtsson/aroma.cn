@@ -168,10 +168,7 @@ setMethodS3("as.character", "MultiSourceCopyNumberNormalization", function(x, ..
   names <- getAllNames(this);
   n <- length(names);
   s <- c(s, sprintf("Number of common array names: %d", n));
-  if (n >= 5)
-    names <- c(names[1:2], "...", names[n]);
-  names <- paste(names, collapse=", ");
-  s <- c(s, sprintf("Names: %s", names)); 
+  s <- c(s, sprintf("Names: %s [%d]", hpaste(names), n)); 
 
   # Parameters:
   paramStr <- getParametersAsString(this);

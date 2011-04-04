@@ -8,6 +8,7 @@ rootPath <- Arguments$getReadablePath(rootPath);
 
 pattern <- "^TCGA,OV,testSet,pairs";
 pattern <- "^broad.mit.edu_(GBM|OV).Genome_Wide_SNP_6(.*),(.*)";
+pattern <- NULL;
 
 dataSets <- list.files(path=rootPath, pattern=pattern);
 exclPattern <- ",TBN";

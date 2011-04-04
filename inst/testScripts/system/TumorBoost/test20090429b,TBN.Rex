@@ -8,6 +8,7 @@ rootPath <- Arguments$getReadablePath(rootPath);
 
 pattern <- "(^TCGA,OV,testSet,pairs|TumorBoostPaper)";
 pattern <- "^broad.mit.edu_(GBM|OV).Genome_Wide_SNP_6(.*),(.*)";
+pattern <- NULL;
 
 dataSets <- list.files(path=rootPath, pattern=pattern);
 exclPattern <- ",TBN";
@@ -44,11 +45,11 @@ if (interactive()) {
   sampleNames <- selectMenu(sampleNames);
 } 
 
-flavors <- c("v1", "v2", "v3", "v4");
-if (interactive()) {
+flavors <- c("v1", "v2", "v3", "v4")[4];
+if (interactive() && length(flavors) > 1) {
   flavor <- textMenu(flavors, value=TRUE);
 } else {
-  flavor <- flavors[4];
+  flavor <- flavors[1];
 }
 
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
