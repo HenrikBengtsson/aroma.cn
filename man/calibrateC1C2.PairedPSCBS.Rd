@@ -24,7 +24,7 @@
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
-    \code{\link[psCBS]{segmentByPairedPSCBS}}.}
+    \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
   \item{...}{Not used.}
   \item{verbose}{See \code{\link[R.utils]{Verbose}}.}
 }

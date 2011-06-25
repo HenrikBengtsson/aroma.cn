@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 0.7.3 [2011-06-25]
+o ROBUSTNESS: Updated package dependencies.
+o FIXES: Now package refers to PSCBS package (not old psCBS).
+
+
 Version: 0.7.2 [2011-04-03]
 o CLEANUP: Utilizing hpaste() internally wherever applicable.
 

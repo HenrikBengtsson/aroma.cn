@@ -12,7 +12,7 @@
 #
 # \arguments{
 #   \item{fit}{A PairedPSCBS fit object as returned by 
-#     @see "psCBS::segmentByPairedPSCBS".}
+#     @see "PSCBS::segmentByPairedPSCBS".}
 #   \item{...}{Not used.}
 #   \item{verbose}{See @see "R.utils::Verbose".}
 # }

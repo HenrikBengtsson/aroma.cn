@@ -24,7 +24,7 @@
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
-    \code{\link[psCBS]{segmentByPairedPSCBS}}.}
+    \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
   \item{by}{A \code{\link[base]{character}} string specifying if the normalization function
     should be estimated based on TumorBoost normalized or non-normalized
     tumor allele B fractions (BAFs).}

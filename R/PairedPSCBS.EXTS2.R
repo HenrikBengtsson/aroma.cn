@@ -12,7 +12,7 @@
 #
 # \arguments{
 #   \item{fit}{A PairedPSCBS fit object as returned by 
-#     @see "psCBS::segmentByPairedPSCBS".}
+#     @see "PSCBS::segmentByPairedPSCBS".}
 #   \item{maxScore}{A positive @double threshold. 
 #     If \code{"auto"}, the threshold is estimated empirically.}
 #   \item{...}{Not used.}
@@ -200,7 +200,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
 #
 # \arguments{
 #   \item{fit}{A PairedPSCBS fit object as returned by 
-#     @see "psCBS::segmentByPairedPSCBS".}
+#     @see "PSCBS::segmentByPairedPSCBS".}
 #   \item{...}{Additional arguments passed to 
 #     @see "aroma.cn::findNeutralCopyNumberState".}
 #   \item{force}{If @TRUE, an already called object is skipped, otherwise not.}

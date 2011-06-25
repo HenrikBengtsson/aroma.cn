@@ -24,7 +24,7 @@
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
-    \code{\link[psCBS]{segmentByPairedPSCBS}}.}
+    \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
   \item{adjust}{A \code{\link[base]{numeric}} adjusting the bandwidth of the empirical
     density estimator of line (changepoint) directions.}
   \item{weightFlavor}{A \code{\link[base]{character}} string specifying how weights are

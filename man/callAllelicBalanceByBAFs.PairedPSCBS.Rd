@@ -24,7 +24,7 @@
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
-    \code{\link[psCBS]{segmentByPairedPSCBS}}.}
+    \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
   \item{maxScore}{A positive \code{\link[base]{double}} threshold.
     If \code{"auto"}, the threshold is estimated empirically.}
   \item{...}{Not used.}

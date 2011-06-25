@@ -23,7 +23,7 @@
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
-    \code{\link[psCBS]{segmentByPairedPSCBS}}.}
+    \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
   \item{...}{Additional arguments passed to
     \code{\link[aroma.cn]{findNeutralCopyNumberState}}.}
   \item{force}{If \code{\link[base:logical]{TRUE}}, an already called object is skipped, otherwise not.}
