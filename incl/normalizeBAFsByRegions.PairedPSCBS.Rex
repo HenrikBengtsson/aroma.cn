@@ -1,7 +1,7 @@
-if (require("psCBS")) {
+if (require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/pcCBS,exData,chr01.Rbin", package="psCBS");
+pathname <- system.file("data-ex/pcCBS,exData,chr01.Rbin", package="PSCBS");
 data <- R.utils::loadObject(pathname);
 R.oo::attachLocally(data);
 x <- position;
@@ -41,4 +41,4 @@ pointsC1C2(fitN);
 linesC1C2(fitN);
 title(main="(C1,C2) - both");
 
-} # if (require("psCBS"))
+} # if (require("PSCBS"))

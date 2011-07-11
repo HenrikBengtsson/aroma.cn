@@ -34,10 +34,10 @@
 }
 
 \examples{\dontrun{
- if (require("psCBS")) {
+ if (require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/pcCBS,exData,chr01.Rbin", package="psCBS");
+pathname <- system.file("data-ex/pcCBS,exData,chr01.Rbin", package="PSCBS");
 # pathname <- "wholeGenomeData/GSE20584,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY/GenomeWideSNP_6/GSE20584,GSM517071vGSM517072,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY.xdr";
 data <- R.utils::loadObject(pathname);
 R.oo::attachLocally(data);
@@ -75,7 +75,7 @@ plotC1C2(fitC, Clim=Clim);
 linesC1C2(fitC);
 title(main="(C1,C2) - calibrated");
 
-} # if (require("psCBS"))
+} # if (require("PSCBS"))
 
 }}
 

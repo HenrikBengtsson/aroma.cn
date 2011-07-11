@@ -1,5 +1,5 @@
 library("aroma.cn");
-library("psCBS");
+library("PSCBS");
 #sourceTo("../aroma.cn/R/PairedPSCBS.NORM.R", modifiedOnly=TRUE);
 
 pathname <- "GSE20584,GSM517071vGSM517072,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY.xdr";

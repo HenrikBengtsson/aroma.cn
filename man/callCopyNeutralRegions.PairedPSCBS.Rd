@@ -35,10 +35,10 @@
 }
 
 \examples{
-if (require("psCBS")) {
+if (require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/pcCBS,exData,chr01.Rbin", package="psCBS");
+pathname <- system.file("data-ex/pcCBS,exData,chr01.Rbin", package="PSCBS");
 data <- R.utils::loadObject(pathname);
 R.oo::attachLocally(data);
 x <- position;
@@ -52,7 +52,7 @@ fitN <- normalizeBAFsByRegions(fit, verbose=-10);
 fitN2 <- callCopyNeutralRegions(fitN, verbose=-10);
 print(fitN2);
 
-} # if (require("psCBS"))
+} # if (require("PSCBS"))
 }
 
 \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}

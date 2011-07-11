@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 0.7.4 [2011-07-10]
+o FIXES: Forgot to update some examples and test scripts which
+  were still referring to the old psCBS package (should be PSCBS).
+
+
 Version: 0.7.3 [2011-06-25]
 o ROBUSTNESS: Updated package dependencies.
 o FIXES: Now package refers to PSCBS package (not old psCBS).
