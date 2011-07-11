@@ -235,7 +235,7 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FA
 
   C <- segs[,"tcnMean", drop=TRUE];
   isAB <- segs[,"abCall", drop=TRUE];
-  n <- segs[,"tcnNbrOfSNPs", drop=TRUE]; # "tcn.num.mark"? /HB 2010-09-09
+  n <- segs[,"tcnNbrOfSNPs", drop=TRUE]; # "tcnNbrOfLoci"? /HB 2010-09-09
 
   # Give more weight to longer regions
   weights <- n;

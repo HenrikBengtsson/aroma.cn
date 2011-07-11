@@ -56,7 +56,7 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
           if (changepoints) {
             dropped <- extractByRegions(fit, regions=fitN$atomicIslands);
             segs <- dropped$output;
-            x <- segs$tcn.loc.start;
+            x <- segs$tcnStart;
             x <- x * xScale;
             abline(v=x, lwd=1, col=col);
             verbose && cat(verbose, "Change-point locations:");
@@ -88,10 +88,10 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
           if (changepoints) {
             x <- sapply(dropped, FUN=function(fd) {
               segs <- fd$output;
-              c(segs$tcn.loc.start[1], segs$tcn.loc.end[nrow(segs)]);
+              c(segs$tcnStart[1], segs$tcnEnd[nrow(segs)]);
             });
             x <- t(x);
-            colnames(x) <- c("block.loc.start", "block.loc.end");
+            colnames(x) <- c("blockStart", "blockEnd");
             x <- x[order(x[,1]),,drop=FALSE];
             x <- cbind(x, length=x[,2]-x[,1]);
             x <- x * xScale;
@@ -123,6 +123,8 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
 
 ############################################################################
 # HISTORY:
+# 2011-07-10 [HB]
+# o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2011-01-19
 # o Now plotTracks() of PruneCNA utilizes plotTracks2() for PairedPSCBS.
 # o Dropped argument 'tracks'.
