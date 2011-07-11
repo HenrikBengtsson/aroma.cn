@@ -10,7 +10,7 @@
 
 
     # Regions weights
-    counts <- xy[,"dh.num.mark", drop=TRUE];
+    counts <- xy[,"dhNbrOfLoci", drop=TRUE];
     w <- sqrt(counts);
     w <- w / sum(w, na.rm=TRUE);
 
@@ -181,9 +181,9 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   X <- matrix(naValue, nrow=nbrOfSegments, ncol=3);
   for (kk in seq(length=nbrOfSegments)) {
     chrKK <- as.numeric(segs[kk,"chromosome"]);
-    xRange <- as.numeric(segs[kk,c("dh.loc.start", "dh.loc.end")]);
-    tcn <- segs[kk,"tcn.mean"];
-    dh <- segs[kk,"dh.mean"];
+    xRange <- as.numeric(segs[kk,c("dhStart", "dhEnd")]);
+    tcn <- segs[kk,"tcnMean"];
+    dh <- segs[kk,"dhMean"];
     # Identify all homozygous SNPs in the region
     keep <- (chromosome == chrKK & xRange[1] <= x & x <= xRange[2] & isHom);
     keep <- whichVector(keep);
@@ -204,7 +204,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 
   # Update DH segmentation means
   rhoN <- XN[,1,drop=TRUE];
-  segs[,"dh.mean"] <- rhoN;
+  segs[,"dhMean"] <- rhoN;
   rm(rhoN);
   verbose && exit(verbose);
 
@@ -222,7 +222,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   scales <- rep(naValue, times=length(data$betaT));
   for (kk in seq(length=nbrOfSegments)) {
     chrKK <- as.numeric(segs[kk,"chromosome"]);
-    xRange <- as.numeric(segs[kk,c("dh.loc.start", "dh.loc.end")]);
+    xRange <- as.numeric(segs[kk,c("dhStart", "dhEnd")]);
     # Identify all SNPs in the region
     keep <- (chromosome == chrKK & xRange[1] <= x & x <= xRange[2]);
     keep <- whichVector(keep);
@@ -265,6 +265,8 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 
 ##############################################################################
 # HISTORY
+# 2011-07-10 [HB]
+# o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-10-10 [HB]
 # o Added memoization to normalizeBAFsByRegions().
 # 2010-09-26 [HB]

@@ -96,8 +96,8 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Adjusting for biases in allelic-balance segments");
   fit4 <- callAllelicBalanceByBAFs(fit3, verbose=verbose);
-  ww <- which(fit4$output$ab.call);
-  fit4$output[ww, "dh.mean"] <- 0;
+  ww <- which(fit4$output$abCall);
+  fit4$output[ww, "dhMean"] <- 0;
   verbose && exit(verbose);
 
   if (debug) {
@@ -189,8 +189,8 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Adjusting for biases in allelic-balance segments");
   fit10 <- callAllelicBalanceByBAFs(fit9, force=TRUE, verbose=verbose);
-  ww <- which(fit10$output$ab.call);
-  fit10$output[ww, "dh.mean"] <- 0;
+  ww <- which(fit10$output$abCall);
+  fit10$output[ww, "dhMean"] <- 0;
   verbose && exit(verbose);
 
   if (debug) {
@@ -385,6 +385,8 @@ setMethodS3("fitC1C2Densities", "PairedPSCBS", function(fit, adjust=0.2, tol=0.0
 
 ##############################################################################
 # HISTORY
+# 2011-07-10 [HB]
+# o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-10-10 [HB]
 # o Added fitC1C2Peaks().
 # o Added calibrateC1C2() for PairedPSCBS.

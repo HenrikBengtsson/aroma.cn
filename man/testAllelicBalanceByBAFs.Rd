@@ -34,7 +34,7 @@
 if (require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/pcCBS,exData,chr01.Rbin", package="PSCBS");
+pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
 data <- R.utils::loadObject(pathname);
 R.oo::attachLocally(data);
 x <- position;

@@ -30,7 +30,7 @@
   \item{...}{Additional arguments passed to \code{\link{findPeaksAndValleys}}().}
   \item{censorAt}{A \code{\link[base]{double}} \code{\link[base]{vector}} of length two specifying the range
     for which values are considered finite.  Values below (above) this
-    range are treated as -\code{\link[base:is.finite]{Inf}} (+@inf).}
+    range are treated as -\code{\link[base:is.finite]{Inf}} (+\code{\link[base:is.finite]{Inf}}).}
   \item{verbose}{A \code{\link[base]{logical}} or a \code{\link[R.utils]{Verbose}} object.}
  }
 

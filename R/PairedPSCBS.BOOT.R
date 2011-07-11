@@ -63,20 +63,20 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   nbrOfSegments <- nrow(segs);
 
   verbose && enter(verbose, "Resampling TCN segments");
-  ids <- unique(segs[["tcn.id"]]);
+  ids <- unique(segs[["tcnId"]]);
   for (ii in seq(along=ids)) {
     id <- ids[ii];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", ii, length(ids)));
 
     # Identify all subsegments for this TCN segment
-    idxs <- which(segs[["tcn.id"]] == id);
+    idxs <- which(segs[["tcnId"]] == id);
     n <- length(idxs);
 
     segsII <- segs[idxs,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsII$tcn.loc.start[1];
-    stop <- segsII$tcn.loc.end[1];
+    start <- segsII$tcnStart[1];
+    stop <- segsII$tcnEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     if (length(units) > 1) {
@@ -101,8 +101,8 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     segsJJ <- segs[jj,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsJJ$dh.loc.start[1];
-    stop <- segsJJ$dh.loc.end[1];
+    start <- segsJJ$dhStart[1];
+    stop <- segsJJ$dhEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
@@ -135,26 +135,26 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   x <- data$x;
 
   verbose && enter(verbose, "Updating TCN fields");
-  ids <- unique(segs[["tcn.id"]]);
+  ids <- unique(segs[["tcnId"]]);
   for (kk in seq(along=ids)) {
     id <- ids[kk];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", kk, length(ids)));
 
     # Identify all subsegments for this TCN segment
-    idxs <- which(segs[["tcn.id"]] == id);
+    idxs <- which(segs[["tcnId"]] == id);
     n <- length(idxs);
 
     segsKK <- segs[idxs,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsKK$tcn.loc.start[1];
-    stop <- segsKK$tcn.loc.end[1];
+    start <- segsKK$tcnStart[1];
+    stop <- segsKK$tcnEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     # Update TCN mean level
     y <- data$CT[units];
     yMean <- mean(y, na.rm=TRUE);
-    segs[idxs,"tcn.mean"] <- rep(yMean, times=length(idxs));
+    segs[idxs,"tcnMean"] <- rep(yMean, times=length(idxs));
 
     verbose && exit(verbose);
   } # for (kk ...)
@@ -167,8 +167,8 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     segsKK <- segs[kk,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsKK$dh.loc.start[1];
-    stop <- segsKK$dh.loc.end[1];
+    start <- segsKK$dhStart[1];
+    stop <- segsKK$dhEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
@@ -183,7 +183,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     beta <- data[[by]][units];
     y <- 2*abs(beta[isHet] - 1/2);
     yMean <- mean(y, na.rm=TRUE);
-    segs[kk,"dh.mean"] <- yMean;
+    segs[kk,"dhMean"] <- yMean;
 
     verbose && exit(verbose);
   } # for (kk ...)
@@ -230,21 +230,21 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
   verbose && enter(verbose, "Identifying nested TCN units and DH units");
   unitsList <- list();
-  ids <- unique(segs[["tcn.id"]]);
+  ids <- unique(segs[["tcnId"]]);
   for (ii in seq(along=ids)) {
     id <- ids[ii];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", ii, length(ids)));
     unitsII <- list();
 
     # Identify all subsegments for this TCN segment
-    idxs <- which(segs[["tcn.id"]] == id);
+    idxs <- which(segs[["tcnId"]] == id);
     n <- length(idxs);
 
     segsII <- segs[idxs,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsII$tcn.loc.start[1];
-    stop <- segsII$tcn.loc.end[1];
+    start <- segsII$tcnStart[1];
+    stop <- segsII$tcnEnd[1];
     units <- whichVector(start <= x & x <= stop);
     tcnUnits <- units;
 
@@ -255,8 +255,8 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
       segsJJ <- segsII[jj,,drop=FALSE];
 
       # Identify loci in segment
-      start <- segsJJ$dh.loc.start[1];
-      stop <- segsJJ$dh.loc.end[1];
+      start <- segsJJ$dhStart[1];
+      stop <- segsJJ$dhEnd[1];
       units <- whichVector(start <= x & x <= stop);
 
       # Identify SNPs and non-SNPs
@@ -373,26 +373,26 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   x <- data$x;
 
   verbose && enter(verbose, "Updating TCN fields");
-  ids <- unique(segs[["tcn.id"]]);
+  ids <- unique(segs[["tcnId"]]);
   for (kk in seq(along=ids)) {
     id <- ids[kk];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", kk, length(ids)));
 
     # Identify all subsegments for this TCN segment
-    idxs <- which(segs[["tcn.id"]] == id);
+    idxs <- which(segs[["tcnId"]] == id);
     n <- length(idxs);
 
     segsKK <- segs[idxs,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsKK$tcn.loc.start[1];
-    stop <- segsKK$tcn.loc.end[1];
+    start <- segsKK$tcnStart[1];
+    stop <- segsKK$tcnEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     # Update TCN mean level
     y <- data$CT[units];
     yMean <- mean(y, na.rm=TRUE);
-    segs[idxs,"tcn.mean"] <- rep(yMean, times=length(idxs));
+    segs[idxs,"tcnMean"] <- rep(yMean, times=length(idxs));
 
     verbose && exit(verbose);
   } # for (kk ...)
@@ -405,8 +405,8 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     segsKK <- segs[kk,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsKK$dh.loc.start[1];
-    stop <- segsKK$dh.loc.end[1];
+    start <- segsKK$dhStart[1];
+    stop <- segsKK$dhEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
@@ -421,7 +421,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     beta <- data[[by]][units];
     y <- 2*abs(beta[isHet] - 1/2);
     yMean <- mean(y, na.rm=TRUE);
-    segs[kk,"dh.mean"] <- yMean;
+    segs[kk,"dhMean"] <- yMean;
 
     verbose && exit(verbose);
   } # for (kk ...)
@@ -471,20 +471,20 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   nbrOfSegments <- nrow(segs);
 
   verbose && enter(verbose, "Resampling TCN segments");
-  ids <- unique(segs[["tcn.id"]]);
+  ids <- unique(segs[["tcnId"]]);
   for (ii in seq(along=ids)) {
     id <- ids[ii];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", ii, length(ids)));
 
     # Identify all subsegments for this TCN segment
-    idxs <- which(segs[["tcn.id"]] == id);
+    idxs <- which(segs[["tcnId"]] == id);
     n <- length(idxs);
 
     segsII <- segs[idxs,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsII$tcn.loc.start[1];
-    stop <- segsII$tcn.loc.end[1];
+    start <- segsII$tcnStart[1];
+    stop <- segsII$tcnEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     if (length(units) > 1) {
@@ -509,8 +509,8 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     segsJJ <- segs[jj,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsJJ$dh.loc.start[1];
-    stop <- segsJJ$dh.loc.end[1];
+    start <- segsJJ$dhStart[1];
+    stop <- segsJJ$dhEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
@@ -543,26 +543,26 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   x <- data$x;
 
   verbose && enter(verbose, "Updating TCN fields");
-  ids <- unique(segs[["tcn.id"]]);
+  ids <- unique(segs[["tcnId"]]);
   for (kk in seq(along=ids)) {
     id <- ids[kk];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", kk, length(ids)));
 
     # Identify all subsegments for this TCN segment
-    idxs <- which(segs[["tcn.id"]] == id);
+    idxs <- which(segs[["tcnId"]] == id);
     n <- length(idxs);
 
     segsKK <- segs[idxs,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsKK$tcn.loc.start[1];
-    stop <- segsKK$tcn.loc.end[1];
+    start <- segsKK$tcnStart[1];
+    stop <- segsKK$tcnEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     # Update TCN mean level
     y <- data$CT[units];
     yMean <- mean(y, na.rm=TRUE);
-    segs[idxs,"tcn.mean"] <- rep(yMean, times=length(idxs));
+    segs[idxs,"tcnMean"] <- rep(yMean, times=length(idxs));
 
     verbose && exit(verbose);
   } # for (kk ...)
@@ -575,8 +575,8 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     segsKK <- segs[kk,,drop=FALSE];
 
     # Identify loci in segment
-    start <- segsKK$dh.loc.start[1];
-    stop <- segsKK$dh.loc.end[1];
+    start <- segsKK$dhStart[1];
+    stop <- segsKK$dhEnd[1];
     units <- whichVector(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
@@ -591,7 +591,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     beta <- data[[by]][units];
     y <- 2*abs(beta[isHet] - 1/2);
     yMean <- mean(y, na.rm=TRUE);
-    segs[kk,"dh.mean"] <- yMean;
+    segs[kk,"dhMean"] <- yMean;
 
     verbose && exit(verbose);
   } # for (kk ...)
@@ -609,6 +609,8 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
 ##############################################################################
 # HISTORY
+# 2011-07-10 [HB]
+# o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-11-04 [HB]
 # o ROBUSTNESS: Now all bootstrap methods utilize resample().
 # 2010-09-16 [HB]

@@ -7,8 +7,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \name{findNeutralCopyNumberState}
+\alias{findNeutralCopyNumberState.default}
 \alias{findNeutralCopyNumberState}
-
 
 \title{Call segments to be copy neutral based on allelic imbalance calls and total copy number estimates}
 
@@ -16,7 +16,7 @@
  Call segments to be copy neutral based on allelic imbalance calls and total copy number estimates.
 }
 
-\usage{findNeutralCopyNumberState(C, isAI, weights=NULL, ..., densityThreshold=1e-10, verbose=FALSE)}
+\usage{\method{findNeutralCopyNumberState}{default}(C, isAI, weights=NULL, ..., densityThreshold=1e-10, verbose=FALSE)}
 
 \arguments{
   \item{C}{A \code{\link[base]{numeric}} \code{\link[base]{vector}} of region-level total copy number estimates.}
@@ -35,3 +35,5 @@
 
 \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
 
+
+\keyword{internal}

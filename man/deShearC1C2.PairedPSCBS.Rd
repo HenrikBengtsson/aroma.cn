@@ -41,7 +41,7 @@
 if (require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/pcCBS,exData,chr01.Rbin", package="PSCBS");
+pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
 # pathname <- "wholeGenomeData/GSE20584,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY/GenomeWideSNP_6/GSE20584,GSM517071vGSM517072,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY.xdr";
 data <- R.utils::loadObject(pathname);
 R.oo::attachLocally(data);
@@ -63,8 +63,8 @@ fitN <- normalizeBAFsByRegions(fit, verbose=-10);
 
 # Call allelic balance
 fitC <- callAllelicBalanceByBAFs(fitN);
-ww <- which(fitC$output$ab.call);
-fitC$output[ww, "dh.mean"] <- 0;
+ww <- which(fitC$output$abCall);
+fitC$output[ww, "dhMean"] <- 0;
 
 # deShear
 fitD <- deShearC1C2(fitC, verbose=verbose);

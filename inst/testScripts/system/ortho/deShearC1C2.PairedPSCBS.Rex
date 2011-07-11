@@ -110,8 +110,8 @@ if (!exists("fitSegC") || !inherits(fitSegC, "PairedPSCBS")) {
   } else {
     verbose && enter(verbose, "Normalizing for allelic-balance biases");
     fitSegC <- callAllelicBalanceByBAFs(fitSegN, verbose=-10);
-    ww <- which(fitSegC$output$ab.call);
-    fitSegC$output[ww, "dh.mean"] <- 0;
+    ww <- which(fitSegC$output$abCall);
+    fitSegC$output[ww, "dhMean"] <- 0;
     verbose && print(verbose, fitSegC);
 
     verbose && enter(verbose, "Saving PairedPSCBS object");
@@ -212,13 +212,13 @@ for (chr in 1:22) {
   );
 
   c1c2List <- lapply(fitListT, FUN=function(fit) {
-    xx <- as.data.frame(fit)[,c("tcn.loc.start", "tcn.loc.end"),drop=FALSE];
+    xx <- as.data.frame(fit)[,c("tcnStart", "tcnEnd"),drop=FALSE];
     c1c2 <- extractC1C2(fit)[,1:2];
     cbind(xx, c1c2);
   });
 
   c1c2 <- c1c2List[[1]];
-  xrange <- as.matrix(c1c2[,c("tcn.loc.start", "tcn.loc.end")]);
+  xrange <- as.matrix(c1c2[,c("tcnStart", "tcnEnd")]);
   xrange <- range(xrange, na.rm=TRUE);
 
   subplots(length(c1c2List), ncol=1, byrow=FALSE);

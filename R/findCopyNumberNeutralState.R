@@ -1,5 +1,5 @@
 ###########################################################################/**
-# @RdocFunction findNeutralCopyNumberState
+# @RdocDefault findNeutralCopyNumberState
 #
 # @title "Call segments to be copy neutral based on allelic imbalance calls and total copy number estimates"
 #
@@ -26,8 +26,9 @@
 #
 # @author
 #
+# @keyword internal
 #*/###########################################################################
-findNeutralCopyNumberState <- function(C, isAI, weights=NULL, ..., densityThreshold=1e-10, verbose=FALSE) {
+setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=NULL, ..., densityThreshold=1e-10, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -154,11 +155,14 @@ findNeutralCopyNumberState <- function(C, isAI, weights=NULL, ..., densityThresh
   verbose && exit(verbose);
 
   isNeutral;
-} # findNeutralCopyNumberState()
+}) # findNeutralCopyNumberState()
 
 
 ##############################################################################
 # HISTORY
+# 2011-07-10 [HB]
+# o Made findNeutralCopyNumberState() a default method.
+# o Made the Rd help "internal".
 # 2010-09-09 [HB]
 # o Now segments with missing values are not called.
 # o Added support for the case when there is no peak/no segments in AB.

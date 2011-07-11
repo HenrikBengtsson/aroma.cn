@@ -20,7 +20,7 @@
 #  \item{...}{Additional arguments passed to @see "findPeaksAndValleys".}
 #  \item{censorAt}{A @double @vector of length two specifying the range
 #    for which values are considered finite.  Values below (above) this 
-#    range are treated as -@Inf (+@inf).}
+#    range are treated as -@Inf (+@Inf).}
 #  \item{verbose}{A @logical or a @see "R.utils::Verbose" object.}
 # }
 #

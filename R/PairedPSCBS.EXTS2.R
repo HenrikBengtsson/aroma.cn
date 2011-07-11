@@ -61,7 +61,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
 
 
   # Nothing to do?
-  if (!force && !is.null(segs$ab.call)) {
+  if (!force && !is.null(segs$abCall)) {
     # Allelic balance segments are already called
     return(fit);
   }
@@ -164,7 +164,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
 
   params <- list(maxScore=maxScore);
 
-  df$ab.call <- (df$ai <= maxScore);
+  df$abCall <- (df$ai <= maxScore);
 
   segs <- cbind(segs, df);
 
@@ -228,14 +228,14 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FA
   segs <- fit$output;
 
   # Nothing to do?
-  if (!force && !is.null(segs$neutral.call)) {
+  if (!force && !is.null(segs$neutralCall)) {
     # Copy neutral segments are already called
     return(fit);
   }
 
-  C <- segs[,"tcn.mean", drop=TRUE];
-  isAB <- segs[,"ab.call", drop=TRUE];
-  n <- segs[,"tcn.num.snps", drop=TRUE]; # "tcn.num.mark"? /HB 2010-09-09
+  C <- segs[,"tcnMean", drop=TRUE];
+  isAB <- segs[,"abCall", drop=TRUE];
+  n <- segs[,"tcnNbrOfSNPs", drop=TRUE]; # "tcn.num.mark"? /HB 2010-09-09
 
   # Give more weight to longer regions
   weights <- n;
@@ -243,7 +243,7 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FA
   isNeutral <- findNeutralCopyNumberState(C=C, isAI=!isAB, weights=weights,
                                                        ..., verbose=verbose);
 
-  segs$neutral.call <- isNeutral;
+  segs$neutralCall <- isNeutral;
 
   fitC <- fit;
   fitC$output <- segs;
@@ -332,7 +332,7 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
   }
 
   verbose && print(verbose, seg);
-  verbose && cat(verbose, "Number of TCN markers: ", sum(seg[["tcn.num.mark"]], na.rm=TRUE));
+  verbose && cat(verbose, "Number of TCN markers: ", sum(seg[["tcnNbrOfLoci"]], na.rm=TRUE));
   verbose && exit(verbose);
 
   verbose && enter(verbose, "Subsetting data");
@@ -347,7 +347,7 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
   }
 
   # Keep only loci within the segment
-  xRange <- as.numeric(seg[,c("dh.loc.start", "dh.loc.end")]);
+  xRange <- as.numeric(seg[,c("dhStart", "dhEnd")]);
   keep <- whichVector(xRange[1] <= data$x & data$x <= xRange[2]);
   units <- units[keep];
   data <- data[keep,];
@@ -377,8 +377,8 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
   # Special case?
   listOfDhLociNotPartOfSegment <- fit$listOfDhLociNotPartOfSegment;
   if (!is.null(listOfDhLociNotPartOfSegment)) {
-    tcnId <- seg[,"tcn.id"];
-    dhId <- seg[,"dh.id"];
+    tcnId <- seg[,"tcnId"];
+    dhId <- seg[,"dhId"];
     dhLociNotPartOfSegment <- listOfDhLociNotPartOfSegment[[tcnId]];
     if (!is.null(dhLociNotPartOfSegment)) {
       lociToExclude <- dhLociNotPartOfSegment[[dhId]];
@@ -391,10 +391,10 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
   }
 
   verbose && cat(verbose, "Number of units: ", n);
-  verbose && cat(verbose, "Number of TCN markers: ", seg[,"tcn.num.mark"]);
+  verbose && cat(verbose, "Number of TCN markers: ", seg[,"tcnNbrOfLoci"]);
 
   # Sanity check
-  if (what == "hets" && n > 0) stopifnot(n == seg[,"dh.num.mark"]);
+  if (what == "hets" && n > 0) stopifnot(n == seg[,"dhNbrOfLoci"]);
 
   fitS <- fit;
   fitS$data <- data;
@@ -409,6 +409,8 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
 
 ##############################################################################
 # HISTORY
+# 2011-07-10 [HB]
+# o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-10-26 [HB]
 # o Now argument 'maxScore' for callAllelicBalanceByBAFs() defaults 
 #   to "auto", which corresponds to estimating the score empirically

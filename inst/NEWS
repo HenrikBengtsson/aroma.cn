@@ -1,9 +1,12 @@
 Package: aroma.cn
 =================
 
-Version: 0.7.4 [2011-07-10]
+Version: 0.8.0 [2011-07-10]
+o CLEANUP: Removed some internal functions from the help index.
 o FIXES: Forgot to update some examples and test scripts which
   were still referring to the old psCBS package (should be PSCBS).
+o BUG FIX: Updated internal code to work with the new column names
+  in PSCBS v0.11.0.
 
 
 Version: 0.7.3 [2011-06-25]

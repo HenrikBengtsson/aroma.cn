@@ -113,8 +113,8 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "
   verbose && exit(verbose);
 
   # Update segmentation means
-  segs[,"tcn.mean"] <- gamma;
-  segs[,"dh.mean"] <- dh;
+  segs[,"tcnMean"] <- gamma;
+  segs[,"dhMean"] <- dh;
 
   # Update data [TO DO]
 
@@ -181,8 +181,8 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, s
   verbose && exit(verbose);
 
   # Update segmentation means
-  segs[,"tcn.mean"] <- gamma;
-  segs[,"dh.mean"] <- dh;
+  segs[,"tcnMean"] <- gamma;
+  segs[,"dhMean"] <- dh;
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Return results
@@ -238,8 +238,8 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
   verbose && exit(verbose);
 
   # Update segmentation means
-  segs[,"tcn.mean"] <- gamma;
-  segs[,"dh.mean"] <- dh;
+  segs[,"tcnMean"] <- gamma;
+  segs[,"dhMean"] <- dh;
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Return results
@@ -581,16 +581,16 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
 setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
   # Identify region in allelic balance
   segs <- as.data.frame(fit);
-  ab.call <- segs$ab.call;
-  if (is.null(ab.call)) {
+  abCall <- segs$abCall;
+  if (is.null(abCall)) {
     throw("Allelic balance has not been called.");
   }
-  idxs <- which(segs$ab.call);
+  idxs <- which(segs$abCall);
   segs <- segs[idxs,,drop=FALSE];
 
   # Extract (TCN,DH)
-  gamma <- segs[, "tcn.mean"];
-  rho <- segs[, "dh.mean"];
+  gamma <- segs[, "tcnMean"];
+  rho <- segs[, "dhMean"];
 
   # Calculate (C1,C2)
   C1 <- 1/2 * (1 - rho) * gamma;
@@ -600,7 +600,7 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
   dC2 <- C2 - C1;
 
   # Calculate weighted average of all C2 biases
-  w <- segs[,"dh.num.mark"];
+  w <- segs[,"dhNbrOfLoci"];
   w <- w / sum(w, na.rm=TRUE);
   dC2 <- weightedMedian(dC2, w=w);
 
@@ -611,6 +611,8 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 ##############################################################################
 # HISTORY
+# 2011-07-10 [HB]
+# o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-10-20 [HB]
 # o Now fitDeltaXYShearModel() uses both -pi/4 and +pi/4 to estimate
 #   the diagonal parameters.
