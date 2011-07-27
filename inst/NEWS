@@ -1,6 +1,13 @@
 Package: aroma.cn
 =================
 
+Version: 0.8.1 [2011-07-27]
+o WORKAROUND: In order for the package to work with the most recent
+  version of R devel, which automatically add namespaces to packages
+  who do not have one, we explicitly have specify that this package
+  should use cat() and getOption() of R.utils (instead of 'base').
+
+
 Version: 0.8.0 [2011-07-10]
 o CLEANUP: Removed some internal functions from the help index.
 o FIXES: Forgot to update some examples and test scripts which

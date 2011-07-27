@@ -238,6 +238,8 @@
 \alias{testEqualityC1C2ByMean}
 \alias{testEqualityTcnByMean}
 \alias{testEqualityTcnByT}
+\alias{cat}
+\alias{getOption}
 
 \description{
   This page contains aliases for all "non-documented" objects that

@@ -289,6 +289,9 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
 
 
 setMethodS3("fitC1C2Peaks", "PairedPSCBS", function(fit, ..., tol=0.05, onError=c("error", "warning", "skip"), verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Argument 'onError':
   onError <- match.arg(onError);
 
