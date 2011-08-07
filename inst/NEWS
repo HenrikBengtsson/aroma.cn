@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 0.8.2 [2011-08-07]
+o The aroma.cn v0.8.1 tar ball uploaded to CRAN mistakenly
+  contained a NAMESPACE file, which shouldn't have been there.
+
+
 Version: 0.8.1 [2011-07-27]
 o WORKAROUND: In order for the package to work with the most recent
   version of R devel, which automatically add namespaces to packages
