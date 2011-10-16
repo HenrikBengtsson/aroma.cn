@@ -44,7 +44,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   verbose && enter(verbose, "Resample (TCN,BAF) signals and reestimate segmentation means");
 
 
-  data <- fit$data;
+  data <- getLocusData(fit);
   snpFields <- c("betaN", "betaT", "betaTN", "muN");
   npFields <- "CT";
   snpFields <- intersect(names(data), snpFields);
@@ -59,7 +59,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   # Resample TCN segments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   x <- data$x;
-  segs <- fit$output;
+  segs <- getSegments(fit, splitters=TRUE);
   nbrOfSegments <- nrow(segs);
 
   verbose && enter(verbose, "Resampling TCN segments");
@@ -223,9 +223,9 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Identify nested TCN units and DH units
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  data <- fit$data;
+  data <- getLocusData(fit);
   x <- data$x;
-  segs <- fit$output;
+  segs <- getSegments(fit, splitters=TRUE);
   nbrOfSegments <- nrow(segs);
 
   verbose && enter(verbose, "Identifying nested TCN units and DH units");
@@ -465,9 +465,9 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Resample TCN segments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  data <- fit$data;
+  data <- getLocusData(fit);
   x <- data$x;
-  segs <- fit$output;
+  segs <- getSegments(fit, splitters=TRUE);
   nbrOfSegments <- nrow(segs);
 
   verbose && enter(verbose, "Resampling TCN segments");
@@ -609,6 +609,8 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
 ##############################################################################
 # HISTORY
+# 2011-10-16 [HB]
+# o Now using getLocusData(fit) and getSegments(fit) where applicable.
 # 2011-07-10 [HB]
 # o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-11-04 [HB]

@@ -115,6 +115,8 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "
   # Update segmentation means
   segs[,"tcnMean"] <- gamma;
   segs[,"dhMean"] <- dh;
+  segs[,"c1Mean"] <- C1C2o[,1];
+  segs[,"c2Mean"] <- C1C2o[,2];
 
   # Update data [TO DO]
 
@@ -183,6 +185,8 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, s
   # Update segmentation means
   segs[,"tcnMean"] <- gamma;
   segs[,"dhMean"] <- dh;
+  segs[,"c1Mean"] <- C1C2[,1];
+  segs[,"c2Mean"] <- C1C2[,2];
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Return results
@@ -240,6 +244,8 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
   # Update segmentation means
   segs[,"tcnMean"] <- gamma;
   segs[,"dhMean"] <- dh;
+  segs[,"c1Mean"] <- C1C2[,1];
+  segs[,"c2Mean"] <- C1C2[,2];
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Return results
@@ -611,6 +617,9 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 ##############################################################################
 # HISTORY
+# 2011-10-16 [HB]
+# o Now deShearC1C2(), translateC1C2() and transformC1C2() also update
+#   C1 and C2 mean levels.
 # 2011-07-10 [HB]
 # o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-10-20 [HB]

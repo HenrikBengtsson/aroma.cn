@@ -54,8 +54,8 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
           verbose && enter(verbose, sprintf("Highlighting %d dropped change points (H=0)", nbrOfDrops));
           msg <- sprintf("%s. Dropping %d change points (H=0).", msg, nbrOfDrops);
           if (changepoints) {
-            dropped <- extractByRegions(fit, regions=fitN$atomicIslands);
-            segs <- dropped$output;
+            dropped <- extractRegions(fit, regions=fitN$atomicIslands);
+            segs <- getSegments(dropped, splitters=TRUE);
             x <- segs$tcnStart;
             x <- x * xScale;
             abline(v=x, lwd=1, col=col);
@@ -87,7 +87,7 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
 
           if (changepoints) {
             x <- sapply(dropped, FUN=function(fd) {
-              segs <- fd$output;
+              segs <- getSegments(fd, splitters=TRUE);
               c(segs$tcnStart[1], segs$tcnEnd[nrow(segs)]);
             });
             x <- t(x);

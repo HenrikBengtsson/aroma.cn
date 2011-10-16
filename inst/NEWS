@@ -1,6 +1,13 @@
 Package: aroma.cn
 =================
 
+Version: 0.8.3 [2011-10-16]
+o Now deShearC1C2(), translateC1C2() and transformC1C2() also 
+  update C1 and C2 mean levels. 
+o Now using getLocusData() and getSegments() internally for all
+  PairedPSCBS objects whereever applicable.
+
+
 Version: 0.8.2 [2011-08-07]
 o The aroma.cn v0.8.1 tar ball uploaded to CRAN mistakenly
   contained a NAMESPACE file, which shouldn't have been there.

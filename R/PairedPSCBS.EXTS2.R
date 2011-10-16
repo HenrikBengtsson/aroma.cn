@@ -69,8 +69,9 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
   verbose && enter(verbose, "Calling allelic balance by BAFs");
 
   # Extract data
-  betaTN <- fit$data$betaTN;
-  muN <- fit$data$muN;
+  data <- getLocusData(fit);
+  betaTN <- data$betaTN;
+  muN <- data$muN;
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Check for cached results
@@ -112,7 +113,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
 
     verbose && print(verbose, fitS);
 
-    dataS <- fitS$data;
+    dataS <- getLocusData(fitS);
     betaTN <- dataS$betaTN;
     muN <- dataS$muN;
 
@@ -225,7 +226,7 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FA
   # Call allelic balance or not, unless already done
   fit <- callAllelicBalanceByBAFs(fit, ..., verbose=verbose);
 
-  segs <- fit$output;
+  segs <- getSegments(fit, splitters=TRUE);
 
   # Nothing to do?
   if (!force && !is.null(segs$neutralCall)) {
@@ -293,7 +294,7 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
   what <- match.arg(what);
 
 
-  segs <- fit$output;
+  segs <- getSegments(fit, splitters=TRUE);
   stopifnot(!is.null(segs)); 
   nbrOfSegments <- nrow(segs);
 
@@ -314,10 +315,10 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Extract the data and segmentation results
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  data <- fit$data;
+  data <- getLocusData(fit);
   stopifnot(!is.null(data));
 
-  segs <- fit$output;
+  segs <- getSegments(fit, splitters=TRUE);
   stopifnot(!is.null(segs));
 
   verbose && enter(verbose, "Subsetting segment");
@@ -409,6 +410,8 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
 
 ##############################################################################
 # HISTORY
+# 2011-10-16 [HB]
+# o Now using getLocusData(fit) and getSegments(fit) where applicable.
 # 2011-07-10 [HB]
 # o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-10-26 [HB]

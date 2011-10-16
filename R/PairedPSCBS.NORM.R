@@ -136,10 +136,10 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   }
 
 
-  data <- fit$data;
+  data <- getLocusData(fit);
   stopifnot(!is.null(data));
 
-  segs <- fit$output;
+  segs <- getSegments(fit, splitters=TRUE);
   stopifnot(!is.null(segs));
 
   chromosomes <- getChromosomes(fit);
@@ -265,6 +265,8 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 
 ##############################################################################
 # HISTORY
+# 2011-10-16 [HB]
+# o Now using getLocusData(fit) and getSegments(fit) where applicable.
 # 2011-07-10 [HB]
 # o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-10-10 [HB]

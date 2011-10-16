@@ -96,7 +96,8 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Adjusting for biases in allelic-balance segments");
   fit4 <- callAllelicBalanceByBAFs(fit3, verbose=verbose);
-  ww <- which(fit4$output$abCall);
+  segs4 <- getSegments(fit4, splitters=TRUE);
+  ww <- which(segs4$abCall);
   fit4$output[ww, "dhMean"] <- 0;
   verbose && exit(verbose);
 
@@ -189,7 +190,8 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Adjusting for biases in allelic-balance segments");
   fit10 <- callAllelicBalanceByBAFs(fit9, force=TRUE, verbose=verbose);
-  ww <- which(fit10$output$abCall);
+  segs10 <- getSegments(fit10, splitters=TRUE);
+  ww <- which(segs10$abCall);
   fit10$output[ww, "dhMean"] <- 0;
   verbose && exit(verbose);
 
@@ -388,6 +390,8 @@ setMethodS3("fitC1C2Densities", "PairedPSCBS", function(fit, adjust=0.2, tol=0.0
 
 ##############################################################################
 # HISTORY
+# 2011-10-16 [HB]
+# o Now using getSegments(fit) instead of fit$output.
 # 2011-07-10 [HB]
 # o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-10-10 [HB]
