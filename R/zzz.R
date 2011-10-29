@@ -6,11 +6,11 @@
 # version of R devel, which automatically add namespaces to packages
 # who do not have one, we explicitly have specify the following.
 # /HB 2011-07-27
-cat <- R.utils::cat;
-getOption <- R.utils::getOption;
+##cat <- R.utils::cat;
+##getOption <- R.utils::getOption;
 
-.First.lib <- function(libname, pkgname) {
-## .onAttach <- function(libname, pkgname) {
+## .First.lib <- function(libname, pkgname) {
+.onAttach <- function(libname, pkgname) {
   pkg <- Package(pkgname);
   assign(pkgname, pkg, pos=getPosition(pkg));
 

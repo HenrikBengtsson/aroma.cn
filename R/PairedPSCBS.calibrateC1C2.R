@@ -283,6 +283,18 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   }
 
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Deshear by (C1,C2) - diagonals
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  fit13 <- deShearC1C2(fit12, dirs="X", verbose=verbose);
+  if (debug) {
+    ff <- fit13;
+    figName <- "debug,fit13";
+    devSet(figName); devSet(figName);
+    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+  }
+
+
   verbose && exit(verbose);
 
   fit12;
