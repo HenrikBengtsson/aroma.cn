@@ -194,7 +194,6 @@
 \alias{resampleC}
 \alias{resampleC.PairedPSCBS}
 \alias{callPeaks}
-\alias{callPeaks.PeaksAndValleys}
 \alias{callPeaks.data.frame}
 \alias{deShearC1C2_v0}
 \alias{deShearC1C2_v0.PairedPSCBS}

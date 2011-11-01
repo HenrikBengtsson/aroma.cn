@@ -1,12 +1,44 @@
-setMethodS3("callPeaks", "data.frame", function(fit, ...) {
-  # Argument 'fit';
-  stopifnot(all(is.element(c("type", "x", "density"), colnames(fit))));
-  class(fit) <- c("PeaksAndValleys", class(fit));
-  callPeaks(fit, ...);
-}) # callPeaks()
-
-
-setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0,+1/4,+1/2)*pi, ..., flavor=c("decreasing", "all"), verbose=FALSE) {
+###########################################################################/**
+# @set "class=PeaksAndValleys"
+# @RdocMethod callPeaks
+#
+# @title "Calls the peaks in peaks-and-valley estimates"
+#
+# \description{
+#   @get "title" to a set of known state.
+# }
+# 
+# @synopsis
+#
+# \arguments{
+#  \item{fit}{A KxC @data.frame of peaks-and-valley estimates.}
+#  \item{expected}{The expected locations of the peaks to be called.}
+#  \item{flavor}{A @character string specifying what flavor of the 
+#    caller to use.}
+#  \item{verbose}{A @logical or a @see "R.utils::Verbose" object.}
+#  \item{...}{Not used.}
+# }
+#
+# \value{
+#   Returns a Kx(C+2) @data.frame.
+# }
+#
+# \section{Flavors}{
+#  If \code{flavor == "all"}, each peak is called to the state with the
+#  closest expected value.
+#  If \code{flavor == "decreasing"}, the strongest peak is called to the
+#  state with the closest expected value, then the second strongest peak
+#  is called analogously to one of the remaining states, and so on.
+# }
+#
+# @author
+#
+# \seealso{
+#   To get peaks-and-valley estimates, use
+#   @see "aroma.light::findPeaksAndValleys".
+# }
+#*/###########################################################################  
+setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0,+1/4,+1/2)*pi, flavor=c("decreasing", "all"), verbose=FALSE, ...) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -103,8 +135,22 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
 }, protected=TRUE) # callPeaks()
 
 
+
+setMethodS3("callPeaks", "data.frame", function(fit, ...) {
+  # Argument 'fit';
+  stopifnot(all(is.element(c("type", "x", "density"), colnames(fit))));
+  class(fit) <- c("PeaksAndValleys", class(fit));
+  callPeaks(fit, ...);
+}, private=TRUE, deprecated=TRUE)
+
+
+
+
 ##############################################################################
 # HISTORY
+# 2011-10-31 [HB]
+# o Added Rdoc comments to callPeaks() for PeaksAndValleys.
+# o CLEANUP: Deprecated callPeaks() for data.frame.
 # 2010-10-08 [HB]
 # o Added callPeaks().
 # o Created.

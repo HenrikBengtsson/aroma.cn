@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 0.9.1 [2011-10-31]
+o Added Rdoc comments to callPeaks() for PeaksAndValleys.
+
+
 Version: 0.9.0 [2011-10-28]
 o Added a namespace to the package, which will be more or less
   a requirement starting with R v2.14.0.

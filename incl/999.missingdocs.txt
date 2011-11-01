@@ -104,7 +104,7 @@ orthogonalizeC1C2
   normalizeLoessKD.data.frame normalizeLoessKD.matrix plot.C1C2
   points.C1C2 resampleA resampleA.PairedPSCBS resampleB
   resampleB.PairedPSCBS resampleC resampleC.PairedPSCBS
-  callPeaks callPeaks.PeaksAndValleys callPeaks.data.frame
+  callPeaks callPeaks.data.frame
   deShearC1C2_v0 deShearC1C2_v0.PairedPSCBS extractDeltaC1C2
   extractDeltaC1C2.PairedPSCBS extractPolarDeltaC1C2
   extractPolarDeltaC1C2.PairedPSCBS fitC1C2ShearModel
