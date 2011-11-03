@@ -79,7 +79,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
   key <- list(method="callAllelicBalanceByBAFs", class=class(fit)[1], 
     data=list(betaTN=betaTN, muN=muN, segments=as.data.frame(fit)),
     maxScore = maxScore,
-    version="2010-10-10"
+    version="2011-11-02"
   );
   dirs <- c("aroma.cn", "ortho");
   if (!force) {

@@ -123,7 +123,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   key <- list(method="normalizeBAFsByRegions", class=class(fit)[1], 
     data=as.data.frame(fit),
-    version="2010-10-10"
+    version="2011-11-02"
   );
   dirs <- c("aroma.cn", "ortho");
   if (!force) {

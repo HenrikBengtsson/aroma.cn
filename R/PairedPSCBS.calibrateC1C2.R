@@ -55,7 +55,7 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # Check for cached results
   key <- list(method="postsegmentTCN", class=class(fit)[1], 
     data=as.data.frame(fit),
-    version="2010-10-10"
+    version="2011-11-02"
   );
   dirs <- c("aroma.cn", "ortho");
   if (!force) {
