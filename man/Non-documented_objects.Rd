@@ -239,6 +239,8 @@
 \alias{testEqualityTcnByT}
 \alias{cat}
 \alias{getOption}
+\alias{drawC1C2Density}
+\alias{drawC1C2Density.PairedPSCBS}
 
 \description{
   This page contains aliases for all "non-documented" objects that

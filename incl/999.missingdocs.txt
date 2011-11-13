@@ -126,3 +126,4 @@ transformC1C2 transformC1C2.PairedPSCBS
  testEqualityC1C2ByChiSquare testEqualityC1C2ByMean
  testEqualityTcnByMean testEqualityTcnByT 
 cat getOption
+drawC1C2Density drawC1C2Density.PairedPSCBS

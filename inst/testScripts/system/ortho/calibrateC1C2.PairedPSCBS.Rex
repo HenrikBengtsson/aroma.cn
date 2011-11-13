@@ -164,5 +164,5 @@ for (chr in 1:22) {
     legend("topleft", lwd=3, col=c("purple", "red", "blue"), c("C - Total CN", "C2 - Major CN", "C1 - Minor CN"), bg="white", horiz=FALSE);
   }
 
-  devOff();
+  devDone();
 } # for (chr ...)

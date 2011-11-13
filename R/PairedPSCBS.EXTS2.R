@@ -253,14 +253,20 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FA
 })
 
 
-setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., Clim=c(0,4), main=NULL) {
-  plotC1C2(fit, Clim=Clim);
-  title(main=main);
+
+setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
+  # findPeaksAndValleys()
+  require("aroma.light") || throw("Package not loaded: aroma.light");
+  # draw() for 'density' objects
+  require("aroma.core") || throw("Package not loaded: aroma.core");
+
   data <- extractC1C2(fit);
   n <- data[,4, drop=TRUE];
   n <- sqrt(n);
   w <- n/sum(n, na.rm=TRUE);
   adjust <- 0.2;
+
+  # For each dimension...
   for (cc in 1:2) {
     y <- data[,cc];
     ok <- is.finite(y) & is.finite(w);
@@ -283,6 +289,13 @@ setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., Clim=c(0,4), main=
     }
   }
   box();
+}) # drawC1C2Density()
+
+
+setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., Clim=c(0,4), main=NULL) {
+  plotC1C2(fit, ..., Clim=Clim);
+  title(main=main);
+  drawC1C2Density(fit, ...);
 })
 
 
@@ -410,6 +423,10 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
 
 ##############################################################################
 # HISTORY
+# 2011-11-12 [HB]
+# o Added drawC1C2Density() adopted from plotC1C2Grid().
+# o Now argument '...' of plotC1C2Grid() for PairedPSCBS are passed
+#   to plotC1C2().
 # 2011-10-16 [HB]
 # o Now using getLocusData(fit) and getSegments(fit) where applicable.
 # 2011-07-10 [HB]
