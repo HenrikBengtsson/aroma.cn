@@ -55,7 +55,7 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # Check for cached results
   key <- list(method="postsegmentTCN", class=class(fit)[1], 
     data=as.data.frame(fit),
-    version="2011-11-02"
+    version="2010-10-17"
   );
   dirs <- c("aroma.cn", "ortho");
   if (!force) {
@@ -124,24 +124,47 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Deshear by (C1,C2) - diagonals
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  fit6 <- deShearC1C2(fit5, dirs="X", verbose=verbose);
+  fit6 <- fit5;
+  tryCatch({
+    fit6 <- deShearC1C2(fit5, dirs="X", verbose=verbose);
+    if (debug) {
+      ff <- fit6;
+      figName <- "debug,fit6";
+      devSet(figName); devSet(figName);
+      plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+    }
+  }, error = function(ex) {
+    print(ex$message);
+  })
+
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Deshear by (C1,C2) - vertical, horizontal, ...
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  fit7a <- deShearC1C2(fit6, dirs="|,-", verbose=verbose);
   if (debug) {
-    ff <- fit6;
-    figName <- "debug,fit6";
+    ff <- fit7a;
+    figName <- "debug,fit7a";
     devSet(figName); devSet(figName);
     plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
   }
 
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Deshear by (C1,C2) - vertical, horizontal, diagonals
+  # Deshear by (C1,C2) - ..., diagonals
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  fit7 <- deShearC1C2(fit6, dirs="|,-,X", verbose=verbose);
-  if (debug) {
-    ff <- fit7;
-    figName <- "debug,fit7";
-    devSet(figName); devSet(figName);
-    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
-  }
+  fit7 <- fit7a;
+  tryCatch({
+    fit7 <- deShearC1C2(fit7a, dirs="X", verbose=verbose);
+    if (debug) {
+      ff <- fit7;
+      figName <- "debug,fit7";
+      devSet(figName); devSet(figName);
+      plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+    }
+  }, error = function(ex) {
+    print(ex$message);
+  })
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -183,6 +206,11 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
     devSet(figName); devSet(figName);
     plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
   }
+
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Rescale C2 to have same unit length as C1 with (1,1) as origin.
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -286,14 +314,18 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Deshear by (C1,C2) - diagonals
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  fit13 <- deShearC1C2(fit12, dirs="X", verbose=verbose);
-  if (debug) {
-    ff <- fit13;
-    figName <- "debug,fit13";
-    devSet(figName); devSet(figName);
-    plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
-  }
-
+  fit13 <- fit12;
+  tryCatch({
+    fit13 <- deShearC1C2(fit12, dirs="X", verbose=verbose);
+    if (debug) {
+      ff <- fit13;
+      figName <- "debug,fit13";
+      devSet(figName); devSet(figName);
+      plotC1C2Grid(ff); linesC1C2(ff); stext(side=3,pos=1,figName);
+    }
+  }, error = function(ex) {
+    print(ex$message);
+  })
 
   verbose && exit(verbose);
 
@@ -402,6 +434,9 @@ setMethodS3("fitC1C2Densities", "PairedPSCBS", function(fit, adjust=0.2, tol=0.0
 
 ##############################################################################
 # HISTORY
+# 2011-10-17 [HB]
+# o ROBUSTNESS: Now calibrateC1C2() no longer gives an error if it cannot
+#   fit diagonals due to lack of data points.
 # 2011-10-16 [HB]
 # o Now using getSegments(fit) instead of fit$output.
 # 2011-07-10 [HB]

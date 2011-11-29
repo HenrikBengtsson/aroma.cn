@@ -36,11 +36,9 @@ if (require("PSCBS")) {
 # Load example ASCN data
 pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
 data <- R.utils::loadObject(pathname);
-R.oo::attachLocally(data);
-x <- position;
 
 # PSCBS segmentation
-fit <- segmentByPairedPSCBS(CT, betaT=betaT, betaN=betaN, x=x, verbose=-10);
+fit <- segmentByPairedPSCBS(data, verbose=-10);
 
 # Normalize
 fitN <- normalizeBAFsByRegions(fit, verbose=-10);

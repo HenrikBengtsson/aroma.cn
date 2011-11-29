@@ -75,14 +75,14 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  segs <- as.data.frame(fit);
+  segs <- getSegments(fit, splitters=FALSE);
   stopifnot(!is.null(segs));
 
   nbrOfSegments <- nrow(segs);
   verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
 
   # (C1,C2,...)
-  X <- extractC1C2(fit);
+  X <- extractC1C2(fit, splitters=FALSE);
 
   # (C1,C2)
   C1C2 <- X[,1:2, drop=FALSE];
@@ -161,14 +161,14 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, s
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  segs <- as.data.frame(fit);
+  segs <- getSegments(fit, splitters=FALSE);
   stopifnot(!is.null(segs));
 
   nbrOfSegments <- nrow(segs);
   verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
 
   # (C1,C2,...)
-  X <- extractC1C2(fit);
+  X <- extractC1C2(fit, splitters=FALSE);
 
   # (C1,C2)
   C1C2 <- X[,1:2, drop=FALSE];
@@ -221,14 +221,14 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  segs <- as.data.frame(fit);
+  segs <- getSegments(fit, splitters=FALSE);
   stopifnot(!is.null(segs));
 
   nbrOfSegments <- nrow(segs);
   verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
 
   # (C1,C2,...)
-  X <- extractC1C2(fit);
+  X <- extractC1C2(fit, splitters=FALSE);
 
   # (C1,C2)
   C1C2 <- X[,1:2, drop=FALSE];
@@ -260,7 +260,7 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
 
 
 
-setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), weightFlavor=c("min", "sum"), ..., verbose=FALSE) {
+setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), weightFlavor=c("min", "sum"), dropABChangePoints=TRUE, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -272,7 +272,10 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
 
   # Argument 'weightFlavor':
   weightFlavor <- match.arg(weightFlavor);
-  
+
+  # Argument 'dropABChangePoints':  
+  dropABChangePoints <- Arguments$getLogical(dropABChangePoints);
+
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
   if (verbose) {
@@ -286,14 +289,14 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  segs <- as.data.frame(fit);
+  segs <- getSegments(fit, splitter=FALSE);
   stopifnot(!is.null(segs));
 
   nbrOfSegments <- nrow(segs);
   verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
 
   # (C1,C2,...)
-  X <- extractC1C2(fit);
+  X <- extractC1C2(fit, splitter=FALSE);
 
   # Number of TCN and DH data points
   counts <- X[,3:4, drop=FALSE];
@@ -319,6 +322,19 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
     dw <- w[1:(length(w)-1)] + w[2:length(w)];
   }
 
+  # Ignore change points between segments in allelic balance
+  # by giving the zero weights.
+  if (dropABChangePoints) {
+    abCall <- segs$abCall;
+    if (!is.null(abCall)) {
+      idxs <- which(abCall);
+      dropIdxs <- idxs[diff(idxs) == 1];
+      if (length(dropIdxs) > 0) {
+        print(dropIdxs);
+        dw[dropIdxs] <- 0.1*dw[dropIdxs];
+      }
+    }
+  }
 
   modelFit <- fitDeltaXYShearModel(X, weights=dw, adjust=adjust, ..., verbose=less(verbose, 1));
 
@@ -586,7 +602,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
 
 setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
   # Identify region in allelic balance
-  segs <- as.data.frame(fit);
+  segs <- getSegments(fit, splitters=FALSE);
   abCall <- segs$abCall;
   if (is.null(abCall)) {
     throw("Allelic balance has not been called.");
@@ -617,6 +633,8 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 ##############################################################################
 # HISTORY
+# 2011-10-17 [HB]
+# o Added argument 'dropABChangePoints' to fitDeltaC1C2ShearModel().
 # 2011-10-16 [HB]
 # o Now deShearC1C2(), translateC1C2() and transformC1C2() also update
 #   C1 and C2 mean levels.

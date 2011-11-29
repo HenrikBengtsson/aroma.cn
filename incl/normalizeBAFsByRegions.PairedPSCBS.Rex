@@ -4,7 +4,6 @@ if (require("PSCBS")) {
 pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
 data <- R.utils::loadObject(pathname);
 R.oo::attachLocally(data);
-x <- position;
 
 # AD HOC: Robustification
 CT[CT < 0] <- 0;
