@@ -32,7 +32,7 @@
 #
 # @keyword internal
 #*/########################################################################### 
-setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="auto", ..., force=FALSE, cache=TRUE, verbose=FALSE) {
+setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="auto", ..., force=FALSE, cache=FALSE, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -163,7 +163,9 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
     verbose && exit(verbose);
   }
 
-  params <- list(maxScore=maxScore);
+  params <- fit$params;
+  paramsT <- list(maxScore=maxScore);
+  params <- c(params, paramsT);
 
   df$abCall <- (df$ai <= maxScore);
 
@@ -423,6 +425,11 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
 
 ##############################################################################
 # HISTORY
+# 2011-12-15
+# o Turned of default memoization for callAllelicBalanceByBAFs().
+# o Now callAllelicBalanceByBAFs() for PairedPSCBS appends its parameter
+#   settings to the ones in the PairedPSCBS object.  Before it dropped
+#   them.
 # 2011-11-12 [HB]
 # o Added drawC1C2Density() adopted from plotC1C2Grid().
 # o Now argument '...' of plotC1C2Grid() for PairedPSCBS are passed

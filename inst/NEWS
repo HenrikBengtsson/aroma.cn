@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 0.9.5 [2011-12-15]
+o ROBUSTNESS: Now process() of TotalCnSmoothing writes atomically.
+o Additional internal updates.
+
+
 Version: 0.9.4 [2011-11-28]
 o Updated package dependencies.
 o Additional internal updates.

@@ -35,12 +35,13 @@ extends \emph{\link[aroma.cn]{TotalCnSmoothing}}\cr
 
  }
 
- \usage{TotalCnKernelSmoothing(..., kernel=c("gaussian", "uniform"), censorH=3, robust=FALSE)}
+ \usage{TotalCnKernelSmoothing(..., kernel=c("gaussian", "uniform"), bandwidth=50000, censorH=3, robust=FALSE)}
 
  \arguments{
   \item{...}{Arguments passed to \code{\link{TotalCnSmoothing}}.}
   \item{kernel}{A \code{\link[base]{character}} string specifying the type of kernel
      to be used.}
+  \item{bandwidth}{A \code{\link[base]{double}} specifying the bandwidth of the smoothing.}
   \item{censorH}{A positive \code{\link[base]{double}} specifying the bandwidth threshold
      where values outside are ignored (zero weight).}
   \item{robust}{If \code{\link[base:logical]{TRUE}}, a robust smoother is used, otherwise not.}

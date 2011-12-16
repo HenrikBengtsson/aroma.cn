@@ -15,7 +15,6 @@
 #  \item{...}{Arguments passed to @see "aroma.core::AromaTransform".}
 #  \item{targetUgp}{An @see "aroma.core::AromaUgpFile" specifying the
 #    target loci for which smoothed copy-number are generated.}
-#  \item{bandwidth}{A @double specify the bandwidth of the smoothing.}
 #  \item{.reqSetClass}{(internal only)}
 # }
 #
@@ -25,26 +24,21 @@
 #
 # @author
 #*/########################################################################### 
-setConstructorS3("TotalCnSmoothing", function(dataSet=NULL, ..., bandwidth=50e3, targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet") {
+setConstructorS3("TotalCnSmoothing", function(dataSet=NULL, ..., targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet") {
   if (!is.null(dataSet)) {
     # Argument 'targetUgp':
     targetUgp <- Arguments$getInstanceOf(targetUgp, "AromaUgpFile");
   }
 
-  # Argument 'bandwidth':
-  bandwidth <- Arguments$getDouble(bandwidth, range=c(0,Inf));
-
   extend(AromaTransform(dataSet=dataSet, ..., .reqSetClass=.reqSetClass), "TotalCnSmoothing",
-    .targetUgp = targetUgp,
-    .bandwidth = bandwidth
+    .targetUgp = targetUgp
   );
 }, abstract=TRUE)
 
 
 setMethodS3("getParameters", "TotalCnSmoothing", function(this, ...) {
   params <- list(
-    targetUgp = this$.targetUgp,
-    bandwidth = this$.bandwidth
+    targetUgp = this$.targetUgp
   );
   params;
 }, private=TRUE);
@@ -62,10 +56,6 @@ setMethodS3("getAsteriskTags", "TotalCnSmoothing", function(this, collapse=NULL,
     byTag <- sprintf("by=%s", byTag[1]);
   }
   tags <- c(tags, byTag);
-
-  # Parameter 'bandwidth'
-  bandwidthTag <- sprintf("H=%.1fkb", params$bandwidth/1e3);
-  tags <- c(tags, bandwidthTag);
 
   # Collapsed or split?
   if (!is.null(collapse)) {
@@ -282,9 +272,8 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
     verbose && exit(verbose);
 
     verbose && enter(verbose, "Storing smoothed data");
-
-    verbose && enter(verbose, "Allocating ", className);
     verbose && cat(verbose, "Pathname: ", pathname);
+
     params2 <- params;
     params2[["targetUgp"]] <- NULL;
     footer <- list(
@@ -303,14 +292,21 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
         params=params2
       )
     );
-    dfOut <- clazz$allocate(filename=pathname, nbrOfRows=nbrOfUnits, 
+
+    # Write to a temporary file
+    pathnameT <- pushTemporaryFile(pathname, verbose=verbose);
+
+    dfOut <- clazz$allocate(filename=pathnameT, nbrOfRows=nbrOfUnits, 
                             platform=platform, chipType=chipType, 
                             footer=footer, verbose=less(verbose, 50));
-    verbose && exit(verbose);
 
     dfOut[,1] <- M;
     rm(M);
-    verbose && exit(verbose);
+
+    # Renaming temporary file
+    pathname <- popTemporaryFile(pathnameT, verbose=verbose);
+
+    verbose && exit(verbose); # Storing
 
     verbose && exit(verbose);
   } # for (kk ...)
@@ -331,6 +327,9 @@ setMethodS3("getOutputFiles", "TotalCnSmoothing", function(this, ...) {
 
 ############################################################################
 # HISTORY:
+# 2011-12-15
+# o Moved argument 'bandwidth' to TotalCnKernelSmoothing.
+# o ROBUSTNESS: Now process() of TotalCnSmoothing write output atomically.
 # 2009-05-05
 # o BUG FIX: process() of TotalCnSmoothing would not "recognize" fullname
 #   translators, that is, the output filenames were always identical to 

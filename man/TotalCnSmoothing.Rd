@@ -33,14 +33,13 @@ extends \emph{\link[aroma.core]{AromaTransform}}\cr
 
  }
 
- \usage{TotalCnSmoothing(dataSet=NULL, ..., bandwidth=50000, targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet")}
+ \usage{TotalCnSmoothing(dataSet=NULL, ..., targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet")}
 
  \arguments{
   \item{dataSet}{An \code{\link[aroma.core]{AromaUnitTotalCnBinarySet}}.}
   \item{...}{Arguments passed to \code{\link[aroma.core]{AromaTransform}}.}
   \item{targetUgp}{An \code{\link[aroma.core]{AromaUgpFile}} specifying the
     target loci for which smoothed copy-number are generated.}
-  \item{bandwidth}{A \code{\link[base]{double}} specify the bandwidth of the smoothing.}
   \item{.reqSetClass}{(internal only)}
  }
 
