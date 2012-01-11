@@ -39,7 +39,8 @@
 }
 
 \examples{
-if (require("PSCBS")) {
+
+if (require("PSCBS") && Sys.getenv("_R_CHECK_FULL_") != "") {
 
 # Load example ASCN data
 pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");

@@ -21,9 +21,7 @@
 #   Returns a calibrated PairedPSCBS fit object.
 # }
 #
-# \examples{\dontrun{
-#  @include "../incl/calibrateC1C2.PairedPSCBS.Rex"
-# }}
+# @examples "../incl/calibrateC1C2.PairedPSCBS.Rex"
 #
 # @author
 #

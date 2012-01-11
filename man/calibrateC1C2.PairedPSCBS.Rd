@@ -33,8 +33,9 @@
   Returns a calibrated PairedPSCBS fit object.
 }
 
-\examples{\dontrun{
- if (require("PSCBS")) {
+\examples{
+
+if (require("PSCBS") && Sys.getenv("_R_CHECK_FULL_") != "") {
 
 # Load example ASCN data
 pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
@@ -75,8 +76,7 @@ linesC1C2(fitC);
 title(main="(C1,C2) - calibrated");
 
 } # if (require("PSCBS"))
-
-}}
+}
 
 \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
 
