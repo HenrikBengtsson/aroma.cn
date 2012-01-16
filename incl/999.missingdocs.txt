@@ -127,3 +127,6 @@ transformC1C2 transformC1C2.PairedPSCBS
  testEqualityTcnByMean testEqualityTcnByT 
 cat getOption
 drawC1C2Density drawC1C2Density.PairedPSCBS
+getAsteriskTags.TotalCnBinnedSmoothing
+getParameters.TotalCnBinnedSmoothing
+smoothRawCopyNumbers.TotalCnBinnedSmoothing

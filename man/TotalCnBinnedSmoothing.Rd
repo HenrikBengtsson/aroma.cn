@@ -1,56 +1,54 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Do not modify this file since it was automatically generated from:
 % 
-%  TotalCnSmoothing.R
+%  TotalCnBinnedSmoothing.R
 % 
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- \name{TotalCnSmoothing}
+ \name{TotalCnBinnedSmoothing}
 \docType{class}
-\alias{TotalCnSmoothing}
+\alias{TotalCnBinnedSmoothing}
 
 
- \title{The abstract TotalCnSmoothing class}
+ \title{The TotalCnBinnedSmoothing class}
 
  \description{
   Package:  aroma.cn \cr
-\bold{Class TotalCnSmoothing}\cr
+\bold{Class TotalCnBinnedSmoothing}\cr
 
 \code{\link[R.oo]{Object}}\cr
 \code{~~|}\cr
 \code{~~+--}\code{\link[aroma.core]{AromaTransform}}\cr
 \code{~~~~~~~|}\cr
-\code{~~~~~~~+--}\emph{\code{TotalCnSmoothing}}\cr
+\code{~~~~~~~+--}\code{\link[aroma.cn]{TotalCnSmoothing}}\cr
+\code{~~~~~~~~~~~~|}\cr
+\code{~~~~~~~~~~~~+--}\code{TotalCnBinnedSmoothing}\cr
 
 \bold{Directly known subclasses:}\cr
-\link[aroma.cn]{TotalCnBinnedSmoothing}, \link[aroma.cn]{TotalCnKernelSmoothing}\cr
+\cr
 
-public abstract static class \bold{TotalCnSmoothing}\cr
-extends \emph{\link[aroma.core]{AromaTransform}}\cr
+public static class \bold{TotalCnBinnedSmoothing}\cr
+extends \emph{\link[aroma.cn]{TotalCnSmoothing}}\cr
 
 
 
  }
 
- \usage{TotalCnSmoothing(dataSet=NULL, ..., targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet")}
+ \usage{TotalCnBinnedSmoothing(..., robust=FALSE)}
 
  \arguments{
-  \item{dataSet}{An \code{\link[aroma.core]{AromaUnitTotalCnBinarySet}}.}
-  \item{...}{Arguments passed to \code{\link[aroma.core]{AromaTransform}}.}
-  \item{targetUgp}{An \code{\link[aroma.core]{AromaUgpFile}} specifying the
-    target loci for which smoothed copy-number are generated.}
-  \item{.reqSetClass}{(internal only)}
+  \item{...}{Arguments passed to \code{\link{TotalCnSmoothing}}.}
+  \item{robust}{If \code{\link[base:logical]{TRUE}}, a robust smoother is used, otherwise not.}
  }
 
  \section{Fields and Methods}{
   \bold{Methods:}\cr
-\tabular{rll}{
- \tab \code{getTargetUgpFile} \tab  -\cr
- \tab \code{process} \tab  -\cr
- \tab \code{smoothRawCopyNumbers} \tab  -\cr
-}
+\emph{No methods defined}.
 
+
+ \bold{Methods inherited from TotalCnSmoothing}:\cr
+getAsteriskTags, getOutputFiles, getTargetPositions, getTargetUgpFile, process, smoothRawCopyNumbers
 
  \bold{Methods inherited from AromaTransform}:\cr
 getExpectedOutputFiles, getExpectedOutputFullnames, getFullName, getInputDataSet, getName, getOutputDataSet, getOutputDataSet0, getOutputFiles, getPath, getTags, isDone, process, setTags

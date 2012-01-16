@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.0.1 [2012-01-16]
+o Added TotalCnBinnedSmoothing().
+
+
 Version: 1.0.0 [2012-01-11]
 o ROBUSTNESS: Updated package dependencies.
 o CLEANUP: The example code for the internal PairedPSCBS methods now

@@ -241,6 +241,9 @@
 \alias{getOption}
 \alias{drawC1C2Density}
 \alias{drawC1C2Density.PairedPSCBS}
+\alias{getAsteriskTags.TotalCnBinnedSmoothing}
+\alias{getParameters.TotalCnBinnedSmoothing}
+\alias{smoothRawCopyNumbers.TotalCnBinnedSmoothing}
 
 \description{
   This page contains aliases for all "non-documented" objects that
