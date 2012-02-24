@@ -30,6 +30,13 @@
 #
 # @author
 #
+# \seealso{
+#   Internally, @see "testAllelicBalanceByBAFs" is used.
+#
+#   Note that this AB caller differs from the default one in the
+#   \pkg{PSCBS} package, cf. @seemethod "PSCBS::callAB.PairedPSCBS".
+# }
+#
 # @keyword internal
 #*/########################################################################### 
 setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="auto", ..., force=FALSE, cache=FALSE, verbose=FALSE) {
