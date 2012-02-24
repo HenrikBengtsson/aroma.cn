@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.0.2 [2012-02-23]
+o Additional internal updates.
+
+
 Version: 1.0.1 [2012-01-16]
 o Added TotalCnBinnedSmoothing().
 

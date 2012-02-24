@@ -15,7 +15,7 @@
 #   \item{weights}{An optional @numeric @vector of non-negative weights.}
 #   \item{...}{Further argumants to be passed to the density estimation
 #     function.}
-#   \item{densityThreshold}{A @numeric value, below which density peaks are
+#   \item{minDensity}{A @numeric value, below which density peaks are
 #     discarded.} 
 #   \item{verbose}{If @TRUE, extra information is output.}
 # }
@@ -26,9 +26,14 @@
 #
 # @author
 #
+# \seealso{
+#   @set "class=PairedPSCBS"
+#   This method is utilized by @seemethod "callCopyNeutralRegions".
+# }
+#
 # @keyword internal
 #*/###########################################################################
-setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=NULL, ..., densityThreshold=1e-10, verbose=FALSE) {
+setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=NULL, ..., minDensity=1e-10, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -45,8 +50,8 @@ setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=N
     weights <- Arguments$getNumerics(weights, range=c(0, Inf), length=length2);
   }
 
-  # Argument 'densityThreshold':
-  densityThreshold <- Arguments$getDouble(densityThreshold);
+  # Argument 'minDensity':
+  minDensity <- Arguments$getDouble(minDensity);
 
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
@@ -117,7 +122,7 @@ setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=N
   verbose && print(verbose, fit);
 
   # Look for peaks with enough density
-  isPeak <- (fit[,"type"] == "peak") & (fit[,"density"] > densityThreshold);
+  isPeak <- (fit[,"type"] == "peak") & (fit[,"density"] > minDensity);
   idxs <- whichVector(isPeak);
 
   # Sanity check
@@ -160,6 +165,8 @@ setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=N
 
 ##############################################################################
 # HISTORY
+# 2012-02-23 [HB]
+# o Renamed argument 'densityThreshold' to 'minDensity'.
 # 2011-07-10 [HB]
 # o Made findNeutralCopyNumberState() a default method.
 # o Made the Rd help "internal".
@@ -171,4 +178,3 @@ setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=N
 # 2010-09-08 [PN]
 # o Created.
 ##############################################################################
-

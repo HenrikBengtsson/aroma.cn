@@ -263,51 +263,6 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ..., force=FA
 
 
 
-setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
-  # findPeaksAndValleys()
-  require("aroma.light") || throw("Package not loaded: aroma.light");
-  # draw() for 'density' objects
-  require("aroma.core") || throw("Package not loaded: aroma.core");
-
-  data <- extractC1C2(fit);
-  n <- data[,4, drop=TRUE];
-  n <- sqrt(n);
-  w <- n/sum(n, na.rm=TRUE);
-  adjust <- 0.2;
-
-  # For each dimension...
-  for (cc in 1:2) {
-    y <- data[,cc];
-    ok <- is.finite(y) & is.finite(w);
-    y <- y[ok];
-    wt <- w[ok]/sum(w[ok]);
-    d <- density(y, weights=wt, adjust=adjust);
-    draw(d, side=cc, height=0.3, col="gray", lwd=2, xpd=FALSE);
-    if (cc == 2) {
-      draw(d, side=1, height=0.3, col="lightblue", lwd=2, xpd=FALSE);
-    }
-    p <- findPeaksAndValleys(d, tol=0.05);
-    type <- NULL; rm(type); # To please R CMD check
-    p <- subset(p, type == "peak");
-    p <- p[order(p$density, decreasing=TRUE),,drop=FALSE];
-    p <- head(p, n=8);
-    if (cc == 1) {
-      abline(v=p$x, lty=3, col="gray");
-    } else {
-      abline(h=p$x, lty=3, col="gray");
-    }
-  }
-  box();
-}) # drawC1C2Density()
-
-
-setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., Clim=c(0,4), main=NULL) {
-  plotC1C2(fit, ..., Clim=Clim);
-  title(main=main);
-  drawC1C2Density(fit, ...);
-})
-
-
 setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets", "SNPs", "all"), ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
@@ -426,21 +381,20 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
   verbose && exit(verbose);
 
   fitS;
-})
+}, protected=TRUE) # extractDhSegment()
 
 
 
 ##############################################################################
 # HISTORY
+# 2012-02-23
+# o Moved drawC1C2Density() and plotC1C2Grid() to PairedPSCBS.PLOT3.R.
+# o Made extractDhSegment() protected.
 # 2011-12-15
 # o Turned of default memoization for callAllelicBalanceByBAFs().
 # o Now callAllelicBalanceByBAFs() for PairedPSCBS appends its parameter
 #   settings to the ones in the PairedPSCBS object.  Before it dropped
 #   them.
-# 2011-11-12 [HB]
-# o Added drawC1C2Density() adopted from plotC1C2Grid().
-# o Now argument '...' of plotC1C2Grid() for PairedPSCBS are passed
-#   to plotC1C2().
 # 2011-10-16 [HB]
 # o Now using getLocusData(fit) and getSegments(fit) where applicable.
 # 2011-07-10 [HB]
@@ -452,8 +406,6 @@ setMethodS3("extractDhSegment", "PairedPSCBS", function(fit, idx, what=c("hets",
 # o Added extractDhSegment() for PairedPSCBS.
 # 2010-10-10 [HB]
 # o Added memoization to callAllelicBalanceByBAFs().
-# 2010-10-08 [HB]
-# o Added plotC1C2Grid() for PairedPSCBS.
 # 2010-09-15 [HB]
 # o Added Rdocs for callCopyNeutralRegions().
 # 2010-09-09 [HB]
