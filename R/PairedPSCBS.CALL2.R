@@ -34,7 +34,7 @@
 #   Internally, @see "testAllelicBalanceByBAFs" is used.
 #
 #   Note that this AB caller differs from the default one in the
-#   \pkg{PSCBS} package, cf. @seemethod "PSCBS::callAB.PairedPSCBS".
+#   \pkg{PSCBS} package, cf. @see "PSCBS::callAB.PairedPSCBS".
 # }
 #
 # @keyword internal

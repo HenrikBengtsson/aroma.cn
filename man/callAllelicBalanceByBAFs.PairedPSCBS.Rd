@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Do not modify this file since it was automatically generated from:
 % 
-%  PairedPSCBS.EXTS2.R
+%  PairedPSCBS.CALL2.R
 % 
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,6 +59,13 @@ print(fitN2);
 }
 
 \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+
+\seealso{
+  Internally, \code{\link{testAllelicBalanceByBAFs}}() is used.
+
+  Note that this AB caller differs from the default one in the
+  \pkg{PSCBS} package, cf. \code{\link[PSCBS]{callAB.PairedPSCBS}}.
+}
 
 
 \keyword{internal}
