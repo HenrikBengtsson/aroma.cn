@@ -23,7 +23,7 @@
 \usage{\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore="auto", ..., force=FALSE, cache=FALSE, verbose=FALSE)}
 
 \arguments{
-  \item{fit}{A PairedPSCBS fit object as returned by
+  \item{fit}{A \code{\link[PSCBS]{PairedPSCBS}} fit object as returned by
     \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
   \item{maxScore}{A positive \code{\link[base]{double}} threshold.
     If \code{"auto"}, the threshold is estimated empirically.}
@@ -33,9 +33,9 @@
 }
 
 \value{
-  Returns a PairedPSCBS fit object where columns for
-  allelic imbalance scores and p-values as well as allelic
-  balance calls are added.
+  Returns a \code{\link[PSCBS]{PairedPSCBS}} fit object
+  where columns for allelic imbalance scores and
+  p-values as well as allelic balance calls are added.
 }
 
 \examples{

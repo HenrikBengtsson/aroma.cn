@@ -218,8 +218,6 @@
 \alias{plotC1C2Grid.PairedPSCBS}
 \alias{translateC1C2}
 \alias{translateC1C2.PairedPSCBS}
-\alias{extractDhSegment}
-\alias{extractDhSegment.PairedPSCBS}
 \alias{transformC1C2}
 \alias{transformC1C2.PairedPSCBS}
 \alias{PairedPSCBSFile}

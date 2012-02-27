@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.0.3 [2012-02-24]
+o CLEANUP: Moved some internal functions to the PSCBS package,
+  so package dependencies was also updated.
+
+
 Version: 1.0.2 [2012-02-23]
 o Updated package dependencies.
 o Additional internal updates.
