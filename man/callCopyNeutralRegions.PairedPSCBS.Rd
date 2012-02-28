@@ -26,7 +26,7 @@
     \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
   \item{...}{Additional arguments passed to
     \code{\link[aroma.cn]{findNeutralCopyNumberState}} and
-    \code{\link[PSCBS]{callCopyNeutralByBAF.PairedPSCBS}}.}
+    \code{\link[PSCBS]{callCopyNeutral.PairedPSCBS}}.}
 }
 
 \value{

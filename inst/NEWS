@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.0.4 [2012-02-27]
+o BUG FIX: drawC1C2Density() for PairedPSCBS would throw an exception
+  if there was only one segment, or less than two finite (C1,C2):s.
+
+
 Version: 1.0.3 [2012-02-24]
 o CLEANUP: Moved some internal functions to the PSCBS package,
   so package dependencies was also updated.

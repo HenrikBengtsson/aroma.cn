@@ -4,6 +4,11 @@ setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
   # draw() for 'density' objects
   require("aroma.core") || throw("Package not loaded: aroma.core");
 
+  # Nothing todo?
+  if (nbrOfSegments(fit) < 2) {
+    return(invisible());
+  }
+
   data <- extractC1C2(fit);
   n <- data[,4, drop=TRUE];
   n <- sqrt(n);
@@ -16,6 +21,12 @@ setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
     ok <- is.finite(y) & is.finite(w);
     y <- y[ok];
     wt <- w[ok]/sum(w[ok]);
+
+    # Nothing to do?
+    if (length(y) < 2) {
+      next;
+    }
+
     d <- density(y, weights=wt, adjust=adjust);
     draw(d, side=cc, height=0.3, col="gray", lwd=2, xpd=FALSE);
     if (cc == 2) {
@@ -46,6 +57,9 @@ setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., Clim=c(0,4), main=
 
 ##############################################################################
 # HISTORY
+# 2012-02-27
+# o BUG FIX: drawC1C2Density() for PairedPSCBS would throw an exception
+#   if there was only one segment, or less than two finite (C1,C2):s.
 # 2012-02-23
 # o Moved drawC1C2Density() and plotC1C2Grid() to its own source file.
 # 2011-11-12 [HB]
