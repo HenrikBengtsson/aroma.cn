@@ -45,11 +45,13 @@ data <- R.utils::loadObject(pathname);
 # PSCBS segmentation
 fit <- segmentByPairedPSCBS(data, verbose=-10);
 
-# Normalize
-fitN <- normalizeBAFsByRegions(fit, verbose=-10);
+fit <- bootstrapTCNandDHByRegion(fit, verbose=-10);
 
-fitN2 <- callCopyNeutralRegions(fitN, verbose=-10);
-print(fitN2);
+fitC <- callCopyNeutralRegions(fit, verbose=-10);
+print(fitC);
+
+# Normalize
+fitN <- normalizeBAFsByRegions(fitC, verbose=-10);
 
 } # if (require("PSCBS"))
 }
