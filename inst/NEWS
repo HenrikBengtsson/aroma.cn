@@ -1,6 +1,14 @@
 Package: aroma.cn
 =================
 
+Version: 1.1.0 [2012-04-10]
+o Updated package dependencies.
+
+
+Version: 1.0.6 [2012-03-30]
+o Added help for normalizePrincipalCurve().
+
+
 Version: 1.0.5 [2012-03-06]
 o BUG FIX: One of the PSCBS examples gave an error.
 
