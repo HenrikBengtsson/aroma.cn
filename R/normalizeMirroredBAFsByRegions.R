@@ -41,6 +41,9 @@
 # @keyword internal
 #*/###########################################################################
 setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c("plain", "total"), ..., verbose=FALSE) {
+  # aroma.light::fitXYCurve()
+  require("aroma.light") || throw("Package not loaded: aroma.light");
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -99,7 +102,7 @@ setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c(
     X <- data[,c(3,2),drop=FALSE];
     verbose && cat(verbose, "(TCN,mBAFhom):");
     verbose && str(verbose, X);
-    fit <- aroma.light::fitXYCurve(X, ..., verbose=verbose);
+    fit <- fitXYCurve(X, ..., verbose=verbose);
     rm(X);
     verbose && str(verbose, fit);
     verbose && exit(verbose);
@@ -147,6 +150,8 @@ devSet(6); plot(y,yHat, xlim=c(0,1), ylim=c(0,1));
 
 ##############################################################################
 # HISTORY
+# 2012-04-16
+# o normalizeMirroredBAFsByRegions() now explicitly require 'aroma.light'.
 # 2010-09-08 [PN+HB]
 # o Added normalizeMirroredBAFsByRegions().
 # o Created.

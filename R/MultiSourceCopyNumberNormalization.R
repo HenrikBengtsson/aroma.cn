@@ -92,6 +92,9 @@
 #*/###########################################################################
 setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fitUgp=NULL, subsetToFit=NULL, targetDimension=1, align=c("byChromosome", "none"), tags="*", ...) {
   if (!is.null(dsList)) {
+    # aroma.light::fitPrincipalCurve()
+    require("aroma.light") || throw("Package not loaded: aroma.light");
+
     # Arguments 'dsList':
     if (is.list(dsList)) {
       K <- length(dsList);
@@ -692,6 +695,9 @@ setMethodS3("getParametersAsString", "MultiSourceCopyNumberNormalization", funct
 
 
 setMethodS3("getPrincipalCurveEstimator", "MultiSourceCopyNumberNormalization", function(this, ...) {
+  # aroma.light::fitPrincipalCurve()
+  require("aroma.light") || throw("Package not loaded: aroma.light");
+
   params <- getParameters(this, verbose=less(verbose, 1));
   df <- params$pcBandwidth;
   if (is.null(df)) {
@@ -1458,6 +1464,9 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 
 ###########################################################################
 # HISTORY:
+# 2012-04-16
+# o MultiSourceCopyNumberNormalization() now explicitly requires the
+#   'aroma.light' package, instead of assuming it is loaded.
 # 2010-04-04
 # o Added citation for MSCN to the Rdocs.
 # 2010-01-14

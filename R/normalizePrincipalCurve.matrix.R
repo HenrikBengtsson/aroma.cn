@@ -38,6 +38,9 @@
 # }
 #*/#########################################################################  
 setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, returnFit=FALSE) {
+  # fitPrincipalCurve()
+  require("aroma.light") || throw("Package not loaded: aroma.light"); 
+
   # Fit principal curve
   fit <- fitPrincipalCurve(x, ...);
 
@@ -71,6 +74,8 @@ setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, r
 
 ###########################################################################
 # HISTORY:
+# 2012-04-16
+# o Now normalizePrincipalCurve() explicitly require aroma.light.
 # 2012-03-30
 # o Added Rdoc comments.
 # 2008-10-08

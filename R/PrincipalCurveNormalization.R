@@ -24,6 +24,10 @@
 # \author{Henrik Bengtsson}
 #*/########################################################################### 
 setConstructorS3("PrincipalCurveNormalization", function(..., subset=1/20) {
+  if (length(list(...)) > 0) {
+    require("aroma.light") || throw("Package not loaded: aroma.light");
+  }
+
   # Arguments 'subset':
   subset <- Arguments$getDouble(subset, range=c(0,1));
 
@@ -47,10 +51,14 @@ setMethodS3("getSubsetToFit", "PrincipalCurveNormalization", function(this, ...)
 
 
 setMethodS3("fitOne", "PrincipalCurveNormalization", function(this, theta, ...) {
+  require("aroma.light") || throw("Package not loaded: aroma.light");
+
   fitPrincipalCurve(theta, ...);
 }, protected=TRUE)
 
 setMethodS3("backtransformOne", "PrincipalCurveNormalization", function(this, theta, fit, ...) {
+  require("aroma.light") || throw("Package not loaded: aroma.light");
+
   backtransformPrincipalCurve(theta, fit=fit, ...);
 }, protected=TRUE)
 
@@ -58,6 +66,9 @@ setMethodS3("backtransformOne", "PrincipalCurveNormalization", function(this, th
 
 ############################################################################
 # HISTORY:
+# 2012-04-16
+# o PrincipalCurveNormalization() now explicitly requires the
+#   'aroma.light' package, instead of assuming it is loaded.
 # 2009-07-15
 # o Created.
 ############################################################################ 

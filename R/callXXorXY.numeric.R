@@ -17,7 +17,8 @@
 #  \item{flavor}{A @character string specifying the type of algorithm used.}
 #  \item{adjust}{A postive @double specifying the amount smoothing for
 #    the empirical density estimator.}
-#  \item{...}{Additional arguments passed to @see "findPeaksAndValleys".}
+#  \item{...}{Additional arguments passed to 
+#    @see "aroma.light::findPeaksAndValleys".}
 #  \item{censorAt}{A @double @vector of length two specifying the range
 #    for which values are considered finite.  Values below (above) this 
 #    range are treated as -@Inf (+@Inf).}
@@ -35,10 +36,13 @@
 # @author
 #
 # \seealso{
-#   Internally @see "findPeaksAndValleys" is used to identify the thresholds.
+#   Internally @see "aroma.light::findPeaksAndValleys" is used to identify
+#   the thresholds.
 # }
 #*/########################################################################### 
 setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("density"), adjust=1.5, ..., censorAt=c(-0.5,+1.5), verbose=FALSE) {
+  require("aroma.light") || throw("Package not loaded: aroma.light");
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -103,6 +107,8 @@ setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("densi
 
 ###########################################################################
 # HISTORY:
+# 2012-04-16 [HB]
+# o Now callXXorXY() explicitly requires aroma.light.
 # 2011-03-03 [HB]
 # o TYPO: Used betaX[is.finite(betaT)] instead of betaT[is.finite(betaT)],
 #   but the results would have been identical either way.

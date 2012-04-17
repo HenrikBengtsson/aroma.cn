@@ -1,8 +1,6 @@
 setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
   # findPeaksAndValleys()
   require("aroma.light") || throw("Package not loaded: aroma.light");
-  # draw() for 'density' objects
-  require("aroma.core") || throw("Package not loaded: aroma.core");
 
   # Nothing todo?
   if (nbrOfSegments(fit) < 2) {
@@ -57,6 +55,9 @@ setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., Clim=c(0,4), main=
 
 ##############################################################################
 # HISTORY
+# 2012-04-16
+# o CLEANUP: drawC1C2Density() for PairedPSCBS no longer needs to require
+#   'aroma.core', because draw() for 'density objects are in R.utils 1.10.0.
 # 2012-02-27
 # o BUG FIX: drawC1C2Density() for PairedPSCBS would throw an exception
 #   if there was only one segment, or less than two finite (C1,C2):s.

@@ -28,10 +28,6 @@
 #  @allmethods "public"
 # }
 #
-# \section{See also}{
-#   @see "aroma.light::fitPrincipalCurve"
-# }
-#
 # \author{Henrik Bengtsson}
 #*/########################################################################### 
 setConstructorS3("AbstractCurveNormalization", function(dataSet=NULL, targetSet=NULL, subsetToFit=NULL, tags="*", copyTarget=TRUE, ...) {
@@ -617,6 +613,8 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 
 ############################################################################
 # HISTORY:
+# 2012-04-16
+# o DOCUMENTATION: Removed reference to aroma.light::fitPrincipalCurve().
 # 2010-01-05
 # o BUG FIX: getOutputDataSet() of AbstractCurveNormalization returned all
 #   files, not just the ones matching the input set.
