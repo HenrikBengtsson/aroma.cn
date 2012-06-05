@@ -42,7 +42,6 @@
 \alias{normalizeOne}
 \alias{normalizeOne.MultiSourceCopyNumberNormalization}
 \alias{normalizePrincipalCurve}
-\alias{normalizePrincipalCurve.matrix}
 \alias{pairs2}
 \alias{pairs2.principal.curve}
 \alias{process.TotalCnSmoothing}
@@ -242,6 +241,15 @@
 \alias{getAsteriskTags.TotalCnBinnedSmoothing}
 \alias{getParameters.TotalCnBinnedSmoothing}
 \alias{smoothRawCopyNumbers.TotalCnBinnedSmoothing}
+\alias{findAtomicAberrations.CBS}
+\alias{pruneCNA.AbstractCBS}
+\alias{[.PruneCNA}
+\alias{extractGenerations}
+\alias{extractGenerations.PruneCNA}
+\alias{nbrOfGenerations}
+\alias{nbrOfGenerations.PruneCNA}
+\alias{testEqualityC1C2ByChiSq}
+\alias{testEqualityC1orC2ByT}
 
 \description{
   This page contains aliases for all "non-documented" objects that

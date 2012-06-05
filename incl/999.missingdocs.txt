@@ -15,7 +15,7 @@
   makeSmoothSplinePredict.numeric nbrOfDataSets
   nbrOfDataSets.MultiSourceCopyNumberNormalization normalizeOne
   normalizeOne.MultiSourceCopyNumberNormalization
-  normalizePrincipalCurve normalizePrincipalCurve.matrix pairs2
+  normalizePrincipalCurve pairs2
   pairs2.principal.curve process.TotalCnSmoothing
   getAsteriskTags.TotalCnKernelSmoothing
   getParameters.TotalCnKernelSmoothing smoothRawCopyNumbers
@@ -129,3 +129,8 @@ drawC1C2Density drawC1C2Density.PairedPSCBS
 getAsteriskTags.TotalCnBinnedSmoothing
 getParameters.TotalCnBinnedSmoothing
 smoothRawCopyNumbers.TotalCnBinnedSmoothing
+findAtomicAberrations.CBS pruneCNA.AbstractCBS
+[.PruneCNA extractGenerations extractGenerations.PruneCNA
+findAtomicAberrations.CBS nbrOfGenerations
+nbrOfGenerations.PruneCNA pruneCNA.AbstractCBS
+testEqualityC1C2ByChiSq testEqualityC1orC2ByT

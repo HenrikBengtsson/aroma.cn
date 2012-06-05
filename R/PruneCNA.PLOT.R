@@ -24,6 +24,30 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
   } 
 
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # AD HOC
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  fit <- this[[1]];
+  if (inherits(fit, "PairedPSCBS")) {
+    # Plot function
+    plotFcn <- function(..., changepoints=TRUE, add=FALSE) {
+      plotTracks2(..., changepoints=changepoints);
+    }
+    startKey <- "tcnStart";
+    endKey <- "tcnEnd";
+  } else if (inherits(fit, "CBS")) {
+    plotFcn <- function(..., changepoints=TRUE, add=FALSE) {
+      if (!add) {
+        plotTracks(...);
+      }
+    }
+    startKey <- "start";
+    endKey <- "end";
+  } else {
+    throw("Non-supported segmentation result: ", class(fit)[1]);
+  }
+
+
   # Setup panels  
   if (!is.null(nrow) && !is.null(nrow)) {
     subplots(nrow*ncol, nrow=nrow, ncol=ncol, byrow=byrow);
@@ -37,7 +61,7 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
     fit <- this[[kk]];
     msg <- sprintf("Number of segments: %s", nbrOfSegments(fit));
 
-    plotTracks2(fit, ..., cex=cex, changepoints=changepoints, xScale=xScale);
+    plotFcn(fit, ..., cex=cex, changepoints=changepoints, xScale=xScale);
 
     if (kk < nbrOfGenerations) {
       fitN <- this[[kk+1]];
@@ -56,7 +80,7 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
           if (changepoints) {
             dropped <- extractRegions(fit, regions=fitN$atomicIslands);
             segs <- getSegments(dropped, splitters=TRUE);
-            x <- segs$tcnStart;
+            x <- segs[[startKey]];
             x <- x * xScale;
             abline(v=x, lwd=1, col=col);
             verbose && cat(verbose, "Change-point locations:");
@@ -78,17 +102,17 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
           verbose && cat(verbose, "Segments:");
 
           for (fd in dropped) { 
-            plotTracks2(fd, ..., col=col, cex=2*cex, xScale=xScale, 
+            plotFcn(fd, ..., col=col, cex=2*cex, xScale=xScale, 
                        changepoints=FALSE, add=TRUE);
           }
   
           # Highlight segments means again
-##          plotTracks2(fit, ..., changepoints=FALSE, xScale=xScale, add=TRUE);
+##          plotFcn(fit, ..., changepoints=FALSE, xScale=xScale, add=TRUE);
 
           if (changepoints) {
             x <- sapply(dropped, FUN=function(fd) {
               segs <- getSegments(fd, splitters=TRUE);
-              c(segs$tcnStart[1], segs$tcnEnd[nrow(segs)]);
+              c(segs[[startKey]][1], segs[[endKey]][nrow(segs)]);
             });
             x <- t(x);
             colnames(x) <- c("blockStart", "blockEnd");
@@ -123,6 +147,9 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
 
 ############################################################################
 # HISTORY:
+# 2012-06-05 [HB]
+# o Now plotTracks() for PruneCNA supports CBS segmentation results
+#   in additional to PairedPSCBS ones.
 # 2011-07-10 [HB]
 # o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2011-01-19

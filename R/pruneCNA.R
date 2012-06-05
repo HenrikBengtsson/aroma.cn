@@ -1,4 +1,12 @@
-setMethodS3("pruneCNA", "PairedPSCBS", function(fit, ..., maxGeneration=Inf, onAtomicIsland=NULL, verbose=FALSE) {
+# \section{Required method implementations}{
+#  In order for this method to work, the following methods need to be
+#  implemented for the class of argument \code{fit}:
+#  \itemize{
+#   \item \code{findAtomicAberrations()}
+#   \item \code{mergeTwoSegments()}
+#  }
+# }
+setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onAtomicIsland=NULL, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -125,12 +133,14 @@ setMethodS3("pruneCNA", "PairedPSCBS", function(fit, ..., maxGeneration=Inf, onA
   class(fitList) <- c("PruneCNA", class(fitList));
 
   fitList;
-})
+}) # prunceCNA()
 
 
 
 ############################################################################
 # HISTORY:
+# 2012-06-05
+# o Now pruneCNA() is for AbstractCBS, not just PairedPSCBS objects.
 # 2011-01-18
 # o Added class 'PruneCNA' to the return object of pruneCNA().
 # o Now pruneCNA() returns pruned objects with the dropped segments 

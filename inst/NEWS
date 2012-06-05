@@ -1,6 +1,17 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.0 [2012-06-05]
+o Adopted findAtomicAberrations() for CBS from ditto of PairedPSCBS.
+o GENERALIZATION: Now plotTracks() for PruneCNA supports CBS 
+  segmentation results in additional to PairedPSCBS ones.
+o GENERALIZATION: Now pruneCNA() is implemented for AbstractCBS,
+  not just PairedPSCBS objects.
+o Merged updates for findAtomicAberrations() for PairedPSCBS and
+  some additional internal "equality" test functions.
+o Updated package dependencies.
+
+
 Version: 1.1.1 [2012-04-16]
 o Updated package dependencies.
 

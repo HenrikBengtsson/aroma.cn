@@ -1,4 +1,14 @@
-setMethodS3("findAtomicAberrations", "PairedPSCBS", function(this, H=1, alpha=0.02, flavor=c("mean(tcn)", "t(tcn)", "mean(c1,c2)", "t(c1)|t(c2)", "chisq(c1,c2)"), minNbrOfLoci=3, verbose=FALSE, ...) {
+setMethodS3("findAtomicAberrations", "CBS", function(this, H=1, alpha=0.02, flavor=c("mean(tcn)", "t(tcn)"), minNbrOfLoci=3, verbose=FALSE, ...) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Local functions
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  extractLocusLevelTCN <- function(fit, ...) {
+    data <- getLocusData(fit);
+    C <- data$y;
+    C;
+  } # extractLocusLevelTCN()
+ 
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -49,17 +59,6 @@ setMethodS3("findAtomicAberrations", "PairedPSCBS", function(this, H=1, alpha=0.
       }
       C;
     } # extractSignals()
-  } else if (is.element(flavor, c("mean(c1,c2)", "t(c1)|t(c2)", "chisq(c1,c2)"))) {
-    extractSignals <- function(..., na.rm=TRUE) {
-      data <- extractLocusLevelC1C2(...);  
-      # Drop missing values?
-      if (na.rm) {
-        ok <- is.finite(data$C1) & is.finite(data$C2);
-        data <- data[ok,,drop=FALSE];
-      }
-      data <- as.matrix(data[,c("C1","C2")]);
-      data;
-    } # extractSignals()
   }
   verbose && exit(verbose);
 
@@ -69,15 +68,9 @@ setMethodS3("findAtomicAberrations", "PairedPSCBS", function(this, H=1, alpha=0.
     testEquality <- testEqualityTcnByMean;
   } else if (flavor == "t(tcn)") {
     testEquality <- testEqualityTcnByT;
-  } else if (flavor == "mean(c1,c2)") {
-    testEquality <- testEqualityC1C2ByMean;
-  } else if (flavor == "t(c1)|t(c2)") {
-    testEquality <- testEqualityC1orC2ByT;
-  } else if (flavor == "chisq(c1,c2)") {
-    testEquality <- testEqualityC1C2ByChiSq;
   }
   verbose && exit(verbose);
-
+ 
 
   verbose && enter(verbose, "Call equivalent copy-number states by pruning");
 
@@ -106,7 +99,7 @@ setMethodS3("findAtomicAberrations", "PairedPSCBS", function(this, H=1, alpha=0.
     verbose && enter(verbose, "Extracting signals");
     dataL <- extractSignals(fitL);
     dataR <- extractSignals(fitR);
-    nL <- nrow(as.matrix(dataL));
+ nL <- nrow(as.matrix(dataL));
     nR <- nrow(as.matrix(dataR));
     verbose && cat(verbose, "dataL:");
     verbose && str(verbose, dataL);
@@ -208,19 +201,9 @@ setMethodS3("findAtomicAberrations", "PairedPSCBS", function(this, H=1, alpha=0.
 }, protected=TRUE) # findAtomicAberrations()
 
 
-
-
 ############################################################################
 # HISTORY:
-# 2011-02-06
-# o Now dealing with cases when two regions could not be compared
-#   resulting in a missing value (NA).
-# o Added  argument 'minNbrOfLoci' for specifying the minimum number
-#   of data points required in either of the two flanking regions.
-#   If fewer than this, then the two regions are considered equal
-#   (and hence merged at H=0).
-# 2011-01-12
-# o Created findAtomicAberrations() for PairedPSCBS from ditto for
-#   CopyNumberRegions currently in aroma.cn.
+# 2012-06-05
+# o Added findAtomicAberrations() for CBS from ditto for PairedPSCBS.
 # o Created.
 ############################################################################

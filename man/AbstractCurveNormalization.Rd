@@ -70,9 +70,5 @@ asThis, getChecksum, $, $<-, [[, [[<-, as.character, attach, attachLocally, clea
 
  }
 
- \section{See also}{
-   \code{\link[aroma.light]{fitPrincipalCurve}}
- }
-
  \author{Henrik Bengtsson}
 \keyword{classes}
