@@ -250,6 +250,29 @@
 \alias{nbrOfGenerations.PruneCNA}
 \alias{testEqualityC1C2ByChiSq}
 \alias{testEqualityC1orC2ByT}
+\alias{as.character.PairedPscbsModel}
+\alias{fit.PairedPscbsModel}
+\alias{getAsteriskTags.PairedPscbsModel}
+\alias{getChipType.PairedPscbsModel}
+\alias{getChromosomes.PairedPscbsModel}
+\alias{getDataSets.PairedPscbsModel}
+\alias{getFitFunction.PairedPscbsModel}
+\alias{getFullName.PairedPscbsModel}
+\alias{getName.PairedPscbsModel}
+\alias{getNormalDataSet.PairedPscbsModel}
+\alias{getOptionalArguments.PairedPscbsModel}
+\alias{getParameters.PairedPscbsModel}
+\alias{getParametersAsString.PairedPscbsModel}
+\alias{getPath.PairedPscbsModel}
+\alias{getRandomSeed.PairedPscbsModel}
+\alias{getRootPath.PairedPscbsModel}
+\alias{getTags.PairedPscbsModel}
+\alias{getTumorDataSet}
+\alias{getTumorDataSet.PairedPscbsModel}
+\alias{indexOf.PairedPscbsModel}
+\alias{nbrOfFiles.PairedPscbsModel}
+\alias{setRandomSeed.PairedPscbsModel}
+\alias{setTags.PairedPscbsModel}
 
 \description{
   This page contains aliases for all "non-documented" objects that

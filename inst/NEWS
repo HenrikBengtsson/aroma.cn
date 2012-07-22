@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.1 [2012-07-22]
+o Added trial version of PairedPscbsModel.
+
+
 Version: 1.2.0 [2012-06-05]
 o Adopted findAtomicAberrations() for CBS from ditto of PairedPSCBS.
 o GENERALIZATION: Now plotTracks() for PruneCNA supports CBS 

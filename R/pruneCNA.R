@@ -44,6 +44,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
       verbose && enter(verbose, sprintf("Block size H=%d of %d", hh, maxH));
     
       res <- findAtomicAberrations(fitT, H=hh, ..., verbose=verbose);
+      verbose && str(verbose, res);
     
       # (i) Atomic islands?
       if (hh == 0) {
@@ -51,9 +52,28 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
       } else {
         atomicIslands <- res$atomicIslands;
       }
+
       if (length(atomicIslands) > 0) {
         verbose && printf(verbose, "Atomic islands found (H=%d):\n", hh);
         verbose && print(verbose, atomicIslands);
+
+        # Overlapping atomic islands?
+        if (length(atomicIslands) > 1) {
+          regionsHH <- matrix(c(atomicIslands, atomicIslands+hh), ncol=2L, byrow=FALSE);
+          colnames(regionsHH) <- c("from", "to");
+          rownames(regionsHH) <- sprintf("Atomic island #%d", seq(along=atomicIslands));
+          verbose && print(verbose, regionsHH);
+
+          froms <- regionsHH[-1,"from"];
+          tos <- regionsHH[-length(atomicIslands),"to"];
+          isOverlapping <- (froms <= tos);
+          verbose && printf(verbose, "Overlapping: %s\n", any(isOverlapping));
+
+          if (any(isOverlapping)) {
+            verbose && cat(verbose, "Overlapping atomic islands. Dropping only the first.");
+            atomicIslands <- atomicIslands[1];
+          }
+        }
     
         # Drop atomic islands and merge flanking segments
         dropList <- list();
@@ -99,7 +119,6 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
           # Sanity check
           stopifnot(n0-n1 == hh+1);
 
-
           fitT <- fitTT;
 
           verbose && exit(verbose);
@@ -115,8 +134,8 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
     
         # Go to next generation
         break;
-      }
-    
+      } # if (length(atomicIslands) > 0)
+
       verbose && exit(verbose);
     } # for (hh ...)
   
