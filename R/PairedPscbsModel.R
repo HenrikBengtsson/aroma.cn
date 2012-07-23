@@ -513,6 +513,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
       args <- c(args, list(...), list(verbose=less(verbose, 1)));
       tFit <- processTime();
       fit <- do.call("fitFcn", args);
+      fit <- setSampleName(fit, arrayName);
       verbose && str(verbose, fit);
       timers$fit <- timers$fit + (processTime() - tFit);
       # Not needed anymore
@@ -546,7 +547,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
         t <- totalTime[3];
         printf(verbose, "Total time: %.2fs == %.2fmin\n", t, t/60);
         t <- totalTime[3]/nbrOfLoci;
-        printf(verbose, "Total time per 1000 locus (with %d loci): %.2fs/locus\n", nbrOfLoci, 1000*t);
+        printf(verbose, "Total time per 1000 locus (with %d loci): %.2fs\n", nbrOfLoci, 1000*t);
         # Get distribution of what is spend where
         t <- base::lapply(timers, FUN=function(timer) unname(timer[3]));
         t <- unlist(t);
