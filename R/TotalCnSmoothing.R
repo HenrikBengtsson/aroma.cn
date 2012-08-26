@@ -234,7 +234,7 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
     verbose && print(verbose, df);
 
     # Preallocate vector
-    M <- rep(as.double(NA), nbrOfUnits);
+    M <- rep(as.double(NA), times=nbrOfUnits);
 
     verbose && enter(verbose, "Reading and smoothing input data");
     for (cc in seq(along=targetList)) {

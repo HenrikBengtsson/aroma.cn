@@ -42,6 +42,14 @@ extends \emph{\link[aroma.cn]{TotalCnSmoothing}}\cr
   \item{robust}{If \code{\link[base:logical]{TRUE}}, a robust smoother is used, otherwise not.}
  }
 
+ \details{
+  Note that \code{dsS <- TotalCnBinnedSmoothing(ds, targetUgp=ugp)} where
+  \code{ugp <- getAromaUgpFile(ds)} returns a data set with an identical
+  set of loci as the input data set and identical signals as the
+  input ones, \emph{except} for loci with duplicated positions.  If all
+  loci have unique positions, the the output is identical to the input.
+ }
+
  \section{Fields and Methods}{
   \bold{Methods:}\cr
 \emph{No methods defined}.

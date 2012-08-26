@@ -15,6 +15,14 @@
 #  \item{robust}{If @TRUE, a robust smoother is used, otherwise not.}
 # }
 #
+# \details{
+#  Note that \code{dsS <- TotalCnBinnedSmoothing(ds, targetUgp=ugp)} where
+#  \code{ugp <- getAromaUgpFile(ds)} returns a data set with an identical
+#  set of loci as the input data set and identical signals as the
+#  input ones, \emph{except} for loci with duplicated positions.  If all
+#  loci have unique positions, the the output is identical to the input.
+# }
+#
 # \section{Fields and Methods}{
 #  @allmethods "public"
 # }
@@ -100,6 +108,9 @@ setMethodS3("smoothRawCopyNumbers", "TotalCnBinnedSmoothing", function(this, raw
 
 ############################################################################
 # HISTORY:
+# 2012-08-26
+# o DOCUMENTATION: Added a help section on binning with target loci being
+#   identical to the input loci.
 # 2012-01-16
 # o Created from TotalCnKernelSmoothing.R.
 ############################################################################
