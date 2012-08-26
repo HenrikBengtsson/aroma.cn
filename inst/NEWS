@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.2 [2012-08-25]
+o Bumped up the package dependencies.
+
+
 Version: 1.2.1 [2012-07-22]
 o Added trial version of PairedPscbsModel.
 
