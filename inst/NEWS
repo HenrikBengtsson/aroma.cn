@@ -3,6 +3,7 @@ Package: aroma.cn
 
 Version: 1.2.2 [2012-08-26]
 o Bumped up the package dependencies.
+o DOCUMENTATION: Improved help on TotalCnBinnedSmoothing.
 
 
 Version: 1.2.1 [2012-07-22]
