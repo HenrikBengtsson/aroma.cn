@@ -438,7 +438,12 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
     tagsT <- paste(tagsT, collapse="-");
     tagsN <- paste(tagsN, collapse="-");
     pairTags <- paste(c(tagsT, tagsN), collapse="_vs_");
+    pairTags <- c("TvsN", pairTags);
     fullname <- paste(c(pairName, pairTags), collapse=",");
+
+    verbose && cat(verbose, "Tags: ", pairTags);
+    verbose && cat(verbose, "Fullname: ", fullname);
+
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Get pathname
