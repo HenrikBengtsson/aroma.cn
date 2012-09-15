@@ -1,6 +1,13 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.4 [2012-09-15]
+o Now fit() for PairedPscbsModel generates pair names iff tumor and
+  normal names don't match, e.g. 'GSM517071_vs_GSM517072' (if match
+  then just 'Patient1').  It also generated "pair" tags.
+o Bumped up the package dependencies.
+
+
 Version: 1.2.3 [2012-09-05]
 o Bumped up the package dependencies.
 

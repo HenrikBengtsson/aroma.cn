@@ -401,8 +401,6 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
   verbose && cat(verbose, "Data sets:");
   verbose && print(verbose, dsList);
 
-  sampleNames <- getNames(dsList$tumor);
-
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract annotation data
@@ -416,21 +414,36 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
   # Array by array
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   res <- list();
-  arrayNames <- sampleNames[arrays];
-  nbrOfArrays <- length(arrayNames);
+  nbrOfArrays <- length(arrays);
   for (aa in seq(length=nbrOfArrays)) {
     array <- arrays[aa];
-    arrayName <- arrayNames[aa];
+
+    # The tumor and normal data files
+    dfT <- getFile(dsList$tumor, array);
+    dfN <- getFile(dsList$normal, array);
+
+    names <- c(T=getName(dfT), N=getName(dfN));
+    pairName <- paste(unique(names), collapse="_vs_");
 
     verbose && enter(verbose, sprintf("Array #%d ('%s') of %d", 
-                                                aa, arrayName, nbrOfArrays));
+                                                aa, pairName, nbrOfArrays));
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    # Generate fullname
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    # Paired tags
+    # Generate pair tags (e.g. "abc_vs_def")
+    tagsT <- setdiff(getTags(dfT), c("pscn", "T", "N"));
+    tagsN <- setdiff(getTags(dfN), c("pscn", "T", "N"));
+    tagsT <- paste(tagsT, collapse="-");
+    tagsN <- paste(tagsN, collapse="-");
+    pairTags <- paste(c(tagsT, tagsN), collapse="_vs_");
+    fullname <- paste(c(pairName, pairTags), collapse=",");
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Get pathname
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    tags <- NULL;
-    fullname <- fullname(arrayName, tags=tags);
-    filename <- sprintf("%s.xdr", fullname);
+    filename <- sprintf("%s,PairedPSCBS.xdr", fullname);
     pathname <- filePath(path, filename);
 
     # Already done?
@@ -450,8 +463,6 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
       # Extract the tumor-normal data
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       verbose && enter(verbose, "Extracting tumor-normal data");
-      dfT <- getFile(dsList$tumor, array);
-      dfN <- getFile(dsList$normal, array);
   
       tRead <- processTime();
       dataT <- readDataFrame(dfT, verbose=less(verbose,50));
@@ -513,7 +524,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
       args <- c(args, list(...), list(verbose=less(verbose, 1)));
       tFit <- processTime();
       fit <- do.call("fitFcn", args);
-      fit <- setSampleName(fit, arrayName);
+      fit <- setSampleName(fit, pairName);
       verbose && str(verbose, fit);
       timers$fit <- timers$fit + (processTime() - tFit);
       # Not needed anymore
@@ -562,7 +573,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
     verbose && exit(verbose);
 
     if (.retResults) {
-      res[[arrayName]] <- fit;
+      res[[pairName]] <- fit;
       rm(fit);
     }  
 
@@ -575,6 +586,10 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 
 ############################################################################
 # HISTORY:
+# 2012-09-15
+# o Now fit() for PairedPscbsModel generates pair names iff tumor and
+#   normal names don't match, e.g. 'GSM517071_vs_GSM517072' (if match
+#   then just 'Patient1').  It also generated "pair" tags.
 # 2012-07-22
 # o fit() seems to work now.
 # o Now utilizing the new AromaUnitPscnBinarySet class.
