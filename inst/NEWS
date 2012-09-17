@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.5 [2012-09-16]
+o Added calculateTumorPSCNByGenotype().
+
+
 Version: 1.2.4 [2012-09-15]
 o Now fit() for PairedPscbsModel generates pair names iff tumor and
   normal names don't match, e.g. 'GSM517071_vs_GSM517072' (if match
