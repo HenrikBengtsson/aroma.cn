@@ -148,3 +148,8 @@ getTags.PairedPscbsModel getTumorDataSet
 getTumorDataSet.PairedPscbsModel indexOf.PairedPscbsModel
 nbrOfFiles.PairedPscbsModel setRandomSeed.PairedPscbsModel
 setTags.PairedPscbsModel
+calculatePairedPSCNByGenotype
+calculatePairedPSCNByGenotype.data.frame
+calculatePairedPSCNByGenotype.numeric
+calculateTumorPSCNByGenotypeUsingCTCN
+calculateTumorPSCNByGenotypeUsingCTCN.numeric

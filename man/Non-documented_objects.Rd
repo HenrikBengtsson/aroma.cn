@@ -273,6 +273,11 @@
 \alias{nbrOfFiles.PairedPscbsModel}
 \alias{setRandomSeed.PairedPscbsModel}
 \alias{setTags.PairedPscbsModel}
+\alias{calculatePairedPSCNByGenotype}
+\alias{calculatePairedPSCNByGenotype.data.frame}
+\alias{calculatePairedPSCNByGenotype.numeric}
+\alias{calculateTumorPSCNByGenotypeUsingCTCN}
+\alias{calculateTumorPSCNByGenotypeUsingCTCN.numeric}
 
 \description{
   This page contains aliases for all "non-documented" objects that
