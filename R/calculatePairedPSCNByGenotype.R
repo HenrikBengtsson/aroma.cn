@@ -12,6 +12,7 @@
 ##
 ## data <- calculatePairedPSCNByGenotype(pscnT, pscnN);
 ## fit <- segmentByPairedPSCBS(data, tbn=FALSE);
+## fit <- callROH(fit);
 ##
 setMethodS3("calculatePairedPSCNByGenotype", "numeric", function(thetaT, betaT, thetaN, betaN, muN=callNaiveGenotypes(betaN, ...), flavor=c("v1"), ...) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -87,10 +88,10 @@ setMethodS3("calculatePairedPSCNByGenotype", "numeric", function(thetaT, betaT, 
 
   # Transform to (thetaA, thetaB) for tumors and normals (only for SNPs)
   thetaTB <- thetaT * betaT;
-  thetaTA <- thetaT - thetaTA;
+  thetaTA <- thetaT - thetaTB;
 
   thetaNB <- thetaN * betaN;
-  thetaNA <- thetaN - thetaNA;
+  thetaNA <- thetaN - thetaNB;
 
   # Identify genotypes
   isAA <- (muN == 0);
