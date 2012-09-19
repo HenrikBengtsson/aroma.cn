@@ -11,7 +11,7 @@
 # @synopsis
 #
 # \arguments{
-#   \item{fit}{A PairedPSCBS fit object as returned by 
+#   \item{fit}{A PairedPSCBS fit object as returned by
 #     @see "PSCBS::segmentByPairedPSCBS".}
 #   \item{adjust}{A @numeric adjusting the bandwidth of the empirical
 #     density estimator of line (changepoint) directions.}
@@ -31,10 +31,10 @@
 #
 # @keyword internal
 #*/###########################################################################
-setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE) {
+setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'dirs':
   dirs <- match.arg(dirs);
 
@@ -72,7 +72,7 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "
   verbose && exit(verbose);
 
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   segs <- getSegments(fit, splitters=FALSE);
@@ -88,11 +88,13 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "
   C1C2 <- X[,1:2, drop=FALSE];
 
 
-  verbose && enter(verbose, "Remove shearing from the (C1,C2) space by independent linear adjustment in x and y");
+  verbose && enter(verbose, "Remove shearing from the (C1,C2) space by linear adjustment in x and y");
 
   ## Backtransform
-  if (dirs == "|-") {
+  if (dirs == "|_") {
     H <- modelFit$H;
+  } else if (dirs == "|-") {
+    H <- modelFit$Hxy;
   } else if (dirs == "-") {
     H <- modelFit$Hx;
   } else if (dirs == "|") {
@@ -121,9 +123,9 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "
   # Update data [TO DO]
 
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Return results
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   fitO <- fit;
   fitO$output <- segs;
   fitO$modelFit <- modelFit;
@@ -138,7 +140,7 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|-", "-", "
 setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, sC2=1, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   dC1 <- Arguments$getNumeric(dC1);
   dC2 <- Arguments$getNumeric(dC2);
   sC1 <- Arguments$getNumeric(sC1);
@@ -158,7 +160,7 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, s
   verbose && cat(verbose, "dC1: ", dC1);
   verbose && cat(verbose, "dC2: ", dC2);
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   segs <- getSegments(fit, splitters=FALSE);
@@ -188,9 +190,9 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, s
   segs[,"c1Mean"] <- C1C2[,1];
   segs[,"c2Mean"] <- C1C2[,2];
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Return results
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   fitO <- fit;
   fitO$output <- segs;
 
@@ -204,7 +206,7 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, s
 setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'fcn':
   stopifnot(is.function(fcn));
 
@@ -218,7 +220,7 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
 
   verbose && enter(verbose, "Transform (C1,C2) by a function");
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   segs <- getSegments(fit, splitters=FALSE);
@@ -247,9 +249,9 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
   segs[,"c1Mean"] <- C1C2[,1];
   segs[,"c2Mean"] <- C1C2[,2];
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Return results
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   fitO <- fit;
   fitO$output <- segs;
 
@@ -263,7 +265,7 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
 setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), weightFlavor=c("min", "sum"), dropABChangePoints=TRUE, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'adjust':
   adjust <- Arguments$getDouble(adjust, range=c(0,Inf));
 
@@ -273,7 +275,7 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
   # Argument 'weightFlavor':
   weightFlavor <- match.arg(weightFlavor);
 
-  # Argument 'dropABChangePoints':  
+  # Argument 'dropABChangePoints':
   dropABChangePoints <- Arguments$getLogical(dropABChangePoints);
 
   # Argument 'verbose':
@@ -286,7 +288,7 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
 
   verbose && enter(verbose, "Fitting (C1,C2) shear model by (dC1,dC2)");
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   segs <- getSegments(fit, splitter=FALSE);
@@ -312,7 +314,7 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
 
   ## Change-point weights
   if (weightFlavor == "min") {
-    ## smallest of the two flanking (DH) counts 
+    ## smallest of the two flanking (DH) counts
     w <- cbind(w[1:(length(w)-1)], w[2:length(w)]);
     w <- rowMins(w, na.rm=TRUE);
     w[is.infinite(w)] <- NA;
@@ -323,7 +325,7 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
   }
 
   # Ignore change points between segments in allelic balance
-  # by giving the zero weights.
+  # by giving them zero weight.
   if (dropABChangePoints) {
     abCall <- segs$abCall;
     if (!is.null(abCall)) {
@@ -351,7 +353,7 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
 setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'X':
   dim <- dim(X);
   if (dim[2] != 2) {
@@ -362,7 +364,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   # Argument 'weights':
   length2 <- rep(J-1L, times=2);
   if (!is.null(weights)) {
-    weights <- Arguments$getDoubles(weights, range=c(0,Inf), 
+    weights <- Arguments$getDoubles(weights, range=c(0,Inf),
                                        length=length2, disallow=NULL);
   }
 
@@ -371,7 +373,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
 
   # Argument 'flavor':
   flavor <- match.arg(flavor);
-  
+
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
   if (verbose) {
@@ -399,9 +401,9 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   verbose && exit(verbose);
 
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Dropping non-finite signals
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Dropping non-finite signals");
   # Keep only finite data points
   ok <- (is.finite(radius) & is.finite(alpha) & is.finite(weights));
@@ -419,9 +421,9 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   verbose && exit(verbose);
 
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Adjust modes in {alpha} to their expect locations
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Shift, modulo pi/8:th, and unshift");
   ## The signal is pi-periodic.
   ## we are looking at from -pi/2 to pi/2.
@@ -435,9 +437,9 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   alphaT[ww] <- alphaT[ww]-pi;
   verbose && exit(verbose);
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Find modes
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Finding modes (peaks & valleys)");
   rg <- c(-pi/2,pi/2)-pi/8;
   d <- density(alphaT, weights=weights, from=rg[1], to=rg[2], adjust=adjust);
@@ -457,11 +459,13 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   verbose && exit(verbose);
 
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Call modes
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Calling modes");
-  expected <- c("-"=-1/2, "\\"=-1/4, "|"=0, "/"=+1/4, "-"=+1/2)*pi;
+  ## expected <- c("-"=-1/2, "\\"=-1/4, "|"=0, "/"=+1/4, "-"=+1/2)*pi;
+  expected <- c("-"=-1/2, "\\"=-1/4, "|"=0, "/"=+1/4)*pi;
+  ## after the above 'angle lag' trick we don't expect anything near +pi/2
 
   verbose && cat(verbose, "Expected locations of peaks:");
   verbose && print(verbose, expected);
@@ -481,9 +485,9 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     text(x=pfp$x, y=pfp$density, names(expected)[idxs], adj=c(0.5, -0.5), cex=1, col="blue");
   }
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Estimate (x,y) shear model
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Estimate (x,y) shear model");
   ## Use -pi/2 and 0 to correct for shearing
 
@@ -496,14 +500,13 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     throw(sprintf("Cannot fit vertical shear parameter. No lines where called to horizontal (angle=-pi/2=%f).", -pi/2));
   }
   # Shear parameter
-  tX <- pfpT$x;
-#  residual <- (pfpT$x - -pi/2);
-#  tX <- pi - residual;
+  phiX <- -(pfpT$x - pfpT$call);
   # Sanity checks
-  stopifnot(is.finite(tX));
+  stopifnot(is.finite(phiX));
   # Shear parameter
-  sx <- tan(tX+pi/2);
+  sx <- tan(phiX);
   stopifnot(is.finite(sx));
+  pfpTV <- pfpT;
 
   # (b) Horizontal shear (based on vertical information)
   pfpT <- subset(pfp, call == 0);
@@ -514,14 +517,13 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     throw("Cannot fit horizontal shear parameter. No lines where called to vertical (angle=0).");
   }
   # Shear parameter
-  tY <- pi/2 - pfpT$x;
-#  residual <- (pfpT$x - 0);
-#  tY <- pi - residual;
+  phiY <- pfpT$x-pfpT$call;
   # Sanity checks
-  stopifnot(is.finite(tY));
+  stopifnot(is.finite(phiY));
   # Shear parameter
-  sy <- tan(tY+pi/2);
+  sy <- tan(phiY);
   stopifnot(is.finite(sy));
+  pfpTH <- pfpT;
 
   # (c) Vertical scale (based on diagonal information)
   pfpT <- subset(pfp, call %in% c(-pi/4, +pi/4));
@@ -542,7 +544,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     verbose && print(verbose, scaleY);
     scaleY <- weighted.mean(scaleY, w=pfpT$density);
     verbose && print(verbose, scaleY);
-  
+
     # Preserve (dx^2 + dy^2) before and after
     scale <- 1/sqrt(1+sx^2);
 
@@ -558,37 +560,52 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
       xy;
     } # Hd()
   }
-  
-  # Create backtransform function
-  H <- function(xy) {
-    cbind(xy[, 1]+xy[, 2]*sx, xy[, 1]*sy + xy[, 2]);
-  } # H()
 
+  ## (d) Horizontal and vertical shear (forcing the estimates to be the same)
+  verbose && cat(verbose, "Horizontal and Vertical peaks:");
+  verbose && print(verbose, rbind(pfpTH, pfpTV));
+  # (Sanity checks have already been done above)
+  # Shear parameter
+  wX <- pfpTH$density;
+  wY <- pfpTV$density;
+  phiXY <- weighted.mean(c(phiX, phiY), w=c(wX, wY))
+  ## check 'pi' ajdustment
+
+  # Sanity checks
+  stopifnot(is.finite(phiXY));
+  # Shear parameter
+  sxy <- tan(phiXY);
+  stopifnot(is.finite(sxy));
+
+  # Create backtransform function
+  Hxy <- function(xy) {
+    cbind(xy[, 1] - sx*xy[, 2], xy[, 2] - sy*xy[, 1]);
+  } # Hxy()
 
   Hx <- function(xy) {
-    cbind(xy[, 1]+xy[, 2]*sx, xy[, 2]);
+    cbind(xy[, 1] - sx*xy[, 2], xy[, 2]);
   } # Hx()
 
   Hy <- function(xy) {
-    cbind(xy[, 1], xy[, 1]*sy + xy[, 2]);
+    cbind(xy[, 1], xy[, 2] - sy*xy[, 1]);
   } # Hy()
 
-
-  # Alternative?!?
-  T <- matrix(c(1,sx, sy,1), nrow=2, ncol=2, byrow=FALSE);
-  H2 <- function(xy) {
-    xy <- as.matrix(xy);
-    xy %*% t(T);
-  } # H2()
+  H <- function(xy) {
+    x <- xy[, 1];
+    y <- xy[, 2];
+    sf <- 1-sxy;
+    cbind(x - sxy*y, y - sxy*x)/sf;
+  } # H()
 
   verbose && cat(verbose, "Model fit:");
-  modelFit <- list(H=H, Hx=Hx, Hy=Hy, Hd=Hd, parameters=c(sx=sx, sy=sy, scaleY=scaleY, scale=scale, tX=tX, tY=tY), debug=list(pfp=pfp));
+  modelFit <- list(H=H, Hx=Hx, Hy=Hy, Hxy=Hxy, Hd=Hd, parameters=c(sx=sx, sy=sy, sxy=sxy, scaleY=scaleY, scale=scale, phiX=phiX, phiY=phiY, phiXY=phiXY), debug=list(pfp=pfp));
   verbose && str(verbose, modelFit);
 
   # Sanity checks
   range <- c(-3,3);
   sx <- Arguments$getDouble(sx, range=range);
   sy <- Arguments$getDouble(sy, range=range);
+  sxy <- Arguments$getDouble(sxy, range=range);
 
   # Not needed anymore
   rm(pfpT);
@@ -618,7 +635,7 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
   C1 <- 1/2 * (1 - rho) * gamma;
   C2 <- gamma - C1;
 
-  # Calculate bias in C2 
+  # Calculate bias in C2
   dC2 <- C2 - C1;
 
   # Calculate weighted average of all C2 biases
@@ -633,6 +650,9 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 ##############################################################################
 # HISTORY
+# 2012-09-19 [PN]
+# o Added direction '|_': similar to '|-' but enforces equal amount of
+#   de-shearing in both dimensions and does not change TCN.
 # 2011-10-17 [HB]
 # o Added argument 'dropABChangePoints' to fitDeltaC1C2ShearModel().
 # 2011-10-16 [HB]

@@ -7,13 +7,13 @@
 # \description{
 #   @get "title" to a set of known state.
 # }
-# 
+#
 # @synopsis
 #
 # \arguments{
 #  \item{fit}{A KxC @data.frame of peaks-and-valley estimates.}
 #  \item{expected}{The expected locations of the peaks to be called.}
-#  \item{flavor}{A @character string specifying what flavor of the 
+#  \item{flavor}{A @character string specifying what flavor of the
 #    caller to use.}
 #  \item{verbose}{A @logical or a @see "R.utils::Verbose" object.}
 #  \item{...}{Not used.}
@@ -37,11 +37,11 @@
 #   To get peaks-and-valley estimates, use
 #   @see "aroma.light::findPeaksAndValleys".
 # }
-#*/###########################################################################  
+#*/###########################################################################
 setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0,+1/4,+1/2)*pi, flavor=c("decreasing", "all"), verbose=FALSE, ...) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'fit';
   stopifnot(all(is.element(c("type", "x", "density"), colnames(fit))));
 
@@ -73,9 +73,9 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
 
 
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Calling peaks
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   xd <- fitP[,c("x", "density"),drop=FALSE];
 
   if (flavor == "all") {
@@ -83,6 +83,7 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
       dist <- abs(x - expected);
       which.min(dist);
     });
+    r <- seq(along=calls); ## default ranks (used below)
   } else if (flavor == "decreasing") {
     # It is probably better to call the strongest peaks first for which
     # we have more confidence, and then call the other relative to those.
@@ -148,6 +149,8 @@ setMethodS3("callPeaks", "data.frame", function(fit, ...) {
 
 ##############################################################################
 # HISTORY
+# 2012-09-18 [PN]
+# o BUG FIX: callPeaks() would return an error when used with flavor "all".
 # 2011-10-31 [HB]
 # o Added Rdoc comments to callPeaks() for PeaksAndValleys.
 # o CLEANUP: Deprecated callPeaks() for data.frame.
