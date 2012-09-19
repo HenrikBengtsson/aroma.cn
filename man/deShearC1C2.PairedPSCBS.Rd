@@ -20,7 +20,7 @@
  Correct for shearing in (C1,C2) space based on region-based PSCN estimates as given by the PSCBS segmentation method.
 }
 
-\usage{\method{deShearC1C2}{PairedPSCBS}(fit, ..., dirs=c("|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE)}
+\usage{\method{deShearC1C2}{PairedPSCBS}(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE)}
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by

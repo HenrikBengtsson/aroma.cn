@@ -153,3 +153,7 @@ calculatePairedPSCNByGenotype.data.frame
 calculatePairedPSCNByGenotype.numeric
 calculateTumorPSCNByGenotypeUsingCTCN
 calculateTumorPSCNByGenotypeUsingCTCN.numeric
+PairedPscbsCaller getAsteriskTags.PairedPscbsCaller
+getParameters.PairedPscbsCaller getPath.PairedPscbsCaller
+getPlatform.PairedPscbsCaller getRootPath.PairedPscbsCaller
+process.PairedPscbsCaller

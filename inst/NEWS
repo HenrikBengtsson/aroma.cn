@@ -1,6 +1,13 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.6 [2012-09-19]
+o Added trial version of PairedPscbsCaller.
+o Additional internal updates.
+o BUG FIX: callPeaks(..., flavor="all") for PeaksAndValleys would
+  return an error.
+
+
 Version: 1.2.5 [2012-09-16]
 o Added calculateTumorPSCNByGenotype().
 

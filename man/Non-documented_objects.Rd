@@ -278,6 +278,13 @@
 \alias{calculatePairedPSCNByGenotype.numeric}
 \alias{calculateTumorPSCNByGenotypeUsingCTCN}
 \alias{calculateTumorPSCNByGenotypeUsingCTCN.numeric}
+\alias{PairedPscbsCaller}
+\alias{getAsteriskTags.PairedPscbsCaller}
+\alias{getParameters.PairedPscbsCaller}
+\alias{getPath.PairedPscbsCaller}
+\alias{getPlatform.PairedPscbsCaller}
+\alias{getRootPath.PairedPscbsCaller}
+\alias{process.PairedPscbsCaller}
 
 \description{
   This page contains aliases for all "non-documented" objects that
