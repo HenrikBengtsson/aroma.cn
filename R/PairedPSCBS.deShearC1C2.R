@@ -476,7 +476,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   verbose && print(verbose, pfp);
   verbose && exit(verbose);
 
-  if (TRUE) {
+  if (FALSE) {
     devSet(sprintf("d,%s", digest(d)));
     plot(d, lwd=2);
     abline(v=expected);
@@ -559,7 +559,9 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
       xy[,2] <- y;
       xy;
     } # Hd()
-    environment(Hd) <- env({ scaleY <- scaleY; });
+    env <- new.env(parent=baseenv());
+    env$scaleY <- scaleY;
+    environment(Hd) <- env;
   }
 
   ## (d) Horizontal and vertical shear (forcing the estimates to be the same)
@@ -582,17 +584,24 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   Hxy <- function(xy) {
     cbind(xy[, 1] - sx*xy[, 2], xy[, 2] - sy*xy[, 1]);
   } # Hxy()
-  environment(Hxy) <- env({ sx <- sx; sy <- sy; });
+  env <- new.env(parent=baseenv());
+  env$sx <- sx;
+  env$sy <- sy;
+  environment(Hxy) <- env;
 
   Hx <- function(xy) {
     cbind(xy[, 1] - sx*xy[, 2], xy[, 2]);
   } # Hx()
-  environment(Hx) <- env({ sx <- sx; });
+  env <- new.env(parent=baseenv());
+  env$sx <- sx;
+  environment(Hx) <- env;
 
   Hy <- function(xy) {
     cbind(xy[, 1], xy[, 2] - sy*xy[, 1]);
   } # Hy()
-  environment(Hy) <- env({ sy <- sy; });
+  env <- new.env(parent=baseenv());
+  env$sy <- sy;
+  environment(Hy) <- env;
 
   H <- function(xy) {
     x <- xy[, 1];
@@ -600,7 +609,9 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     sf <- 1-sxy;
     cbind(x - sxy*y, y - sxy*x)/sf;
   } # H()
-  environment(H) <- env({ sxy <- sxy; });
+  env <- new.env(parent=baseenv());
+  env$sxy <- sxy;
+  environment(H) <- env;
 
   verbose && cat(verbose, "Model fit:");
   modelFit <- list(H=H, Hx=Hx, Hy=Hy, Hxy=Hxy, Hd=Hd, parameters=c(sx=sx, sy=sy, sxy=sxy, scaleY=scaleY, scale=scale, phiX=phiX, phiY=phiY, phiXY=phiXY), debug=list(pfp=pfp));
