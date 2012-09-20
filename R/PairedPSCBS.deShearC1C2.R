@@ -559,6 +559,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
       xy[,2] <- y;
       xy;
     } # Hd()
+    environment(Hd) <- env({ scaleY <- scaleY; });
   }
 
   ## (d) Horizontal and vertical shear (forcing the estimates to be the same)
@@ -581,14 +582,17 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   Hxy <- function(xy) {
     cbind(xy[, 1] - sx*xy[, 2], xy[, 2] - sy*xy[, 1]);
   } # Hxy()
+  environment(Hxy) <- env({ sx <- sx; sy <- sy; });
 
   Hx <- function(xy) {
     cbind(xy[, 1] - sx*xy[, 2], xy[, 2]);
   } # Hx()
+  environment(Hx) <- env({ sx <- sx; });
 
   Hy <- function(xy) {
     cbind(xy[, 1], xy[, 2] - sy*xy[, 1]);
   } # Hy()
+  environment(Hy) <- env({ sy <- sy; });
 
   H <- function(xy) {
     x <- xy[, 1];
@@ -596,6 +600,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     sf <- 1-sxy;
     cbind(x - sxy*y, y - sxy*x)/sf;
   } # H()
+  environment(H) <- env({ sxy <- sxy; });
 
   verbose && cat(verbose, "Model fit:");
   modelFit <- list(H=H, Hx=Hx, Hy=Hy, Hxy=Hxy, Hd=Hd, parameters=c(sx=sx, sy=sy, sxy=sxy, scaleY=scaleY, scale=scale, phiX=phiX, phiY=phiY, phiXY=phiXY), debug=list(pfp=pfp));
@@ -650,6 +655,11 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 ##############################################################################
 # HISTORY
+# 2012-09-19 [HB]
+# o MEMORY/"BUG FIX": fitDeltaXYShearModel() would return "H" deshearing
+#   functions that each would hold the very large fitDeltaXYShearModel()
+#   call environment.  Now we make sure each of those objects only
+#   contains the few scalar parameter estimates needed.
 # 2012-09-19 [PN]
 # o Added direction '|_': similar to '|-' but enforces equal amount of
 #   de-shearing in both dimensions and does not change TCN.
