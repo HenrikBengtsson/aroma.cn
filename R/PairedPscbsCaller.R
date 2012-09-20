@@ -1,4 +1,14 @@
-setConstructorS3("PairedPscbsCaller", function(dataSet=NULL, calls=c("ROH", "AB", "LOH"), ...) {
+setConstructorS3("PairedPscbsCaller", function(dataSet=NULL, ..., calls=c("ROH", "AB", "LOH")) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Load required packages
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  if (!is.null(dataSet)) {
+    require("PSCBS") || throw("Package not loaded: PSCBS");
+  }
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Argument 'dataSet':
   if (!is.null(dataSet)) {
     dataSet <- Arguments$getInstanceOf(dataSet, "PairedPSCBSFileSet");
@@ -99,7 +109,7 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE) {
   for (ii in seq(sms)) {
     smf <- getFile(sms, ii);
     sampleName <- getName(smf);
-    verbose && enter(verbose, "Tumor-normal pair #%d ('%s') of %d", ii, sampleName, length(sms));
+    verbose && enter(verbose, sprintf("Tumor-normal pair #%d ('%s') of %d", ii, sampleName, length(sms)));
   
     filename <- getFilename(smf);
     pathname <- file.path(pathD, filename);
