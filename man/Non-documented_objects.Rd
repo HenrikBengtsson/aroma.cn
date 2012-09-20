@@ -285,6 +285,11 @@
 \alias{getPlatform.PairedPscbsCaller}
 \alias{getRootPath.PairedPscbsCaller}
 \alias{process.PairedPscbsCaller}
+\alias{getOutputDataSet.PairedPscbsModel}
+\alias{loadFit.PairedPSCBSFile}
+\alias{getChipType.PairedPSCBSFileSet}
+\alias{getDefaultFullName.PairedPSCBSFileSet}
+\alias{getPlatform.PairedPSCBSFileSet}
 
 \description{
   This page contains aliases for all "non-documented" objects that

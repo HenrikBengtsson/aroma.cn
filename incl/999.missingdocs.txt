@@ -157,3 +157,7 @@ PairedPscbsCaller getAsteriskTags.PairedPscbsCaller
 getParameters.PairedPscbsCaller getPath.PairedPscbsCaller
 getPlatform.PairedPscbsCaller getRootPath.PairedPscbsCaller
 process.PairedPscbsCaller
+getOutputDataSet.PairedPscbsModel loadFit.PairedPSCBSFile
+getChipType.PairedPSCBSFileSet
+getDefaultFullName.PairedPSCBSFileSet
+getPlatform.PairedPSCBSFileSet

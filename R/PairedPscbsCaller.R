@@ -1,14 +1,14 @@
 setConstructorS3("PairedPscbsCaller", function(dataSet=NULL, calls=c("ROH", "AB", "LOH"), ...) {
   # Argument 'dataSet':
   if (!is.null(dataSet)) {
-    dataSet <- Arguments$getInstanceOf(dataSet, "GenericDataFileSet");
+    dataSet <- Arguments$getInstanceOf(dataSet, "PairedPSCBSFileSet");
   }
 
   # Argument 'calls':
   calls <- match.arg(calls, several.ok=TRUE);
 
   extend(AromaTransform(dataSet=dataSet, ...,
-               .reqSetClass="GenericDataFileSet"), "PairedPscbsCaller",
+               .reqSetClass="PairedPSCBSFileSet"), "PairedPscbsCaller",
     .calls = calls
   );
 }) # PairedPscbsCaller()

@@ -63,6 +63,7 @@ extends \link[R.oo]{Object}\cr
  \tab \code{getFullName} \tab  -\cr
  \tab \code{getName} \tab  -\cr
  \tab \code{getNormalDataSet} \tab  -\cr
+ \tab \code{getOutputDataSet} \tab  -\cr
  \tab \code{getPath} \tab  -\cr
  \tab \code{getRootPath} \tab  -\cr
  \tab \code{getTags} \tab  -\cr

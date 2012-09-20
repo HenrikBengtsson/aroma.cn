@@ -173,6 +173,13 @@ setMethodS3("getDataSets", "PairedPscbsModel", function(this, ...) {
 })
 
 
+setMethodS3("getOutputDataSet", "PairedPscbsModel", function(this, ...) {
+  path <- getPath(this);
+  res <- PairedPSCBSFileSet$byPath(path);
+  res;
+})
+
+
 setMethodS3("getFitFunction", "PairedPscbsModel", function(this, ...) {
   defaultSeed <- getRandomSeed(this);
   fitFcn <- function(..., seed=defaultSeed) {
@@ -591,6 +598,9 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 
 ############################################################################
 # HISTORY:
+# 2012-09-19
+# o Now getOutputDataSet() for PairedPscbsModel returns a 
+#   PairedPSCBSFileSet.
 # 2012-09-15
 # o Now fit() for PairedPscbsModel generates pair names iff tumor and
 #   normal names don't match, e.g. 'GSM517071_vs_GSM517072' (if match
