@@ -2,6 +2,8 @@ Package: aroma.cn
 =================
 
 Version: 1.2.7 [2012-09-20]
+o BUG FIX: horizontal/vertical axes were swapped in 
+  deShearC1C2(..., dirs='|_').
 o Now PairedPscbsCaller() passes '...' to the internal callers,
   which makes it possible to for instance specify the number of
   bootstrap samples done for the AB caller.
