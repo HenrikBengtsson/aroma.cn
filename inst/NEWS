@@ -1,6 +1,14 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.7 [2012-09-20]
+o Now PairedPscbsCaller() passes '...' to the internal callers,
+  which makes it possible to for instance specify the number of
+  bootstrap samples done for the AB caller.
+o Now PairedPscbsModel() excludes the actual gaps from the known
+  segments it passes to segmentByPairedPSCBS().
+
+
 Version: 1.2.6 [2012-09-19]
 o Added trial version of PairedPscbsCaller.
 o Additional internal updates.
