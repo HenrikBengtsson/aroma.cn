@@ -514,7 +514,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
         verbose && cat(verbose, "Minimal gap length: ", minLength);
         gaps <- findLargeGaps(data, minLength=minLength);
         verbose && print(verbose, gaps);
-        knownSegments <- gapsToSegments(gaps);
+        knownSegments <- gapsToSegments(gaps, dropGaps=FALSE);
         # Not needed anymore
         rm(gaps);
         verbose && exit(verbose);
@@ -598,6 +598,9 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 
 ############################################################################
 # HISTORY:
+# 2012-09-20
+# o Now PairedPscbsModel() excludes the actual gaps from the known
+#   segments it passes to segmentByPairedPSCBS().
 # 2012-09-19
 # o Now getOutputDataSet() for PairedPscbsModel returns a 
 #   PairedPSCBSFileSet.

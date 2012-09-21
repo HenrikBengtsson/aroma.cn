@@ -1,4 +1,4 @@
-setConstructorS3("PairedPscbsCaller", function(dataSet=NULL, ..., calls=c("ROH", "AB", "LOH")) {
+setConstructorS3("PairedPscbsCaller", function(dataSet=NULL, tags="*", calls=c("ROH", "AB", "LOH"), ...) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Load required packages
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -17,9 +17,13 @@ setConstructorS3("PairedPscbsCaller", function(dataSet=NULL, ..., calls=c("ROH",
   # Argument 'calls':
   calls <- match.arg(calls, several.ok=TRUE);
 
-  extend(AromaTransform(dataSet=dataSet, ...,
+  # Arguments '...':
+  optionalArgs <- list();
+
+  extend(AromaTransform(dataSet=dataSet, tags=tags,
                .reqSetClass="PairedPSCBSFileSet"), "PairedPscbsCaller",
-    .calls = calls
+    .calls = calls,
+    .optionalArgs = optionalArgs
   );
 }) # PairedPscbsCaller()
 
@@ -75,6 +79,11 @@ setMethodS3("getPath", "PairedPscbsCaller", function(this, create=TRUE, ...) {
 })
 
 
+setMethodS3("getOptionalArguments", "PairedPscbsCaller", function(this, ...) {
+  this$.optionalArgs;
+}, protected=TRUE)
+
+
 setMethodS3("getParameters", "PairedPscbsCaller", function(this, ...) {
   calls <- this$.calls;
   params <- list(calls=calls);
@@ -105,6 +114,10 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE) {
   verbose && cat(verbose, "Output path: ", pathD);
 
   verbose && cat(verbose, "Number of samples: ", length(sms));
+
+  optArgs <- getOptionalArguments(this);
+  verbose && cat(verbose, "Optional arguments (may be ignored/may give an error/warning):");
+  verbose && str(verbose, optArgs);
   
   for (ii in seq(sms)) {
     smf <- getFile(sms, ii);
@@ -129,13 +142,23 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE) {
     # Sanity check
     fit <- Arguments$getInstanceOf(fit, "PairedPSCBS");
     verbose && exit(verbose);
-    
+
+    # Arguments to be passed to each caller
+    argsT <- append(optArgs, verbose=less(verbose, 5));
+
     verbose && enter(verbose, "Calling ROH");
-    fit <- callROH(fit, verbose=less(verbose, 5));   
+    args <- append(list(fit), argsT);
+    fit <- do.call(callROH, args);
     verbose && exit(verbose);
   
     verbose && enter(verbose, "Calling AB");
-    fit <- callAB(fit, verbose=less(verbose, 5));   
+    args <- append(list(fit), argsT);
+    fit <- do.call(callAB, args);
+    verbose && exit(verbose);
+  
+    verbose && enter(verbose, "Calling LOH");
+    args <- append(list(fit), argsT);
+    fit <- do.call(callLOH, args);
     verbose && exit(verbose);
   
     verbose && enter(verbose, "Saving");
@@ -162,6 +185,8 @@ setMethodS3("getPlatform", "PairedPscbsCaller", function(this, ...) {
 
 ##########################################################################
 # HISTORY:
+# 2012-09-20
+# o Now PairedPscbsCaller() passes '...' to the internal callers.
 # 2012-09-19
 # o Made as an AromaTransform for now.
 # o Created.
