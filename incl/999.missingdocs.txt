@@ -161,3 +161,4 @@ getOutputDataSet.PairedPscbsModel loadFit.PairedPSCBSFile
 getChipType.PairedPSCBSFileSet
 getDefaultFullName.PairedPSCBSFileSet
 getPlatform.PairedPSCBSFileSet
+getOptionalArguments.PairedPscbsCaller

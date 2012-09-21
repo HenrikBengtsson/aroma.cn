@@ -24,7 +24,7 @@ setMethodS3("extractDeltaC1C2", "PairedPSCBS", function(...) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  X <- extractC1C2(...);
+  X <- extractC1C2(..., splitters=TRUE, addGaps=TRUE);
 
   # (C1,C2)
   C1C2 <- X[,1:2,drop=FALSE];
@@ -67,7 +67,7 @@ setMethodS3("extractDeltaC1C2", "PairedPSCBS", function(...) {
 
 setMethodS3("extractC1C2", "list", function(fitList, ...) {
   c1c2List <- lapply(fitList, FUN=function(fit) {
-    extractC1C2(fit);
+    extractC1C2(fit, ...);
   });
   
   # Append NAs between chromosomes
@@ -114,6 +114,9 @@ setMethodS3("normalizeLoess2D", "C1C2", function(X, ...) {
 
 ##############################################################################
 # HISTORY
+# 2012-09-21 [HB]
+# o Now extractDeltaC1C2() makes sure that there are splitters between
+#   chromosomes and gaps.
 # 2010-10-05 [HB]
 # o Added extractPolarDeltaC1C2(), which returns [0,pi] angles and lengths.
 # o Now extractDeltaC1C2() returns two types of change-point weights.

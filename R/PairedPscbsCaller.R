@@ -144,7 +144,7 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE) {
     verbose && exit(verbose);
 
     # Arguments to be passed to each caller
-    argsT <- append(optArgs, verbose=less(verbose, 5));
+    argsT <- append(optArgs, list(verbose=less(verbose, 5)));
 
     verbose && enter(verbose, "Calling ROH");
     args <- append(list(fit), argsT);

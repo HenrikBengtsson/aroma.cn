@@ -290,6 +290,7 @@
 \alias{getChipType.PairedPSCBSFileSet}
 \alias{getDefaultFullName.PairedPSCBSFileSet}
 \alias{getPlatform.PairedPSCBSFileSet}
+\alias{getOptionalArguments.PairedPscbsCaller}
 
 \description{
   This page contains aliases for all "non-documented" objects that
