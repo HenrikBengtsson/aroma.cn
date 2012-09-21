@@ -489,7 +489,11 @@ chrsTags <- if (nbrOfChromosomes == 1) {
   \resizebox{\textwidth}{!}{%
     \includegraphics{<%={
       # saveObject(fit, file="fool.Rbin")
-      tags <- c(chrsTags, "PairedPSCBS", gsub("[*-]", "", track), getChecksum(fit));
+      if (doDeshearing) {
+        tags <- c(chrsTags, "PairedPSCBS", gsub("[*-]", "", track), "deSheared", getChecksum(fit));
+      } else {
+        tags <- c(chrsTags, "PairedPSCBS", gsub("[*-]", "", track), getChecksum(fit));
+      }
       toPNG(name=sampleName, tags=tags, width=1024, aspectRatio=0.25, par=list(mar=c(2.8,4,1,1)+0.1, cex=1.5), {
         plotTracks(fit, tracks=track, lwd=5, Clim=Clim);
 #        plotTrack2(fit, panels=track, lwd=5, Clim=Clim);
@@ -549,10 +553,14 @@ chrsTags <- if (nbrOfChromosomes == 1) {
  \begin{center}
   \resizebox{0.6\textwidth}{!}{%
     \includegraphics{<%={
-      tags <- c(chrsTags, "PairedPSCBS", "C1C2", getChecksum(fit));
+      if (doDeshearing) {
+        tags <- c(chrsTags, "PairedPSCBS", "C1C2", "deSheared", getChecksum(fit));
+      } else {
+        tags <- c(chrsTags, "PairedPSCBS", "C1C2", getChecksum(fit));
+      }
       toPNG(name=sampleName, tags=tags, width=640, aspectRatio=1, par=list(mar=c(4,4,1,1)+0.1, cex=2), {
-        plotC1C2Grid(fit, Clim=ClimX);
-        linesC1C2(fit, lwd=2);
+        plotC1C2Grid(fit, Clim=ClimX, pch=19, col="#00000011");
+        linesC1C2(fit, lwd=2, col="#00000011");
       }, force=FALSE);
     }%>}%
   }%
