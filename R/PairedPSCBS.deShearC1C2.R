@@ -335,6 +335,8 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
     ## sum of region weights
     dw <- w[1:(length(w)-1)] + w[2:length(w)];
   }
+  # Sanity check
+  stopifnot(length(dw) == nrow(X)-1L);
 
   # Ignore change points between segments in allelic balance
   # by giving them "zero" (actually 0.1) weight.
@@ -342,10 +344,13 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
     abCall <- segs$abCall;
     if (!is.null(abCall)) {
       idxs <- which(abCall);
-      dropIdxs <- idxs[diff(idxs) == 1];
+      dropIdxs <- idxs[which(diff(idxs) == 1)];
+      dropIdxs <- dropIdxs[is.finite(dropIdxs)];
       if (length(dropIdxs) > 0) {
         verbose && cat(verbose, "Number of AB-to-AB change points dropped: ", length(dropIdxs));
         dw[dropIdxs] <- 0.1*dw[dropIdxs];
+        # Sanity check
+        stopifnot(length(dw) == nrow(X)-1L);
       }
     }
   }
@@ -362,7 +367,151 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
 
 
 
-setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), ..., verbose=FALSE) {
+setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0.5, tol=0.02, flavor=c("decreasing", "all"), onError=c("error", "return"), ..., verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Local functions
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  estimateShear <- function(pfp) {
+    verbose && enter(verbose, "Estimate (x,y) shear model");
+    ## Use -pi/2 and 0 to correct for shearing
+  
+    # (a) Vertical shear (based on horizontal information)
+    pfpT <- subset(pfp, call == -pi/2);
+    verbose && cat(verbose, "Horizontal peak:");
+    verbose && print(verbose, pfpT);
+    # Sanity checks
+    if (nrow(pfpT) < 1) {
+      throw(sprintf("Cannot fit vertical shear parameter. No lines where called to horizontal (angle=-pi/2=%f).", -pi/2));
+    }
+    # Shear parameter
+    phiV <- -(pfpT$x - pfpT$call);
+    # Sanity checks
+    stopifnot(is.finite(phiV));
+    # Shear parameter
+    sV <- tan(phiV);
+    stopifnot(is.finite(sV));
+    pfpTV <- pfpT;
+  
+    # (b) Horizontal shear (based on vertical information)
+    pfpT <- subset(pfp, call == 0);
+    verbose && cat(verbose, "Vertical peak:");
+    verbose && print(verbose, pfpT);
+    # Sanity checks
+    if (nrow(pfpT) < 1) {
+      throw("Cannot fit horizontal shear parameter. No lines where called to vertical (angle=0).");
+    }
+    # Shear parameter
+    phiH <- pfpT$x-pfpT$call;
+    # Sanity checks
+    stopifnot(is.finite(phiH));
+    # Shear parameter
+    sH <- tan(phiH);
+    stopifnot(is.finite(sH));
+    pfpTH <- pfpT;
+  
+    # (c) Vertical scale (based on diagonal information)
+    pfpT <- subset(pfp, call %in% c(-pi/4, +pi/4));
+    verbose && cat(verbose, "Diagonal peak:");
+    verbose && print(verbose, pfpT);
+    # Sanity checks
+    if (nrow(pfpT) < 1) {
+      msg <- "Cannot fit diagonal shear scale parameter. No lines where called to diagonal (angle=-pi/4 or +pi/4).";
+      warning(msg);
+  
+      scale <- scaleY <- as.double(NA);
+      Hd <- NULL;
+    } else {
+      # Shear parameter
+      tX <- pfpT$x;
+      scaleY <- pfpT$call/pfpT$x;
+      verbose && cat(verbose, "scaleY:");
+      verbose && print(verbose, scaleY);
+      scaleY <- weighted.mean(scaleY, w=pfpT$density);
+      verbose && print(verbose, scaleY);
+  
+      # Preserve (dx^2 + dy^2) before and after
+      scale <- 1/sqrt(1+sV^2);
+  
+      Hd <- function(xy) {
+        y <- xy[,2];
+        mu0 <- min(y, na.rm=TRUE);
+        y <- scaleY * y;
+        mu1 <- min(y, na.rm=TRUE);
+        dmu <- mu1 - mu0;
+        # Preserve y offset
+        y <- y - dmu;
+        xy[,2] <- y;
+        xy;
+      } # Hd()
+      env <- new.env(parent=baseenv());
+      env$scaleY <- scaleY;
+      environment(Hd) <- env;
+    }
+  
+    ## (d) Horizontal and vertical shear (forcing the estimates to be the same)
+    verbose && cat(verbose, "Horizontal and Vertical peaks:");
+    verbose && print(verbose, rbind(pfpTH, pfpTV));
+    # (Sanity checks have already been done above)
+    # Shear parameter
+    wH <- pfpTH$density;
+    wV <- pfpTV$density;
+    phiHV <- weighted.mean(c(phiV, phiH), w=c(wV, wH))
+    ## check 'pi' ajdustment
+  
+    # Sanity checks
+    stopifnot(is.finite(phiHV));
+    # Shear parameter
+    sHV <- tan(phiHV);
+    stopifnot(is.finite(sHV));
+  
+    # Create backtransform function
+    Hxy <- function(xy) {
+      cbind(xy[, 1] - sV*xy[, 2], xy[, 2] - sH*xy[, 1]);
+    } # Hxy()
+    env <- new.env(parent=baseenv());
+    env$sV <- sV;
+    env$sH <- sH;
+    environment(Hxy) <- env;
+  
+    Hx <- function(xy) {
+      cbind(xy[, 1] - sV*xy[, 2], xy[, 2]);
+    } # Hx()
+    env <- new.env(parent=baseenv());
+    env$sV <- sV;
+    environment(Hx) <- env;
+  
+    Hy <- function(xy) {
+      cbind(xy[, 1], xy[, 2] - sH*xy[, 1]);
+    } # Hy()
+    env <- new.env(parent=baseenv());
+    env$sH <- sH;
+    environment(Hy) <- env;
+  
+    H <- function(xy) {
+      x <- xy[, 1];
+      y <- xy[, 2];
+      sf <- 1-sHV;
+      cbind(x - sHV*y, y - sHV*x)/sf;
+    } # H()
+    env <- new.env(parent=baseenv());
+    env$sHV <- sHV;
+    environment(H) <- env;
+
+    # Sanity checks
+    range <- c(-3,3);
+    sV <- Arguments$getDouble(sV, range=range);
+    sH <- Arguments$getDouble(sH, range=range);
+    sHV <- Arguments$getDouble(sHV, range=range);
+
+    # Not needed anymore
+    rm(pfpT);
+
+    params <- list(H=H, Hx=Hx, Hy=Hy, Hxy=Hxy, Hd=Hd, parameters=c(sV=sV, sH=sH, sHV=sHV, scaleY=scaleY, scale=scale, phiV=phiV, phiH=phiH, phiHV=phiHV));
+
+    params;
+  } # estimateShear()
+
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -385,6 +534,9 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
 
   # Argument 'flavor':
   flavor <- match.arg(flavor);
+
+  # Argument 'onError':
+  onError <- match.arg(onError);
 
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
@@ -448,12 +600,27 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   alphaT[ww] <- alphaT[ww]-pi;
   verbose && exit(verbose);
 
+  modelFit <- list();
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Find modes
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Finding modes (peaks & valleys)");
   rg <- c(-pi/2,pi/2)-lag;
-  d <- density(alphaT, weights=weights, from=rg[1], to=rg[2], adjust=adjust);
+  if (onError == "error") {
+    d <- density(alphaT, weights=weights, from=rg[1], to=rg[2], adjust=adjust);
+  } else if (onError == "return") {
+    d <- tryCatch({
+      density(alphaT, weights=weights, from=rg[1], to=rg[2], adjust=adjust);
+    }, error=function(ex) {
+      verbose && print(verbose, ex);
+      ex;
+    });
+    if (inherits(d, "error")) {
+      modelFit$error <- d;
+      return(modelFit);
+    }
+  }
 
   fp <- findPeaksAndValleys(d, tol=tol, ...);
   # Not needed anymore
@@ -469,7 +636,6 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   nbrOfPeaks <- nrow(pfp);
   verbose && exit(verbose);
 
-
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Call modes
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -481,167 +647,71 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   verbose && cat(verbose, "Expected locations of peaks:");
   verbose && print(verbose, expected);
 
-  pfp <- callPeaks(pfp, expected=expected, flavor=flavor, verbose=verbose);
+  if (onError == "error") {
+    pfp <- callPeaks(pfp, expected=expected, flavor=flavor, verbose=verbose);
+  } else if (onError == "return") {
+    pfp <- tryCatch({
+      callPeaks(pfp, expected=expected, flavor=flavor, verbose=verbose);
+    }, error=function(ex) {
+      verbose && print(verbose, ex);
+      ex;
+    });
+    if (inherits(pfp, "error")) {
+      modelFit$error <- pfp;
+      pfp <- NULL;
+    }
+  }
 
   verbose && cat(verbose, "Calls:");
   verbose && print(verbose, pfp);
+
   verbose && exit(verbose);
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Estimate (x,y) shear model
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  verbose && enter(verbose, "Estimate (x,y) shear model");
-  ## Use -pi/2 and 0 to correct for shearing
+  if (is.data.frame(pfp)) {
+    if (onError == "error") {
+      params <- estimateShear(pfp);
+    } else if (onError == "return") {
+      params <- tryCatch({
+        estimateShear(pfp);
+      }, error=function(ex) {
+        verbose && print(verbose, ex);
+        ex;
+      });
+      if (inherits(params, "error")) {
+        modelFit$error <- params;
+        params <- NULL;
+      }
+    }
+    modelFit <- append(modelFit, params);
+  } # if (is.data.frame(pfp))
 
-  # (a) Vertical shear (based on horizontal information)
-  pfpT <- subset(pfp, call == -pi/2);
-  verbose && cat(verbose, "Horizontal peak:");
-  verbose && print(verbose, pfpT);
-  # Sanity checks
-  if (nrow(pfpT) < 1) {
-    throw(sprintf("Cannot fit vertical shear parameter. No lines where called to horizontal (angle=-pi/2=%f).", -pi/2));
-  }
-  # Shear parameter
-  phiV <- -(pfpT$x - pfpT$call);
-  # Sanity checks
-  stopifnot(is.finite(phiV));
-  # Shear parameter
-  sV <- tan(phiV);
-  stopifnot(is.finite(sV));
-  pfpTV <- pfpT;
 
-  # (b) Horizontal shear (based on vertical information)
-  pfpT <- subset(pfp, call == 0);
-  verbose && cat(verbose, "Vertical peak:");
-  verbose && print(verbose, pfpT);
-  # Sanity checks
-  if (nrow(pfpT) < 1) {
-    throw("Cannot fit horizontal shear parameter. No lines where called to vertical (angle=0).");
-  }
-  # Shear parameter
-  phiH <- pfpT$x-pfpT$call;
-  # Sanity checks
-  stopifnot(is.finite(phiH));
-  # Shear parameter
-  sH <- tan(phiH);
-  stopifnot(is.finite(sH));
-  pfpTH <- pfpT;
-
-  # (c) Vertical scale (based on diagonal information)
-  pfpT <- subset(pfp, call %in% c(-pi/4, +pi/4));
-  verbose && cat(verbose, "Diagonal peak:");
-  verbose && print(verbose, pfpT);
-  # Sanity checks
-  if (nrow(pfpT) < 1) {
-    msg <- "Cannot fit diagonal shear scale parameter. No lines where called to diagonal (angle=-pi/4 or +pi/4).";
-    warning(msg);
-
-    scale <- scaleY <- as.double(NA);
-    Hd <- NULL;
-  } else {
-    # Shear parameter
-    tX <- pfpT$x;
-    scaleY <- pfpT$call/pfpT$x;
-    verbose && cat(verbose, "scaleY:");
-    verbose && print(verbose, scaleY);
-    scaleY <- weighted.mean(scaleY, w=pfpT$density);
-    verbose && print(verbose, scaleY);
-
-    # Preserve (dx^2 + dy^2) before and after
-    scale <- 1/sqrt(1+sV^2);
-
-    Hd <- function(xy) {
-      y <- xy[,2];
-      mu0 <- min(y, na.rm=TRUE);
-      y <- scaleY * y;
-      mu1 <- min(y, na.rm=TRUE);
-      dmu <- mu1 - mu0;
-      # Preserve y offset
-      y <- y - dmu;
-      xy[,2] <- y;
-      xy;
-    } # Hd()
-    env <- new.env(parent=baseenv());
-    env$scaleY <- scaleY;
-    environment(Hd) <- env;
-  }
-
-  ## (d) Horizontal and vertical shear (forcing the estimates to be the same)
-  verbose && cat(verbose, "Horizontal and Vertical peaks:");
-  verbose && print(verbose, rbind(pfpTH, pfpTV));
-  # (Sanity checks have already been done above)
-  # Shear parameter
-  wH <- pfpTH$density;
-  wV <- pfpTV$density;
-  phiHV <- weighted.mean(c(phiV, phiH), w=c(wV, wH))
-  ## check 'pi' ajdustment
-
-  # Sanity checks
-  stopifnot(is.finite(phiHV));
-  # Shear parameter
-  sHV <- tan(phiHV);
-  stopifnot(is.finite(sHV));
-
-  # Create backtransform function
-  Hxy <- function(xy) {
-    cbind(xy[, 1] - sV*xy[, 2], xy[, 2] - sH*xy[, 1]);
-  } # Hxy()
-  env <- new.env(parent=baseenv());
-  env$sV <- sV;
-  env$sH <- sH;
-  environment(Hxy) <- env;
-
-  Hx <- function(xy) {
-    cbind(xy[, 1] - sV*xy[, 2], xy[, 2]);
-  } # Hx()
-  env <- new.env(parent=baseenv());
-  env$sV <- sV;
-  environment(Hx) <- env;
-
-  Hy <- function(xy) {
-    cbind(xy[, 1], xy[, 2] - sH*xy[, 1]);
-  } # Hy()
-  env <- new.env(parent=baseenv());
-  env$sH <- sH;
-  environment(Hy) <- env;
-
-  H <- function(xy) {
-    x <- xy[, 1];
-    y <- xy[, 2];
-    sf <- 1-sHV;
-    cbind(x - sHV*y, y - sHV*x)/sf;
-  } # H()
-  env <- new.env(parent=baseenv());
-  env$sHV <- sHV;
-  environment(H) <- env;
-
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Return
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && cat(verbose, "Model fit:");
-  modelFit <- list(H=H, Hx=Hx, Hy=Hy, Hxy=Hxy, Hd=Hd, parameters=c(sV=sV, sH=sH, sHV=sHV, scaleY=scaleY, scale=scale, phiV=phiV, phiH=phiH, phiHV=phiHV), debug=list(cpAngleDensity=d, pfp=pfp));
+  modelFit$debug <- list(cpAngleDensity=d, expected=expected, pfp=pfp);
   verbose && str(verbose, modelFit);
 
-  # Sanity checks
-  range <- c(-3,3);
-  sV <- Arguments$getDouble(sV, range=range);
-  sH <- Arguments$getDouble(sH, range=range);
-  sHV <- Arguments$getDouble(sHV, range=range);
-
-  # Not needed anymore
-  rm(pfpT);
   verbose && exit(verbose);
-
 
   if (FALSE) {
     debug <- modelFit$debug;
     d <- debug$cpAngleDensity;
-    pfp <- debug$pfp;
-    expected <- attr(pfp, "expected");
-    devSet(sprintf("d,%s", digest(d)));
+    expected <- debug$expected;
     plot(d, lwd=2);
     abline(v=expected);
     text(x=expected, y=par("usr")[4], names(expected), adj=c(0.5,-0.5), cex=1, xpd=TRUE);
-    idxs <- match(pfp$call, expected);
-    text(x=pfp$x, y=pfp$density, names(expected)[idxs], adj=c(0.5, -0.5), cex=1, col="blue");
+
+    pfp <- debug$pfp;
+    if (!is.null(pfp)) {
+      idxs <- match(pfp$call, expected);
+      text(x=pfp$x, y=pfp$density, names(expected)[idxs], adj=c(0.5, -0.5), cex=1, col="blue");
+    }
   }
 
   verbose && exit(verbose);
@@ -684,6 +754,9 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 ##############################################################################
 # HISTORY
 # 2012-09-21 [HB]
+# o BUG FIX: fitDeltaC1C2ShearModel(... dropABChangePoints=TRUE) could 
+#   generate an incorrect number change-point weights if dropping.
+# o Added argument 'onError' to fitDeltaXYShearModel() for matrix.
 # o Now attribute 'modelFit' fitDeltaXYShearModel() also contains 
 #   debug$cpAngleDensity.
 # 2012-09-21 [PN]
