@@ -56,6 +56,6 @@ sampleName <- getName(df);
 tryCatch({
   report(fit, rspTags="deShear", studyName=dataSet, force=TRUE);
 }, error=function(ex) {
-  .lastError <- ex;
+  .lastError <<- ex;
 });
 
