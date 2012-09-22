@@ -105,7 +105,7 @@ if (!exists("segList", mode="list")) {
 }
 
 
-toPNG(dataSet, tags=c(sampleName, "DP", "RSEvsCPs"), width=800, aspectRatio=0.7, {
+toPNG(sampleName, tags=c("DP", "RSEvsCPs"), width=800, aspectRatio=0.7, {
   plot(modelFit$nbrOfChangePoints, modelFit$rse,
        xlab="Number of change points", ylab="RSE");
   stext(side=3, pos=0, sampleName);
@@ -144,14 +144,6 @@ for (kk in seq(along=nbrOfCPs)) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Deshear
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Fast naive calling of AB
-##   fitAB <- fitDP;
-##   deltaAB <- estimateDeltaAB(fitAB);
-##   segs <- fitAB$output;
-##   abCall <- segs$dhMean <= deltaAB;
-##   segs$dhMean[abCall] <- 0;
-##   segs$abCall <- abCall;
-##   fitAB$output <- segs;
   fitD <- deShearC1C2(fitDP);
   doPlots(fitD, tags="deShear");
 
