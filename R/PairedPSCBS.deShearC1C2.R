@@ -67,6 +67,18 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", 
   }
 
   verbose && enter(verbose, "Fitting (C1,C2) shear model");
+
+  # Naive AB caller?
+  segs <- fit$output;
+  abCall <- segs$abCall;
+  if (is.null(abCall)) {
+    deltaAB <- estimateDeltaAB(fit, ...);
+    abCall <- (segs$dhMean <= deltaAB);
+    segs$dhMean[abCall] <- 0;
+    segs$abCall <- abCall;
+    fit$output <- segs;
+  }
+
   modelFit <- fitDeltaC1C2ShearModel(fit, ..., verbose=verbose);
   verbose && print(verbose, modelFit);
   verbose && exit(verbose);
@@ -325,14 +337,14 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
   }
 
   # Ignore change points between segments in allelic balance
-  # by giving them zero weight.
+  # by giving them "zero" (actually 0.1) weight.
   if (dropABChangePoints) {
     abCall <- segs$abCall;
     if (!is.null(abCall)) {
       idxs <- which(abCall);
       dropIdxs <- idxs[diff(idxs) == 1];
       if (length(dropIdxs) > 0) {
-        print(dropIdxs);
+        verbose && cat(verbose, "Number of AB-to-AB change points dropped: ", length(dropIdxs));
         dw[dropIdxs] <- 0.1*dw[dropIdxs];
       }
     }
@@ -666,6 +678,8 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 ##############################################################################
 # HISTORY
 # 2012-09-21 [PN]
+# o Now fitDeltaC1C2ShearModel() will apply a fast naive AB caller, 
+#   iff AB calls are not available.
 # o BUG FIX: horizontal/vertical axes were swapped for direction '|_'
 # 2012-09-19 [HB]
 # o MEMORY/"BUG FIX": fitDeltaXYShearModel() would return "H" deshearing
