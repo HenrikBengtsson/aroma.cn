@@ -40,21 +40,22 @@ if (length(ds) == 0) {
 # Select tumor-normal pair
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 if (length(ds) > 1) {
- ii <- textMenu(getNames(ds));
+ ii <- textMenu(getFullNames(ds));
 } else {
  ii <- 1L;
 }
 
 df <- getFile(ds, ii);
 fit <- loadObject(df);
-sampleName <- getName(df);
+sampleName <- getFullName(df);
+sampleName <- setdiff(sampleName, "PairedPSCBS");
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # REPORT
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 tryCatch({
-  report(fit, rspTags="deShear", studyName=dataSet, force=TRUE);
+  report(fit, rspTags="deShear", sampleName=sampleName, studyName=dataSet, force=TRUE);
 }, error=function(ex) {
   .lastError <<- ex;
 });
