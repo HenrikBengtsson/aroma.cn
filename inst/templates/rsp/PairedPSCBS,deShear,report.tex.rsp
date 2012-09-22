@@ -24,6 +24,7 @@ REPORT_USE_ALPHA_CHANNEL <- getOption("PSCBS::report/useAlphaChannel", TRUE);
 REPORT_PER_CHROMOSOME <- getOption("PSCBS::reports/perChromosome", TRUE);
 REPORT_C1C2 <- getOption("PSCBS::reports/pscnSegmentationTransitions", TRUE);
 REPORT_C1C2_DESHEARING <- getOption("PSCBS::reports/c1C2Deshearing", TRUE);
+REPORT_C1C2_DESHEARING_KAPPA <- getOption("PSCBS::reports/c1C2DeshearingKappa", TRUE);
 
 # To implement:
 REPORT_PER_GENOTYPE <- getOption("PSCBS::reports/perGenotype", TRUE);
@@ -519,7 +520,7 @@ chrsTags <- if (nbrOfChromosomes == 1) {
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % PARENT-SPECIFIC COPY-NUMBER TRANSITIONS
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-<% pscnSegmentationTransitions <- function(fit, doDeshearing=c(FALSE, TRUE)[1], ...) { %>
+<% pscnSegmentationTransitions <- function(fit, kappa=NULL, doDeshearing=c(FALSE, TRUE)[1], ...) { %>
 <% if (!REPORT_C1C2) return(); %>
 \clearpage
 <% if (doDeshearing) { %>
@@ -565,6 +566,9 @@ chrsTags <- if (nbrOfChromosomes == 1) {
       toPNG(name=sampleName, tags=tags, width=640, aspectRatio=1, par=list(mar=c(4,4,1,1)+0.1, cex=2), {
         plotC1C2Grid(fit, Clim=ClimX, pch=19, col="#00000011");
         linesC1C2(fit, lwd=2, col="#00000011");
+        if (!is.null(kappa)) {
+          abline(v=kappa, col="red", lty=3, lwd=2);
+        }
       }, force=FALSE);
     }%>}%
   }%
@@ -611,6 +615,9 @@ chrsTags <- if (nbrOfChromosomes == 1) {
    are projected onto the horizontal and vertical axis, respectively.
    To easy a visual comparison, the latter is also projected onto the
    horizontal axis (light blue curve).
+   <% if (!is.null(kappa)) { %>
+   The background signal was estimated to $\kappa=<%=sprintf("%.3f", kappa)%>$.
+   <% } %>
    \textbf{Right:}
    The empirical density of the directions of the ($P=<%=nbrOfChangePoints(fit)%>$) change points in ($C_1,C_2$) in copy-number segmentation on <%=chromosomesH%><%=if (doDeshearing) " after de-shearing"%>.
    <% if (is.null(cpAngleDensity)) { %>
@@ -621,13 +628,26 @@ chrsTags <- if (nbrOfChromosomes == 1) {
 \end{figure}
 <% } # pscnSegmentationTransitions() %>
 
-<%=pscnSegmentationTransitions(fit)%>
+<%
+kappa <- estimateKappa(fit);
+%>
+<%=pscnSegmentationTransitions(fit, kappa=kappa)%>
 
 <%
 if (REPORT_C1C2_DESHEARING) {
   fitD <- deShearC1C2(fit);
-  pscnSegmentationTracks(fitD, doDeshearing=TRUE);
-  pscnSegmentationTransitions(fitD, doDeshearing=TRUE);
+  kappaD <- estimateKappa(fitD);
+  pscnSegmentationTracks(fitD, kappa=kappaD, doDeshearing=TRUE);
+  pscnSegmentationTransitions(fitD, kappa=kappaD, doDeshearing=TRUE);
+}
+%>
+
+<%
+if (REPORT_C1C2_DESHEARING_KAPPA) {
+  fitDn <- translateC1C2(fitD, dC1=-kappaD, dC2=-kappaD);
+  kappaDn <- estimateKappa(fitDn);
+  pscnSegmentationTracks(fitDn, kappa=kappaDn, doDeshearing=TRUE);
+  pscnSegmentationTransitions(fitDn, kappa=kappaDn, doDeshearing=TRUE);
 }
 %>
 
@@ -651,16 +671,25 @@ fitT <- extractChromosome(fit, chromosome=chr);
 
 <%=pscnSegmentationTracks(fitT)%>
 
-<%=pscnSegmentationTransitions(fitT)%>
+<%=pscnSegmentationTransitions(fitT, kappa=kappa)%>
 
 <%
 if (REPORT_C1C2_DESHEARING) {
   fitDT <- extractChromosome(fitD, chromosome=chr);
   pscnSegmentationTracks(fitDT, doDeshearing=TRUE);
-  pscnSegmentationTransitions(fitDT, doDeshearing=TRUE);
+  pscnSegmentationTransitions(fitDT, kappa=kappaD, doDeshearing=TRUE);
   rm(fitDT);
 }
 %>
+
+<%
+if (REPORT_C1C2_DESHEARING_KAPPA) {
+  fitDTn <- extractChromosome(fitDn, chromosome=chr);
+  pscnSegmentationTracks(fitDTn, kappa=kappaDn, doDeshearing=TRUE);
+  pscnSegmentationTransitions(fitDTn, kappa=kappaDn, doDeshearing=TRUE);
+}
+%>
+
 
 <% } # for (chr ...) %>
 <% } # if (REPORT_PER_CHROMOSOME && nbrOfChromosomes(fit) > 1) %>
@@ -722,6 +751,8 @@ assign("renamePDF", function() {
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % HISTORY:
+# 2012-09-22
+# o Now displaying raw, desheared, and kappa corrected.
 # 2012-09-19
 % o Created from PairedPSCBS report template.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
