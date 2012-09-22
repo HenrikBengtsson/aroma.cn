@@ -140,7 +140,7 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   fitO <- fit;
   fitO$output <- segs;
-  #fitO$modelFit <- modelFit;  ## huge and contains lots of promises
+  fitO$modelFit <- modelFit;
 
   verbose && exit(verbose);
 
@@ -487,14 +487,6 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   verbose && print(verbose, pfp);
   verbose && exit(verbose);
 
-  if (FALSE) {
-    devSet(sprintf("d,%s", digest(d)));
-    plot(d, lwd=2);
-    abline(v=expected);
-    text(x=expected, y=par("usr")[4], names(expected), adj=c(0.5,-0.5), cex=1, xpd=TRUE);
-    idxs <- match(pfp$call, expected);
-    text(x=pfp$x, y=pfp$density, names(expected)[idxs], adj=c(0.5, -0.5), cex=1, col="blue");
-  }
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Estimate (x,y) shear model
@@ -625,7 +617,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   environment(H) <- env;
 
   verbose && cat(verbose, "Model fit:");
-  modelFit <- list(H=H, Hx=Hx, Hy=Hy, Hxy=Hxy, Hd=Hd, parameters=c(sV=sV, sH=sH, sHV=sHV, scaleY=scaleY, scale=scale, phiV=phiV, phiH=phiH, phiHV=phiHV), debug=list(pfp=pfp));
+  modelFit <- list(H=H, Hx=Hx, Hy=Hy, Hxy=Hxy, Hd=Hd, parameters=c(sV=sV, sH=sH, sHV=sHV, scaleY=scaleY, scale=scale, phiV=phiV, phiH=phiH, phiHV=phiHV), debug=list(cpAngleDensity=d, pfp=pfp));
   verbose && str(verbose, modelFit);
 
   # Sanity checks
@@ -637,6 +629,20 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   # Not needed anymore
   rm(pfpT);
   verbose && exit(verbose);
+
+
+  if (FALSE) {
+    debug <- modelFit$debug;
+    d <- debug$cpAngleDensity;
+    pfp <- debug$pfp;
+    expected <- attr(pfp, "expected");
+    devSet(sprintf("d,%s", digest(d)));
+    plot(d, lwd=2);
+    abline(v=expected);
+    text(x=expected, y=par("usr")[4], names(expected), adj=c(0.5,-0.5), cex=1, xpd=TRUE);
+    idxs <- match(pfp$call, expected);
+    text(x=pfp$x, y=pfp$density, names(expected)[idxs], adj=c(0.5, -0.5), cex=1, col="blue");
+  }
 
   verbose && exit(verbose);
 
@@ -677,6 +683,9 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 ##############################################################################
 # HISTORY
+# 2012-09-21 [HB]
+# o Now attribute 'modelFit' fitDeltaXYShearModel() also contains 
+#   debug$cpAngleDensity.
 # 2012-09-21 [PN]
 # o Now fitDeltaC1C2ShearModel() will apply a fast naive AB caller, 
 #   iff AB calls are not available.

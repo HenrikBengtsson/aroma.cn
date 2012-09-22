@@ -75,9 +75,12 @@ if (length(ds) > 1) {
  ii <- 1L;
 }
 
-df <- getFile(ds, ii);
-fit <- loadObject(df);
-sampleName <- getName(df);
+if (!exists("fit") || !inherits(fit, "PairedPSCBS")) {
+  df <- getFile(ds, ii);
+  fit <- loadObject(df);
+  sampleName <- getName(df);
+  rm(segList, fitList);
+}
 
 fit0 <- fit;
 
@@ -146,6 +149,25 @@ for (kk in seq(along=nbrOfCPs)) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   fitD <- deShearC1C2(fitDP);
   doPlots(fitD, tags="deShear");
+
+  nCPsTag <- sprintf("#CPs=%d", nbrOfChangePoints(fitD));
+  toPNG(sampleName, tags=c("cpCallDensity", nCPsTag, "deShear"), width=800, aspectRatio=0.5, {
+    debug <- fitD$modelFit$debug;
+    d <- debug$cpAngleDensity;
+    pfp <- debug$pfp;
+    expected <- attr(pfp, "expected");
+    par(mar=c(5,4,2,2));
+    plot(d, lwd=2, main="");
+    abline(v=expected);
+    text(x=expected, y=par("usr")[4], names(expected), adj=c(0.5,-0.5), cex=1.5, xpd=TRUE);
+
+    # Annotate called peaks
+    idxs <- match(pfp$call, expected);
+    text(x=pfp$x, y=pfp$density, names(expected)[idxs], adj=c(0.5,-0.5), cex=1.5, col="blue");
+
+    stext(side=4, pos=0, sampleName);
+    stext(side=4, pos=1, nCPsTag);
+  });
 
   verbose && exit(verbose);
 } # for (kk ...)
