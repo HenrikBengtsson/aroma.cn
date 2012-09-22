@@ -613,9 +613,9 @@ chrsTags <- if (nbrOfChromosomes == 1) {
    horizontal axis (light blue curve).
    \textbf{Right:}
    The empirical density of the directions of the ($P=<%=nbrOfChangePoints(fit)%>$) change points in ($C_1,C_2$) in copy-number segmentation on <%=chromosomesH%><%=if (doDeshearing) " after de-shearing"%>.
-   <% if (!is.null(cpAngleDensity)) { %>
+   <% if (is.null(cpAngleDensity)) { %>
    \emph{There were too change points for estimating the density.}
-   <% } # if (!is.null(cpAngleDensity)) %>
+   <% } # if (is.null(cpAngleDensity)) %>
  }
  \label{fig:C1C2}
 \end{figure}
