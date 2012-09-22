@@ -21,7 +21,7 @@ stopifnot(exists("rspArgs", mode="list"));
 REPORT_DENSITIES <- getOption("PSCBS::reports/densities", FALSE);
 REPORT_TUMORBOOST <- getOption("PSCBS::reports/TumorBoost", FALSE);
 REPORT_USE_ALPHA_CHANNEL <- getOption("PSCBS::report/useAlphaChannel", TRUE);
-REPORT_PER_CHROMOSOME <- getOption("PSCBS::reports/perChromosome", FALSE);
+REPORT_PER_CHROMOSOME <- getOption("PSCBS::reports/perChromosome", TRUE);
 REPORT_C1C2 <- getOption("PSCBS::reports/pscnSegmentationTransitions", TRUE);
 REPORT_C1C2_DESHEARING <- getOption("PSCBS::reports/c1C2Deshearing", TRUE);
 
@@ -461,10 +461,10 @@ dataT <- subset(data, type == "SNP");
 <% pscnSegmentationTracks <- function(fit, doDeshearing=c(FALSE, TRUE)[1], ...) { %>
 \clearpage
 <% if (doDeshearing) { %>
-\section{Parent-specific copy-number segmentation tracks after de-shearing}
+\section{PSCN segmentation tracks after de-shearing}
 \label{sec:PSCNSegmentationTracksAfterDeshearing}
 <% } else { %>
-\section{Parent-specific copy-number segmentation tracks}
+\section{PSCN segmentation tracks}
 \label{sec:PSCNSegmentationTracks}
 <% } %>
 <%
@@ -489,13 +489,12 @@ chrsTags <- if (nbrOfChromosomes == 1) {
   \resizebox{\textwidth}{!}{%
     \includegraphics{<%={
       # saveObject(fit, file="fool.Rbin")
-      if (doDeshearing) {
-        tags <- c(chrsTags, "PairedPSCBS", gsub("[*-]", "", track), "deSheared", getChecksum(fit));
-      } else {
-        tags <- c(chrsTags, "PairedPSCBS", gsub("[*-]", "", track), getChecksum(fit));
-      }
-      toPNG(name=sampleName, tags=tags, width=1024, aspectRatio=0.25, par=list(mar=c(2.8,4,1,1)+0.1, cex=1.5), {
-        plotTracks(fit, tracks=track, lwd=5, Clim=Clim);
+      tags <- c(chrsTags, "PairedPSCBS", gsub("[*-]", "", track), getChecksum(fit));
+      nChrs <- nbrOfChromosomes(fit);
+      mar <- c(1.4,4,0.6,1)+0.1;
+      if (nChrs == 1) mar <- c(2.0,4,1.1,1)+0.1;
+      toPNG(name=sampleName, tags=tags, width=1024, aspectRatio=0.25, par=list(mar=mar, cex=1.5), {
+        plotTracks(fit, tracks=track, lwd=5, Clim=Clim, add=(nChrs > 1));
 #        plotTrack2(fit, panels=track, lwd=5, Clim=Clim);
       }, force=FALSE);
     }%>}%
@@ -524,16 +523,20 @@ chrsTags <- if (nbrOfChromosomes == 1) {
 <% if (!REPORT_C1C2) return(); %>
 \clearpage
 <% if (doDeshearing) { %>
-\section{Parent-specific copy-number transitions after de-shearing}
+\section{PSCN transitions after de-shearing}
 \label{sec:PSCNSegmentationTransitionsAfterDeshearing}
 <% } else { %>
-\section{Parent-specific copy-number transitions}
+\section{PSCN transitions}
 \label{sec:PSCNSegmentationTransitions}
 <% } %>
 
 <%
 # plotC1C2Grid()
 require("aroma.cn") || throw("Package not loaded: aroma.cn");
+
+# Estimate CP angular density
+modelFit <- fitDeltaC1C2ShearModel(fit, onError="return");
+cpAngleDensity <- modelFit$debug$cpAngleDensity;
 
 chromosomes <- getChromosomes(fit);
 nbrOfChromosomes <- length(chromosomes);
@@ -551,12 +554,13 @@ chrsTags <- if (nbrOfChromosomes == 1) {
 %>
 \begin{figure}[htbp]
  \begin{center}
+  \parbox[t]{0.6\textwidth}{\vspace{0pt}%
   \resizebox{0.6\textwidth}{!}{%
     \includegraphics{<%={
       if (doDeshearing) {
         tags <- c(chrsTags, "PairedPSCBS", "C1C2", "deSheared", getChecksum(fit));
       } else {
-        tags <- c(chrsTags, "PairedPSCBS", "C1C2", getChecksum(fit));
+      tags <- c(chrsTags, "PairedPSCBS", "C1C2", getChecksum(fit));
       }
       toPNG(name=sampleName, tags=tags, width=640, aspectRatio=1, par=list(mar=c(4,4,1,1)+0.1, cex=2), {
         plotC1C2Grid(fit, Clim=ClimX, pch=19, col="#00000011");
@@ -564,10 +568,42 @@ chrsTags <- if (nbrOfChromosomes == 1) {
       }, force=FALSE);
     }%>}%
   }%
+  }% \parbox[t]{0.6\textwidth}
+%%
+  \parbox[t]{0.38\textwidth}{\vspace{0pt}%
+  <% if (!is.null(cpAngleDensity)) { %>
+  \resizebox{0.38\textwidth}{!}{%
+    \includegraphics{<%={
+      tags <- c(chrsTags, "PairedPSCBS", "CPAngleDensity", getChecksum(fit));
+      toPNG(name=sampleName, tags=tags, width=640, aspectRatio=0.7, par=list(mar=c(4,4,2,2)+0.1, cex=2), {
+        debug <- modelFit$debug;
+        plot(cpAngleDensity, lwd=2, main="");
+         expected <- debug$expected;
+         if (!is.null(expected)) {
+           abline(v=expected);
+           text(x=expected, y=par("usr")[4], names(expected), adj=c(0.5,-0.5), cex=1.5, xpd=TRUE);
+         }
+ 
+         # Annotate called peaks, iff possible
+         pfp <- debug$pfp;
+         if (!is.null(pfp) && !is.null(expected)) {
+           idxs <- match(pfp$call, expected);
+           text(x=pfp$x, y=pfp$density, names(expected)[idxs], adj=c(0.5,-0.5), cex=1.5, xpd=TRUE, col="blue");
+         }
+
+##        stext(side=4, pos=0, sampleName);
+##        stext(side=4, pos=1, nCPsTag);
+      }, force=FALSE);
+    }%>}%
+  }\\%
+  <% } # if (!is.null(cpAngleDensity)) %>
+  ~
+  }%\parbox[t]{0.38\textwidth}
  \end{center}
  \caption{
+   \textbf{Left:}
    A graph representation of the minor ($C_1$) and major ($C_2$)
-   copy-number segmentation on <%=chromosomesH%> <%=ifelse(doDeshearing, "after de-shearing", "")%>,
+   copy-number segmentation on <%=chromosomesH%><%=if (doDeshearing) " after de-shearing"%>,
    where the nodes represent ($S=<%=nbrOfSegments(fit, splitters=FALSE)%>$)
    segments and the lines change points.
    The size of a node reflects the length of the corresponding segment.
@@ -575,6 +611,11 @@ chrsTags <- if (nbrOfChromosomes == 1) {
    are projected onto the horizontal and vertical axis, respectively.
    To easy a visual comparison, the latter is also projected onto the
    horizontal axis (light blue curve).
+   \textbf{Right:}
+   The empirical density of the directions of the ($P=<%=nbrOfChangePoints(fit)%>$) change points in ($C_1,C_2$) in copy-number segmentation on <%=chromosomesH%><%=if (doDeshearing) " after de-shearing"%>.
+   <% if (!is.null(cpAngleDensity)) { %>
+   \emph{There were too change points for estimating the density.}
+   <% } # if (!is.null(cpAngleDensity)) %>
  }
  \label{fig:C1C2}
 \end{figure}
@@ -620,7 +661,6 @@ if (REPORT_C1C2_DESHEARING) {
   rm(fitDT);
 }
 %>
-
 
 <% } # for (chr ...) %>
 <% } # if (REPORT_PER_CHROMOSOME && nbrOfChromosomes(fit) > 1) %>
