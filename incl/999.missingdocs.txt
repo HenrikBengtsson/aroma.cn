@@ -162,3 +162,4 @@ getChipType.PairedPSCBSFileSet
 getDefaultFullName.PairedPSCBSFileSet
 getPlatform.PairedPSCBSFileSet
 getOptionalArguments.PairedPscbsCaller
+backgroundCorrect backgroundCorrect.PairedPSCBS

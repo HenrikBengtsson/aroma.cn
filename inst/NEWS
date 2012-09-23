@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.8 [2012-09-23]
+o More internal updates.
+
+
 Version: 1.2.7 [2012-09-20]
 o Now PairedPscbsCaller() passes '...' to the internal callers,
   which makes it possible to for instance specify the number of

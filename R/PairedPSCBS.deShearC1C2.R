@@ -75,7 +75,7 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", 
     deltaAB <- estimateDeltaAB(fit, ...);
     abCall <- (segs$dhMean <= deltaAB);
     segs$dhMean[abCall] <- 0;
-    segs$abCall <- abCall;
+##    segs$abCall <- abCall;
     fit$output <- segs;
   }
 
@@ -99,7 +99,6 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", 
   # (C1,C2)
   C1C2 <- X[,1:2, drop=FALSE];
 
-
   verbose && enter(verbose, "Remove shearing from the (C1,C2) space by linear adjustment in x and y");
 
   ## Backtransform
@@ -116,13 +115,14 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", 
   }
 
   C1C2o <- H(C1C2);
+
   # Sanity checks
   stopifnot(dim(C1C2o) == dim(C1C2));
   verbose && exit(verbose);
 
   verbose && enter(verbose, "Transform orthogonalized (C1,C2) to (TCN,DH)");
   # (C1,C2) -> (TCN,DH)
-  gamma <- rowSums(C1C2o, na.rm=TRUE);
+  gamma <- rowSums(C1C2o);  # Don't do na.rm=TRUE here => TCN = 0.
   dh <- 2*(C1C2o[,2]/gamma - 1/2);
   verbose && exit(verbose);
 
@@ -140,7 +140,12 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   fitO <- fit;
   fitO$output <- segs;
-  fitO$modelFit <- modelFit;
+
+  # Record deshearing parameters
+  postMethods <- fitO$postMethods;
+  if (is.null(postMethods)) postMethods <- list();
+  postMethods$deShearC1C2 <- list(modelFit=modelFit);
+  fitO$postMethods <- postMethods;
 
   verbose && exit(verbose);
 
@@ -325,18 +330,22 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
   rm(counts);
 
   ## Change-point weights
-  if (weightFlavor == "min") {
-    ## smallest of the two flanking (DH) counts
-    w <- cbind(w[1:(length(w)-1)], w[2:length(w)]);
-    w <- rowMins(w, na.rm=TRUE);
-    w[is.infinite(w)] <- NA;
-    dw <- sqrt(w);
-  } else if (weightFlavor == "sum") {
-    ## sum of region weights
-    dw <- w[1:(length(w)-1)] + w[2:length(w)];
+  if (nbrOfSegments > 1) {
+    if (weightFlavor == "min") {
+      ## smallest of the two flanking (DH) counts
+      w <- cbind(w[1:(length(w)-1)], w[2:length(w)]);
+      w <- rowMins(w, na.rm=TRUE);
+      w[is.infinite(w)] <- NA;
+      dw <- sqrt(w);
+    } else if (weightFlavor == "sum") {
+      ## sum of region weights
+      dw <- w[1:(length(w)-1)] + w[2:length(w)];
+    }
+  } else {
+    dw <- double(0L);
   }
   # Sanity check
-  stopifnot(length(dw) == nrow(X)-1L);
+  stopifnot((length(dw) == nrow(X)-1L) && TRUE);
 
   # Ignore change points between segments in allelic balance
   # by giving them "zero" (actually 0.1) weight.
@@ -371,7 +380,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Local functions
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  estimateShear <- function(pfp) {
+  estimateShear <- function(pfp, need=NULL) {
     verbose && enter(verbose, "Estimate (x,y) shear model");
     ## Use -pi/2 and 0 to correct for shearing
   
@@ -750,9 +759,49 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 
 
+setMethodS3("backgroundCorrect", "PairedPSCBS", function(fit, preserveScale=TRUE, ...) {
+  modelFit <- list();
+
+  # (1) Estimate background (e.g. normal contamination and more)
+  kappa <- estimateKappa(fit);
+  modelFit$kappa <- kappa;
+  fitBG <- translateC1C2(fit, dC1=-kappa, dC2=-kappa);
+
+  if (preserveScale) {
+    segs <- getSegments(fit);
+    segsBG <- getSegments(fitBG);
+#    chrs <- 1:22;
+#    if (!is.null(chrs)) segs <- subset(segs, chromosome %in% chrs);
+#    if (!is.null(chrs)) segsBG <- subset(segsBG, chromosome %in% chrs);
+    count <- segs[["tcnNbrOfLoci"]];
+    CT <- segs[["tcnMean"]];
+    CTBG <- segsBG[["tcnMean"]];
+    mu <- weightedMedian(CT, w=count);
+    muBG <- weightedMedian(CTBG, w=count);
+    scale <- mu/muBG;
+    fitBG <- translateC1C2(fitBG, sC1=scale, sC2=scale);
+    modelFit$scaleCT <- scale;
+  }
+
+  # Store model fit
+  postMethods <- fit$postMethods;
+  if (is.null(postMethods)) postMethods <- list();
+  postMethods$backgroundCorrection <- list(modelFit=modelFit);
+  fitBG$postMethods <- postMethods;
+
+  fitBG;
+}) # backgroundCorrect()
+
+
+
 ##############################################################################
 # HISTORY
 # 2012-09-22
+# o Added backgroundCorrect() for PairedPSCBS.
+# o Now fitDeltaC1C2ShearModel() "handles" also single elements.
+# o BUG FIX: deShearC1C2() would incorrectly set the TCN level to zero
+#   if (C1,C2) = (NA,NA).
+# o Now deShearC1C2() stores the modelFit in postMethods$deShearC1C2$modelFit.
 # o CORRECTION: The peak caller of fitDeltaXYShearModel() swapped the labels
 #   of the horizontal and vertical peaks. Labels are only used for display.
 # 2012-09-21 [HB]

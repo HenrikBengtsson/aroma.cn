@@ -71,7 +71,7 @@ REPORT_PER_GENOTYPE <- getOption("PSCBS::reports/perGenotype", TRUE);
 \newcommand{\BAFTN}{BAF$^*_{T}$\xspace}
 
 
-<% pairedPSCBSReport <- function(fit, sampleName=NULL, dataSet=NULL, studyName="PairedPSCBS", Clim=c(0,4), Blim=c(0,1), reportPath=file.path("reports", studyName), figPath=file.path(reportPath, "figures"), ..., figForce=FALSE) { %>
+<% pairedPSCBSReport <- function(fit, sampleName=NULL, dataSet=NULL, studyName="PairedPSCBS", Clim=c(0,5), Blim=c(0,1), reportPath=file.path("reports", studyName), figPath=file.path(reportPath, "figures"), ..., figForce=FALSE) { %>
 <%
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Validate arguments
@@ -459,13 +459,25 @@ dataT <- subset(data, type == "SNP");
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % PARENT-SPECIFIC COPY-NUMBER SEGMENTATION TRACKS
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-<% pscnSegmentationTracks <- function(fit, doDeshearing=c(FALSE, TRUE)[1], ...) { %>
+<% pscnSegmentationTracks <- function(fit, chromosomes=NULL, ...) { %>
 \clearpage
-<% if (doDeshearing) { %>
-\section{PSCN segmentation tracks after de-shearing}
+<%
+postMethods <- names(fit$postMethods);
+deShearC1C2 <- is.element("deShearC1C2", postMethods);
+bgCorrection <- is.element("backgroundCorrection", postMethods);
+
+if (!is.null(chromosomes)) {
+  fit <- extractChromosomes(fit, chromosomes=chromosomes);
+}
+%>
+<% if (deShearC1C2 && bgCorrection) { %>
+\section{PSCN segments after de-shearing and background correction}
+\label{sec:PSCNSegmentationTracksAfterDeshearingAndBgCorrection}
+<% } else if (deShearC1C2) { %>
+\section{PSCN segments after de-shearing}
 \label{sec:PSCNSegmentationTracksAfterDeshearing}
 <% } else { %>
-\section{PSCN segmentation tracks}
+\section{PSCN segments}
 \label{sec:PSCNSegmentationTracks}
 <% } %>
 <%
@@ -495,8 +507,9 @@ chrsTags <- if (nbrOfChromosomes == 1) {
       mar <- c(1.4,4,0.6,1)+0.1;
       if (nChrs == 1) mar <- c(2.0,4,1.1,1)+0.1;
       toPNG(name=sampleName, tags=tags, width=1024, aspectRatio=0.25, par=list(mar=mar, cex=1.5), {
-        plotTracks(fit, tracks=track, lwd=5, Clim=Clim, add=(nChrs > 1));
-#        plotTrack2(fit, panels=track, lwd=5, Clim=Clim);
+        scatter <- if (deShearC1C2) NULL else "*";
+        calls <- if (deShearC1C2) NULL else "*";
+        plotTracks(fit, tracks=track, scatter=scatter, calls=calls, lwd=5, Clim=Clim, add=(nChrs > 1));
       }, force=FALSE);
     }%>}%
   }%
@@ -505,7 +518,7 @@ chrsTags <- if (nbrOfChromosomes == 1) {
  \end{center}
  \caption{
    Results of Paired PSCBS segmentation
-   <%=ifelse(doDeshearing, "after de-shearing", "")%>
+   <%=ifelse(deShearC1C2, "after de-shearing", "")%>
    on <%=chromosomesH%> projected onto
    TCN (top), \BAFT (row 2), \BAFTN (row 3), DH (row 4), as well as TCN, $C_1$ and $C_2$ (bottom).
    Paired PSCBS segmentation is always done on TCN and DH data.
@@ -520,10 +533,27 @@ chrsTags <- if (nbrOfChromosomes == 1) {
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 % PARENT-SPECIFIC COPY-NUMBER TRANSITIONS
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-<% pscnSegmentationTransitions <- function(fit, kappa=NULL, doDeshearing=c(FALSE, TRUE)[1], ...) { %>
+<% pscnSegmentationTransitions <- function(fit, chromosomes=NULL, kappa=NULL, ...) { %>
 <% if (!REPORT_C1C2) return(); %>
 \clearpage
-<% if (doDeshearing) { %>
+<%
+postMethods <- names(fit$postMethods);
+deShearC1C2 <- is.element("deShearC1C2", postMethods);
+bgCorrection <- is.element("backgroundCorrection", postMethods);
+
+# Get deShear model fit, iff exists
+modelFitD <- fit$postMethods$deShearC1C2$modelFit;
+cpAngleDensityD <- modelFitD$debug$cpAngleDensity;
+
+# Subset by chromosome?
+if (!is.null(chromosomes)) {
+  fit <- extractChromosomes(fit, chromosomes=chromosomes);
+}
+%>
+<% if (deShearC1C2 && bgCorrection) { %>
+\section{PSCN transitions after de-shearing and background correction}
+\label{sec:PSCNSegmentationTransitionsAfterDeshearingAndBgCorrection}
+<% } else if (deShearC1C2) { %>
 \section{PSCN transitions after de-shearing}
 \label{sec:PSCNSegmentationTransitionsAfterDeshearing}
 <% } else { %>
@@ -532,7 +562,7 @@ chrsTags <- if (nbrOfChromosomes == 1) {
 <% } %>
 
 <%
-# plotC1C2Grid()
+# plotC1C2Grid() is needed
 require("aroma.cn") || throw("Package not loaded: aroma.cn");
 
 # Estimate CP angular density
@@ -558,13 +588,14 @@ chrsTags <- if (nbrOfChromosomes == 1) {
   \parbox[t]{0.6\textwidth}{\vspace{0pt}%
   \resizebox{0.6\textwidth}{!}{%
     \includegraphics{<%={
-      if (doDeshearing) {
-        tags <- c(chrsTags, "PairedPSCBS", "C1C2", "deSheared", getChecksum(fit));
-      } else {
-      tags <- c(chrsTags, "PairedPSCBS", "C1C2", getChecksum(fit));
+      tags <- c(chrsTags, "PairedPSCBS", "C1C2");
+      if (deShearC1C2) {
+        tags <- c(tags, "deSheared");
       }
-      toPNG(name=sampleName, tags=tags, width=640, aspectRatio=1, par=list(mar=c(4,4,1,1)+0.1, cex=2), {
+      tags <- c(tags, getChecksum(fit));
+      toPNG(name=sampleName, tags=tags, width=640, aspectRatio=1, par=list(mar=c(4,4,1.02,1)+0.1, cex=2), {
         plotC1C2Grid(fit, Clim=ClimX, pch=19, col="#00000011");
+        stext(side=3, pos=1, chrsTags, cex=0.8);
         linesC1C2(fit, lwd=2, col="#00000011");
         if (!is.null(kappa)) {
           abline(v=kappa, col="red", lty=3, lwd=2);
@@ -581,19 +612,23 @@ chrsTags <- if (nbrOfChromosomes == 1) {
       tags <- c(chrsTags, "PairedPSCBS", "CPAngleDensity", getChecksum(fit));
       toPNG(name=sampleName, tags=tags, width=640, aspectRatio=0.7, par=list(mar=c(4,4,2,2)+0.1, cex=2), {
         debug <- modelFit$debug;
-        plot(cpAngleDensity, lwd=2, main="");
-         expected <- debug$expected;
-         if (!is.null(expected)) {
-           abline(v=expected);
-           text(x=expected, y=par("usr")[4], names(expected), adj=c(0.5,-0.5), cex=1.5, xpd=TRUE);
-         }
+        maxY <- max(c(cpAngleDensity$y, cpAngleDensityD$y), na.rm=TRUE);
+        plot(cpAngleDensity, ylim=c(0,maxY), lwd=2, main="");
+        if (!is.null(cpAngleDensityD)) lines(cpAngleDensityD, lwd=2, col="lightblue");
+        lines(cpAngleDensity, lwd=2);
+        expected <- debug$expected;
+        if (!is.null(expected)) {
+          abline(v=expected);
+          text(x=expected, y=par("usr")[4], names(expected), adj=c(0.5,-0.5), cex=1.5, xpd=TRUE);
+        }
  
-         # Annotate called peaks, iff possible
-         pfp <- debug$pfp;
-         if (!is.null(pfp) && !is.null(expected)) {
-           idxs <- match(pfp$call, expected);
-           text(x=pfp$x, y=pfp$density, names(expected)[idxs], adj=c(0.5,-0.5), cex=1.5, xpd=TRUE, col="blue");
-         }
+        # Annotate called peaks, iff possible
+        pfpD <- modelFitD$debug$pfp;
+        expectedD <- modelFitD$debug$expected;
+        if (!is.null(pfpD) && !is.null(expectedD)) {
+          idxs <- match(pfpD$call, expectedD);
+          text(x=pfpD$x, y=pfpD$density, names(expectedD)[idxs], adj=c(0.5,-0.5), cex=1.5, xpd=TRUE, col="blue");
+        }
 
 ##        stext(side=4, pos=0, sampleName);
 ##        stext(side=4, pos=1, nCPsTag);
@@ -607,7 +642,7 @@ chrsTags <- if (nbrOfChromosomes == 1) {
  \caption{
    \textbf{Left:}
    A graph representation of the minor ($C_1$) and major ($C_2$)
-   copy-number segmentation on <%=chromosomesH%><%=if (doDeshearing) " after de-shearing"%>,
+   copy-number segmentation on <%=chromosomesH%><%=if (deShearC1C2) " after de-shearing"%>,
    where the nodes represent ($S=<%=nbrOfSegments(fit, splitters=FALSE)%>$)
    segments and the lines change points.
    The size of a node reflects the length of the corresponding segment.
@@ -616,10 +651,10 @@ chrsTags <- if (nbrOfChromosomes == 1) {
    To easy a visual comparison, the latter is also projected onto the
    horizontal axis (light blue curve).
    <% if (!is.null(kappa)) { %>
-   The background signal was estimated to $\kappa=<%=sprintf("%.3f", kappa)%>$.
+   The background signal was estimated to $\kappa=<%=sprintf("%.3f", kappa)%>$ (vertical dashed red line).
    <% } %>
    \textbf{Right:}
-   The empirical density of the directions of the ($P=<%=nbrOfChangePoints(fit)%>$) change points in ($C_1,C_2$) in copy-number segmentation on <%=chromosomesH%><%=if (doDeshearing) " after de-shearing"%>.
+   The empirical density of the directions of the ($P=<%=nbrOfChangePoints(fit)%>$) change points in ($C_1,C_2$) in copy-number segmentation on <%=chromosomesH%><%=if (deShearC1C2) " after de-shearing"%>.
    <% if (is.null(cpAngleDensity)) { %>
    \emph{There were too change points for estimating the density.}
    <% } # if (is.null(cpAngleDensity)) %>
@@ -637,17 +672,21 @@ kappa <- estimateKappa(fit);
 if (REPORT_C1C2_DESHEARING) {
   fitD <- deShearC1C2(fit);
   kappaD <- estimateKappa(fitD);
-  pscnSegmentationTracks(fitD, kappa=kappaD, doDeshearing=TRUE);
-  pscnSegmentationTransitions(fitD, kappa=kappaD, doDeshearing=TRUE);
+  pscnSegmentationTracks(fitD, kappa=kappaD);
+  pscnSegmentationTransitions(fitD, kappa=kappaD);
 }
 %>
 
 <%
 if (REPORT_C1C2_DESHEARING_KAPPA) {
-  fitDn <- translateC1C2(fitD, dC1=-kappaD, dC2=-kappaD);
+  # Remove background and rescale
+  fitDn <- backgroundCorrect(fitD, preserveScale=TRUE);
+
+  # Estimate background for rescale data
   kappaDn <- estimateKappa(fitDn);
-  pscnSegmentationTracks(fitDn, kappa=kappaDn, doDeshearing=TRUE);
-  pscnSegmentationTransitions(fitDn, kappa=kappaDn, doDeshearing=TRUE);
+
+  pscnSegmentationTracks(fitDn, kappa=kappaDn);
+  pscnSegmentationTransitions(fitDn, kappa=kappaDn);
 }
 %>
 
@@ -669,24 +708,21 @@ fitT <- extractChromosome(fit, chromosome=chr);
 
 <%=beforeAndAfterTumorBoost(fitT)%>
 
-<%=pscnSegmentationTracks(fitT)%>
+<%=pscnSegmentationTracks(fit, chromosomes=chr)%>
 
-<%=pscnSegmentationTransitions(fitT, kappa=kappa)%>
+<%=pscnSegmentationTransitions(fit, chromosomes=chr, kappa=kappa)%>
 
 <%
 if (REPORT_C1C2_DESHEARING) {
-  fitDT <- extractChromosome(fitD, chromosome=chr);
-  pscnSegmentationTracks(fitDT, doDeshearing=TRUE);
-  pscnSegmentationTransitions(fitDT, kappa=kappaD, doDeshearing=TRUE);
-  rm(fitDT);
+  pscnSegmentationTracks(fitD, chromosomes=chr);
+  pscnSegmentationTransitions(fitD, chromosomes=chr, kappa=kappaD);
 }
 %>
 
 <%
 if (REPORT_C1C2_DESHEARING_KAPPA) {
-  fitDTn <- extractChromosome(fitDn, chromosome=chr);
-  pscnSegmentationTracks(fitDTn, kappa=kappaDn, doDeshearing=TRUE);
-  pscnSegmentationTransitions(fitDTn, kappa=kappaDn, doDeshearing=TRUE);
+  pscnSegmentationTracks(fitDn, chromosomes=chr, kappa=kappaDn);
+  pscnSegmentationTransitions(fitDn, chromosomes=chr, kappa=kappaDn);
 }
 %>
 
@@ -751,6 +787,8 @@ assign("renamePDF", function() {
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % HISTORY:
+# 2012-09-23
+# o Now display background and rescale corrected.
 # 2012-09-22
 # o Now displaying raw, desheared, and kappa corrected.
 # 2012-09-19

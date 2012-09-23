@@ -291,6 +291,8 @@
 \alias{getDefaultFullName.PairedPSCBSFileSet}
 \alias{getPlatform.PairedPSCBSFileSet}
 \alias{getOptionalArguments.PairedPscbsCaller}
+\alias{backgroundCorrect}
+\alias{backgroundCorrect.PairedPSCBS}
 
 \description{
   This page contains aliases for all "non-documented" objects that

@@ -48,7 +48,7 @@ if (length(ds) > 1) {
 df <- getFile(ds, ii);
 fit <- loadObject(df);
 sampleName <- getFullName(df);
-sampleName <- setdiff(sampleName, "PairedPSCBS");
+sampleName <- gsub(",PairedPSCBS", "", sampleName, fixed=TRUE);
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
