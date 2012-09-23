@@ -557,8 +557,8 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
 
   # (radius,alpha)  # 'radius' is not really used
   radius <- sqrt(dXY[,2]^2 + dXY[,1]^2);
-  alpha <- atan(dXY[,2]/dXY[,1]);
-  verbose && cat(verbose, "(radius,alpha):");
+  alpha <- atan(dXY[,2]/dXY[,1]); ## == atan(dY/dX)
+  verbose && cat(verbose, "(radius,alpha) where horizontal (vertical) is alpha=0 (pi/2):");
   verbose && str(verbose, radius);
   verbose && str(verbose, alpha);
   verbose && exit(verbose);
@@ -588,15 +588,15 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   # Adjust modes in {alpha} to their expect locations
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Shift, modulo pi/8:th, and unshift");
-  ## The signal is pi-periodic.
-  ## we are looking at from -pi/2 to pi/2.
-  ## we expect a peak near -pi/2 (or pi/2...)
-  ## in order to estimate it correctly, transform the signal so that it is
-  ## in -pi/2-pi/8, pi/2-pi/8
-  ## /PN 2010-09-22
+  ## - The signal is pi-periodic.
+  ## - We are looking at from -pi/2 to pi/2.
+  ## - We expect a peak near -pi/2 (or pi/2...)
+  ## - In order to estimate it correctly, transform the signal so that 
+  ##   it is in (-pi/2-pi/8, pi/2-pi/8)
+  ##   /PN 2010-09-22
   lag <- pi/8;
   alphaT <- alpha;
-  ww <- which(alphaT > pi/2-lag) ## half way to both expected peaks
+  ww <- which(alphaT > pi/2-lag); ## half way to both expected peaks
   alphaT[ww] <- alphaT[ww]-pi;
   verbose && exit(verbose);
 
@@ -606,7 +606,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   # Find modes
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Finding modes (peaks & valleys)");
-  rg <- c(-pi/2,pi/2)-lag;
+  rg <- c(-pi/2,pi/2) - lag;
   if (onError == "error") {
     d <- density(alphaT, weights=weights, from=rg[1], to=rg[2], adjust=adjust);
   } else if (onError == "return") {
@@ -640,8 +640,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   # Call modes
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Calling modes");
-  ## expected <- c("-"=-1/2, "\\"=-1/4, "|"=0, "/"=+1/4, "-"=+1/2)*pi;
-  expected <- c("-"=-1/2, "\\"=-1/4, "|"=0, "/"=+1/4)*pi;
+  expected <- c("|"=-1/2, "\\"=-1/4, "-"=0, "/"=+1/4)*pi;
   ## after the above 'angle lag' trick we don't expect anything near +pi/2
 
   verbose && cat(verbose, "Expected locations of peaks:");
@@ -753,6 +752,9 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 ##############################################################################
 # HISTORY
+# 2012-09-22
+# o CORRECTION: The peak caller of fitDeltaXYShearModel() swapped the labels
+#   of the horizontal and vertical peaks. Labels are only used for display.
 # 2012-09-21 [HB]
 # o BUG FIX: fitDeltaC1C2ShearModel(... dropABChangePoints=TRUE) could 
 #   generate an incorrect number change-point weights if dropping.
