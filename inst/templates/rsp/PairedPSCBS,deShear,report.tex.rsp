@@ -680,7 +680,7 @@ if (REPORT_C1C2_DESHEARING) {
 <%
 if (REPORT_C1C2_DESHEARING_KAPPA) {
   # Remove background and rescale
-  fitDn <- backgroundCorrect(fitD, preserveScale=TRUE);
+  fitDn <- backgroundCorrect(fitD, targetMedian=2);
 
   # Estimate background for rescale data
   kappaDn <- estimateKappa(fitDn);

@@ -759,29 +759,56 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 
 
 
-setMethodS3("backgroundCorrect", "PairedPSCBS", function(fit, preserveScale=TRUE, ...) {
+setMethodS3("backgroundCorrect", "PairedPSCBS", function(fit, targetMedian=c("same", "none"), ...) {
+  # Argument 'targetMedian':
+  if (is.character(targetMedian)) {
+    targetMedian <- match.arg(targetMedian);
+  } else {
+    targetMedian <- Arguments$getDouble(targetMedian, range=c(0,Inf));
+  }
+
   modelFit <- list();
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # (1) Estimate background (e.g. normal contamination and more)
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   kappa <- estimateKappa(fit);
   modelFit$kappa <- kappa;
   fitBG <- translateC1C2(fit, dC1=-kappa, dC2=-kappa);
 
-  if (preserveScale) {
-    segs <- getSegments(fit);
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # (2) Rescale
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Calculate current median
+  modelFit$targetMedian <- targetMedian;
+  if (!identical(targetMedian, "none")) {
     segsBG <- getSegments(fitBG);
-#    chrs <- 1:22;
-#    if (!is.null(chrs)) segs <- subset(segs, chromosome %in% chrs);
-#    if (!is.null(chrs)) segsBG <- subset(segsBG, chromosome %in% chrs);
-    count <- segs[["tcnNbrOfLoci"]];
-    CT <- segs[["tcnMean"]];
+    count <- segsBG[["tcnNbrOfLoci"]];
+    # chrs <- 1:22;
+    # if (!is.null(chrs)) segsBG <- subset(segsBG, chromosome %in% chrs);
     CTBG <- segsBG[["tcnMean"]];
-    mu <- weightedMedian(CT, w=count);
     muBG <- weightedMedian(CTBG, w=count);
+    muBG <- Arguments$getDouble(muBG, range=c(0,Inf));
+    modelFit$muBG <- muBG;
+
+    if (identical(targetMedian, "same")) {
+      segs <- getSegments(fit);
+      # if (!is.null(chrs)) segs <- subset(segs, chromosome %in% chrs);
+      CT <- segs[["tcnMean"]];
+      mu <- weightedMedian(CT, w=count);
+      mu <- Arguments$getDouble(mu, range=c(0,Inf));
+    } else if (is.numeric(targetMedian)) {
+      mu <- targetMedian;
+    }
+    modelFit$mu <- mu;
+
     scale <- mu/muBG;
+    modelFit$scale <- scale;
+
     fitBG <- translateC1C2(fitBG, sC1=scale, sC2=scale);
-    modelFit$scaleCT <- scale;
-  }
+  } # if (!identical(targetMedian, "none"))
+
 
   # Store model fit
   postMethods <- fit$postMethods;
