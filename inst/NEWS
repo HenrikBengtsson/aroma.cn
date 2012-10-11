@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.9 [2012-10-11]
+o Added getOutputFileClass() and getOutputFileExtension() for
+  TotalCnSmoothing.
+
+
 Version: 1.2.8 [2012-09-23]
 o More internal updates.
 

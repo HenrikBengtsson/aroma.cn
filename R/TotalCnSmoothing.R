@@ -169,6 +169,86 @@ setMethodS3("getTargetPositions", "TotalCnSmoothing", function(this, ..., force=
 setMethodS3("smoothRawCopyNumbers", "TotalCnSmoothing", abstract=TRUE);
 
 
+setMethodS3("getOutputFileExtension", "TotalCnSmoothing", function(this, ...) {
+  ds <- getInputDataSet(this);
+  df <- getFile(ds, 1);
+  ext <- getFilenameExtension(df);
+  sprintf(".%s", ext);
+}, protected=TRUE)
+
+
+setMethodS3("getOutputFileSetClass", "TotalCnSmoothing", function(this, ...) {
+  ds <- getInputDataSet(this);
+  className <- class(ds)[1];
+  Class$forName(className);
+}, protected=TRUE)
+
+
+setMethodS3("getOutputFileClass", "TotalCnSmoothing", function(this, ...) {
+  setClass <- getOutputFileSetClass(this, ...);
+  setInstance <- newInstance(setClass);
+  className <- getFileClass(setInstance);
+  Class$forName(className);
+}, protected=TRUE)
+
+
+setMethodS3("getOutputDataSet0", "TotalCnSmoothing", function(this, pattern=NULL, className=NULL, ..., verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  }
+
+  # Argument 'pattern':
+  if (!is.null(pattern)) {
+    pattern <- Arguments$getRegularExpression(pattern=pattern);
+  }
+
+
+  verbose && enter(verbose, "Retrieving existing set of output files");
+  ds <- getInputDataSet(this);
+  outPath <- getPath(this);
+  if (is.null(className)) {
+    clazz <- getOutputFileSetClass(this);
+    className <- getName(clazz);
+  }
+  verbose && cat(verbose, "Class: ", className);
+
+  path <- getPath(this);
+  verbose && cat(verbose, "Path: ", path);
+
+  if (is.null(pattern)) {
+    # Default filename pattern find non-private (no dot prefix) files with
+    # the same file name extension as the input data set.
+    fileExt <- getOutputFileExtension(this);
+    fileExt <- c(fileExt, tolower(fileExt), toupper(fileExt));
+    fileExt <- sprintf("(%s)", paste(unique(fileExt), collapse="|"));
+    verbose && cat(verbose, "Expected file extensions: ", fileExt);
+    pattern <- sprintf("^[^.].*%s$", fileExt);
+  }
+  verbose && cat(verbose, "Pattern: ", pattern);
+
+  verbose && enter(verbose, sprintf("Calling %s$forName()", className));
+  clazz <- Class$forName(className);
+  args <- list(path=path, pattern=pattern, ...);
+  verbose && str(verbose, args);
+  args$verbose <- less(verbose);
+  staticMethod <- clazz$byPath;
+  dsOut <- do.call("staticMethod", args=args);
+  rm(staticMethod, args); # Not needed anymore
+  verbose && exit(verbose);
+
+  verbose && exit(verbose);
+
+  dsOut;
+}, protected=TRUE)
+
+
+
 setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
@@ -207,6 +287,13 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
   verbose && cat(verbose, "Total number of target units:", nbrOfUnits);
   verbose && exit(verbose);
 
+  # Get Class object for the output files
+  clazz <- getOutputFileClass(this);
+
+  # Get the filename extension for output files
+  ext <- getOutputFileExtension(this);
+
+
   nbrOfArrays <- length(ds);
   for (kk in seq(ds)) {
     df <- getFile(ds, kk);
@@ -215,12 +302,11 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
 
     path <- getPath(this);
     fullname <- getFullName(df);
-    ext <- getFilenameExtension(df);
-    filename <- sprintf("%s.%s", fullname, ext);
+    filename <- sprintf("%s%s", fullname, ext);
     pathname <- Arguments$getReadablePathname(filename, path=path, 
                                                          mustExist=FALSE);
-    className <- class(df)[1];
-    clazz <- Class$forName(className);
+    verbose && cat(verbose, "Output pathname: ", pathname);
+
     if (isFile(pathname)) {
       dfOut <- newInstance(clazz, filename=pathname);
       if (nbrOfUnits != nbrOfUnits(dfOut)) {
@@ -327,6 +413,11 @@ setMethodS3("getOutputFiles", "TotalCnSmoothing", function(this, ...) {
 
 ############################################################################
 # HISTORY:
+# 2012-10-11
+# o Added custom getOutputDataSet0() for TotalCnSmoothing that utilizes
+#   getOutputFileExtension().
+# o Added getOutputFileClass() and getOutputFileExtension() for
+#   TotalCnSmoothing.
 # 2011-12-15
 # o Moved argument 'bandwidth' to TotalCnKernelSmoothing.
 # o ROBUSTNESS: Now process() of TotalCnSmoothing write output atomically.

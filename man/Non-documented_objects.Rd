@@ -293,6 +293,13 @@
 \alias{getOptionalArguments.PairedPscbsCaller}
 \alias{backgroundCorrect}
 \alias{backgroundCorrect.PairedPSCBS}
+\alias{getOutputDataSet0.TotalCnSmoothing}
+\alias{getOutputFileClass}
+\alias{getOutputFileClass.TotalCnSmoothing}
+\alias{getOutputFileExtension}
+\alias{getOutputFileExtension.TotalCnSmoothing}
+\alias{getOutputFileSetClass}
+\alias{getOutputFileSetClass.TotalCnSmoothing}
 
 \description{
   This page contains aliases for all "non-documented" objects that

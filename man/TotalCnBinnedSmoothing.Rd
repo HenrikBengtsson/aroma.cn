@@ -56,7 +56,7 @@ extends \emph{\link[aroma.cn]{TotalCnSmoothing}}\cr
 
 
  \bold{Methods inherited from TotalCnSmoothing}:\cr
-getAsteriskTags, getOutputFiles, getTargetPositions, getTargetUgpFile, process, smoothRawCopyNumbers
+getAsteriskTags, getOutputDataSet0, getOutputFileClass, getOutputFileExtension, getOutputFiles, getOutputFileSetClass, getTargetPositions, getTargetUgpFile, process, smoothRawCopyNumbers
 
  \bold{Methods inherited from AromaTransform}:\cr
 getExpectedOutputFiles, getExpectedOutputFullnames, getFullName, getInputDataSet, getName, getOutputDataSet, getOutputDataSet0, getOutputFiles, getPath, getTags, isDone, process, setTags
