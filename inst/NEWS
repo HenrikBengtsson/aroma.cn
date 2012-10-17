@@ -1,6 +1,12 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.10 [2012-10-16]
+o ROBUSTNESS/BUG FIX: No longer passing '...' to NextMethod(), cf.
+  R-devel thread 'Do *not* pass '...' to NextMethod() - it'll do it 
+  for you; missing documentation, a bug or just me?' on Oct 16, 2012.
+
+
 Version: 1.2.9 [2012-10-11]
 o Added getOutputFileClass() and getOutputFileExtension() for
   TotalCnSmoothing.

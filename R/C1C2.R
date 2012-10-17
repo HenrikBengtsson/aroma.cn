@@ -95,7 +95,8 @@ setMethodS3("plot", "C1C2", function(x, xlim=c(0,4), ylim=xlim, xlab=expression(
 })
 
 setMethodS3("points", "C1C2", function(x, cex=sqrt(x[,"w"])+1/8, ...) {
-  NextMethod("points", x[,c("C1","C2"),drop=FALSE], cex=cex, ...);
+  x <- x[,c("C1","C2"),drop=FALSE];
+  NextMethod("points", x, cex=cex);
 })
 
 

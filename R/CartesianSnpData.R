@@ -6,7 +6,7 @@ setConstructorS3("CartesianSnpData", function(data=NULL, ...) {
 
 
 setMethodS3("plot", "CartesianSnpData", function(x, xlim=range(data, na.rm=TRUE), ylim=xlim, ...) {
-  NextMethod("plot", x, xlim=xlim, ylim=ylim, ...);
+  NextMethod("plot", xlim=xlim, ylim=ylim);
 })
 
 

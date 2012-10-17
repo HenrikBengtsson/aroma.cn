@@ -5,7 +5,7 @@ setConstructorS3("TotalFracBSnpData", function(data=NULL, ...) {
 })
 
 setMethodS3("plot", "TotalFracBSnpData", function(x, xlim=NULL, ylim=c(0,1), ...) {
-  NextMethod("plot", x, xlim=xlim, ylim=ylim, ...);
+  NextMethod("plot", xlim=xlim, ylim=ylim);
 })
 
 

@@ -38,7 +38,7 @@ setConstructorS3("PrincipalCurveNormalization", function(..., subset=1/20) {
 
 
 setMethodS3("getSubsetToFit", "PrincipalCurveNormalization", function(this, ...) {
-  units <- NextMethod("getSubsetToFit", this, ...);
+  units <- NextMethod("getSubsetToFit");
 
   n <- length(units);
   subset <- this$.subset;

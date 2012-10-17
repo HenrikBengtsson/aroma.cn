@@ -6,7 +6,7 @@ setConstructorS3("PolarSnpData", function(data=NULL, ...) {
 
 
 setMethodS3("plot", "PolarSnpData", function(x, xlim=NULL, ylim=c(0,pi/2), ...) {
-  NextMethod("plot", x, xlim=xlim, ylim=ylim, ...);
+  NextMethod("plot", xlim=xlim, ylim=ylim);
 })
 
 

@@ -45,7 +45,7 @@ setMethodS3("getParameters", "TotalCnSmoothing", function(this, ...) {
 
 
 setMethodS3("getAsteriskTags", "TotalCnSmoothing", function(this, collapse=NULL, ...) {
-  tags <- NextMethod("getAsteriskTags", this, collapse=NULL, ...);
+  tags <- NextMethod("getAsteriskTags", collapse=NULL);
 
   # Add class-specific tags
 
@@ -78,7 +78,7 @@ setMethodS3("getTargetUgpFile", "TotalCnSmoothing", function(this, ...) {
 })
 
 setMethodS3("getPath", "TotalCnSmoothing", function(this, create=TRUE, ...) {
-  path <- NextMethod("getPath", this, create=FALSE, ...);
+  path <- NextMethod("getPath", create=FALSE);
   path <- dirname(path);
   targetUgp <- getTargetUgpFile(this);
   chipType <- getChipType(targetUgp, fullname=FALSE);
@@ -406,7 +406,7 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
 
 
 setMethodS3("getOutputFiles", "TotalCnSmoothing", function(this, ...) {
-  NextMethod("getOutputFiles", pattern=".*[.]asb$", ...);
+  NextMethod("getOutputFiles", pattern=".*[.]asb$");
 }, protected=TRUE) 
 
 

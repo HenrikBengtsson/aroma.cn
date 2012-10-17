@@ -40,14 +40,14 @@ setConstructorS3("TotalCnBinnedSmoothing", function( ..., robust=FALSE) {
 
 
 setMethodS3("getParameters", "TotalCnBinnedSmoothing", function(this, ...) {
-  params <- NextMethod("getParameters", this, ...);
+  params <- NextMethod("getParameters");
   params$robust <- this$.robust;
   params;
 }, private=TRUE);
 
 
 setMethodS3("getAsteriskTags", "TotalCnBinnedSmoothing", function(this, collapse=NULL, ...) {
-  tags <- NextMethod("getAsteriskTags", this, collapse=NULL, ...);
+  tags <- NextMethod("getAsteriskTags", collapse=NULL);
 
   # Add class-specific tags
 
