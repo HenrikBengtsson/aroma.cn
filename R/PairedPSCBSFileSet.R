@@ -10,7 +10,9 @@ setMethodS3("byPath", "PairedPSCBSFileSet", function(static, ..., pattern=".*(,P
     args <- args[-excl];
   }
 
-  do.call("byPath.GenericDataFileSet", args);
+  # Call the "next" method
+  args <- c(list("byPath"), args);
+  do.call("NextMethod", args);
 }, static=TRUE)
 
 
@@ -33,8 +35,9 @@ setMethodS3("findByName", "PairedPSCBSFileSet", function(static, ..., chipType=N
   }
   args <- c(list(static=static), args, subdirs=chipType, paths=paths);
 
-  # Call same method in the super class
-  do.call("findByName.GenericDataFileSet", args);
+  # Call the "next" method
+  args <- c(list("findByName"), args);
+  do.call("NextMethod", args);
 }, static=TRUE)
 
 
