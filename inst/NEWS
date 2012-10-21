@@ -1,6 +1,13 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.12 [2012-10-21]
+o ROBUSTNESS: Now using Arguments$getWritablePath() everywhere instead
+  of mkdirs(), because the former will do a better job in creating
+  and asserting directories on slow shared file systems, and when it
+  fails it gives a more informative error message.
+
+
 Version: 1.2.11 [2012-10-17]
 o ROBUSTNESS: Now all static Object methods that calls "next" methods,
   utilizes NextMethod(), which became possible with R.oo v1.10.0.
