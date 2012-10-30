@@ -250,17 +250,19 @@ setMethodS3("getPath", "TumorBoostNormalization", function(this, create=TRUE, ..
   chipType <- getChipType(ds, fullname=FALSE);
 
   # The full path
-  path <- filePath(rootPath, fullname, chipType, expandLinks="any");
+  path <- filePath(rootPath, fullname, chipType);
+
+  # Create path?
+  if (create) {
+    path <- Arguments$getWritablePath(path);
+  } else {
+    path <- Arguments$getReadablePath(path, mustExist=FALSE);
+  }
 
   # Verify that it is not the same as the input path
   inPath <- getPath(getInputDataSet(this));
   if (getAbsolutePath(path) == getAbsolutePath(inPath)) {
     throw("The generated output data path equals the input data path: ", path, " == ", inPath);
-  }
-
-  # Create path?
-  if (create) {
-    path <- Arguments$getWritablePath(path);
   }
 
   path;

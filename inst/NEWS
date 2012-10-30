@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.13 [2012-10-29]
+o CLEANUP: Now using Arguments$get(Read|Writ)ablePath() instead of
+  filePath(..., expandLinks="any").
+
+
 Version: 1.2.12 [2012-10-21]
 o ROBUSTNESS: Now using Arguments$getWritablePath() everywhere instead
   of mkdirs(), because the former will do a better job in creating

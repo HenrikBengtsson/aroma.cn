@@ -285,18 +285,19 @@ setMethodS3("getPath", "PairedPscbsModel", function(this, create=TRUE, ...) {
   chipType <- getChipType(this, fullname=FALSE);
 
   # The full path
-  path <- filePath(rootPath, fullname, chipType, expandLinks="any");
-
-  # Verify that it is not the same as the input path
-  dsT <- getTumorDataSet(this);
-  inPath <- getPath(dsT);
-  if (getAbsolutePath(path) == getAbsolutePath(inPath)) {
-    throw("The generated output data path equals the input data path: ", path, " == ", inPath);
-  }
+  path <- filePath(rootPath, fullname, chipType);
 
   # Create path?
   if (create) {
     path <- Arguments$getWritablePath(path);
+  } else {
+    path <- Arguments$getReadablePath(path, mustExist=FALSE);
+  }
+
+  # Verify that it is not the same as the input path
+  inPath <- getPath(getInputDataSet(this));
+  if (getAbsolutePath(path) == getAbsolutePath(inPath)) {
+    throw("The generated output data path equals the input data path: ", path, " == ", inPath);
   }
 
   path;
