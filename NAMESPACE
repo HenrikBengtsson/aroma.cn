@@ -4,6 +4,7 @@
 # importFrom(R.utils, cat)
 import(R.utils)
 importFrom("matrixStats", "weightedMedian")
+import(PSCBS)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

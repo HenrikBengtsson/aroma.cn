@@ -1,6 +1,13 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.14 [2012-11-01]
+o ROBUSTNESS: Now package also imports PSCBS to please 'R CMD check'.
+  The reason was that some of the internal methods call PSCBS
+  methods, which only happens if PSCBS is loaded in the first place
+  but 'R CMD check' cannot known that.
+
+
 Version: 1.2.13 [2012-10-29]
 o CLEANUP: Now using Arguments$get(Read|Writ)ablePath() instead of
   filePath(..., expandLinks="any").
