@@ -829,7 +829,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
 
   # Identify and exlude missing data sets
   keep <- sapply(dfSList, FUN=function(df) !identical(df, NA));
-  keep <- whichVector(keep);
+  keep <- which(keep);
   dfSList <- dfSList[keep];
 
 
@@ -961,7 +961,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
     unitsS <- list();
     for (chr in chromosomes) {
       chrStr <- sprintf("Chr%02d", chr);
-      unitsS[[chrStr]] <- whichVector(values == chr);
+      unitsS[[chrStr]] <- which(values == chr);
     }
     rm(values);
 #    verbose && str(verbose, unitsS);
@@ -1214,7 +1214,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
         listOfUnits <- list();
         for (chr in chromosomes) {
           chrStr <- sprintf("Chr%02d", chr);
-          subset <- whichVector(values == chr);
+          subset <- which(values == chr);
           listOfUnits[[chrStr]] <- subset;
         }
         rm(values);

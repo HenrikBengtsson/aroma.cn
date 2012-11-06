@@ -369,10 +369,10 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     } else if (flavor == "v2") {
       b <- rep(1, length(delta));
       isDown <- (betaT < betaN);
-      idxs <- whichVector(isDown);
+      idxs <- which(isDown);
       # NOTE: It is possible that 'b' has NA:s.
       b[idxs] <- betaT[idxs]/betaN[idxs];
-      idxs <- whichVector(!isDown);
+      idxs <- which(!isDown);
       # NOTE: It is possible that 'b' has NA:s.
       b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
       rm(isDown,isHomA,isHomB,idxs);
@@ -382,10 +382,10 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       isHomB <- (muN == 1);
       isHet <- !isHomA & !isHomB;
       isDown <- (betaT < betaN);
-      idxs <- whichVector((isHet & isDown) | isHomA);
+      idxs <- which((isHet & isDown) | isHomA);
       # NOTE: It is possible that 'b' has NA:s.
       b[idxs] <- betaT[idxs]/betaN[idxs];
-      idxs <- whichVector((isHet & !isDown) | isHomB);
+      idxs <- which((isHet & !isDown) | isHomB);
       # NOTE: It is possible that 'b' has NA:s.
       b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
       rm(isDown,isHet,isHomA,isHomB,idxs);
@@ -393,10 +393,10 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       b <- rep(1, length(delta));
       isHet <- (muN != 0 & muN != 1);
       isDown <- (betaT < betaN);
-      idxs <- whichVector(isHet & isDown);
+      idxs <- which(isHet & isDown);
       # NOTE: It is possible that 'b' has NA:s.
       b[idxs] <- betaT[idxs]/betaN[idxs];
-      idxs <- whichVector(isHet & !isDown);
+      idxs <- which(isHet & !isDown);
       # NOTE: It is possible that 'b' has NA:s.
       b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
       rm(isDown,isHet,idxs);
@@ -415,7 +415,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       verbose && enter(verbose, "Correcting for signal compression");
 
       isHom <- (muN == 0 | muN == 1);
-      idxs <- whichVector(isHom);
+      idxs <- which(isHom);
       eta <- median(abs(betaT[idxs]-1/2), na.rm=TRUE);
       verbose && cat(verbose, "Signal compression in homozygous SNPs before TBN");
       verbose && str(verbose, 1/2-eta);
@@ -428,9 +428,9 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       
       isHet <- !isHom;
       isDown <- (betaTN < 1/2);
-      idxs <- whichVector(isHet & isDown);
+      idxs <- which(isHet & isDown);
       betaTN[idxs] <- 1/2 - sf * (1/2 - betaTN[idxs]);
-      idxs <- whichVector(isHet & !isDown);
+      idxs <- which(isHet & !isDown);
       betaTN[idxs] <- 1/2 + sf * (betaTN[idxs] - 1/2);
 
       rm(isDown, isHom, isHet, idxs, eta, etaC, sf);

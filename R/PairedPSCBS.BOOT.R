@@ -77,7 +77,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsII$tcnStart[1];
     stop <- segsII$tcnEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     if (length(units) > 1) {
       # Resample
@@ -103,7 +103,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsJJ$dhStart[1];
     stop <- segsJJ$dhEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
     muN <- data$muN[units];
@@ -111,7 +111,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     # Identify heterozygous SNPs
     isHet <- (muN == 1/2);
-    hets <- whichVector(isSnp & isHet);
+    hets <- which(isSnp & isHet);
 
     units <- units[hets];
 
@@ -149,7 +149,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsKK$tcnStart[1];
     stop <- segsKK$tcnEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     # Update TCN mean level
     y <- data$CT[units];
@@ -169,7 +169,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsKK$dhStart[1];
     stop <- segsKK$dhEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
     muN <- data$muN[units];
@@ -177,7 +177,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     # Identify heterozygous SNPs
     isHet <- (muN == 1/2);
-    hets <- whichVector(isSnp & isHet);
+    hets <- which(isSnp & isHet);
 
     # Update DH mean level
     beta <- data[[by]][units];
@@ -245,7 +245,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsII$tcnStart[1];
     stop <- segsII$tcnEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
     tcnUnits <- units;
 
     # For each DH segment in this TCN segment        
@@ -257,17 +257,17 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
       # Identify loci in segment
       start <- segsJJ$dhStart[1];
       stop <- segsJJ$dhEnd[1];
-      units <- whichVector(start <= x & x <= stop);
+      units <- which(start <= x & x <= stop);
 
       # Identify SNPs and non-SNPs
       muN <- data$muN[units];
       isSnp <- is.finite(muN);
-      nonSnps <- whichVector(!isSnp);
+      nonSnps <- which(!isSnp);
 
       # Identify heterozygous SNPs
       isHet <- (muN == 1/2);
-      hets <- whichVector(isSnp &  isHet);
-      homs <- whichVector(isSnp & !isHet);
+      hets <- which(isSnp &  isHet);
+      homs <- which(isSnp & !isHet);
 
       dhList[[jj]] <- list(dhUnits=units, nonSnps=units[nonSnps], hets=units[hets], homs=units[homs]);
       verbose && exit(verbose);
@@ -387,7 +387,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsKK$tcnStart[1];
     stop <- segsKK$tcnEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     # Update TCN mean level
     y <- data$CT[units];
@@ -407,7 +407,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsKK$dhStart[1];
     stop <- segsKK$dhEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
     muN <- data$muN[units];
@@ -415,7 +415,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     # Identify heterozygous SNPs
     isHet <- (muN == 1/2);
-    hets <- whichVector(isSnp & isHet);
+    hets <- which(isSnp & isHet);
 
     # Update DH mean level
     beta <- data[[by]][units];
@@ -485,7 +485,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsII$tcnStart[1];
     stop <- segsII$tcnEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     if (length(units) > 1) {
       # Resample
@@ -511,7 +511,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsJJ$dhStart[1];
     stop <- segsJJ$dhEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
     muN <- data$muN[units];
@@ -519,7 +519,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     # Identify heterozygous SNPs
     isHet <- (muN == 1/2);
-    hets <- whichVector(isSnp & isHet);
+    hets <- which(isSnp & isHet);
 
     units <- units[hets];
 
@@ -557,7 +557,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsKK$tcnStart[1];
     stop <- segsKK$tcnEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     # Update TCN mean level
     y <- data$CT[units];
@@ -577,7 +577,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Identify loci in segment
     start <- segsKK$dhStart[1];
     stop <- segsKK$dhEnd[1];
-    units <- whichVector(start <= x & x <= stop);
+    units <- which(start <= x & x <= stop);
 
     # Identify SNPs and non-SNPs
     muN <- data$muN[units];
@@ -585,7 +585,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     # Identify heterozygous SNPs
     isHet <- (muN == 1/2);
-    hets <- whichVector(isSnp & isHet);
+    hets <- which(isSnp & isHet);
 
     # Update DH mean level
     beta <- data[[by]][units];

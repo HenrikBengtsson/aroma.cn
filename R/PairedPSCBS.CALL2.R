@@ -130,7 +130,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
     # AD HOC: For some unknown reason does resample() introduce NAs.
     # /HB 2010-09-15
     keep <- is.finite(betaTN) & is.finite(muN);
-    keep <- whichVector(keep);
+    keep <- which(keep);
     betaTN <- betaTN[keep];
     muN <- muN[keep];
 

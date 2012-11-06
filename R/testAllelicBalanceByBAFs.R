@@ -65,7 +65,7 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Dropping loci with missing signals or missing genotypes");
   keep <- (is.finite(betaT) & is.finite(muN));
-  keep <- whichVector(keep);
+  keep <- which(keep);
 
   if (length(keep) < nbrOfLoci) {
     betaT <- betaT[keep];
@@ -89,19 +89,19 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
   verbose && enter(verbose, "Getting homozygous and heterozygous centered BAF signals");
   # AA SNPs
   isAA <- (muN == 0);
-  idxs <- whichVector(isAA);
+  idxs <- which(isAA);
   yAA <- betaT[idxs];
   yAA <- yAA - mean(yAA);
   
   # BB SNPs
   isBB <- (muN == 1);
-  idxs <- whichVector(isBB);
+  idxs <- which(isBB);
   yBB <- betaT[idxs];
   yBB <- yBB - mean(yBB);
 
   # AB SNPs
   isAB <- (muN == 1/2);
-  idxs <- whichVector(isAB);
+  idxs <- which(isAB);
   yAB <- betaT[idxs];
   yAB <- yAB - mean(yAB);
 
@@ -115,7 +115,7 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
 
   # All other SNPs (for curiousity only)
   ## isOther <- (!isAA & !isAB & !isBB);
-  ## idxs <- whichVector(isOther);
+  ## idxs <- which(isOther);
   ## nOthers <- length(idxs);
 
   # Not needed anymore

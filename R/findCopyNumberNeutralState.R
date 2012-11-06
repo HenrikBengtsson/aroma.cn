@@ -77,7 +77,7 @@ setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=N
   isNeutral <- isAB;
 
   # Extracting segments in allelic balance
-  idxs <- whichVector(isAB);
+  idxs <- which(isAB);
   n <- length(idxs);
   verbose && cat(verbose, "Number of segments in allelic balance: ", n);
 
@@ -123,7 +123,7 @@ setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=N
 
   # Look for peaks with enough density
   isPeak <- (fit[,"type"] == "peak") & (fit[,"density"] > minDensity);
-  idxs <- whichVector(isPeak);
+  idxs <- which(isPeak);
 
   # Sanity check
   stopifnot(length(idxs) >= 1);

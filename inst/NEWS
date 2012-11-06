@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.15 [2012-11-05]
+o CLEANUP: Replaced all whichVector() with which(), because the
+  latter is now the fastest again. 
+
+
 Version: 1.2.14 [2012-11-01]
 o ROBUSTNESS: Now package also imports PSCBS to please 'R CMD check'.
   The reason was that some of the internal methods call PSCBS

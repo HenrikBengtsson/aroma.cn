@@ -42,7 +42,7 @@
 
     for (cc in 1:2) {
       delta <- dxy2[,cc];
-      idxs <- whichVector(is.finite(delta));
+      idxs <- which(is.finite(delta));
       C1C2[idxs+1,cc] <- C1C2[idxs,cc] + delta[idxs];
     }
 
@@ -186,7 +186,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
     dh <- segs[kk,"dhMean"];
     # Identify all homozygous SNPs in the region
     keep <- (chromosome == chrKK & xRange[1] <= x & x <= xRange[2] & isHom);
-    keep <- whichVector(keep);
+    keep <- which(keep);
     mBAFhom <- mean(rho[keep], na.rm=TRUE);
     X[kk,] <- c(dh, mBAFhom, tcn);
   } # for (kk ...)
@@ -225,7 +225,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
     xRange <- as.numeric(segs[kk,c("dhStart", "dhEnd")]);
     # Identify all SNPs in the region
     keep <- (chromosome == chrKK & xRange[1] <= x & x <= xRange[2]);
-    keep <- whichVector(keep);
+    keep <- which(keep);
     scales[keep] <- scale[kk];
   } # for (kk ...)
 
