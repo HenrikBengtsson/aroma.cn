@@ -56,7 +56,7 @@ setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, r
 
   if (center) {
     # Same center for each column
-    for (cc in seq(length=ncol(x))) {
+    for (cc in seq_len(ncol(x))) {
       mu <- median(x[,cc], na.rm=TRUE);
       muN <- median(xN[,cc], na.rm=TRUE);
       xN[,cc] <- xN[,cc] - (muN-mu);

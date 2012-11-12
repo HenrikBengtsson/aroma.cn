@@ -103,7 +103,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
   nbrOfSegments <- nrow(segs);
   naValue <- as.double(NA);
   df <- NULL;
-  for (kk in seq(length=nbrOfSegments)) {
+  for (kk in seq_len(nbrOfSegments)) {
     verbose && enter(verbose, sprintf("Segment #%d of %d", kk, nbrOfSegments));
 
     fitS <- extractDhSegment(fit, idx=kk, what="SNPs");

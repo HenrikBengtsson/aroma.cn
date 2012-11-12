@@ -3,7 +3,7 @@ setMethodS3("getBacktransforms", "PrincipalCurve", function(fit, dimensions=NULL
   s <- fit$s;
   ndim <- ncol(s);
   if (is.null(dimensions)) { 
-    dimensions <- seq(length=ndim);
+    dimensions <- seq_len(ndim);
   }
   dimensions <- Arguments$getIndices(dimensions, max=ndim);
 
@@ -20,7 +20,7 @@ setMethodS3("getBacktransforms", "PrincipalCurve", function(fit, dimensions=NULL
   dim <- c(length(y), 2, length(dimensions));
   XY <- array(naValue, dim=dim);
 
-  for (kk in seq(along=dimensions)) {
+  for (kk in seq_along(dimensions)) {
     dim <- dimensions[kk];
     yN <- backtransformPrincipalCurve(y, fit=fit, dimensions=dim,
                                      targetDimension=targetDimension);
@@ -45,7 +45,7 @@ setMethodS3("plotBacktransforms", "PrincipalCurve", function(fit, ..., xlim=c(-3
 
   ndim <- dim(XY)[3];
   subplots(ndim);
-  for (kk in seq(length=ndim)) {
+  for (kk in seq_len(ndim)) {
     xy <- XY[,,kk];
     plot(NA, xlim=xlim, ylim=ylim, xlab=xlab, ylab=ylab);
     abline(a=0, b=1, lty=3);

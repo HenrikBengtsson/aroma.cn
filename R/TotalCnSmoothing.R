@@ -293,7 +293,7 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
 
 
   nbrOfArrays <- length(ds);
-  for (kk in seq(ds)) {
+  for (kk in seq_along(ds)) {
     df <- getFile(ds, kk);
     verbose && enter(verbose, sprintf("Array %d ('%s') of %d", 
                                             kk, getName(df), nbrOfArrays));
@@ -321,7 +321,7 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
     M <- rep(as.double(NA), times=nbrOfUnits);
 
     verbose && enter(verbose, "Reading and smoothing input data");
-    for (cc in seq(along=targetList)) {
+    for (cc in seq_along(targetList)) {
       target <- targetList[[cc]];
       chromosome <- target$chromosome;
       chrTag <- sprintf("Chr%02d", chromosome);

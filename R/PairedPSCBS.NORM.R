@@ -179,7 +179,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   # Allocate
   naValue <- as.double(NA);
   X <- matrix(naValue, nrow=nbrOfSegments, ncol=3);
-  for (kk in seq(length=nbrOfSegments)) {
+  for (kk in seq_len(nbrOfSegments)) {
     chrKK <- as.numeric(segs[kk,"chromosome"]);
     xRange <- as.numeric(segs[kk,c("dhStart", "dhEnd")]);
     tcn <- segs[kk,"tcnMean"];
@@ -220,7 +220,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   # Expand region-level scale factors to locus-level scale factors
   naValue <- as.double(NA);
   scales <- rep(naValue, times=length(data$betaT));
-  for (kk in seq(length=nbrOfSegments)) {
+  for (kk in seq_len(nbrOfSegments)) {
     chrKK <- as.numeric(segs[kk,"chromosome"]);
     xRange <- as.numeric(segs[kk,c("dhStart", "dhEnd")]);
     # Identify all SNPs in the region

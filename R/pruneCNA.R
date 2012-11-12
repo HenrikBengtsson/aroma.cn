@@ -61,7 +61,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
         if (length(atomicIslands) > 1) {
           regionsHH <- matrix(c(atomicIslands, atomicIslands+hh), ncol=2L, byrow=FALSE);
           colnames(regionsHH) <- c("from", "to");
-          rownames(regionsHH) <- sprintf("Atomic island #%d", seq(along=atomicIslands));
+          rownames(regionsHH) <- sprintf("Atomic island #%d", seq_along(atomicIslands));
           verbose && print(verbose, regionsHH);
 
           froms <- regionsHH[-1,"from"];
@@ -78,7 +78,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
         # Drop atomic islands and merge flanking segments
         dropList <- list();
         atomicIslands <- sort(atomicIslands, decreasing=TRUE);
-        for (kk in seq(along=atomicIslands)) {
+        for (kk in seq_along(atomicIslands)) {
           atomicIsland <- atomicIslands[kk];
           if (hh == 0) {
             atomicIslandTag <- sprintf("change point #%d", atomicIsland);

@@ -54,7 +54,7 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", 
   if (length(dirs) > 1) {
     verbose && enter(verbose, "Deshearing direction by direction");
     fitT <- fit;
-    for (kk in seq(along=dirs)) {
+    for (kk in seq_along(dirs)) {
       dir <- dirs[kk];
       verbose && enter(verbose, sprintf("Direction #%d ('%s') of %d", kk, dir, length(dirs)));
       fitT <- deShearC1C2(fitT, dirs=dir, ..., verbose=verbose);

@@ -71,10 +71,10 @@ setConstructorS3("PairedPscbsModel", function(dsT=NULL, dsN=NULL, tags="*", ...,
     }
 
     # Assert that the ds sets have the same number ds files
-    nbrOfFiles <- nbrOfFiles(dsT);
-    if (nbrOfFiles != nbrOfFiles(dsN)) {
+    nbrOfFiles <- length(dsT);
+    if (nbrOfFiles != length(dsN)) {
       throw("The number of samples in 'dsT' and 'dsN' differ: ", 
-             nbrOfFiles, " != ", nbrOfFiles(dsN));
+             nbrOfFiles, " != ", length(dsN));
     }
   }
 
@@ -262,7 +262,7 @@ setMethodS3("getChipType", "PairedPscbsModel", function(this, ...) {
 
 setMethodS3("nbrOfFiles", "PairedPscbsModel", function(this, ...) {
   dsT <- getTumorDataSet(this);
-  nbrOfFiles(dsT);
+  length(dsT);
 })
 
 
@@ -419,7 +419,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   res <- list();
   nbrOfArrays <- length(arrays);
-  for (aa in seq(length=nbrOfArrays)) {
+  for (aa in seq_len(nbrOfArrays)) {
     array <- arrays[aa];
 
     # The tumor and normal data files

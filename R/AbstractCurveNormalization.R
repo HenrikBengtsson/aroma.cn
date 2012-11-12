@@ -36,7 +36,7 @@ setConstructorS3("AbstractCurveNormalization", function(dataSet=NULL, targetSet=
     # Arguments 'dataSet' and 'targetSet'
     dsList <- list(dataSet=dataSet, targetSet=targetSet);
     className <- "AromaUnitTotalCnBinarySet";
-    for (kk in seq(along=dsList)) {
+    for (kk in seq_along(dsList)) {
       key <- names(dsList)[kk];
       ds <- dsList[[kk]];
       ds <- Arguments$getInstanceOf(ds, className, .name=key);
@@ -46,12 +46,12 @@ setConstructorS3("AbstractCurveNormalization", function(dataSet=NULL, targetSet=
     for (jj in 1:(length(dsList)-1)) {
       keyJJ <- names(dsList)[jj];
       dsJJ <- dsList[[jj]];
-      nJJ <- nbrOfFiles(dsJJ);
+      nJJ <- length(dsJJ);
       chipTypeJJ <- getChipType(dsJJ);
       for (kk in (jj+1):length(dsList)) {
         keyKK <- names(dsList)[kk];
         dsKK <- dsList[[kk]];
-        nKK <- nbrOfFiles(dsKK);
+        nKK <- length(dsKK);
         chipTypeKK <- getChipType(dsKK);
 
         # Assert that each data set contains the same number of files
@@ -111,7 +111,7 @@ setMethodS3("as.character", "AbstractCurveNormalization", function(x, ...) {
 
   dsList <- getDataSets(this);
   s <- c(s, sprintf("Data sets (%d):", length(dsList)));
-  for (kk in seq(along=dsList)) {
+  for (kk in seq_along(dsList)) {
     ds <- dsList[[kk]];
     s <- c(s, sprintf("<%s>:", capitalize(names(dsList)[kk])));
     s <- c(s, as.character(ds));
@@ -296,8 +296,8 @@ setMethodS3("getPath", "AbstractCurveNormalization", function(this, create=TRUE,
 
 setMethodS3("nbrOfFiles", "AbstractCurveNormalization", function(this, ...) {
   ds <- getInputDataSet(this);
-  nbrOfFiles(ds);
-})
+  length(ds);
+}, protected=TRUE)
 
 
 setMethodS3("getOutputDataSet", "AbstractCurveNormalization", function(this, ..., verbose=FALSE) {
@@ -330,7 +330,7 @@ setMethodS3("getOutputDataSet", "AbstractCurveNormalization", function(this, ...
   if (anyMissing(idxs)) {
     throw("Should not happen.");
   }
-  verbose && cat(verbose, "Number of files dropped: ", nbrOfFiles(res) - length(idxs));
+  verbose && cat(verbose, "Number of files dropped: ", length(res) - length(idxs));
   verbose && cat(verbose, "Number of files kept: ", length(idxs));
   res <- extract(res, idxs);
   verbose && exit(verbose);
@@ -343,7 +343,7 @@ setMethodS3("getOutputDataSet", "AbstractCurveNormalization", function(this, ...
 
 setMethodS3("getPairedDataSet", "AbstractCurveNormalization", function(this, array, ..., verbose=FALSE) {
   ds <- getInputDataSet(this);
-  nbrOfArrays <-nbrOfFiles(ds);
+  nbrOfArrays <- length(ds);
 
   # Argument 'array':
   array <- Arguments$getIndex(array, max=nbrOfArrays);
@@ -412,7 +412,7 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
   }
 
 
-  for (kk in seq(length=nbrOfFiles)) {
+  for (kk in seq_len(nbrOfFiles)) {
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Extract array pair
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

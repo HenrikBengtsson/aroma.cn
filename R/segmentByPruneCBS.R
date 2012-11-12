@@ -83,7 +83,7 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
     regions4[,"start"] <- regions2[,"stop"];
     regions <- rbind(regions3, regions4);
     x <- getPositions(cn);
-    for (kk in seq(length=nrow(regions))) {
+    for (kk in seq_len(nrow(regions))) {
       region <- regions[kk,,drop=TRUE];
       keep <- (region[1] <= x & x <= region[2]);
       w[keep] <- 0.2*w[keep];
@@ -275,7 +275,7 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
     regions4[,"start"] <- regions2[,"stop"];
     regions <- rbind(regions3, regions4);
     x <- getPositions(cn);
-    for (kk in seq(length=nrow(regions))) {
+    for (kk in seq_len(nrow(regions))) {
       region <- regions[kk,,drop=TRUE];
       keep <- (region[1] <= x & x <= region[2]);
       w[keep] <- 0.2*w[keep];

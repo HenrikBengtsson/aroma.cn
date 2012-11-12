@@ -6,7 +6,7 @@ setMethodS3("extractGenerations", "PruneCNA", function(this, generations, ...) {
   # Argument 'generations':
   n <- nbrOfGenerations(this);
   if (any(generations < 0)) {
-    generations <- setdiff(seq(length=n), -generations);
+    generations <- setdiff(seq_len(n), -generations);
   }
   generations <- Arguments$getIndices(generations, max=n);
 

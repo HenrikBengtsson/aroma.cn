@@ -64,7 +64,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
   verbose && enter(verbose, "Resampling TCN segments");
   ids <- unique(segs[["tcnId"]]);
-  for (ii in seq(along=ids)) {
+  for (ii in seq_along(ids)) {
     id <- ids[ii];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", ii, length(ids)));
 
@@ -96,7 +96,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Resample DH segments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  for (jj in seq(length=nbrOfSegments)) {
+  for (jj in seq_len(nbrOfSegments)) {
     verbose && enter(verbose, sprintf("DH segment #%d of %d", jj, nbrOfSegments));
     segsJJ <- segs[jj,,drop=FALSE];
 
@@ -136,7 +136,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
   verbose && enter(verbose, "Updating TCN fields");
   ids <- unique(segs[["tcnId"]]);
-  for (kk in seq(along=ids)) {
+  for (kk in seq_along(ids)) {
     id <- ids[kk];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", kk, length(ids)));
 
@@ -161,7 +161,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   verbose && exit(verbose);
 
   verbose && enter(verbose, "Updating DH fields");
-  for (kk in seq(length=nbrOfSegments)) {
+  for (kk in seq_len(nbrOfSegments)) {
     verbose && enter(verbose, sprintf("DH segment #%d of %d", kk, nbrOfSegments));
 
     segsKK <- segs[kk,,drop=FALSE];
@@ -231,7 +231,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   verbose && enter(verbose, "Identifying nested TCN units and DH units");
   unitsList <- list();
   ids <- unique(segs[["tcnId"]]);
-  for (ii in seq(along=ids)) {
+  for (ii in seq_along(ids)) {
     id <- ids[ii];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", ii, length(ids)));
     unitsII <- list();
@@ -250,7 +250,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     # For each DH segment in this TCN segment        
     dhList <- list();
-    for (jj in seq(length=n)) {
+    for (jj in seq_len(n)) {
       verbose && enter(verbose, sprintf("DH segment #%d of %d", jj, n));
       segsJJ <- segsII[jj,,drop=FALSE];
 
@@ -298,7 +298,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   verbose && enter(verbose, "Resampling unit indices");
   unitsListS <- list();
-  for (ii in seq(along=unitsList)) {
+  for (ii in seq_along(unitsList)) {
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", ii, length(unitsList)));
 
     unitsListII <- unitsList[[ii]];
@@ -353,14 +353,14 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
   units <- unlist(lapply(unitsList, FUN=function(x) x[[1]]), use.names=FALSE);
   unitsS <- unlist(lapply(unitsListS, FUN=function(x) x[[1]]), use.names=FALSE);
-  idxs <- seq(along=units);
+  idxs <- seq_along(units);
   idxs[units] <- unitsS;
 
   fields <- c("CT", "betaN", "betaT", "betaTN", "muN");
   fields <- intersect(names(data), fields);
   verbose && cat(verbose, "Fields:");
   verbose && print(verbose, fields);
-  for (ff in seq(along=fields)) {
+  for (ff in seq_along(fields)) {
     data[[ff]] <- data[[ff]][idxs];
   }
   data$units <- idxs;
@@ -374,7 +374,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
   verbose && enter(verbose, "Updating TCN fields");
   ids <- unique(segs[["tcnId"]]);
-  for (kk in seq(along=ids)) {
+  for (kk in seq_along(ids)) {
     id <- ids[kk];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", kk, length(ids)));
 
@@ -399,7 +399,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   verbose && exit(verbose);
 
   verbose && enter(verbose, "Updating DH fields");
-  for (kk in seq(length=nbrOfSegments)) {
+  for (kk in seq_len(nbrOfSegments)) {
     verbose && enter(verbose, sprintf("DH segment #%d of %d", kk, nbrOfSegments));
 
     segsKK <- segs[kk,,drop=FALSE];
@@ -472,7 +472,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
   verbose && enter(verbose, "Resampling TCN segments");
   ids <- unique(segs[["tcnId"]]);
-  for (ii in seq(along=ids)) {
+  for (ii in seq_along(ids)) {
     id <- ids[ii];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", ii, length(ids)));
 
@@ -492,7 +492,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
       unitsS <- resample(units, replace=TRUE);
   
       # Resample data
-      for (ff in seq(along=fields)) {
+      for (ff in seq_along(fields)) {
         data[[ff]][units] <- data[[ff]][unitsS];
       }
     }
@@ -504,7 +504,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Resample DH segments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  for (jj in seq(length=nbrOfSegments)) {
+  for (jj in seq_len(nbrOfSegments)) {
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", jj, nbrOfSegments));
     segsJJ <- segs[jj,,drop=FALSE];
 
@@ -528,7 +528,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
       unitsS <- resample(units, replace=TRUE);
   
       # Resample data
-      for (ff in seq(along=fields)) {
+      for (ff in seq_along(fields)) {
         data[[ff]][units] <- data[[ff]][unitsS];
       }
     }
@@ -544,7 +544,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
   verbose && enter(verbose, "Updating TCN fields");
   ids <- unique(segs[["tcnId"]]);
-  for (kk in seq(along=ids)) {
+  for (kk in seq_along(ids)) {
     id <- ids[kk];
     verbose && enter(verbose, sprintf("TCN segment #%d of %d", kk, length(ids)));
 
@@ -569,7 +569,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   verbose && exit(verbose);
 
   verbose && enter(verbose, "Updating DH fields");
-  for (kk in seq(length=nbrOfSegments)) {
+  for (kk in seq_len(nbrOfSegments)) {
     verbose && enter(verbose, sprintf("DH segment #%d of %d", kk, nbrOfSegments));
 
     segsKK <- segs[kk,,drop=FALSE];

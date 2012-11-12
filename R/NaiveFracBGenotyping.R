@@ -91,12 +91,12 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
   nbrOfUnits <- nbrOfUnits(df);
 
   units <- NULL;
-  for (kk in seq(ds)) {
+  for (kk in seq_along(ds)) {
     df <- getFile(ds, kk);
-    verbose && enter(verbose, sprintf("Data file #%d ('%s') of %d", kk, getName(df), nbrOfFiles(ds)));
+    verbose && enter(verbose, sprintf("Data file #%d ('%s') of %d", kk, getName(df), length(ds)));
 
     if (is.null(units)) {
-      units <- seq(length=nbrOfUnits);
+      units <- seq_len(nbrOfUnits);
 
       # Identify units on ChrX and ChrY
       ugp <- getAromaUgpFile(ds);

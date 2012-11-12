@@ -21,7 +21,7 @@ setMethodS3("fitLoessKD", "matrix", function(X, Y, ...) {
 
   # Estimate relationship for each dimension
   fitList <- list();
-  for (cc in seq(length=ncol(X))) {
+  for (cc in seq_len(ncol(X))) {
     fitList[[cc]] <- loess(Y[,cc] ~ X);
   }
 
@@ -38,7 +38,7 @@ setMethodS3("fitLoessKD", "matrix", function(X, Y, ...) {
     ok <- rowAlls(is.finite(X));
     ok <- which(ok);
     X <- X[ok,,drop=FALSE];
-    for (cc in seq(length=ncol(X))) {
+    for (cc in seq_len(ncol(X))) {
       fit <- fitList[[cc]];
       yPred <- predict(fit, newdata=X);
       Y[ok,cc] <- yPred;

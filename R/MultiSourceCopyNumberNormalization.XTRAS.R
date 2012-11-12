@@ -120,7 +120,7 @@ setMethodS3("plotSmoothedPairsOne", "MultiSourceCopyNumberNormalization", functi
   legend <- paste(legend, collapse="\n");
 
   verbose && enter(verbose, "Plotting");
-  I <- matrix(seq(length=ncol(M)), nrow=1);
+  I <- matrix(seq_len(ncol(M)), nrow=1);
   colnames(I) <- colnames(M);
   pairs(I, pch=".", cex=2, lower.panel=NULL, upper.panel=panel, 
        xlim=Mlim, ylim=Mlim, gap=gap, cex.labels=cex.labels, oma=oma, ...);

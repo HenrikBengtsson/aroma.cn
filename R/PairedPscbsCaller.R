@@ -117,7 +117,7 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE) {
   verbose && cat(verbose, "Optional arguments (may be ignored/may give an error/warning):");
   verbose && str(verbose, optArgs);
   
-  for (ii in seq(sms)) {
+  for (ii in seq_along(sms)) {
     smf <- getFile(sms, ii);
     sampleName <- getName(smf);
     verbose && enter(verbose, sprintf("Tumor-normal pair #%d ('%s') of %d", ii, sampleName, length(sms)));

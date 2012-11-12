@@ -100,7 +100,7 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
       K <- length(dsList);
 
       className <- "AromaUnitTotalCnBinarySet";
-      for (kk in seq(length=K)) {
+      for (kk in seq_len(K)) {
         ds <- dsList[[kk]];
         ds <- Arguments$getInstanceOf(ds, className, .name="dsList");
       }
@@ -162,7 +162,7 @@ setMethodS3("as.character", "MultiSourceCopyNumberNormalization", function(x, ..
   # Data sets:
   dsList <- getInputDataSets(this);
   s <- c(s, sprintf("Data sets (%d):", length(dsList)));
-  for (kk in seq(along=dsList)) {
+  for (kk in seq_along(dsList)) {
     ds <- dsList[[kk]];
     s <- c(s, as.character(ds));
   }
@@ -304,7 +304,7 @@ setMethodS3("getOutputDataSets", "MultiSourceCopyNumberNormalization", function(
   dsList <- getInputDataSets(this);
   paths <- getOutputPaths(this);
   dsOutList <- list();
-  for (kk in seq(along=dsList)) {
+  for (kk in seq_along(dsList)) {
     ds <- dsList[[kk]];
     verbose && enter(verbose, sprintf("Data set %d ('%s') of %d",
                                     kk, getFullName(ds), length(dsList)));
@@ -328,7 +328,7 @@ setMethodS3("getOutputDataSets", "MultiSourceCopyNumberNormalization", function(
       if (anyMissing(idxs)) {
         throw("Should not happen.");
       }
-      verbose && cat(verbose, "Number of files dropped: ", nbrOfFiles(dsOut) - length(idxs));
+      verbose && cat(verbose, "Number of files dropped: ", length(dsOut) - length(idxs));
       verbose && cat(verbose, "Number of files kept: ", length(idxs));
       dsOut <- extract(dsOut, idxs);
       verbose && exit(verbose);
@@ -452,7 +452,7 @@ setMethodS3("extractTupleOfDataFiles", "MultiSourceCopyNumberNormalization", fun
   # Arguments 'dsList':
   if (is.list(dsList)) {
     className <- "AromaUnitTotalCnBinarySet";
-    for (kk in seq(along=dsList)) {
+    for (kk in seq_along(dsList)) {
       ds <- dsList[[kk]];
       ds <- Arguments$getInstanceOf(ds, className, .name="dsList");
     }
@@ -574,7 +574,7 @@ setMethodS3("getSmoothedDataSets", "MultiSourceCopyNumberNormalization", functio
     verbose && printf(verbose, "Bandwidth (sd): %.2f\n", sd);
 
     dsSmoothList <- list();
-    for (kk in seq(along=dsList)) {
+    for (kk in seq_along(dsList)) {
       ds <- dsList[[kk]];
       verbose && enter(verbose, sprintf("Data set %d ('%s') of %d",
                                          kk, getFullName(ds), length(dsList)));
@@ -930,7 +930,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   targetChannel <- NULL;
   if (!is.null(targetChannel)) {
-##     for (kk in seq(length=dim[2])) {
+##     for (kk in seq_len(dim[2])) {
 ##       if (kk == targetChannel) {
 ##         targetTransform <- function(x, ...) x;
 ##       } else {
@@ -983,7 +983,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
     verbose && exit(verbose);
 
     verbose && enter(verbose, "Loading and backtransforming *smoothed* data");
-    for (kk in seq(length=nbrOfArrays)) {
+    for (kk in seq_len(nbrOfArrays)) {
       dfS <- dfSList[[kk]];
       verbose && enter(verbose, sprintf("Source #%d ('%s') of %d", kk, 
                                         getFullName(dfS), nbrOfArrays));
@@ -1020,7 +1020,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
     rownames(mus) <- names(unitsS);
     dmus <- mus;
 
-    for (chr in seq(length=nbrOfChromosomes)) {
+    for (chr in seq_len(nbrOfChromosomes)) {
       chrStr <- sprintf("Chr%02d", chr);
       verbose && enter(verbose, sprintf("Chromosome #%d of %d", 
                                                      chr, nbrOfChromosomes));
@@ -1029,7 +1029,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
 
       verbose && enter(verbose, "Extracting backtransformed *smoothed* data");
       yList <- list();
-      for (kk in seq(length=nbrOfArrays)) {
+      for (kk in seq_len(nbrOfArrays)) {
         yList[[kk]] <- YSN[unitsCC,kk,drop=TRUE];
       } # for (kk ...)
       verbose && str(verbose, yList);
@@ -1159,7 +1159,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
 
   nbrOfArrays <- length(dfList);
   dfNList <- vector("list", nbrOfArrays);
-  for (kk in seq(length=nbrOfArrays)) {
+  for (kk in seq_len(nbrOfArrays)) {
     df <- dfList[[kk]];
     verbose && enter(verbose, sprintf("Source #%d ('%s') of %d", kk, 
                                             getFullName(df), nbrOfArrays));
@@ -1392,7 +1392,7 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 
 
   verbose && enter(verbose, "Processing each array");
-  for (kk in seq(length=nbrOfSamples)) {
+  for (kk in seq_len(nbrOfSamples)) {
     name <- allNames[kk];
     verbose && enter(verbose, sprintf("Sample #%d ('%s') of %d", 
                                                     kk, name, nbrOfSamples));
@@ -1407,7 +1407,7 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
    
     verbose && enter(verbose, "Check if all arrays are already normalized");
     isDone <- TRUE;
-    for (jj in seq(along=dfList)) {
+    for (jj in seq_along(dfList)) {
       df <- dfList[[jj]];
       outputPath <- outputPaths[[jj]];
       filename <- getFilename(df);

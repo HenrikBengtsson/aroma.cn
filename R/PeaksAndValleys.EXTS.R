@@ -83,7 +83,7 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
       dist <- abs(x - expected);
       which.min(dist);
     });
-    r <- seq(along=calls); ## default ranks (used below)
+    r <- seq_along(calls); ## default ranks (used below)
   } else if (flavor == "decreasing") {
     # It is probably better to call the strongest peaks first for which
     # we have more confidence, and then call the other relative to those.
@@ -94,7 +94,7 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
     verbose && cat(verbose, "Reordering:");
     verbose && print(verbose, o);
     # The ranks (for later)
-    r <- seq(along=o); r[o] <- r;
+    r <- seq_along(o); r[o] <- r;
     verbose && cat(verbose, "Rank:");
     verbose && print(verbose, r);
     xd <- xd[o,,drop=FALSE];
@@ -104,7 +104,7 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
     naValue <- as.integer(NA);
     calls <- rep(naValue, times=nrow(xd));
     expectedLeft <- expected;
-    for (kk in seq(length=nrow(xd))) {
+    for (kk in seq_len(nrow(xd))) {
       # All expected modes called?
       if (!any(is.finite(expectedLeft))) {
         break;

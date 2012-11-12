@@ -55,7 +55,7 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
   }
 
   nbrOfGenerations <- length(this);
-  for (kk in seq(length=nbrOfGenerations)) { 
+  for (kk in seq_len(nbrOfGenerations)) { 
     verbose && enter(verbose, sprintf("Generation %d of %d", kk, nbrOfGenerations));
 
     fit <- this[[kk]];
@@ -122,7 +122,7 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
             verbose && print(verbose, x);
             abline(v=x[,1:2], lwd=1, col=col);
             yy <- par("usr")[3:4];
-            for (rr in seq(length=nrow(x))) {
+            for (rr in seq_len(nrow(x))) {
               xs <- x[rr,1:2];
 #str(list(xs=xs, ys=ys));
               ys <- yy[1]*c(1,1);
