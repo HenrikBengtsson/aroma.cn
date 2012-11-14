@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.17 [2012-11-13]
+o CLEANUP/FIX: Used "cache:" field modified instead of "cached:".
+  After correction, all clearCache() methods could be dropped.
+
+
 Version: 1.2.16 [2012-11-12]
 o CLEANUP: Now seq_along(x) instead of seq(along=x) everywhere.
   Similarly, seq(ds) where 'ds' is GenericDataFileSet is now

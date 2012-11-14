@@ -144,7 +144,7 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
     .subsetToFit = subsetToFit,
     .align = align,
     .targetDimension = targetDimension,
-    "cache:.dsSmoothList" = NULL
+    "cached:.dsSmoothList" = NULL
   )
 })
 
@@ -181,19 +181,6 @@ setMethodS3("as.character", "MultiSourceCopyNumberNormalization", function(x, ..
   class(s) <- "GenericSummary";
   s;
 }, private=TRUE)
-
-
-setMethodS3("clearCache", "MultiSourceCopyNumberNormalization", function(this, ...) {
-  # Clear all cached values.
-  # /AD HOC.
-  for (ff in c(".dsSmoothList")) {
-    this[[ff]] <- NULL;
-  }
-
-  # Then for this object
-  NextMethod("clearCache");
-}, private=TRUE)
-
 
 
 ###########################################################################/**
@@ -1464,6 +1451,9 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 
 ###########################################################################
 # HISTORY:
+# 2012-11-13
+# o CLEANUP/FIX: Used "cache:" field modified instead of "cached:".
+#   After correction, all clearCache() methods could be dropped.
 # 2012-04-16
 # o MultiSourceCopyNumberNormalization() now explicitly requires the
 #   'aroma.light' package, instead of assuming it is loaded.

@@ -99,7 +99,6 @@
 \alias{setTags.TumorBoostNormalization}
 \alias{getAsteriskTags.MultiSourceCopyNumberNormalization}
 \alias{getTags.MultiSourceCopyNumberNormalization}
-\alias{clearCache.MultiSourceCopyNumberNormalization}
 \alias{getFlavor}
 \alias{getFlavor.TumorBoostNormalization}
 \alias{as.character.AbstractCurveNormalization}

@@ -49,7 +49,6 @@
  setTags.TumorBoostNormalization
  getAsteriskTags.MultiSourceCopyNumberNormalization
  getTags.MultiSourceCopyNumberNormalization
-clearCache.MultiSourceCopyNumberNormalization
   getFlavor getFlavor.TumorBoostNormalization
   as.character.AbstractCurveNormalization backtransformOne
   backtransformOne.AbstractCurveNormalization
