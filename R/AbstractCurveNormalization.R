@@ -259,7 +259,8 @@ setMethodS3("getTargetDataSet", "AbstractCurveNormalization", function(this, ...
 
 setMethodS3("getRootPath", "AbstractCurveNormalization", function(this, ...) {
   "totalAndFracBData";
-})
+}, protected=TRUE)
+
 
 setMethodS3("getPath", "AbstractCurveNormalization", function(this, create=TRUE, ...) {
   # Create the (sub-)directory tree for the data set
@@ -291,7 +292,7 @@ setMethodS3("getPath", "AbstractCurveNormalization", function(this, create=TRUE,
   }
 
   path;
-})
+}, protected=TRUE)
 
 
 setMethodS3("nbrOfFiles", "AbstractCurveNormalization", function(this, ...) {

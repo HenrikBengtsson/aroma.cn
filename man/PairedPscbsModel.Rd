@@ -61,7 +61,6 @@ extends \link[aroma.core]{ParametersInterface}\cr
  \tab \code{getChipType} \tab  -\cr
  \tab \code{getChromosomes} \tab  -\cr
  \tab \code{getDataSets} \tab  -\cr
- \tab \code{getFitFunction} \tab  -\cr
  \tab \code{getFullName} \tab  -\cr
  \tab \code{getName} \tab  -\cr
  \tab \code{getNormalDataSet} \tab  -\cr

@@ -75,7 +75,7 @@ setMethodS3("getPath", "PairedPscbsCaller", function(this, create=TRUE, ...) {
   }
 
   path;
-})
+}, protected=TRUE)
 
 
 setMethodS3("getOptionalArguments", "PairedPscbsCaller", function(this, ...) {

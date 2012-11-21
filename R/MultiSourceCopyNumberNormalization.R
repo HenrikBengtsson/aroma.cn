@@ -271,7 +271,7 @@ setMethodS3("getOutputPaths", "MultiSourceCopyNumberNormalization", function(thi
   });
   paths <- unlist(paths, use.names=FALSE);
   paths;
-});
+}, protected=TRUE)
 
 
 setMethodS3("getOutputDataSets", "MultiSourceCopyNumberNormalization", function(this, ..., force=FALSE, verbose=FALSE) {

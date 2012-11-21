@@ -186,7 +186,7 @@ setMethodS3("getFitFunction", "PairedPscbsModel", function(this, ...) {
     PSCBS::segmentByPairedPSCBS(..., seed=seed);
   }
   fitFcn;
-})
+}, protected=TRUE)
 
 setMethodS3("getAsteriskTags", "PairedPscbsModel", function(this, collapse=NULL, ...) {
   tags <- "PairedPSCBS";

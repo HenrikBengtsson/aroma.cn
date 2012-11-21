@@ -234,7 +234,8 @@ setMethodS3("getNormalGenotypeCallSet", "TumorBoostNormalization", function(this
 
 setMethodS3("getRootPath", "TumorBoostNormalization", function(this, ...) {
   "totalAndFracBData";
-})
+}, protected=TRUE)
+
 
 setMethodS3("getPath", "TumorBoostNormalization", function(this, create=TRUE, ...) {
   # Create the (sub-)directory tree for the data set
@@ -266,7 +267,7 @@ setMethodS3("getPath", "TumorBoostNormalization", function(this, create=TRUE, ..
   }
 
   path;
-})
+}, protected=TRUE)
 
 
 setMethodS3("nbrOfFiles", "TumorBoostNormalization", function(this, ...) {

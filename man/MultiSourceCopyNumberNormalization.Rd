@@ -70,7 +70,6 @@ extends \link[aroma.core]{ParametersInterface}\cr
  \tab \code{getAsteriskTags} \tab  -\cr
  \tab \code{\link[aroma.cn:getInputDataSets.MultiSourceCopyNumberNormalization]{getInputDataSets}} \tab Gets the list of data sets to be normalized.\cr
  \tab \code{getOutputDataSets} \tab  -\cr
- \tab \code{getOutputPaths} \tab  -\cr
  \tab \code{getTags} \tab  -\cr
  \tab \code{nbrOfDataSets} \tab  -\cr
  \tab \code{\link[aroma.cn:process.MultiSourceCopyNumberNormalization]{process}} \tab Normalizes all samples.\cr
