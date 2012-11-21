@@ -43,7 +43,7 @@ setMethodS3("getParameters", "TotalCnBinnedSmoothing", function(this, ...) {
   params <- NextMethod("getParameters");
   params$robust <- this$.robust;
   params;
-}, private=TRUE);
+}, protected=TRUE);
 
 
 setMethodS3("getAsteriskTags", "TotalCnBinnedSmoothing", function(this, collapse=NULL, ...) {

@@ -136,7 +136,7 @@ setMethodS3("as.character", "TumorBoostNormalization", function(x, ...) {
  
   class(s) <- "GenericSummary";
   s;
-}, private=TRUE)
+}, protected=TRUE)
 
 
 setMethodS3("getAsteriskTags", "TumorBoostNormalization", function(this, collapse=NULL, ...) {
@@ -157,7 +157,7 @@ setMethodS3("getAsteriskTags", "TumorBoostNormalization", function(this, collaps
   }
 
   tags;
-}, private=TRUE)
+}, protected=TRUE)
 
 
 setMethodS3("getName", "TumorBoostNormalization", function(this, ...) {

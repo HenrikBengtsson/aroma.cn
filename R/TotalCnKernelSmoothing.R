@@ -55,7 +55,7 @@ setMethodS3("getParameters", "TotalCnKernelSmoothing", function(this, ...) {
   params$censorH <- this$.censorH;
   params$robust <- this$.robust;
   params;
-}, private=TRUE);
+}, protected=TRUE);
 
 
 setMethodS3("getAsteriskTags", "TotalCnKernelSmoothing", function(this, collapse=NULL, ...) {

@@ -103,7 +103,7 @@ setConstructorS3("PairedPscbsModel", function(dsT=NULL, dsN=NULL, tags="*", ...,
     }
   }
 
-  this <- extend(Object(), "PairedPscbsModel",
+  this <- extend(Object(), c("PairedPscbsModel", uses("ParametersInterface")),
     .dsT = dsT,
     .dsN = dsN,
     .extraArgs = extraArgs,
@@ -141,7 +141,7 @@ setMethodS3("as.character", "PairedPscbsModel", function(x, ...) {
 
   class(s) <- "GenericSummary";
   s;
-}, private=TRUE)
+}, protected=TRUE)
 
 
 
@@ -196,7 +196,7 @@ setMethodS3("getAsteriskTags", "PairedPscbsModel", function(this, collapse=NULL,
   }
   
   tags;
-}, private=TRUE) 
+}, protected=TRUE) 
 
 
 setMethodS3("getName", "PairedPscbsModel", function(this, ...) {
@@ -269,7 +269,7 @@ setMethodS3("nbrOfFiles", "PairedPscbsModel", function(this, ...) {
 
 setMethodS3("getRootPath", "PairedPscbsModel", function(this, ...) {
   "pscbsData";
-})
+}, protected=TRUE) 
 
 
 setMethodS3("getPath", "PairedPscbsModel", function(this, create=TRUE, ...) {
@@ -301,25 +301,18 @@ setMethodS3("getPath", "PairedPscbsModel", function(this, create=TRUE, ...) {
   }
 
   path;
-})
+}, protected=TRUE) 
 
 
 
 setMethodS3("getParameters", "PairedPscbsModel", function(this, ...) {
-  params <- list();
-  params <- c(params, dropTcnOutliers=this$.dropTcnOutliers, gapMinLength=this$.gapMinLength, seed=getRandomSeed(this), this$.extraArgs);
+  params <- NextMethod("getParameters");
+  params$dropTcnOutliers <- this$.dropTcnOutliers;
+  params$gapMinLength <- this$.gapMinLength;
+  params$seed <- getRandomSeed(this);
+  params <- c(params, this$.extraArgs);
   params;
 }, protected=TRUE);
-
-
-setMethodS3("getParametersAsString", "PairedPscbsModel", function(this, ...) {
-  params <- getParameters(this, expand=FALSE);
-  params <- trim(capture.output(str(params)))[-1];
-  params <- gsub("^[$][ ]*", "", params);
-  params <- gsub(" [ ]*", " ", params);
-  params <- gsub("[ ]*:", ":", params);
-  params;
-}, private=TRUE)
 
 
 setMethodS3("getOptionalArguments", "PairedPscbsModel", function(this, ...) {
@@ -595,6 +588,8 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 
 ############################################################################
 # HISTORY:
+# 2012-11-21
+# o Now class utilizes the new ParametersInterface.
 # 2012-09-20
 # o Now PairedPscbsModel() excludes the actual gaps from the known
 #   segments it passes to segmentByPairedPSCBS().

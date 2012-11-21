@@ -37,11 +37,10 @@ setConstructorS3("TotalCnSmoothing", function(dataSet=NULL, ..., targetUgp=NULL,
 
 
 setMethodS3("getParameters", "TotalCnSmoothing", function(this, ...) {
-  params <- list(
-    targetUgp = this$.targetUgp
-  );
+  params <- NextMethod("getParameters");
+  params$targetUgp <- this$.targetUgp;
   params;
-}, private=TRUE);
+}, protected=TRUE);
 
 
 setMethodS3("getAsteriskTags", "TotalCnSmoothing", function(this, collapse=NULL, ...) {
@@ -69,7 +68,7 @@ setMethodS3("getAsteriskTags", "TotalCnSmoothing", function(this, collapse=NULL,
 
 setMethodS3("getRootPath", "TotalCnSmoothing", function(this, ...) {
   "smoothCnData";
-}, private=TRUE)
+}, protected=TRUE)
 
 
 
@@ -100,7 +99,7 @@ setMethodS3("getPath", "TotalCnSmoothing", function(this, create=TRUE, ...) {
   }
 
   path;
-}, private=TRUE)
+}, protected=TRUE)
 
 
 
@@ -164,7 +163,7 @@ setMethodS3("getTargetPositions", "TotalCnSmoothing", function(this, ..., force=
 
 
 
-setMethodS3("smoothRawCopyNumbers", "TotalCnSmoothing", abstract=TRUE);
+setMethodS3("smoothRawCopyNumbers", "TotalCnSmoothing", abstract=TRUE, protected=TRUE);
 
 
 setMethodS3("getOutputFileExtension", "TotalCnSmoothing", function(this, ...) {

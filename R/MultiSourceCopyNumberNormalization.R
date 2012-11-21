@@ -137,7 +137,7 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
     throw("Unknown arguments: ", argsStr);
   }
 
-  extend(Object(), "MultiSourceCopyNumberNormalization",
+  extend(Object(), c("MultiSourceCopyNumberNormalization", uses("ParametersInterface")),
     .tags = tags,
     .dsList = dsList,
     .fitUgp = fitUgp,
@@ -180,7 +180,7 @@ setMethodS3("as.character", "MultiSourceCopyNumberNormalization", function(x, ..
 
   class(s) <- "GenericSummary";
   s;
-}, private=TRUE)
+}, protected=TRUE)
 
 
 ###########################################################################/**
@@ -659,26 +659,16 @@ setMethodS3("getSubsetToFit", "MultiSourceCopyNumberNormalization", function(thi
 
 
 setMethodS3("getParameters", "MultiSourceCopyNumberNormalization", function(this, ...) {
-  params <- list(
-    subsetToFit = getSubsetToFit(this, ...),
-    fitUgp = getFitAromaUgpFile(this, ...),
-    align = this$.align,
-    targetDimension = this$.targetDimension,
-    pcBandwidth = this$.pcBandwidth
-  );
+  params <- NextMethod("getParameters");
+  
+  params$subsetToFit <- getSubsetToFit(this, ...);
+  params$fitUgp <- getFitAromaUgpFile(this, ...);
+  params$align <- this$.align;
+  params$targetDimension <- this$.targetDimension;
+  params$pcBandwidth <- this$.pcBandwidth;
 
   params;
-})
-
-
-setMethodS3("getParametersAsString", "MultiSourceCopyNumberNormalization", function(this, ...) {
-  params <- getParameters(this, expand=FALSE);
-  params <- trim(capture.output(str(params)))[-1];
-  params <- gsub("^[$][ ]*", "", params);
-  params <- gsub(" [ ]*", " ", params);
-  params <- gsub("[ ]*:", ":", params);
-  params;
-}, private=TRUE) 
+}, protected=TRUE)
 
 
 setMethodS3("getPrincipalCurveEstimator", "MultiSourceCopyNumberNormalization", function(this, ...) {
@@ -1451,6 +1441,8 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 
 ###########################################################################
 # HISTORY:
+# 2012-11-21
+# o Now class utilizes the new ParametersInterface.
 # 2012-11-13
 # o CLEANUP/FIX: Used "cache:" field modified instead of "cached:".
 #   After correction, all clearCache() methods could be dropped.

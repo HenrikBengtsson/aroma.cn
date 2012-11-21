@@ -38,7 +38,7 @@ setMethodS3("findByName", "PairedPSCBSFileSet", function(static, ..., chipType=N
   # Call the "next" method
   args <- c(list("findByName"), args);
   do.call("NextMethod", args);
-}, static=TRUE)
+}, static=TRUE, protected=TRUE)
 
 
 setMethodS3("byName", "PairedPSCBSFileSet", function(static, name, ..., paths=NULL) {
@@ -65,7 +65,7 @@ setMethodS3("getDefaultFullName", "PairedPSCBSFileSet", function(this, ...) {
   res <- getParent(res);
   res <- basename(res);
   res;
-});
+}, protected=TRUE)
 
 
 setMethodS3("getChipType", "PairedPSCBSFileSet", function(this, ...) {
@@ -75,7 +75,7 @@ setMethodS3("getChipType", "PairedPSCBSFileSet", function(this, ...) {
     res <- basename(path);
   }
   res;
-});
+})
 
 
 #############################################################################

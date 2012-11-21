@@ -19,13 +19,15 @@
 
 \code{\link[R.oo]{Object}}\cr
 \code{~~|}\cr
-\code{~~+--}\code{MultiSourceCopyNumberNormalization}\cr
+\code{~~+--}\code{\link[aroma.core]{ParametersInterface}}\cr
+\code{~~~~~~~|}\cr
+\code{~~~~~~~+--}\code{MultiSourceCopyNumberNormalization}\cr
 
 \bold{Directly known subclasses:}\cr
 \cr
 
 public static class \bold{MultiSourceCopyNumberNormalization}\cr
-extends \link[R.oo]{Object}\cr
+extends \link[aroma.core]{ParametersInterface}\cr
 
 
 
@@ -69,15 +71,17 @@ extends \link[R.oo]{Object}\cr
  \tab \code{\link[aroma.cn:getInputDataSets.MultiSourceCopyNumberNormalization]{getInputDataSets}} \tab Gets the list of data sets to be normalized.\cr
  \tab \code{getOutputDataSets} \tab  -\cr
  \tab \code{getOutputPaths} \tab  -\cr
- \tab \code{getParameters} \tab  -\cr
  \tab \code{getTags} \tab  -\cr
  \tab \code{nbrOfDataSets} \tab  -\cr
  \tab \code{\link[aroma.cn:process.MultiSourceCopyNumberNormalization]{process}} \tab Normalizes all samples.\cr
 }
 
 
+ \bold{Methods inherited from ParametersInterface}:\cr
+getParameters, getParametersAsString
+
  \bold{Methods inherited from Object}:\cr
-asThis, getChecksum, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save
+asThis, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save, print
 
 
  }

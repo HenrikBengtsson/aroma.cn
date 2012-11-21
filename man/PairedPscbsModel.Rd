@@ -19,13 +19,15 @@
 
 \code{\link[R.oo]{Object}}\cr
 \code{~~|}\cr
-\code{~~+--}\code{PairedPscbsModel}\cr
+\code{~~+--}\code{\link[aroma.core]{ParametersInterface}}\cr
+\code{~~~~~~~|}\cr
+\code{~~~~~~~+--}\code{PairedPscbsModel}\cr
 
 \bold{Directly known subclasses:}\cr
 \cr
 
 public static class \bold{PairedPscbsModel}\cr
-extends \link[R.oo]{Object}\cr
+extends \link[aroma.core]{ParametersInterface}\cr
 
 
 
@@ -64,8 +66,6 @@ extends \link[R.oo]{Object}\cr
  \tab \code{getName} \tab  -\cr
  \tab \code{getNormalDataSet} \tab  -\cr
  \tab \code{getOutputDataSet} \tab  -\cr
- \tab \code{getPath} \tab  -\cr
- \tab \code{getRootPath} \tab  -\cr
  \tab \code{getTags} \tab  -\cr
  \tab \code{getTumorDataSet} \tab  -\cr
  \tab \code{indexOf} \tab  -\cr
@@ -74,8 +74,11 @@ extends \link[R.oo]{Object}\cr
 }
 
 
+ \bold{Methods inherited from ParametersInterface}:\cr
+getParameters, getParametersAsString
+
  \bold{Methods inherited from Object}:\cr
-asThis, getChecksum, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save
+asThis, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save, print
 
 
  }

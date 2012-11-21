@@ -119,7 +119,7 @@ setMethodS3("as.character", "AbstractCurveNormalization", function(x, ...) {
  
   class(s) <- "GenericSummary";
   s;
-}, private=TRUE)
+}, protected=TRUE)
 
 
 setMethodS3("getAsteriskTags", "AbstractCurveNormalization", function(this, ...) {
@@ -144,7 +144,7 @@ setMethodS3("getAsteriskTags", "AbstractCurveNormalization", function(this, ...)
   tags <- name;
 
   tags;
-}, private=TRUE)
+}, protected=TRUE)
 
 
 

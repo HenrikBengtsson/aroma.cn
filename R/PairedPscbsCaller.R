@@ -37,12 +37,13 @@ setMethodS3("getAsteriskTags", "PairedPscbsCaller", function(this, collapse=NULL
   tags <- Arguments$getTags(tags, collapse=collapse);
 
   tags;
-}, private=TRUE)
+}, protected=TRUE)
 
 
 setMethodS3("getRootPath", "PairedPscbsCaller", function(this, ...) {
   "pscbsData";
 }, protected=TRUE)
+
 
 setMethodS3("getPath", "PairedPscbsCaller", function(this, create=TRUE, ...) {
   # Create the (sub-)directory tree for the data set
@@ -83,10 +84,10 @@ setMethodS3("getOptionalArguments", "PairedPscbsCaller", function(this, ...) {
 
 
 setMethodS3("getParameters", "PairedPscbsCaller", function(this, ...) {
-  calls <- this$.calls;
-  params <- list(calls=calls);
+  params <- NextMethod("getParameters");
+  params$calls <- this$.calls;
   params;
-}, private=TRUE)
+}, protected=TRUE)
 
 
 

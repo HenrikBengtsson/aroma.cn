@@ -44,10 +44,10 @@ extends \emph{\link[aroma.cn]{AbstractCurveNormalization}}\cr
 
 
  \bold{Methods inherited from AbstractCurveNormalization}:\cr
-backtransformOne, fitOne, getDataSets, getFullName, getInputDataSet, getName, getOutputDataSet, getPairedDataSet, getPath, getRootPath, getSubsetToFit, getTags, getTargetDataSet, nbrOfFiles, process, setTags
+as.character, backtransformOne, fitOne, getAsteriskTags, getDataSets, getFullName, getInputDataSet, getName, getOutputDataSet, getPairedDataSet, getPath, getRootPath, getSubsetToFit, getTags, getTargetDataSet, nbrOfFiles, process, setTags
 
  \bold{Methods inherited from Object}:\cr
-asThis, getChecksum, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save
+asThis, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save, print
 
 
  }

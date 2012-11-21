@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.18 [2012-11-21]
+o Now applicable classes utilize the new ParametersInterface.
+o DOCUMENTATION: Hiding more internal methods from the help indices.
+
+
 Version: 1.2.17 [2012-11-13]
 o CLEANUP/FIX: Used "cache:" field modified instead of "cached:".
   After correction, all clearCache() methods could be dropped.
