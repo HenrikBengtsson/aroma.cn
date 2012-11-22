@@ -133,11 +133,7 @@ setMethodS3("as.character", "PairedPscbsModel", function(x, ...) {
 
   nbrOfFiles <- nbrOfFiles(this);
   s <- c(s, sprintf("Number of arrays: %d", nbrOfFiles));
- 
-  params <- getParametersAsString(this);
-  nparams <- length(params);
-  params <- paste(params, collapse=", ");
-  s <- c(s, sprintf("Additional parameters: [%d] %s", nparams, params));
+   s <- c(s, sprintf("Additional parameters: %s", getParametersAsString(this)));
 
   class(s) <- "GenericSummary";
   s;
