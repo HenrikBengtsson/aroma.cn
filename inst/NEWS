@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.19 [2012-11-26]
+o Bumped up the package dependencies.
+
+
 Version: 1.2.18 [2012-11-21]
 o Now applicable classes utilize the new ParametersInterface.
 o DOCUMENTATION: Hiding more internal methods from the help indices.
