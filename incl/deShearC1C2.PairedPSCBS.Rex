@@ -27,7 +27,7 @@ ww <- which(fitC$output$abCall);
 fitC$output[ww, "dhMean"] <- 0;
 
 # deShear
-fitD <- deShearC1C2(fitC, verbose=verbose);
+fitD <- deShearC1C2(fitC, verbose=-10);
 
 devSet("tracks");
 subplots(2*3, ncol=2, byrow=FALSE);

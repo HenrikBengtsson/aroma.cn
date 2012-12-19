@@ -55,7 +55,7 @@ fit <- segmentByPairedPSCBS(CT[ww], betaT=betaT[ww], betaN=betaN[ww], x=x[ww], c
 fit <- postsegmentTCN(fit);
 
 # Calibrate in (C1,C2) space
-fitC <- calibrateC1C2(fit, verbose=verbose);
+fitC <- calibrateC1C2(fit, verbose=-10);
 
 devSet("tracks");
 subplots(10, ncol=2, byrow=FALSE);

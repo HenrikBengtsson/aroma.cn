@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.2.20 [2012-12-19]
+o BUG FIX: Some example() scripts used non-defined values.
+
+
 Version: 1.2.19 [2012-11-26]
 o Bumped up the package dependencies.
 
