@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.3.0 [2012-01-07]
+o Bumped up the package dependencies.
+o BUG FIX: process() for PairedPscbsCaller used the global 'verbose'.
+
+
 Version: 1.2.20 [2012-12-19]
 o BUG FIX: Some example() scripts used non-defined values.
 

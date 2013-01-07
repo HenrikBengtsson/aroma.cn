@@ -673,7 +673,7 @@ setMethodS3("getPrincipalCurveEstimator", "MultiSourceCopyNumberNormalization", 
   # aroma.light::fitPrincipalCurve()
   require("aroma.light") || throw("Package not loaded: aroma.light");
 
-  params <- getParameters(this, verbose=less(verbose, 1));
+  params <- getParameters(this);
   df <- params$pcBandwidth;
   if (is.null(df)) {
     df <- 5;
@@ -1439,6 +1439,8 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
 
 ###########################################################################
 # HISTORY:
+# 2013-01-07
+# o BUG FIX: getPrincipalCurveEstimator() used non-existing 'verbose'.
 # 2012-11-21
 # o Now class utilizes the new ParametersInterface.
 # 2012-11-13

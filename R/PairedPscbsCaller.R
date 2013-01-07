@@ -91,9 +91,20 @@ setMethodS3("getParameters", "PairedPscbsCaller", function(this, ...) {
 
 
 
-setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE) {
+setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE, verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Validate arguments
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'force':
   force <- Arguments$getLogical(force);
+
+  # Argument 'verbose':
+  verbose <- Arguments$getVerbose(verbose);
+  if (verbose) {
+    pushState(verbose);
+    on.exit(popState(verbose));
+  } 
+
 
   sms <- getInputDataSet(this);
 
@@ -184,6 +195,8 @@ setMethodS3("getPlatform", "PairedPscbsCaller", function(this, ...) {
 
 ##########################################################################
 # HISTORY:
+# 2013-01-07
+# o BUG FIX: process() for PairedPscbsCaller used the global 'verbose'.
 # 2012-09-20
 # o Now PairedPscbsCaller() passes '...' to the internal callers.
 # 2012-09-19
