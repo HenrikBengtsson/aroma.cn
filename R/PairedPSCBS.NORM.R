@@ -150,6 +150,11 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   nbrOfSegments <- nrow(segs);
   verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
 
+  # Get mean estimators
+  estList <- getMeanEstimators(fit, "dh");
+  avgDH <- estList$dh;
+
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -187,7 +192,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
     # Identify all homozygous SNPs in the region
     keep <- (chromosome == chrKK & xRange[1] <= x & x <= xRange[2] & isHom);
     keep <- which(keep);
-    mBAFhom <- mean(rho[keep], na.rm=TRUE);
+    mBAFhom <- avgDH(rho[keep], na.rm=TRUE);
     X[kk,] <- c(dh, mBAFhom, tcn);
   } # for (kk ...)
 
@@ -265,6 +270,9 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 
 ##############################################################################
 # HISTORY
+# 2013-01-17 [HB]
+# o Updated normalizeBAFsByRegions() for PairedPSCBS to recognize when
+#   other mean-level estimators than the sample mean have been used.
 # 2011-10-16 [HB]
 # o Now using getLocusData(fit) and getSegments(fit) where applicable.
 # 2011-07-10 [HB]

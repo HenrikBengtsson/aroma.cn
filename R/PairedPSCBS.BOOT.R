@@ -43,6 +43,10 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
   verbose && enter(verbose, "Resample (TCN,BAF) signals and reestimate segmentation means");
 
+  # Get mean estimators
+  estList <- getMeanEstimators(fit, c("tcn", "dh"));
+  avgTCN <- estList$tcn;
+  avgDH <- estList$dh;
 
   data <- getLocusData(fit);
   snpFields <- c("betaN", "betaT", "betaTN", "muN");
@@ -153,7 +157,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     # Update TCN mean level
     y <- data$CT[units];
-    yMean <- mean(y, na.rm=TRUE);
+    yMean <- avgTCN(y, na.rm=TRUE);
     segs[idxs,"tcnMean"] <- rep(yMean, times=length(idxs));
 
     verbose && exit(verbose);
@@ -182,7 +186,7 @@ setMethodS3("resampleC", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Update DH mean level
     beta <- data[[by]][units];
     y <- 2*abs(beta[isHet] - 1/2);
-    yMean <- mean(y, na.rm=TRUE);
+    yMean <- avgDH(y, na.rm=TRUE);
     segs[kk,"dhMean"] <- yMean;
 
     verbose && exit(verbose);
@@ -218,6 +222,11 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
   verbose && enter(verbose, "Resample (TCN,BAF) signals and reestimate segmentation means");
 
+
+  # Get mean estimators
+  estList <- getMeanEstimators(fit, c("tcn", "dh"));
+  avgTCN <- estList$tcn;
+  avgDH <- estList$dh;
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -391,7 +400,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     # Update TCN mean level
     y <- data$CT[units];
-    yMean <- mean(y, na.rm=TRUE);
+    yMean <- avgTCN(y, na.rm=TRUE);
     segs[idxs,"tcnMean"] <- rep(yMean, times=length(idxs));
 
     verbose && exit(verbose);
@@ -420,7 +429,7 @@ setMethodS3("resampleA", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Update DH mean level
     beta <- data[[by]][units];
     y <- 2*abs(beta[isHet] - 1/2);
-    yMean <- mean(y, na.rm=TRUE);
+    yMean <- avgDH(y, na.rm=TRUE);
     segs[kk,"dhMean"] <- yMean;
 
     verbose && exit(verbose);
@@ -460,6 +469,12 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
   fields <- intersect(names(data), fields);
   verbose && cat(verbose, "Fields to be resampled:");
   verbose && print(verbose, fields);
+
+
+  # Get mean estimators
+  estList <- getMeanEstimators(fit, c("tcn", "dh"));
+  avgTCN <- estList$tcn;
+  avgDH <- estList$dh;
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -561,7 +576,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
     # Update TCN mean level
     y <- data$CT[units];
-    yMean <- mean(y, na.rm=TRUE);
+    yMean <- avgTCN(y, na.rm=TRUE);
     segs[idxs,"tcnMean"] <- rep(yMean, times=length(idxs));
 
     verbose && exit(verbose);
@@ -590,7 +605,7 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
     # Update DH mean level
     beta <- data[[by]][units];
     y <- 2*abs(beta[isHet] - 1/2);
-    yMean <- mean(y, na.rm=TRUE);
+    yMean <- avgDH(y, na.rm=TRUE);
     segs[kk,"dhMean"] <- yMean;
 
     verbose && exit(verbose);
@@ -609,6 +624,10 @@ setMethodS3("resampleB", "PairedPSCBS", function(fit, by=c("betaTN", "betaT"), .
 
 ##############################################################################
 # HISTORY
+# 2013-01-17 [HB]
+# o Updated resampleA(), resampleB() and resampleC() for PairedPSCBS
+#   to recognize when other mean-level estimators than the sample mean
+#   have been used.
 # 2011-10-16 [HB]
 # o Now using getLocusData(fit) and getSegments(fit) where applicable.
 # 2011-07-10 [HB]
