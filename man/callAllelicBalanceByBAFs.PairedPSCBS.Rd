@@ -10,9 +10,7 @@
 \name{callAllelicBalanceByBAFs.PairedPSCBS}
 \alias{callAllelicBalanceByBAFs.PairedPSCBS}
 \alias{PairedPSCBS.callAllelicBalanceByBAFs}
-\alias{callAllelicBalanceByBAFs.PairedPSCBS}
 \alias{callAllelicBalanceByBAFs,PairedPSCBS-method}
-
 
 \title{Calls regions that are in allelic balance}
 
@@ -20,7 +18,9 @@
  Calls regions that are in allelic balance from the allele B fractions (BAF).
 }
 
-\usage{\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore="auto", ..., force=FALSE, cache=FALSE, verbose=FALSE)}
+\usage{
+\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore="auto", ..., force=FALSE, cache=FALSE, verbose=FALSE)
+}
 
 \arguments{
   \item{fit}{A \code{\link[PSCBS]{PairedPSCBS}} fit object as returned by
@@ -40,11 +40,11 @@
 
 \examples{
 
-if (require("PSCBS") && Sys.getenv("_R_CHECK_FULL_") != "") {
+if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS.data") && require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
-data <- R.utils::loadObject(pathname);
+data("paired.chr01", package="PSCBS.data")
+data <- paired.chr01
 
 # PSCBS segmentation
 fit <- segmentByPairedPSCBS(data, verbose=-10);
@@ -58,7 +58,7 @@ print(fitN2);
 } # if (require("PSCBS"))
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson, Pierre Neuvial}
 
 \seealso{
   Internally, \code{\link{testAllelicBalanceByBAFs}}() is used.

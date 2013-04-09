@@ -9,9 +9,7 @@
 \name{callCopyNeutralRegions.PairedPSCBS}
 \alias{callCopyNeutralRegions.PairedPSCBS}
 \alias{PairedPSCBS.callCopyNeutralRegions}
-\alias{callCopyNeutralRegions.PairedPSCBS}
 \alias{callCopyNeutralRegions,PairedPSCBS-method}
-
 
 \title{Calls regions that are copy neutral}
 
@@ -19,7 +17,9 @@
  Calls regions that are copy neutral from the allele B fractions (BAF).
 }
 
-\usage{\method{callCopyNeutralRegions}{PairedPSCBS}(fit, ...)}
+\usage{
+\method{callCopyNeutralRegions}{PairedPSCBS}(fit, ...)
+}
 
 \arguments{
   \item{fit}{A \code{\link[PSCBS]{PairedPSCBS}} fit object as returned by
@@ -36,11 +36,11 @@
 
 \examples{
 
-if (require("PSCBS") && Sys.getenv("_R_CHECK_FULL_") != "") {
+if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS.data") && require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
-data <- R.utils::loadObject(pathname);
+data("paired.chr01", package="PSCBS.data")
+data <- paired.chr01
 
 # PSCBS segmentation
 fit <- segmentByPairedPSCBS(data, verbose=-10);
@@ -56,7 +56,7 @@ fitN <- normalizeBAFsByRegions(fitC, verbose=-10);
 } # if (require("PSCBS"))
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson}
 
 
 \keyword{internal}

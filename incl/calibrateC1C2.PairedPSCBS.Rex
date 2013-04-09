@@ -1,10 +1,9 @@
 
-if (require("PSCBS") && Sys.getenv("_R_CHECK_FULL_") != "") {
+if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS.data") && require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
-# pathname <- "wholeGenomeData/GSE20584,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY/GenomeWideSNP_6/GSE20584,GSM517071vGSM517072,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY.xdr";
-data <- R.utils::loadObject(pathname);
+data("paired.chr01", package="PSCBS.data")
+data <- paired.chr01
 R.oo::attachLocally(data);
 
 # AD HOC: Robustification

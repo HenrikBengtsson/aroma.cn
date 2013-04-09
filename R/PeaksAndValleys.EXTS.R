@@ -31,7 +31,7 @@
 #  is called analogously to one of the remaining states, and so on.
 # }
 #
-# @author
+# @author "HB, PN"
 #
 # \seealso{
 #   To get peaks-and-valley estimates, use

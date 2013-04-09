@@ -9,9 +9,7 @@
 \name{getSubsetToFit.MultiSourceCopyNumberNormalization}
 \alias{getSubsetToFit.MultiSourceCopyNumberNormalization}
 \alias{MultiSourceCopyNumberNormalization.getSubsetToFit}
-\alias{getSubsetToFit.MultiSourceCopyNumberNormalization}
 \alias{getSubsetToFit,MultiSourceCopyNumberNormalization-method}
-
 
 \title{Gets subset of (smoothing) units for fitting the model}
 
@@ -19,7 +17,9 @@
  Gets subset of (smoothing) units for fitting the model.
 }
 
-\usage{\method{getSubsetToFit}{MultiSourceCopyNumberNormalization}(this, ..., verbose=FALSE)}
+\usage{
+\method{getSubsetToFit}{MultiSourceCopyNumberNormalization}(this, ..., verbose=FALSE)
+}
 
 \arguments{
   \item{...}{Not used.}
@@ -30,7 +30,7 @@
  Returns an \code{\link[base]{integer}} \code{\link[base]{vector}} of unit indices.
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson}
 
 \seealso{
   For more information see \code{\link{MultiSourceCopyNumberNormalization}}.

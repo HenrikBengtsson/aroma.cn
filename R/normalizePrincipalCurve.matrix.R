@@ -26,8 +26,6 @@
 #   Returns an NxK @matrix.
 # }
 #
-# @author
-#
 # \references{
 #   [1] Hastie, T. and Stuetzle, W, \emph{Principal Curves}, JASA, 1989.
 # }
@@ -36,10 +34,12 @@
 #   @see "aroma.light::fitPrincipalCurve" and
 #   @see "aroma.light::backtransformPrincipalCurve".
 # }
-#*/#########################################################################  
+#
+# @author "HB"
+#*/#########################################################################
 setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, returnFit=FALSE) {
   # fitPrincipalCurve()
-  require("aroma.light") || throw("Package not loaded: aroma.light"); 
+  require("aroma.light") || throw("Package not loaded: aroma.light");
 
   # Fit principal curve
   fit <- fitPrincipalCurve(x, ...);

@@ -23,14 +23,14 @@
 #
 # @examples "../incl/callAllelicBalanceByBAFs.PairedPSCBS.Rex"
 #
-# @author
+# @author "HB, PN"
 #
 # @keyword internal
-#*/########################################################################### 
+#*/###########################################################################
 setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c("var", "mean"), ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'betaT':
   betaT <- Arguments$getDoubles(betaT);
   nbrOfLoci <- length(betaT);
@@ -47,8 +47,8 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
   if (verbose) {
     pushState(verbose);
     on.exit(popState(verbose));
-  } 
- 
+  }
+
 
   verbose && enter(verbose, "Testing for allelic balance by allele B fractions (BAFs)");
 
@@ -82,17 +82,17 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
   rm(keep);
   verbose && exit(verbose);
 
-  
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Get homozygous and heterozygous centered BAF signals
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   verbose && enter(verbose, "Getting homozygous and heterozygous centered BAF signals");
   # AA SNPs
   isAA <- (muN == 0);
   idxs <- which(isAA);
   yAA <- betaT[idxs];
   yAA <- yAA - mean(yAA);
-  
+
   # BB SNPs
   isBB <- (muN == 1);
   idxs <- which(isBB);
@@ -131,9 +131,9 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
   res <- list(statistic=NA, p.value=NA);
 
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Sanity checks
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   nMin <- min(nHoms, nHets);
 
   # Sanity check
@@ -153,9 +153,9 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
   }
 
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Testing for allelic balance
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   if (flavor == "var") {
     res <- var.test(hets, homs, alternative="greater");
   } else if (flavor == "mean") {
@@ -171,7 +171,7 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
   # Sanity check
 
   verbose && exit(verbose);
-  
+
   res;
 }, protected=TRUE) # testAllelicBalanceByBAFs()
 
@@ -182,7 +182,7 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
 # o Harmonized code. Added more verbose output. Added more code comments.
 # o Renamed to testAllelicBalanceByBAFs() from AI.test().
 # o Added an Rdoc skeleton.
-# o Renamed arguments. 
+# o Renamed arguments.
 # 2010-08-25 [PN]
 # o Created.
 #############################################################################

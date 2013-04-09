@@ -7,7 +7,7 @@
 #  @classhierarchy
 #
 # }
-# 
+#
 # @synopsis
 #
 # \arguments{
@@ -24,8 +24,8 @@
 #  @allmethods "public"
 # }
 #
-# @author
-#*/########################################################################### 
+# @author "HB"
+#*/###########################################################################
 setConstructorS3("TotalCnKernelSmoothing", function( ..., kernel=c("gaussian", "uniform"), bandwidth=50e3, censorH=3, robust=FALSE) {
   # Argument 'kernel':
   kernel <- match.arg(kernel);
@@ -65,7 +65,7 @@ setMethodS3("getAsteriskTags", "TotalCnKernelSmoothing", function(this, collapse
 
   params <- getParameters(this);
 
-  # We put the bandwidth tag before the kernel one for 
+  # We put the bandwidth tag before the kernel one for
   # backward compatibility reason. /HB 2011-12-15
   # Parameter 'bandwidth'
   bandwidthTag <- sprintf("H=%.1fkb", params$bandwidth/1e3);
@@ -82,16 +82,16 @@ setMethodS3("getAsteriskTags", "TotalCnKernelSmoothing", function(this, collapse
   # Collapsed or split?
   if (!is.null(collapse)) {
     tags <- paste(tags, collapse=collapse);
-  } 
+  }
 
   tags;
-}, protected=TRUE) 
+}, protected=TRUE)
 
 
 setMethodS3("smoothRawCopyNumbers", "TotalCnKernelSmoothing", function(this, rawCNs, target, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
   if (verbose) {
@@ -111,7 +111,7 @@ setMethodS3("smoothRawCopyNumbers", "TotalCnKernelSmoothing", function(this, raw
   knownArguments <- names(formals(colKernelSmoothing.matrix));
   keep <- is.element(names(args), knownArguments);
   args <- args[keep];
-  
+
   args <- c(list(rawCNs), args);
 
   verbose && cat(verbose, "Calling kernelSmoothing() with arguments:");

@@ -6,7 +6,7 @@
 # \description{
 #  @classhierarchy
 # }
-# 
+#
 # @synopsis
 #
 # \arguments{
@@ -17,8 +17,8 @@
 #  @allmethods "public"
 # }
 #
-# \author{Henrik Bengtsson}
-#*/########################################################################### 
+# @author "HB"
+#*/###########################################################################
 setConstructorS3("XYCurveNormalization", function(...) {
   extend(AbstractCurveNormalization(...), "XYCurveNormalization");
 })
@@ -37,4 +37,4 @@ setMethodS3("backtransformOne", "XYCurveNormalization", function(this, theta, fi
 # HISTORY:
 # 2009-07-15
 # o Created.
-############################################################################ 
+############################################################################

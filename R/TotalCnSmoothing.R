@@ -7,7 +7,7 @@
 #  @classhierarchy
 #
 # }
-# 
+#
 # @synopsis
 #
 # \arguments{
@@ -22,8 +22,8 @@
 #  @allmethods "public"
 # }
 #
-# @author
-#*/########################################################################### 
+# @author "HB"
+#*/###########################################################################
 setConstructorS3("TotalCnSmoothing", function(dataSet=NULL, ..., targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet") {
   if (!is.null(dataSet)) {
     # Argument 'targetUgp':
@@ -59,10 +59,10 @@ setMethodS3("getAsteriskTags", "TotalCnSmoothing", function(this, collapse=NULL,
   # Collapsed or split?
   if (!is.null(collapse)) {
     tags <- paste(tags, collapse=collapse);
-  } 
+  }
 
   tags;
-}, protected=TRUE) 
+}, protected=TRUE)
 
 
 
@@ -104,9 +104,9 @@ setMethodS3("getPath", "TotalCnSmoothing", function(this, create=TRUE, ...) {
 
 
 setMethodS3("getTargetPositions", "TotalCnSmoothing", function(this, ..., force=FALSE, verbose=FALSE) {
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   params <- getParameters(this);
   targetUgp <- params$targetUgp;
 
@@ -144,7 +144,7 @@ setMethodS3("getTargetPositions", "TotalCnSmoothing", function(this, ..., force=
   res <- list();
   for (cc in chromosomes) {
     chrTag <- sprintf("Chr%02d", cc);
-    verbose && enter(verbose, sprintf("Chromosome %d ('%s') of %d", 
+    verbose && enter(verbose, sprintf("Chromosome %d ('%s') of %d",
                                              cc, chrTag, nbrOfChromosomes));
     verbose && cat(verbose, "Target positions:");
     units <- getUnitsOnChromosome(targetUgp, chromosome=cc);
@@ -249,7 +249,7 @@ setMethodS3("getOutputDataSet0", "TotalCnSmoothing", function(this, pattern=NULL
 setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
   if (verbose) {
@@ -294,13 +294,13 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
   nbrOfArrays <- length(ds);
   for (kk in seq_along(ds)) {
     df <- getFile(ds, kk);
-    verbose && enter(verbose, sprintf("Array %d ('%s') of %d", 
+    verbose && enter(verbose, sprintf("Array %d ('%s') of %d",
                                             kk, getName(df), nbrOfArrays));
 
     path <- getPath(this);
     fullname <- getFullName(df);
     filename <- sprintf("%s%s", fullname, ext);
-    pathname <- Arguments$getReadablePathname(filename, path=path, 
+    pathname <- Arguments$getReadablePathname(filename, path=path,
                                                          mustExist=FALSE);
     verbose && cat(verbose, "Output pathname: ", pathname);
 
@@ -324,11 +324,11 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
       target <- targetList[[cc]];
       chromosome <- target$chromosome;
       chrTag <- sprintf("Chr%02d", chromosome);
-  
-      verbose && enter(verbose, sprintf("Chromosome %d ('%s') of %d", 
+
+      verbose && enter(verbose, sprintf("Chromosome %d ('%s') of %d",
                                                cc, chrTag, nbrOfChromosomes));
       verbose && cat(verbose, "Extracting raw CNs:");
-      rawCNs <- extractRawCopyNumbers(df, chromosome=chromosome, 
+      rawCNs <- extractRawCopyNumbers(df, chromosome=chromosome,
                                                   verbose=less(verbose, 10));
       verbose && print(verbose, rawCNs);
       verbose && summary(verbose, rawCNs);
@@ -337,7 +337,7 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
       verbose && cat(verbose, "Target positions:");
       verbose && str(verbose, target$xOut);
 
-      smoothCNs <- smoothRawCopyNumbers(this, rawCNs=rawCNs, 
+      smoothCNs <- smoothRawCopyNumbers(this, rawCNs=rawCNs,
                                         target=target, verbose=verbose);
 
       verbose && print(verbose, smoothCNs);
@@ -350,7 +350,7 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
     verbose && cat(verbose, "Smoothed CNs across all chromosomes:");
     verbose && str(verbose, M);
     verbose && summary(verbose, M);
-    verbose && printf(verbose, "Missing values: %d (%.1f%%) out of %d\n", 
+    verbose && printf(verbose, "Missing values: %d (%.1f%%) out of %d\n",
                    sum(is.na(M)), 100*sum(is.na(M))/nbrOfUnits, nbrOfUnits);
     verbose && exit(verbose);
 
@@ -361,9 +361,9 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
     params2[["targetUgp"]] <- NULL;
     footer <- list(
       sourceDataFile=list(
-        fullname=getFullName(df), 
-        platform=getPlatform(df), 
-        chipType=getChipType(df), 
+        fullname=getFullName(df),
+        platform=getPlatform(df),
+        chipType=getChipType(df),
         checksum=getChecksum(df)
       ), parameters=list(
         targetUgp=list(
@@ -379,8 +379,8 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
     # Write to a temporary file
     pathnameT <- pushTemporaryFile(pathname, verbose=verbose);
 
-    dfOut <- clazz$allocate(filename=pathnameT, nbrOfRows=nbrOfUnits, 
-                            platform=platform, chipType=chipType, 
+    dfOut <- clazz$allocate(filename=pathnameT, nbrOfRows=nbrOfUnits,
+                            platform=platform, chipType=chipType,
                             footer=footer, verbose=less(verbose, 50));
 
     dfOut[,1] <- M;
@@ -404,7 +404,7 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
 
 setMethodS3("getOutputFiles", "TotalCnSmoothing", function(this, ...) {
   NextMethod("getOutputFiles", pattern=".*[.]asb$");
-}, protected=TRUE) 
+}, protected=TRUE)
 
 
 
@@ -420,7 +420,7 @@ setMethodS3("getOutputFiles", "TotalCnSmoothing", function(this, ...) {
 # o ROBUSTNESS: Now process() of TotalCnSmoothing write output atomically.
 # 2009-05-05
 # o BUG FIX: process() of TotalCnSmoothing would not "recognize" fullname
-#   translators, that is, the output filenames were always identical to 
+#   translators, that is, the output filenames were always identical to
 #   the input ones.
 # 2009-05-04
 # o BUG FIX: Added missing argument 'verbose' in getTargetPositions() of

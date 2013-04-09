@@ -10,9 +10,7 @@
 \name{normalizeBAFsByRegions.PairedPSCBS}
 \alias{normalizeBAFsByRegions.PairedPSCBS}
 \alias{PairedPSCBS.normalizeBAFsByRegions}
-\alias{normalizeBAFsByRegions.PairedPSCBS}
 \alias{normalizeBAFsByRegions,PairedPSCBS-method}
-
 
 \title{Normalizes allele B fractions (BAFs) based on region-based PSCN estimates}
 
@@ -20,7 +18,9 @@
  Normalizes allele B fractions (BAFs) based on region-based PSCN estimates as given by the PSCBS segmentation method.
 }
 
-\usage{\method{normalizeBAFsByRegions}{PairedPSCBS}(fit, by=c("betaTN", "betaT"), ..., force=FALSE, cache=TRUE, verbose=FALSE)}
+\usage{
+\method{normalizeBAFsByRegions}{PairedPSCBS}(fit, by=c("betaTN", "betaT"), ..., force=FALSE, cache=TRUE, verbose=FALSE)
+}
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
@@ -48,11 +48,11 @@
 
 \examples{
 
-if (require("PSCBS") && Sys.getenv("_R_CHECK_FULL_") != "") {
+if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS.data") && require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
-data <- R.utils::loadObject(pathname);
+data("paired.chr01", package="PSCBS.data")
+data <- paired.chr01
 R.oo::attachLocally(data);
 
 # AD HOC: Robustification
@@ -93,7 +93,7 @@ title(main="(C1,C2) - both");
 } # if (require("PSCBS"))
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson, Pierre Neuvial}
 
 \seealso{
   Internally \code{\link[aroma.cn]{normalizeMirroredBAFsByRegions}} is used.

@@ -10,30 +10,30 @@
 #  of a tumor sample given the allele B fractions and genotype calls for
 #  a matched normal.
 #  The method is a single-sample (single-pair) method.  It does not require
-#  total copy number estimates.  
+#  total copy number estimates.
 #  The normalization is done such that the total copy number is unchanged
 #  afterwards.
 # }
-# 
+#
 # @synopsis
 #
 # \arguments{
-#  \item{dsT}{An @see "aroma.core::AromaUnitFracBCnBinarySet" of 
+#  \item{dsT}{An @see "aroma.core::AromaUnitFracBCnBinarySet" of
 #     tumor samples.}
-#  \item{dsN}{An @see "aroma.core::AromaUnitFracBCnBinarySet" of 
+#  \item{dsN}{An @see "aroma.core::AromaUnitFracBCnBinarySet" of
 #     match normal samples.}
-#  \item{gcN}{An @see "aroma.core::AromaUnitGenotypeCallSet" of 
+#  \item{gcN}{An @see "aroma.core::AromaUnitGenotypeCallSet" of
 #     genotypes for the normals.}
-#  \item{flavor}{A @character string specifying the type of 
+#  \item{flavor}{A @character string specifying the type of
 #     correction applied.}
 #  \item{preserveScale}{If @TRUE, SNPs that are heterozygous in the
 #    matched normal are corrected for signal compression using an estimate
 #    of signal compression based on the amount of correction performed
 #    by TumorBoost on SNPs that are homozygous in the matched normal.}
-#  \item{collapseHomozygous}{If @TRUE, SNPs that are homozygous in the 
+#  \item{collapseHomozygous}{If @TRUE, SNPs that are homozygous in the
 #    matched normal are also called homozygous in the tumor, that is,
-#    it's allele B fraction is collapsed to either 0 or 1.  
-#    If @FALSE, the homozygous values are normalized according the 
+#    it's allele B fraction is collapsed to either 0 or 1.
+#    If @FALSE, the homozygous values are normalized according the
 #    model. [NOT USED YET]
 #  }
 #  \item{tags}{(Optional) Sets the tags for the output data sets.}
@@ -44,8 +44,8 @@
 #  @allmethods "public"
 # }
 #
-# \author{Henrik Bengtsson and Pierre Neuvial}
-#*/########################################################################### 
+# @author "HB, PN"
+#*/###########################################################################
 setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), preserveScale=TRUE, collapseHomozygous=FALSE, tags="*", ...) {
   # Validate arguments
   if (!is.null(dsT)) {
@@ -132,8 +132,8 @@ setMethodS3("as.character", "TumorBoostNormalization", function(x, ...) {
     ds <- dsList[[kk]];
     s <- c(s, sprintf("<%s>:", capitalize(names(dsList)[kk])));
     s <- c(s, as.character(ds));
-  } 
- 
+  }
+
   class(s) <- "GenericSummary";
   s;
 }, protected=TRUE)
@@ -151,7 +151,7 @@ setMethodS3("getAsteriskTags", "TumorBoostNormalization", function(this, collaps
   if (!preserveScale) {
     tags <- c(tags, "ns");
   }
-  
+
   if (!is.null(collapse)) {
     tags <- paste(tags, collapse=collapse);
   }
@@ -202,11 +202,11 @@ setMethodS3("setTags", "TumorBoostNormalization", function(this, tags="*", ...) 
     tags <- trim(unlist(strsplit(tags, split=",")));
     tags <- tags[nchar(tags) > 0];
   }
-  
+
   this$.tags <- tags;
 })
 
- 
+
 setMethodS3("getFullName", "TumorBoostNormalization", function(this, ...) {
   name <- getName(this);
   tags <- getTags(this);
@@ -246,7 +246,7 @@ setMethodS3("getPath", "TumorBoostNormalization", function(this, create=TRUE, ..
   # Full name
   fullname <- getFullName(this);
 
-  # Chip type    
+  # Chip type
   ds <- getInputDataSet(this);
   chipType <- getChipType(ds, fullname=FALSE);
 
@@ -293,7 +293,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
   if (verbose) {
     pushState(verbose);
     on.exit(popState(verbose));
-  } 
+  }
 
 
   units <- NULL;
@@ -314,7 +314,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     dfList <- lapply(dsList, FUN=getFile, kk);
     dfT <- dfList$tumor;
     name <- getName(dfT);
-    verbose && enter(verbose, sprintf("Sample #%d ('%s') of %d", 
+    verbose && enter(verbose, sprintf("Sample #%d ('%s') of %d",
                                                     kk, name, nbrOfFiles));
 
     # Output file
@@ -426,7 +426,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 
       # Correction factor
       sf <- etaC/eta;
-      
+
       isHet <- !isHom;
       isDown <- (betaTN < 1/2);
       idxs <- which(isHet & isDown);
@@ -483,7 +483,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     verbose && exit(verbose);
   } # for (kk ...)
 
-  res <- getOutputDataSet(this, verbose=less(verbose, 1)); 
+  res <- getOutputDataSet(this, verbose=less(verbose, 1));
 
   verbose && exit(verbose);
 
@@ -507,7 +507,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 #   can verify the encoding, i.e. 0, 1/2, or 1.
 # 2009-07-15
 # o BUG FIX: TumorBoostNormalization: the 'srcFiles' attribute in file
-#   footer of the result files contained a duplicated default footer 
+#   footer of the result files contained a duplicated default footer
 #   instead of the tumor-normal pair.
 # 2009-07-02
 # o Added model 'flavor' "v4" which corrects heterozygots according to "v2"
@@ -525,4 +525,4 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
 #   no stray arguments.
 # 2009-04-29
 # o Created.
-############################################################################ 
+############################################################################

@@ -6,12 +6,12 @@
 # \description{
 #  @classhierarchy
 # }
-# 
+#
 # @synopsis
 #
 # \arguments{
 #  \item{...}{Arguments passed to @see "AbstractCurveNormalization".}
-#  \item{subset}{A @double in (0,1] specifying the fraction of the 
+#  \item{subset}{A @double in (0,1] specifying the fraction of the
 #    \code{subsetToFit} to be used for fitting.  Since the fit function
 #    for this class is rather slow, the default is to use a 1/20:th
 #    of the default data points.}
@@ -21,8 +21,8 @@
 #  @allmethods "public"
 # }
 #
-# \author{Henrik Bengtsson}
-#*/########################################################################### 
+# @author "HB"
+#*/###########################################################################
 setConstructorS3("PrincipalCurveNormalization", function(..., subset=1/20) {
   if (length(list(...)) > 0) {
     require("aroma.light") || throw("Package not loaded: aroma.light");
@@ -71,4 +71,4 @@ setMethodS3("backtransformOne", "PrincipalCurveNormalization", function(this, th
 #   'aroma.light' package, instead of assuming it is loaded.
 # 2009-07-15
 # o Created.
-############################################################################ 
+############################################################################

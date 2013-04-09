@@ -36,7 +36,9 @@ extends \link[aroma.core]{ParametersInterface}\cr
   piecewise constant segments.
  }
 
- \usage{PairedPscbsModel(dsT=NULL, dsN=NULL, tags="*", ..., dropTcnOutliers=TRUE, gapMinLength=1e+06, seed=NULL)}
+ \usage{
+PairedPscbsModel(dsT=NULL, dsN=NULL, tags="*", ..., dropTcnOutliers=TRUE, gapMinLength=1e+06, seed=NULL)
+}
 
  \arguments{
    \item{dsT, dsN}{The tumor and the normal
@@ -74,10 +76,10 @@ extends \link[aroma.core]{ParametersInterface}\cr
 
 
  \bold{Methods inherited from ParametersInterface}:\cr
-getParameters, getParametersAsString, getParameterSets
+getParameterSets, getParameters, getParametersAsString
 
  \bold{Methods inherited from Object}:\cr
-asThis, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save
+$, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save, asThis
 
 
  }

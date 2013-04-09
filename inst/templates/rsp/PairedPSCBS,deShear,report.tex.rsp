@@ -9,6 +9,7 @@
 
 <%
 library("PSCBS");
+library("R.devices");
 library("R.cache");
 stopifnot(exists("rspArgs", mode="list"));
 %>
@@ -787,6 +788,8 @@ assign("renamePDF", function() {
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % HISTORY:
+# 2013-04-08
+# o Now loading R.devices package.
 # 2012-09-23
 # o Now display background and rescale corrected.
 # 2012-09-22

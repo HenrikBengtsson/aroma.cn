@@ -9,9 +9,7 @@
 \name{getSmoothedDataSets.MultiSourceCopyNumberNormalization}
 \alias{getSmoothedDataSets.MultiSourceCopyNumberNormalization}
 \alias{MultiSourceCopyNumberNormalization.getSmoothedDataSets}
-\alias{getSmoothedDataSets.MultiSourceCopyNumberNormalization}
 \alias{getSmoothedDataSets,MultiSourceCopyNumberNormalization-method}
-
 
 \title{Gets the data sets smoothed toward the UGP file}
 
@@ -19,7 +17,9 @@
  Gets the data sets smoothed toward the UGP file.
 }
 
-\usage{\method{getSmoothedDataSets}{MultiSourceCopyNumberNormalization}(this, ..., verbose=FALSE)}
+\usage{
+\method{getSmoothedDataSets}{MultiSourceCopyNumberNormalization}(this, ..., verbose=FALSE)
+}
 
 \arguments{
   \item{...}{Not used.}
@@ -38,7 +38,7 @@
   will be located automatically in future sessions.
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson}
 
 \seealso{
   \code{\link[aroma.cn:getFitAromaUgpFile.MultiSourceCopyNumberNormalization]{*getFitAromaUgpFile}()}.

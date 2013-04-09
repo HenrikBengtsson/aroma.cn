@@ -9,9 +9,7 @@
 \name{getAllNames.MultiSourceCopyNumberNormalization}
 \alias{getAllNames.MultiSourceCopyNumberNormalization}
 \alias{MultiSourceCopyNumberNormalization.getAllNames}
-\alias{getAllNames.MultiSourceCopyNumberNormalization}
 \alias{getAllNames,MultiSourceCopyNumberNormalization-method}
-
 
 \title{Gets the names of all unique samples across all sources}
 
@@ -19,7 +17,9 @@
  Gets the names of all unique samples across all sources.
 }
 
-\usage{\method{getAllNames}{MultiSourceCopyNumberNormalization}(this, ...)}
+\usage{
+\method{getAllNames}{MultiSourceCopyNumberNormalization}(this, ...)
+}
 
 \arguments{
   \item{...}{Passed to \code{getNames(...)} of each data set.}
@@ -29,7 +29,7 @@
  Returns a \code{\link[base]{character}} \code{\link[base]{vector}}.
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson}
 
 \seealso{
   For more information see \code{\link{MultiSourceCopyNumberNormalization}}.

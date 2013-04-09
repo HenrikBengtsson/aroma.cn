@@ -9,8 +9,6 @@
 
 \name{normalizeMirroredBAFsByRegions.matrix}
 \alias{normalizeMirroredBAFsByRegions.matrix}
-\alias{normalizeMirroredBAFsByRegions.matrix}
-
 \alias{normalizeMirroredBAFsByRegions}
 
 \title{Normalizes region-level mirrored allele B fractions (mBAFs)}
@@ -21,7 +19,9 @@
  or close to their expected values (which is at zero and one).
 }
 
-\usage{\method{normalizeMirroredBAFsByRegions}{matrix}(data, flavor=c("plain", "total"), ..., verbose=FALSE)}
+\usage{
+\method{normalizeMirroredBAFsByRegions}{matrix}(data, flavor=c("plain", "total"), ..., verbose=FALSE)
+}
 
 \arguments{
   \item{data}{A \code{\link[base]{numeric}} Kx2 or Kx3 \code{\link[base]{matrix}}, where K is the number of
@@ -46,7 +46,7 @@
 
 %examples "../incl/normalizeMirroredBAFsByRegions.Rex"
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson, Pierre Neuvial}
 
 
 \keyword{methods}

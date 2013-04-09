@@ -10,9 +10,7 @@
 \name{findAtomicAberrations.CopyNumberRegions}
 \alias{findAtomicAberrations.CopyNumberRegions}
 \alias{CopyNumberRegions.findAtomicAberrations}
-\alias{findAtomicAberrations.CopyNumberRegions}
 \alias{findAtomicAberrations,CopyNumberRegions-method}
-
 \alias{findAtomicAberrations}
 
 \title{Finds all possible atomic regions}
@@ -21,7 +19,9 @@
   Finds all possible atomic regions of a certain length.
 }
 
-\usage{\method{findAtomicAberrations}{CopyNumberRegions}(cnr, data, H=1, alpha=0.02, ..., verbose=FALSE)}
+\usage{
+\method{findAtomicAberrations}{CopyNumberRegions}(cnr, data, H=1, alpha=0.02, ..., verbose=FALSE)
+}
 
 \arguments{
   \item{cnr}{The segments defining the partitioning of the data.}
@@ -131,8 +131,6 @@ for (H in 1:3) {
 
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
-
 % \references{
 %   [1] \url{http://www.definethat.com/define/7274.htm}
 %   [2] \url{http://en.wikipedia.org/wiki/Atomic_(order_theory)}
@@ -142,6 +140,8 @@ for (H in 1:3) {
 \seealso{
   ...
 }
+
+\author{Henrik Bengtsson}
 
 
 \keyword{internal}

@@ -27,7 +27,7 @@
 #
 # @examples "../incl/deShearC1C2.PairedPSCBS.Rex"
 #
-# @author
+# @author "HB, PN"
 #
 # @keyword internal
 #*/###########################################################################
@@ -383,7 +383,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   estimateShear <- function(pfp, need=NULL) {
     verbose && enter(verbose, "Estimate (x,y) shear model");
     ## Use -pi/2 and 0 to correct for shearing
-  
+
     # (a) Vertical shear (based on horizontal information)
     pfpT <- subset(pfp, call == -pi/2);
     verbose && cat(verbose, "Horizontal peak:");
@@ -400,7 +400,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     sV <- tan(phiV);
     stopifnot(is.finite(sV));
     pfpTV <- pfpT;
-  
+
     # (b) Horizontal shear (based on vertical information)
     pfpT <- subset(pfp, call == 0);
     verbose && cat(verbose, "Vertical peak:");
@@ -417,7 +417,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     sH <- tan(phiH);
     stopifnot(is.finite(sH));
     pfpTH <- pfpT;
-  
+
     # (c) Vertical scale (based on diagonal information)
     pfpT <- subset(pfp, call %in% c(-pi/4, +pi/4));
     verbose && cat(verbose, "Diagonal peak:");
@@ -426,7 +426,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     if (nrow(pfpT) < 1) {
       msg <- "Cannot fit diagonal shear scale parameter. No lines where called to diagonal (angle=-pi/4 or +pi/4).";
       warning(msg);
-  
+
       scale <- scaleY <- as.double(NA);
       Hd <- NULL;
     } else {
@@ -437,10 +437,10 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
       verbose && print(verbose, scaleY);
       scaleY <- weighted.mean(scaleY, w=pfpT$density);
       verbose && print(verbose, scaleY);
-  
+
       # Preserve (dx^2 + dy^2) before and after
       scale <- 1/sqrt(1+sV^2);
-  
+
       Hd <- function(xy) {
         y <- xy[,2];
         mu0 <- min(y, na.rm=TRUE);
@@ -456,7 +456,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
       env$scaleY <- scaleY;
       environment(Hd) <- env;
     }
-  
+
     ## (d) Horizontal and vertical shear (forcing the estimates to be the same)
     verbose && cat(verbose, "Horizontal and Vertical peaks:");
     verbose && print(verbose, rbind(pfpTH, pfpTV));
@@ -466,13 +466,13 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     wV <- pfpTV$density;
     phiHV <- weighted.mean(c(phiV, phiH), w=c(wV, wH))
     ## check 'pi' ajdustment
-  
+
     # Sanity checks
     stopifnot(is.finite(phiHV));
     # Shear parameter
     sHV <- tan(phiHV);
     stopifnot(is.finite(sHV));
-  
+
     # Create backtransform function
     Hxy <- function(xy) {
       cbind(xy[, 1] - sV*xy[, 2], xy[, 2] - sH*xy[, 1]);
@@ -481,21 +481,21 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     env$sV <- sV;
     env$sH <- sH;
     environment(Hxy) <- env;
-  
+
     Hx <- function(xy) {
       cbind(xy[, 1] - sV*xy[, 2], xy[, 2]);
     } # Hx()
     env <- new.env(parent=baseenv());
     env$sV <- sV;
     environment(Hx) <- env;
-  
+
     Hy <- function(xy) {
       cbind(xy[, 1], xy[, 2] - sH*xy[, 1]);
     } # Hy()
     env <- new.env(parent=baseenv());
     env$sH <- sH;
     environment(Hy) <- env;
-  
+
     H <- function(xy) {
       x <- xy[, 1];
       y <- xy[, 2];
@@ -600,7 +600,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
   ## - The signal is pi-periodic.
   ## - We are looking at from -pi/2 to pi/2.
   ## - We expect a peak near -pi/2 (or pi/2...)
-  ## - In order to estimate it correctly, transform the signal so that 
+  ## - In order to estimate it correctly, transform the signal so that
   ##   it is in (-pi/2-pi/8, pi/2-pi/8)
   ##   /PN 2010-09-22
   lag <- pi/8;
@@ -832,13 +832,13 @@ setMethodS3("backgroundCorrect", "PairedPSCBS", function(fit, targetMedian=c("sa
 # o CORRECTION: The peak caller of fitDeltaXYShearModel() swapped the labels
 #   of the horizontal and vertical peaks. Labels are only used for display.
 # 2012-09-21 [HB]
-# o BUG FIX: fitDeltaC1C2ShearModel(... dropABChangePoints=TRUE) could 
+# o BUG FIX: fitDeltaC1C2ShearModel(... dropABChangePoints=TRUE) could
 #   generate an incorrect number change-point weights if dropping.
 # o Added argument 'onError' to fitDeltaXYShearModel() for matrix.
-# o Now attribute 'modelFit' fitDeltaXYShearModel() also contains 
+# o Now attribute 'modelFit' fitDeltaXYShearModel() also contains
 #   debug$cpAngleDensity.
 # 2012-09-21 [PN]
-# o Now fitDeltaC1C2ShearModel() will apply a fast naive AB caller, 
+# o Now fitDeltaC1C2ShearModel() will apply a fast naive AB caller,
 #   iff AB calls are not available.
 # o BUG FIX: horizontal/vertical axes were swapped for direction '|_'
 # 2012-09-19 [HB]

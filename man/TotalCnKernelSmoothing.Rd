@@ -6,15 +6,15 @@
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- \name{TotalCnKernelSmoothing}
+\name{TotalCnKernelSmoothing}
 \docType{class}
 \alias{TotalCnKernelSmoothing}
 
 
- \title{The TotalCnKernelSmoothing class}
+\title{The TotalCnKernelSmoothing class}
 
- \description{
-  Package:  aroma.cn \cr
+\description{
+ Package:  aroma.cn \cr
 \bold{Class TotalCnKernelSmoothing}\cr
 
 \code{\link[R.oo]{Object}}\cr
@@ -35,39 +35,41 @@ extends \emph{\link[aroma.cn]{TotalCnSmoothing}}\cr
 
 
 
- }
+}
 
- \usage{TotalCnKernelSmoothing(..., kernel=c("gaussian", "uniform"), bandwidth=50000, censorH=3, robust=FALSE)}
+\usage{
+TotalCnKernelSmoothing(..., kernel=c("gaussian", "uniform"), bandwidth=50000, censorH=3, robust=FALSE)
+}
 
- \arguments{
-  \item{...}{Arguments passed to \code{\link{TotalCnSmoothing}}.}
-  \item{kernel}{A \code{\link[base]{character}} string specifying the type of kernel
-     to be used.}
-  \item{bandwidth}{A \code{\link[base]{double}} specifying the bandwidth of the smoothing.}
-  \item{censorH}{A positive \code{\link[base]{double}} specifying the bandwidth threshold
-     where values outside are ignored (zero weight).}
-  \item{robust}{If \code{\link[base:logical]{TRUE}}, a robust smoother is used, otherwise not.}
- }
+\arguments{
+ \item{...}{Arguments passed to \code{\link{TotalCnSmoothing}}.}
+ \item{kernel}{A \code{\link[base]{character}} string specifying the type of kernel
+    to be used.}
+ \item{bandwidth}{A \code{\link[base]{double}} specifying the bandwidth of the smoothing.}
+ \item{censorH}{A positive \code{\link[base]{double}} specifying the bandwidth threshold
+    where values outside are ignored (zero weight).}
+ \item{robust}{If \code{\link[base:logical]{TRUE}}, a robust smoother is used, otherwise not.}
+}
 
- \section{Fields and Methods}{
-  \bold{Methods:}\cr
+\section{Fields and Methods}{
+ \bold{Methods:}\cr
 \emph{No methods defined}.
 
 
  \bold{Methods inherited from TotalCnSmoothing}:\cr
-getAsteriskTags, getOutputDataSet0, getOutputFileClass, getOutputFileExtension, getOutputFiles, getOutputFileSetClass, getParameters, getPath, getRootPath, getTargetPositions, getTargetUgpFile, process, smoothRawCopyNumbers
+getAsteriskTags, getOutputDataSet0, getOutputFileClass, getOutputFileExtension, getOutputFileSetClass, getOutputFiles, getParameters, getPath, getRootPath, getTargetPositions, getTargetUgpFile, process, smoothRawCopyNumbers
 
  \bold{Methods inherited from AromaTransform}:\cr
 as.character, getAsteriskTags, getExpectedOutputFiles, getExpectedOutputFullnames, getFullName, getInputDataSet, getName, getOutputDataSet, getOutputDataSet0, getOutputFiles, getPath, getRootPath, getTags, isDone, process, setTags
 
  \bold{Methods inherited from ParametersInterface}:\cr
-getParameters, getParametersAsString, getParameterSets
+getParameterSets, getParameters, getParametersAsString
 
  \bold{Methods inherited from Object}:\cr
-asThis, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save
+$, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save, asThis
 
 
- }
+}
 
- \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson}
 \keyword{classes}

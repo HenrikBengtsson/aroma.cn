@@ -10,9 +10,7 @@
 \name{deShearC1C2.PairedPSCBS}
 \alias{deShearC1C2.PairedPSCBS}
 \alias{PairedPSCBS.deShearC1C2}
-\alias{deShearC1C2.PairedPSCBS}
 \alias{deShearC1C2,PairedPSCBS-method}
-
 
 \title{Correct for shearing in (C1,C2) space based on region-based PSCN estimates}
 
@@ -20,7 +18,9 @@
  Correct for shearing in (C1,C2) space based on region-based PSCN estimates as given by the PSCBS segmentation method.
 }
 
-\usage{\method{deShearC1C2}{PairedPSCBS}(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE)}
+\usage{
+\method{deShearC1C2}{PairedPSCBS}(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE)
+}
 
 \arguments{
   \item{fit}{A PairedPSCBS fit object as returned by
@@ -39,12 +39,11 @@
 
 \examples{
 
-if (require("PSCBS") && Sys.getenv("_R_CHECK_FULL_") != "") {
+if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS.data") && require("PSCBS")) {
 
 # Load example ASCN data
-pathname <- system.file("data-ex/PairedPSCBS,exData,chr01.Rbin", package="PSCBS");
-# pathname <- "wholeGenomeData/GSE20584,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY/GenomeWideSNP_6/GSE20584,GSM517071vGSM517072,ACC,ra,-XY,BPN,-XY,AVG,FLN,-XY.xdr";
-data <- R.utils::loadObject(pathname);
+data("paired.chr01", package="PSCBS.data")
+data <- paired.chr01
 R.oo::attachLocally(data);
 
 # AD HOC: Robustification
@@ -90,7 +89,7 @@ title(main="(C1,C2) - deSheared");
 } # if (require("PSCBS"))
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson, Pierre Neuvial}
 
 
 \keyword{internal}

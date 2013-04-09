@@ -16,7 +16,9 @@
  Simple creation of a CopyNumberRegions object containing a single region.
 }
 
-\usage{cnr(start, stop=NULL, mean=1, chromosome=1, xScale=1e+06, ...)}
+\usage{
+cnr(start, stop=NULL, mean=1, chromosome=1, xScale=1e+06, ...)
+}
 
 \arguments{
   \item{start, stop}{Two \code{\link[base]{numeric}}s specifying the start and stop
@@ -61,7 +63,7 @@ plot(cn, col="#aaaaaa", ylim=c(0,5));
 drawLevels(pT, col="#ff0000", lwd=3);
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson}
 
 
 \keyword{internal}

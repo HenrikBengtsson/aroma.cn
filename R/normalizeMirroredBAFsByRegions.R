@@ -14,8 +14,8 @@
 # @synopsis
 #
 # \arguments{
-#   \item{data}{A @numeric Kx2 or Kx3 @matrix, where K is the number of 
-#     segments and the first and the second column contains average 
+#   \item{data}{A @numeric Kx2 or Kx3 @matrix, where K is the number of
+#     segments and the first and the second column contains average
 #     heterozygous and homozygous mBAF estimates, respectively.
 #     The third column, which is optional, contains total copy numbers.}
 #   \item{flavor}{A @character string specifying how the normalization
@@ -36,7 +36,7 @@
 #
 # %examples "../incl/normalizeMirroredBAFsByRegions.Rex"
 #
-# @author
+# @author "HB, PN"
 #
 # @keyword internal
 #*/###########################################################################
@@ -46,7 +46,7 @@ setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c(
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Arguments 'data':
   dim <- dim(data);
   if (!is.element(dim[2], c(2,3))) {
@@ -82,7 +82,7 @@ setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c(
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Estimate normalization function/scale factors
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   modelFit <- list(scale=NA);
   if (flavor == "plain") {
     verbose && enter(verbose, "Estimating scale factors for each segment independently");
@@ -143,7 +143,7 @@ devSet(6); plot(y,yHat, xlim=c(0,1), ylim=c(0,1));
 
   # Sanity check
   stopifnot(dim(dataN) == dim);
-  
+
   dataN;
 }) # normalizeMirroredBAFsByRegions()
 

@@ -11,7 +11,7 @@
 # @synopsis
 #
 # \arguments{
-#   \item{fit}{A PairedPSCBS fit object as returned by 
+#   \item{fit}{A PairedPSCBS fit object as returned by
 #     @see "PSCBS::segmentByPairedPSCBS".}
 #   \item{...}{Not used.}
 #   \item{verbose}{See @see "R.utils::Verbose".}
@@ -23,14 +23,14 @@
 #
 # @examples "../incl/calibrateC1C2.PairedPSCBS.Rex"
 #
-# @author
+# @author "HB, PN"
 #
 # @keyword internal
 #*/###########################################################################
 setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cache=TRUE, debug=FALSE, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'force':
   force <- Arguments$getLogical(force);
 
@@ -51,7 +51,7 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   # Update TCN segment means
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Check for cached results
-  key <- list(method="postsegmentTCN", class=class(fit)[1], 
+  key <- list(method="postsegmentTCN", class=class(fit)[1],
     data=as.data.frame(fit),
     version="2010-10-17"
   );
@@ -189,7 +189,7 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
     b <- peakFit$params$b;
     scale <- 1/b;
     shift <- -a/b;
-  
+
     # Sanity check
     shift <- Arguments$getDouble(shift, range=c(-3,3));
     scale <- Arguments$getDouble(scale, range=c(0.1,3));
@@ -292,7 +292,7 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
     b <- peakFit$params$b;
     scale <- 1/b;
     shift <- -a/b;
-  
+
     # Sanity check
     shift <- Arguments$getDouble(shift, range=c(-3,3));
     scale <- Arguments$getDouble(scale, range=c(0.1,3));
@@ -335,7 +335,7 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
 setMethodS3("fitC1C2Peaks", "PairedPSCBS", function(fit, ..., tol=0.05, onError=c("error", "warning", "skip"), verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'onError':
   onError <- match.arg(onError);
 
@@ -427,7 +427,7 @@ setMethodS3("fitC1C2Densities", "PairedPSCBS", function(fit, adjust=0.2, tol=0.0
   names(pList) <- names(dList);
 
   return(list(dList=dList, pList=pList));
-}) # fitC1C2Densities() 
+}) # fitC1C2Densities()
 
 
 ##############################################################################

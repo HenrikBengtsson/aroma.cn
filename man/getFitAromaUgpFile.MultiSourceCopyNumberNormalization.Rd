@@ -9,9 +9,7 @@
 \name{getFitAromaUgpFile.MultiSourceCopyNumberNormalization}
 \alias{getFitAromaUgpFile.MultiSourceCopyNumberNormalization}
 \alias{MultiSourceCopyNumberNormalization.getFitAromaUgpFile}
-\alias{getFitAromaUgpFile.MultiSourceCopyNumberNormalization}
 \alias{getFitAromaUgpFile,MultiSourceCopyNumberNormalization-method}
-
 
 \title{Gets the UGP file specifying the common set of loci to normalize at}
 
@@ -19,7 +17,9 @@
  Gets the UGP file specifying the common set of loci to normalize at.
 }
 
-\usage{\method{getFitAromaUgpFile}{MultiSourceCopyNumberNormalization}(this, ...)}
+\usage{
+\method{getFitAromaUgpFile}{MultiSourceCopyNumberNormalization}(this, ...)
+}
 
 \arguments{
   \item{...}{Not used.}
@@ -29,7 +29,7 @@
  Returns a \code{\link[aroma.core]{AromaUgpFile}}.
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson}
 
 \seealso{
   For more information see \code{\link{MultiSourceCopyNumberNormalization}}.

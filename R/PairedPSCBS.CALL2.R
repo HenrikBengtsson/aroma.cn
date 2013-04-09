@@ -11,9 +11,9 @@
 # @synopsis
 #
 # \arguments{
-#   \item{fit}{A @see "PSCBS::PairedPSCBS" fit object as returned by 
+#   \item{fit}{A @see "PSCBS::PairedPSCBS" fit object as returned by
 #     @see "PSCBS::segmentByPairedPSCBS".}
-#   \item{maxScore}{A positive @double threshold. 
+#   \item{maxScore}{A positive @double threshold.
 #     If \code{"auto"}, the threshold is estimated empirically.}
 #   \item{...}{Not used.}
 #   \item{force}{If @TRUE, an already called object is skipped, otherwise not.}
@@ -28,7 +28,7 @@
 #
 # @examples "../incl/callAllelicBalanceByBAFs.PairedPSCBS.Rex"
 #
-# @author
+# @author "HB, PN"
 #
 # \seealso{
 #   Internally, @see "testAllelicBalanceByBAFs" is used.
@@ -38,11 +38,11 @@
 # }
 #
 # @keyword internal
-#*/########################################################################### 
+#*/###########################################################################
 setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="auto", ..., force=FALSE, cache=FALSE, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'maxScore':
   if (is.character(maxScore)) {
     maxScore <- match.arg(maxScore);
@@ -83,7 +83,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Check for cached results
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  key <- list(method="callAllelicBalanceByBAFs", class=class(fit)[1], 
+  key <- list(method="callAllelicBalanceByBAFs", class=class(fit)[1],
     data=list(betaTN=betaTN, muN=muN, segments=as.data.frame(fit)),
     maxScore = maxScore,
     version="2011-11-02"
@@ -209,9 +209,9 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
 # @synopsis
 #
 # \arguments{
-#   \item{fit}{A @see "PSCBS::PairedPSCBS" fit object as returned by 
+#   \item{fit}{A @see "PSCBS::PairedPSCBS" fit object as returned by
 #     @see "PSCBS::segmentByPairedPSCBS".}
-#   \item{...}{Additional arguments passed to 
+#   \item{...}{Additional arguments passed to
 #     @see "aroma.cn::findNeutralCopyNumberState" and
 #     @see "PSCBS::callCopyNeutral.PairedPSCBS".}
 # }
@@ -226,7 +226,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
 # @author
 #
 # @keyword internal
-#*/########################################################################### 
+#*/###########################################################################
 setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ...) {
   # Call allelic balance or not, unless already done
   fit <- callAllelicBalanceByBAFs(fit, ...);
@@ -255,7 +255,7 @@ setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ...) {
 # 2011-07-10 [HB]
 # o Updated code to work with the new column names in PSCBS v0.11.0.
 # 2010-10-26 [HB]
-# o Now argument 'maxScore' for callAllelicBalanceByBAFs() defaults 
+# o Now argument 'maxScore' for callAllelicBalanceByBAFs() defaults
 #   to "auto", which corresponds to estimating the score empirically
 #   from the allelic imbalance scores ('ai').
 # o Added extractDhSegment() for PairedPSCBS.

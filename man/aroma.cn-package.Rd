@@ -6,7 +6,7 @@
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- \name{aroma.cn-package}
+\name{aroma.cn-package}
 \alias{aroma.cn-package}
 \alias{aroma.cn}
 \docType{package}
@@ -14,46 +14,46 @@
 \title{Package aroma.cn}
 
 
- \description{
-   Package for analysis of copy-number estimates obtained from various platforms.
+\description{
+  Analysis of copy-number estimates obtained from various platforms.
 
-   This package should be considered to be in an alpha or beta phase.
-   You should expect the API to be changing over time.
- }
+  This package should be considered to be in an alpha or beta phase.
+  You should expect the API to be changing over time.
+}
 
- \section{Requirements}{
-   This package requires the \pkg{aroma.core} package.
- }
+\section{Requirements}{
+  This package requires the \pkg{aroma.core} package.
+}
 
- \section{Installation and updates}{
+\section{Installation and updates}{
 
-   To install this package, see instructions at
-   \url{http://www.aroma-project.org/}.
- }
+  To install this package, see instructions at
+  \url{http://www.aroma-project.org/}.
+}
 
- \section{To get started}{
-   To get started, see:
-   \enumerate{
-     \item ...
-   }
- }
+\section{To get started}{
+  To get started, see:
+  \enumerate{
+    \item ...
+  }
+}
 
- \author{
-   Henrik Bengtsson.
- }
+\author{Henrik Bengtsson, Pierre Neuvial}
 
- \section{License}{
-   The releases of this package is licensed under
-   LGPL version 2.1 or newer.
+\section{License}{
+  The releases of this package is licensed under
+  LGPL version 2.1 or newer.
 
-   The development code of the packages is under a private licence
-   (where applicable) and patches sent to the author fall under the
-   latter license, but will be, if incorporated, released under the
-   "release" license above.
- }
+  The development code of the packages is under a private licence
+  (where applicable) and patches sent to the author fall under the
+  latter license, but will be, if incorporated, released under the
+  "release" license above.
+}
 
- \references{
- 
+\references{
+
+Please cite aroma.cn as
+
   H. Bengtsson, R. Irizarry, B. Carvalho, & T.P. Speed. Estimation and
   assessment of raw copy numbers at the single locus level,
   Bioinformatics, 2008
@@ -71,5 +71,5 @@
   data sets in bounded memory, Tech Report 745, Department of
   Statistics, University of California, Berkeley, February 2008
 
- }
+}
 \keyword{package}

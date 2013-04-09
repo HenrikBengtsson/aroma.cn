@@ -9,8 +9,6 @@
 
 \name{normalizePrincipalCurve.matrix}
 \alias{normalizePrincipalCurve.matrix}
-\alias{normalizePrincipalCurve.matrix}
-
 
 \encoding{latin1}
 
@@ -20,7 +18,9 @@
   Fit a principal curve in K dimensions.
 }
 
-\usage{\method{normalizePrincipalCurve}{matrix}(x, ..., center=TRUE, returnFit=FALSE)}
+\usage{
+\method{normalizePrincipalCurve}{matrix}(x, ..., center=TRUE, returnFit=FALSE)
+}
 
 \arguments{
  \item{x}{An NxK \code{\link[base]{matrix}} (K>=2) where the columns represent the dimension.}
@@ -36,8 +36,6 @@
   Returns an NxK \code{\link[base]{matrix}}.
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
-
 \references{
   [1] Hastie, T. and Stuetzle, W, \emph{Principal Curves}, JASA, 1989.
 }
@@ -46,4 +44,6 @@
   \code{\link[aroma.light]{fitPrincipalCurve}} and
   \code{\link[aroma.light]{backtransformPrincipalCurve}}.
 }
+
+\author{Henrik Bengtsson}
 \keyword{methods}

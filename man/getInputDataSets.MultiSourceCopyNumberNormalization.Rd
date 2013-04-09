@@ -9,9 +9,7 @@
 \name{getInputDataSets.MultiSourceCopyNumberNormalization}
 \alias{getInputDataSets.MultiSourceCopyNumberNormalization}
 \alias{MultiSourceCopyNumberNormalization.getInputDataSets}
-\alias{getInputDataSets.MultiSourceCopyNumberNormalization}
 \alias{getInputDataSets,MultiSourceCopyNumberNormalization-method}
-
 
 \title{Gets the list of data sets to be normalized}
 
@@ -19,7 +17,9 @@
  Gets the list of data sets to be normalized.
 }
 
-\usage{\method{getInputDataSets}{MultiSourceCopyNumberNormalization}(this, ...)}
+\usage{
+\method{getInputDataSets}{MultiSourceCopyNumberNormalization}(this, ...)
+}
 
 \arguments{
   \item{...}{Not used.}
@@ -29,7 +29,7 @@
  Returns a \code{\link[base]{list}}.
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson}
 
 \seealso{
   For more information see \code{\link{MultiSourceCopyNumberNormalization}}.

@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.3.2 [2013-04-08]
+o Updated examples to utilize new 'PSCBS.data' package.
+o Updated package dependencies.
+
+
 Version: 1.3.1 [2013-01-17]
 o Updated internal methods for PairedPSCBS to recognize when other
   mean-level estimators than the sample mean have been used.

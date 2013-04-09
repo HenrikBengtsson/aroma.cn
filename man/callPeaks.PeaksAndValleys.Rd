@@ -10,9 +10,7 @@
 \name{callPeaks.PeaksAndValleys}
 \alias{callPeaks.PeaksAndValleys}
 \alias{PeaksAndValleys.callPeaks}
-\alias{callPeaks.PeaksAndValleys}
 \alias{callPeaks,PeaksAndValleys-method}
-
 
 \title{Calls the peaks in peaks-and-valley estimates}
 
@@ -20,7 +18,9 @@
   Calls the peaks in peaks-and-valley estimates to a set of known state.
 }
 
-\usage{\method{callPeaks}{PeaksAndValleys}(fit, expected=c(-1/2, -1/4, 0, +1/4, +1/2) * pi, flavor=c("decreasing", "all"), verbose=FALSE, ...)}
+\usage{
+\method{callPeaks}{PeaksAndValleys}(fit, expected=c(-1/2, -1/4, 0, +1/4, +1/2) * pi, flavor=c("decreasing", "all"), verbose=FALSE, ...)
+}
 
 \arguments{
  \item{fit}{A KxC \code{\link[base]{data.frame}} of peaks-and-valley estimates.}
@@ -43,7 +43,7 @@
  is called analogously to one of the remaining states, and so on.
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson, Pierre Neuvial}
 
 \seealso{
   To get peaks-and-valley estimates, use

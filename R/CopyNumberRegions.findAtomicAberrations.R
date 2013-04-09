@@ -14,7 +14,7 @@
 # \arguments{
 #   \item{cnr}{The segments defining the partitioning of the data.}
 #   \item{data}{The data  used to test for equality.}
-#   \item{H}{A positive @integer specifying how many segments each 
+#   \item{H}{A positive @integer specifying how many segments each
 #      atomic abberation should contain.}
 #   \item{alpha}{A @double in [0,1] specifying the significance level
 #      for testing the null-hypothesis that the flanking segments
@@ -24,7 +24,7 @@
 # }
 #
 # \value{
-#   Returns a @data.frame with K rows, where K >= 0 is the number 
+#   Returns a @data.frame with K rows, where K >= 0 is the number
 #   of atomic aberrations found.
 # }
 #
@@ -47,8 +47,6 @@
 #
 # @examples "../incl/findAtomicAberrations.Rex"
 #
-# @author
-#
 # % \references{
 # %   [1] \url{http://www.definethat.com/define/7274.htm}
 # %   [2] \url{http://en.wikipedia.org/wiki/Atomic_(order_theory)}
@@ -59,8 +57,10 @@
 #   ...
 # }
 #
+# @author "HB"
+#
 # @keyword internal
-#*/########################################################################### 
+#*/###########################################################################
 setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=1, alpha=0.02, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Local functions
@@ -76,7 +76,7 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
     # Test:
     #  H0: muL == muR
     #  H1: muL != muR
-    fit <- t.test(dataL, dataR, paired=FALSE, var.equal=TRUE, 
+    fit <- t.test(dataL, dataR, paired=FALSE, var.equal=TRUE,
                                               alternative="two.sided");
     t <- fit$statistic;
     p <- fit$p.value;
@@ -139,11 +139,11 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
     isEqual <- testEquality(dataL, dataR, alpha=alpha);
     fit <- attr(isEqual, "fit");
 
-    verbose && printf(verbose, "t=%.3f (p=%g), (L==R)=%s\n", 
+    verbose && printf(verbose, "t=%.3f (p=%g), (L==R)=%s\n",
                                        fit$t, fit$p, isEqual);
     rm(dataL, dataR, fit); # Not needed anymore
 
-    # If the two flanking regions are equal, then we have 
+    # If the two flanking regions are equal, then we have
     # found an atomic region.
     if (isEqual) {
       atomicRegions <- c(atomicRegions, rr);
@@ -163,7 +163,7 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
     stop        = stop[atomicRegions+(H-1L)]
   );
 
-  # Atomic islands = atomic regions that are not next 
+  # Atomic islands = atomic regions that are not next
   # to another atomic region
   dups <- which(diff(atomicRegions) == 1);
   if (length(dups) > 0) {
@@ -202,7 +202,7 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
 # o Added argument 'debugPlot'.
 # 2010-07-19
 # o Added trial version of segmentByPruneCBS().
-# o TO DO: Down-weight loci that were close to earlier 
+# o TO DO: Down-weight loci that were close to earlier
 #   change points in the succeeding segmentations.
 # o Added prototype version of findAtomicRegions().
 # o Added prototype version of callByPruning().

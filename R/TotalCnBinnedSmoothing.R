@@ -7,7 +7,7 @@
 #  @classhierarchy
 #
 # }
-# 
+#
 # @synopsis
 #
 # \arguments{
@@ -27,8 +27,8 @@
 #  @allmethods "public"
 # }
 #
-# @author
-#*/########################################################################### 
+# @author "HB"
+#*/###########################################################################
 setConstructorS3("TotalCnBinnedSmoothing", function( ..., robust=FALSE) {
   # Arguments 'robust':
   robust <- Arguments$getLogical(robust);
@@ -60,16 +60,16 @@ setMethodS3("getAsteriskTags", "TotalCnBinnedSmoothing", function(this, collapse
   # Collapsed or split?
   if (!is.null(collapse)) {
     tags <- paste(tags, collapse=collapse);
-  } 
+  }
 
   tags;
-}, protected=TRUE) 
+}, protected=TRUE)
 
 
 setMethodS3("smoothRawCopyNumbers", "TotalCnBinnedSmoothing", function(this, rawCNs, target, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
   if (verbose) {
@@ -91,7 +91,7 @@ setMethodS3("smoothRawCopyNumbers", "TotalCnBinnedSmoothing", function(this, raw
   knownArguments <- names(formals(colBinnedSmoothing.matrix));
   keep <- is.element(names(args), knownArguments);
   args <- args[keep];
-  
+
   args <- c(list(rawCNs), args);
 
   verbose && cat(verbose, "Calling binnedSmoothing() with arguments:");

@@ -6,15 +6,15 @@
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- \name{TotalCnSmoothing}
+\name{TotalCnSmoothing}
 \docType{class}
 \alias{TotalCnSmoothing}
 
 
- \title{The abstract TotalCnSmoothing class}
+\title{The abstract TotalCnSmoothing class}
 
- \description{
-  Package:  aroma.cn \cr
+\description{
+ Package:  aroma.cn \cr
 \bold{Class TotalCnSmoothing}\cr
 
 \code{\link[R.oo]{Object}}\cr
@@ -33,20 +33,22 @@ extends \emph{\link[aroma.core]{AromaTransform}}\cr
 
 
 
- }
+}
 
- \usage{TotalCnSmoothing(dataSet=NULL, ..., targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet")}
+\usage{
+TotalCnSmoothing(dataSet=NULL, ..., targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet")
+}
 
- \arguments{
-  \item{dataSet}{An \code{\link[aroma.core]{AromaUnitTotalCnBinarySet}}.}
-  \item{...}{Arguments passed to \code{\link[aroma.core]{AromaTransform}}.}
-  \item{targetUgp}{An \code{\link[aroma.core]{AromaUgpFile}} specifying the
-    target loci for which smoothed copy-number are generated.}
-  \item{.reqSetClass}{(internal only)}
- }
+\arguments{
+ \item{dataSet}{An \code{\link[aroma.core]{AromaUnitTotalCnBinarySet}}.}
+ \item{...}{Arguments passed to \code{\link[aroma.core]{AromaTransform}}.}
+ \item{targetUgp}{An \code{\link[aroma.core]{AromaUgpFile}} specifying the
+   target loci for which smoothed copy-number are generated.}
+ \item{.reqSetClass}{(internal only)}
+}
 
- \section{Fields and Methods}{
-  \bold{Methods:}\cr
+\section{Fields and Methods}{
+ \bold{Methods:}\cr
 \tabular{rll}{
  \tab \code{getTargetUgpFile} \tab  -\cr
  \tab \code{process} \tab  -\cr
@@ -57,13 +59,13 @@ extends \emph{\link[aroma.core]{AromaTransform}}\cr
 as.character, getAsteriskTags, getExpectedOutputFiles, getExpectedOutputFullnames, getFullName, getInputDataSet, getName, getOutputDataSet, getOutputDataSet0, getOutputFiles, getPath, getRootPath, getTags, isDone, process, setTags
 
  \bold{Methods inherited from ParametersInterface}:\cr
-getParameters, getParametersAsString, getParameterSets
+getParameterSets, getParameters, getParametersAsString
 
  \bold{Methods inherited from Object}:\cr
-asThis, $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save
+$, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save, asThis
 
 
- }
+}
 
- \author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
+\author{Henrik Bengtsson}
 \keyword{classes}

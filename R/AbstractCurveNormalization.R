@@ -6,20 +6,20 @@
 # \description{
 #  @classhierarchy
 # }
-# 
+#
 # @synopsis
 #
 # \arguments{
-#  \item{dataSet}{An @see "aroma.core::AromaUnitTotalCnBinarySet" of 
+#  \item{dataSet}{An @see "aroma.core::AromaUnitTotalCnBinarySet" of
 #     "test" samples to be normalized.}
-#  \item{targetSet}{An @see "aroma.core::AromaUnitTotalCnBinarySet" of 
+#  \item{targetSet}{An @see "aroma.core::AromaUnitTotalCnBinarySet" of
 #     paired target samples.}
-#  \item{subsetToFit}{The subset of loci to be used to fit the 
+#  \item{subsetToFit}{The subset of loci to be used to fit the
 #    normalization functions.
 #    If @NULL, loci on chromosomes 1-22 are used, but not on ChrX and ChrY.
 #  }
 #  \item{tags}{(Optional) Sets the tags for the output data sets.}
-#  \item{copyTarget}{If @TRUE, target arrays are copied to the output 
+#  \item{copyTarget}{If @TRUE, target arrays are copied to the output
 #     data set, otherwise not.}
 #  \item{...}{Not used.}
 # }
@@ -28,8 +28,8 @@
 #  @allmethods "public"
 # }
 #
-# \author{Henrik Bengtsson}
-#*/########################################################################### 
+# @author "HB"
+#*/###########################################################################
 setConstructorS3("AbstractCurveNormalization", function(dataSet=NULL, targetSet=NULL, subsetToFit=NULL, tags="*", copyTarget=TRUE, ...) {
   # Validate arguments
   if (!is.null(dataSet)) {
@@ -115,8 +115,8 @@ setMethodS3("as.character", "AbstractCurveNormalization", function(x, ...) {
     ds <- dsList[[kk]];
     s <- c(s, sprintf("<%s>:", capitalize(names(dsList)[kk])));
     s <- c(s, as.character(ds));
-  } 
- 
+  }
+
   class(s) <- "GenericSummary";
   s;
 }, protected=TRUE)
@@ -162,7 +162,7 @@ setMethodS3("getSubsetToFit", "AbstractCurveNormalization", function(this, ..., 
   if (verbose) {
     pushState(verbose);
     on.exit(popState(verbose));
-  } 
+  }
 
   units <- this$.subsetToFit;
   if (is.null(units)) {
@@ -173,10 +173,10 @@ setMethodS3("getSubsetToFit", "AbstractCurveNormalization", function(this, ..., 
     ugp <- getAromaUgpFile(ds);
     verbose && print(verbose, ugp);
     verbose && exit(verbose);
-  
+
     verbose && enter(verbose, "Querying UGP for units on chromosomes of interest");
     chromosomes <- 1:22;
-    verbose && cat(verbose, "Chromosomes to fit: ", 
+    verbose && cat(verbose, "Chromosomes to fit: ",
                                              seqToHumanReadable(chromosomes));
     units <- sapply(chromosomes, FUN=function(cc) {
       getUnitsOnChromosome(ugp, cc);
@@ -232,10 +232,10 @@ setMethodS3("setTags", "AbstractCurveNormalization", function(this, tags="*", ..
 
   this$.tags <- tags;
 
-  invisible(this); 
+  invisible(this);
 })
 
- 
+
 setMethodS3("getFullName", "AbstractCurveNormalization", function(this, ...) {
   name <- getName(this);
   tags <- getTags(this);
@@ -271,7 +271,7 @@ setMethodS3("getPath", "AbstractCurveNormalization", function(this, create=TRUE,
   # Full name
   fullname <- getFullName(this);
 
-  # Chip type    
+  # Chip type
   ds <- getInputDataSet(this);
   chipType <- getChipType(ds, fullname=FALSE);
 
@@ -310,7 +310,7 @@ setMethodS3("getOutputDataSet", "AbstractCurveNormalization", function(this, ...
   if (verbose) {
     pushState(verbose);
     on.exit(popState(verbose));
-  } 
+  }
 
 
   verbose && enter(verbose, "Getting output data set");
@@ -380,7 +380,7 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
   if (verbose) {
     pushState(verbose);
     on.exit(popState(verbose));
-  } 
+  }
 
 
   verbose && enter(verbose, "Paired (x,y)-curve normalization");
@@ -398,13 +398,13 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
   verbose && cat(verbose, "Output path: ", outPath);
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Optional function h() and g() for transforming and backtransform 
+  # Optional function h() and g() for transforming and backtransform
   # signals.  Typically x = g(h(x)), although maybe only for positive
   # values, e.g. h(x) = log2(x) and g(y) = 2^x.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   hFcn <- this$.transformFcn;
   gFcn <- this$.untransformFcn;
-  
+
   # Sanity check (none or both functions must be specified)
   if (is.function(hFcn) || is.function(gFcn)) {
     if (!is.function(hFcn) || !is.function(gFcn)) {
@@ -425,7 +425,7 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 
     df <- getFile(dsPair, 2);
     fullname <- getFullName(df);
-    verbose && enter(verbose, sprintf("Sample #%d ('%s') of %d", 
+    verbose && enter(verbose, sprintf("Sample #%d ('%s') of %d",
                                                     kk, fullname, nbrOfFiles));
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -506,7 +506,7 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
     rm(subsetToFit);
     verbose && str(verbose, thetaFit);
     verbose && exit(verbose);
-    
+
     verbose && enter(verbose, "Calling fit function");
     fit <- fitOne(this, theta=thetaFit, ..., verbose=verbose);
     rm(thetaFit);
@@ -603,7 +603,7 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Return output data set
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  res <- getOutputDataSet(this, verbose=less(verbose, 1)); 
+  res <- getOutputDataSet(this, verbose=less(verbose, 1));
 
   verbose && exit(verbose);
 
@@ -622,4 +622,4 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 #   scale, e.g. h(x)=log2(x), g(y)=2^y.
 # 2009-07-15
 # o Created.
-############################################################################ 
+############################################################################

@@ -16,7 +16,9 @@
  Call segments to be copy neutral based on allelic imbalance calls and total copy number estimates.
 }
 
-\usage{\method{findNeutralCopyNumberState}{default}(C, isAI, weights=NULL, ..., minDensity=1e-10, verbose=FALSE)}
+\usage{
+\method{findNeutralCopyNumberState}{default}(C, isAI, weights=NULL, ..., minDensity=1e-10, verbose=FALSE)
+}
 
 \arguments{
   \item{C}{A \code{\link[base]{numeric}} \code{\link[base]{vector}} of region-level total copy number estimates.}
@@ -33,12 +35,12 @@
   A \code{\link[base]{logical}} \code{\link[base]{vector}} of "neutral copy number state" calls.
 }
 
-\author{Henrik Bengtsson (\url{http://www.braju.com/R/})}
-
 \seealso{
  
   This method is utilized by \code{\link[aroma.cn:callCopyNeutralRegions.PairedPSCBS]{*callCopyNeutralRegions}()}.
 }
+
+\author{Henrik Bengtsson, Pierre Neuvial}
 
 
 \keyword{internal}

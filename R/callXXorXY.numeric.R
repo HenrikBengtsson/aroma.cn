@@ -8,7 +8,7 @@
 # \description{
 #   @get "title".
 # }
-# 
+#
 # @synopsis
 #
 # \arguments{
@@ -17,10 +17,10 @@
 #  \item{flavor}{A @character string specifying the type of algorithm used.}
 #  \item{adjust}{A postive @double specifying the amount smoothing for
 #    the empirical density estimator.}
-#  \item{...}{Additional arguments passed to 
+#  \item{...}{Additional arguments passed to
 #    @see "aroma.light::findPeaksAndValleys".}
 #  \item{censorAt}{A @double @vector of length two specifying the range
-#    for which values are considered finite.  Values below (above) this 
+#    for which values are considered finite.  Values below (above) this
 #    range are treated as -@Inf (+@Inf).}
 #  \item{verbose}{A @logical or a @see "R.utils::Verbose" object.}
 # }
@@ -33,13 +33,13 @@
 #   Missing and non-finite values are dropped before trying to call XX or XY.
 # }
 #
-# @author
+# @author "HB, PN"
 #
 # \seealso{
 #   Internally @see "aroma.light::findPeaksAndValleys" is used to identify
 #   the thresholds.
 # }
-#*/########################################################################### 
+#*/###########################################################################
 setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("density"), adjust=1.5, ..., censorAt=c(-0.5,+1.5), verbose=FALSE) {
   require("aroma.light") || throw("Package not loaded: aroma.light");
 
@@ -74,8 +74,8 @@ setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("densi
   if (verbose) {
     pushState(verbose);
     on.exit(popState(verbose));
-  } 
- 
+  }
+
 
   verbose && enter(verbose, "Calling gender from allele B fractions (BAFs)");
 

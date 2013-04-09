@@ -10,15 +10,15 @@
 # @synopsis
 #
 # \arguments{
-#   \item{start, stop}{Two @numerics specifying the start and stop 
-#     location of the region.  If \code{stop} is @NULL, then 
+#   \item{start, stop}{Two @numerics specifying the start and stop
+#     location of the region.  If \code{stop} is @NULL, then
 #     \code{start[2]} is used instead.}
 #   \item{mean}{A @numeric specifying the mean level of the region.}
 #   \item{chromosome}{An @integer specifying the chromosome ID.}
 #   \item{xScale}{The default scaling parameter used for \code{start}
 #     and \code{stop}, which is then also used for plotting genomic
 #     locations.}
-#   \item{...}{Additional arguments passed to 
+#   \item{...}{Additional arguments passed to
 #     @see "aroma.core::CopyNumberRegions".}
 # }
 #
@@ -28,14 +28,14 @@
 #
 # @examples "../incl/cnr.Rex"
 #
-# @author
+# @author "HB"
 #
 # @keyword internal
-#*/########################################################################### 
+#*/###########################################################################
 cnr <- function(start, stop=NULL, mean=1, chromosome=1, xScale=1e6, ...) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'start':
   start <- Arguments$getNumerics(start, length=c(1,2));
 
@@ -50,8 +50,8 @@ cnr <- function(start, stop=NULL, mean=1, chromosome=1, xScale=1e6, ...) {
     throw("If argument 'stop' is specified, then argument 'start' must be a single position: ", length(start));
   }
 
-  CopyNumberRegions(chromosome=chromosome, 
-                    start=xScale*start, stop=xScale*stop, 
+  CopyNumberRegions(chromosome=chromosome,
+                    start=xScale*start, stop=xScale*stop,
                     mean=mean, ...);
 } # cnr()
 

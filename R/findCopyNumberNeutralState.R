@@ -16,7 +16,7 @@
 #   \item{...}{Further argumants to be passed to the density estimation
 #     function.}
 #   \item{minDensity}{A @numeric value, below which density peaks are
-#     discarded.} 
+#     discarded.}
 #   \item{verbose}{If @TRUE, extra information is output.}
 # }
 #
@@ -24,19 +24,19 @@
 #   A @logical @vector of "neutral copy number state" calls.
 # }
 #
-# @author
-#
 # \seealso{
 #   @set "class=PairedPSCBS"
 #   This method is utilized by @seemethod "callCopyNeutralRegions".
 # }
+#
+# @author "HB, PN"
 #
 # @keyword internal
 #*/###########################################################################
 setMethodS3("findNeutralCopyNumberState", "default", function(C, isAI, weights=NULL, ..., minDensity=1e-10, verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'C':
   C <- Arguments$getNumerics(C);
   nbrOfLoci <- length(C);
