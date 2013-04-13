@@ -1,8 +1,7 @@
 Package: aroma.cn
 =================
 
-Version: 1.3.2 [2013-04-08]
-o Updated examples to utilize new 'PSCBS.data' package.
+Version: 1.3.2 [2013-04-13]
 o Updated package dependencies.
 
 

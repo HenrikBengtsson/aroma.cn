@@ -42,8 +42,7 @@
 if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS.data") && require("PSCBS")) {
 
 # Load example ASCN data
-data("paired.chr01", package="PSCBS.data")
-data <- paired.chr01
+data <- PSCBS::exampleData("paired.chr01");
 R.oo::attachLocally(data);
 
 # AD HOC: Robustification
