@@ -25,7 +25,6 @@
   \item{fit}{A \code{\link[PSCBS]{PairedPSCBS}} fit object as returned by
     \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
   \item{...}{Additional arguments passed to
-    \code{\link[aroma.cn]{findNeutralCopyNumberState}} and
     \code{\link[PSCBS]{callCopyNeutral.PairedPSCBS}}.}
 }
 

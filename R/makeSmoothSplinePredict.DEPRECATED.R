@@ -1,4 +1,6 @@
 setMethodS3("makeSmoothSplinePredict", "numeric", function(x, y, df=5, ...) {
+  .Deprecated("makeSmoothSplinePredict", msg="Internal function makeSmoothSplinePredict() is deprecated, because it is no longer used.  It will eventually be removed from the package.");
+
   # Argument 'y':
   if (length(x) != length(y)) {
     throw("Argument 'y' is of a different length than 'x'");

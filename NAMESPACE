@@ -1,17 +1,19 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # IMPORTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-importFrom("R.methodsS3", "throw");
-importFrom("R.methodsS3", "setMethodS3");
+importFrom("R.methodsS3", "throw")
+importFrom("R.methodsS3", "setMethodS3")
+import("R.oo")
 
-importFrom("R.cache", "loadCache");
-importFrom("R.cache", "saveCache");
+importFrom("R.cache", "loadCache")
+importFrom("R.cache", "saveCache")
 
 importFrom("matrixStats", "weightedMedian")
 
 # importFrom(R.utils, cat)
-import(R.utils)
-import(PSCBS)
+import("R.utils")
+
+import("PSCBS")
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

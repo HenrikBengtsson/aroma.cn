@@ -212,7 +212,6 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
 #   \item{fit}{A @see "PSCBS::PairedPSCBS" fit object as returned by
 #     @see "PSCBS::segmentByPairedPSCBS".}
 #   \item{...}{Additional arguments passed to
-#     @see "aroma.cn::findNeutralCopyNumberState" and
 #     @see "PSCBS::callCopyNeutral.PairedPSCBS".}
 # }
 #
