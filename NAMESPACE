@@ -4,9 +4,13 @@
 importFrom("R.methodsS3", "throw");
 importFrom("R.methodsS3", "setMethodS3");
 
+importFrom("R.cache", "loadCache");
+importFrom("R.cache", "saveCache");
+
+importFrom("matrixStats", "weightedMedian")
+
 # importFrom(R.utils, cat)
 import(R.utils)
-importFrom("matrixStats", "weightedMedian")
 import(PSCBS)
 
 
@@ -14,7 +18,7 @@ import(PSCBS)
 # EXPORTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Object that must exported explicitly
-export(.conflicts.OK) 
+export(.conflicts.OK)
 
 # Export all public methods, that is, those without a preceeding dot
 # in their names.
