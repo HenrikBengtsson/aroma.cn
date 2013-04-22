@@ -4,16 +4,18 @@
 #
 # \encoding{latin1}
 #
-# @title "Fit a principal curve in K dimensions"
+# @title "Normalizes data in K dimensions using principal curves"
 #
 # \description{
-#   @get "title".
+#   @get "title" such that afterward the data cluster (approximately
+#   linearly) along the diagonal (in K dimensions).
 # }
 #
 # @synopsis
 #
 # \arguments{
-#  \item{x}{An NxK @matrix (K>=2) where the columns represent the dimension.}
+#  \item{x}{An NxK @matrix where the columns represent the
+#      (K >= 2) dimensions.}
 #  \item{...}{Additional arguments passed to
 #      @see "aroma.light::fitPrincipalCurve" used for fitting the model.}
 #  \item{center}{If @TRUE, normalized data is centered such that the median
@@ -36,6 +38,8 @@
 # }
 #
 # @author "HB"
+#
+# @keyword internal
 #*/#########################################################################
 setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, returnFit=FALSE) {
   # fitPrincipalCurve()
@@ -45,11 +49,19 @@ setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, r
   fit <- fitPrincipalCurve(x, ...);
 
   # Flip direction of 'lambda'?
-  rho <- cor(fit$lambda, x[,1], use="complete.obs");
+  rho <- cor(fit$lambda, x[,1L], use="complete.obs");
   flip <- (rho < 0);
 
+  # Sanity check
+  stopifnot(identical(dim(fit$s), dim(x)));
   dx <- (fit$s - x);
+
+  # Sanity check
+  stopifnot(identical(dim(dx), dim(x)));
+  stopifnot(identical(nrow(dx), length(fit$lambda)));
   xN <- fit$lambda + dx;
+  stopifnot(identical(dim(xN), dim(x)));
+
   if (flip) {
     xN <- -xN;
   }

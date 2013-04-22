@@ -1,5 +1,5 @@
 
-if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS.data") && require("PSCBS")) {
+if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS")) {
 
 # Load example ASCN data
 data <- PSCBS::exampleData("paired.chr01");

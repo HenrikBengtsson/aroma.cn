@@ -54,10 +54,6 @@
 
 Please cite aroma.cn as
 
-  H. Bengtsson, R. Irizarry, B. Carvalho, & T.P. Speed. Estimation and
-  assessment of raw copy numbers at the single locus level,
-  Bioinformatics, 2008
-
   H. Bengtsson, P. Neuvial and T.P. SpeedTumorBoost: Normalization of
   allele-specific tumor copy numbers from a single pair of tumor-normal
   genotyping microarrays, BMC Bioinformatics, 2010
@@ -70,6 +66,10 @@ Please cite aroma.cn as
   generic framework in R for analyzing small to very large Affymetrix
   data sets in bounded memory, Tech Report 745, Department of
   Statistics, University of California, Berkeley, February 2008
+
+  H. Bengtsson, R. Irizarry, B. Carvalho, & T.P. Speed. Estimation and
+  assessment of raw copy numbers at the single locus level,
+  Bioinformatics, 2008
 
 }
 \keyword{package}

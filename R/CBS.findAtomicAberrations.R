@@ -7,7 +7,7 @@ setMethodS3("findAtomicAberrations", "CBS", function(this, H=1, alpha=0.02, flav
     C <- data$y;
     C;
   } # extractLocusLevelTCN()
- 
+
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
@@ -52,7 +52,7 @@ setMethodS3("findAtomicAberrations", "CBS", function(this, H=1, alpha=0.02, flav
   verbose && enter(verbose, "Setting up extractSignals()");
   if (is.element(flavor, c("mean(tcn)", "t(tcn)"))) {
     extractSignals <- function(..., na.rm=TRUE) {
-      C <- extractLocusLevelTCN(...);  
+      C <- extractLocusLevelTCN(...);
       # Drop missing values?
       if (na.rm) {
         C <- C[is.finite(C)];
@@ -70,7 +70,7 @@ setMethodS3("findAtomicAberrations", "CBS", function(this, H=1, alpha=0.02, flav
     testEquality <- testEqualityTcnByT;
   }
   verbose && exit(verbose);
- 
+
 
   verbose && enter(verbose, "Call equivalent copy-number states by pruning");
 
@@ -92,8 +92,8 @@ setMethodS3("findAtomicAberrations", "CBS", function(this, H=1, alpha=0.02, flav
     # The two flanking regions
     idxL <- rr-1;
     idxR <- rr+H;
-    fitL <- extractByRegion(this, region=idxL);
-    fitR <- extractByRegion(this, region=idxR);
+    fitL <- extractRegion(this, region=idxL);
+    fitR <- extractRegion(this, region=idxR);
 
     # Extract their data
     verbose && enter(verbose, "Extracting signals");
@@ -147,12 +147,12 @@ setMethodS3("findAtomicAberrations", "CBS", function(this, H=1, alpha=0.02, flav
     if (!is.null(fit)) {
       verbose && cat(verbose, "fit:");
       verbose && str(verbose, fit);
-      verbose && printf(verbose, "t=%.3f (p=%g), (alpha=%g) (L==R)=%s\n", 
+      verbose && printf(verbose, "t=%.3f (p=%g), (alpha=%g) (L==R)=%s\n",
                          fit$statistic, fit$p.value, alpha, isEqual);
     }
     rm(dataL, dataR, fit); # Not needed anymore
 
-    # If the two flanking regions are equal, then we have 
+    # If the two flanking regions are equal, then we have
     # found an atomic region.
     # Also, in case either of the regions compared contains
     # no data points, which may happen with (C1,C2) when
@@ -177,7 +177,7 @@ setMethodS3("findAtomicAberrations", "CBS", function(this, H=1, alpha=0.02, flav
 #    stop        = stop[atomicRegions+(H-1L)]
   );
 
-  # Atomic islands = atomic regions that are not next 
+  # Atomic islands = atomic regions that are not next
   # to another atomic region
   dups <- which(diff(atomicRegions) == H);
   if (length(dups) > 0) {

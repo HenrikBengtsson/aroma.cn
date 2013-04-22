@@ -19,7 +19,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
     pushState(verbose);
     on.exit(popState(verbose));
   }
- 
+
 
   fitT <- fit;
 
@@ -29,7 +29,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
     verbose && enter(verbose, sprintf("Generation #%d", gg));
 
     fitList[[gg]] <- fitT;
-  
+
     nbrOfSegments <- nbrOfSegments(fitT);
     maxH <- nbrOfSegments-2L;
 
@@ -42,10 +42,10 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
     for (hh in 0:maxH) {
 #    for (hh in 0) {
       verbose && enter(verbose, sprintf("Block size H=%d of %d", hh, maxH));
-    
+
       res <- findAtomicAberrations(fitT, H=hh, ..., verbose=verbose);
       verbose && str(verbose, res);
-    
+
       # (i) Atomic islands?
       if (hh == 0) {
         atomicIslands <- res$atomicRegions;
@@ -74,7 +74,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
             atomicIslands <- atomicIslands[1];
           }
         }
-    
+
         # Drop atomic islands and merge flanking segments
         dropList <- list();
         atomicIslands <- sort(atomicIslands, decreasing=TRUE);
@@ -94,7 +94,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
 
           if (hh > 0) {
             verbose && enter(verbose, sprintf("Dropping %d segments (%s)", hh, atomicIslandTag));
-            fitTT <- dropByRegions(fitTT, regions=atomicIsland, H=hh);
+            fitTT <- dropRegions(fitTT, regions=atomicIsland, H=hh);
             nT <- nbrOfSegments(fitTT);
             verbose && exit(verbose);
             verbose && cat(verbose, "Number of segments left: ", nT);
@@ -105,7 +105,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
           fitDrop <- fitTT$dropped;
           fitTT$dropped <- NULL;
           dropList[[kk]] <- fitDrop;
-    
+
           verbose && enter(verbose, sprintf("Merging segments (#%d and #%d)", atomicIsland-1L, atomicIsland));
           fitTT <- mergeTwoSegments(fitTT, left=atomicIsland-1L);
 
@@ -123,7 +123,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
 
           verbose && exit(verbose);
         } # for (kk ...)
-  
+
         fitT$dropped <- dropList;
         fitT$atomicIslands <- rev(atomicIslands);
         fitT$H <- hh;
@@ -131,18 +131,18 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
         hasChanged <- TRUE;
 
         verbose && exit(verbose);
-    
+
         # Go to next generation
         break;
       } # if (length(atomicIslands) > 0)
 
       verbose && exit(verbose);
     } # for (hh ...)
-  
+
     if (!hasChanged) {
       break;
     }
-  
+
     # Next generation
     gg <- gg + 1L;
 
@@ -162,7 +162,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
 # o Now pruneCNA() is for AbstractCBS, not just PairedPSCBS objects.
 # 2011-01-18
 # o Added class 'PruneCNA' to the return object of pruneCNA().
-# o Now pruneCNA() returns pruned objects with the dropped segments 
+# o Now pruneCNA() returns pruned objects with the dropped segments
 #   included in a separate list.
 # o Added argument 'maxGeneration' to pruneCNA().
 # 2010-09-08
@@ -175,7 +175,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
 # o Added argument 'debugPlot'.
 # 2010-07-19
 # o Added trial version of segmentByPruneCBS().
-# o TO DO: Down-weight loci that were close to earlier 
+# o TO DO: Down-weight loci that were close to earlier
 #   change points in the succeeding segmentations.
 # o Added prototype version of findAtomicRegions().
 # o Added prototype version of callByPruning().
