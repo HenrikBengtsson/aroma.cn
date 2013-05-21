@@ -38,7 +38,8 @@ extends \emph{\link[aroma.cn]{TotalCnSmoothing}}\cr
 }
 
 \usage{
-TotalCnKernelSmoothing(..., kernel=c("gaussian", "uniform"), bandwidth=50000, censorH=3, robust=FALSE)
+TotalCnKernelSmoothing(..., kernel=c("gaussian", "uniform"), bandwidth=50000, censorH=3,
+  robust=FALSE)
 }
 
 \arguments{

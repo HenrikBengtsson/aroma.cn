@@ -2,12 +2,14 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Local functions
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-xAxisBar <- function(x0, x1=NULL, y=par("usr")[3], lwd=4, col=par("col"), length=0.04, xpd=FALSE, ...) {
+xAxisBar <- function(x0, x1=NULL, y=par("usr")[3], lwd=4, col=par("col"),
+                     length=0.04, xpd=FALSE, ...) {
   if (is.null(x1)) {
     x1 <- x0[2];
     x0 <- x0[1];
   }
-  arrows(x0=x0, x1=x1, y0=y, code=3, angle=90, length=length, lwd=lwd, col=col, xpd=xpd, lend=2, ...);
+  arrows(x0=x0, x1=x1, y0=y, code=3, angle=90, length=length, lwd=lwd,
+         col=col, xpd=xpd, lend=2, ...);
 } # xAxisBar()
 
 

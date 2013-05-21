@@ -19,7 +19,8 @@
 }
 
 \usage{
-\method{deShearC1C2}{PairedPSCBS}(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE)
+\method{deShearC1C2}{PairedPSCBS}(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X",
+  "-,|,X"), verbose=FALSE)
 }
 
 \arguments{
@@ -53,7 +54,8 @@ CT[CT > 30] <- 30;
 cc <- 1;
 ww <- which(data$chromosome == cc);
 
-fit <- segmentByPairedPSCBS(CT[ww], betaT=betaT[ww], betaN=betaN[ww], x=x[ww], chromosome=cc, verbose=-10);
+fit <- segmentByPairedPSCBS(CT[ww], betaT=betaT[ww], betaN=betaN[ww],
+                            x=x[ww], chromosome=cc, verbose=-10);
 fit <- postsegmentTCN(fit);
 
 ## Normalize

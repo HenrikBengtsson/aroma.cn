@@ -37,7 +37,8 @@ extends \link[aroma.core]{ParametersInterface}\cr
  }
 
  \usage{
-PairedPscbsModel(dsT=NULL, dsN=NULL, tags="*", ..., dropTcnOutliers=TRUE, gapMinLength=1e+06, seed=NULL)
+PairedPscbsModel(dsT=NULL, dsN=NULL, tags="*", ..., dropTcnOutliers=TRUE,
+  gapMinLength=1e+06, seed=NULL)
 }
 
  \arguments{

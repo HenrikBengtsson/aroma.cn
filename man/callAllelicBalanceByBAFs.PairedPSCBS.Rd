@@ -19,7 +19,8 @@
 }
 
 \usage{
-\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore="auto", ..., force=FALSE, cache=FALSE, verbose=FALSE)
+\method{callAllelicBalanceByBAFs}{PairedPSCBS}(fit, maxScore="auto", ..., force=FALSE, cache=FALSE,
+  verbose=FALSE)
 }
 
 \arguments{

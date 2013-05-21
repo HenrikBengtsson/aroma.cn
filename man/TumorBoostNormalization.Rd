@@ -39,7 +39,8 @@ extends \link[R.oo]{Object}\cr
 }
 
 \usage{
-TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"), preserveScale=TRUE, collapseHomozygous=FALSE, tags="*", ...)
+TumorBoostNormalization(dsT=NULL, dsN=NULL, gcN=NULL, flavor=c("v4", "v3", "v2", "v1"),
+  preserveScale=TRUE, collapseHomozygous=FALSE, tags="*", ...)
 }
 
 \arguments{

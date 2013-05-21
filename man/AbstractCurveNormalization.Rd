@@ -31,7 +31,8 @@ extends \link[R.oo]{Object}\cr
 }
 
 \usage{
-AbstractCurveNormalization(dataSet=NULL, targetSet=NULL, subsetToFit=NULL, tags="*", copyTarget=TRUE, ...)
+AbstractCurveNormalization(dataSet=NULL, targetSet=NULL, subsetToFit=NULL, tags="*",
+  copyTarget=TRUE, ...)
 }
 
 \arguments{

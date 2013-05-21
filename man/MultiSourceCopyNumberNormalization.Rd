@@ -39,7 +39,8 @@ extends \link[aroma.core]{ParametersInterface}\cr
 }
 
 \usage{
-MultiSourceCopyNumberNormalization(dsList=NULL, fitUgp=NULL, subsetToFit=NULL, targetDimension=1, align=c("byChromosome", "none"), tags="*", ...)
+MultiSourceCopyNumberNormalization(dsList=NULL, fitUgp=NULL, subsetToFit=NULL,
+  targetDimension=1, align=c("byChromosome", "none"), tags="*", ...)
 }
 
 \arguments{

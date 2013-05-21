@@ -36,7 +36,8 @@ extends \emph{\link[aroma.core]{AromaTransform}}\cr
 }
 
 \usage{
-TotalCnSmoothing(dataSet=NULL, ..., targetUgp=NULL, .reqSetClass="AromaUnitTotalCnBinarySet")
+TotalCnSmoothing(dataSet=NULL, ..., targetUgp=NULL,
+  .reqSetClass="AromaUnitTotalCnBinarySet")
 }
 
 \arguments{

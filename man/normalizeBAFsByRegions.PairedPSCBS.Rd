@@ -19,7 +19,8 @@
 }
 
 \usage{
-\method{normalizeBAFsByRegions}{PairedPSCBS}(fit, by=c("betaTN", "betaT"), ..., force=FALSE, cache=TRUE, verbose=FALSE)
+\method{normalizeBAFsByRegions}{PairedPSCBS}(fit, by=c("betaTN", "betaT"), ..., force=FALSE, cache=TRUE,
+  verbose=FALSE)
 }
 
 \arguments{

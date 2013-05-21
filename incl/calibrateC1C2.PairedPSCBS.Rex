@@ -13,7 +13,8 @@ CT[CT > 30] <- 30;
 cc <- 1;
 ww <- which(data$chromosome == cc);
 
-fit <- segmentByPairedPSCBS(CT[ww], betaT=betaT[ww], betaN=betaN[ww], x=x[ww], chromosome=cc, verbose=-10);
+fit <- segmentByPairedPSCBS(CT[ww], betaT=betaT[ww], betaN=betaN[ww], 
+                            x=x[ww], chromosome=cc, verbose=-10);
 fit <- postsegmentTCN(fit);
 
 # Calibrate in (C1,C2) space

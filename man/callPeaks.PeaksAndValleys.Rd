@@ -19,7 +19,8 @@
 }
 
 \usage{
-\method{callPeaks}{PeaksAndValleys}(fit, expected=c(-1/2, -1/4, 0, +1/4, +1/2) * pi, flavor=c("decreasing", "all"), verbose=FALSE, ...)
+\method{callPeaks}{PeaksAndValleys}(fit, expected=c(-1/2, -1/4, 0, +1/4, +1/2) * pi, flavor=c("decreasing", "all"),
+  verbose=FALSE, ...)
 }
 
 \arguments{

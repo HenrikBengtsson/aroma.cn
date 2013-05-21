@@ -18,7 +18,8 @@
 }
 
 \usage{
-\method{callXXorXY}{numeric}(betaX, betaY=NULL, flavor=c("density"), adjust=1.5, ..., censorAt=c(-0.5, +1.5), verbose=FALSE)
+\method{callXXorXY}{numeric}(betaX, betaY=NULL, flavor=c("density"), adjust=1.5, ...,
+  censorAt=c(-0.5, +1.5), verbose=FALSE)
 }
 
 \arguments{
