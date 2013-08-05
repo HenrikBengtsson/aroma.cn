@@ -43,13 +43,13 @@ setMethodS3("callGenotypes", "TotalFracBSnpData", function(this, adjust=1.5, mea
 
   beta <- data[,"fracB"];
   fit <- findPeaksAndValleys(beta, adjust=adjust);
-  type <- NULL; rm(type); # To please R CMD check
+  type <- NULL; rm(list="type"); # To please R CMD check
   fit <- subset(fit, type == "valley");
   nbrOfGenotypeGroups <- nrow(fit)+1;
   if (nbrOfGenotypeGroups == 1) {
     warning("PRECISION ERROR: Only one genotype group was detected.");
     if (meanCN == 1) {
-      mu <- rep(1/2, nbrOfUnits);
+      mu <- rep(1/2, times=nbrOfUnits);
       a <- 1/2;
       mu[beta < a] <- 0;
       mu[beta > a] <- 1;
@@ -60,13 +60,13 @@ setMethodS3("callGenotypes", "TotalFracBSnpData", function(this, adjust=1.5, mea
       mu[beta > b] <- 1;
     }
   } else if (nbrOfGenotypeGroups == 2) {
-    a <- fit$x[1];
-    mu <- rep(0, nbrOfUnits);
+    a <- fit$x[1L];
+    mu <- rep(0, times=nbrOfUnits);
     mu[beta > a] <- 1;
   } else if (nbrOfGenotypeGroups == 3) {
-    a <- fit$x[1];
-    b <- fit$x[2];
-    mu <- rep(1/2, nbrOfUnits);
+    a <- fit$x[1L];
+    b <- fit$x[2L];
+    mu <- rep(1/2, times=nbrOfUnits);
     mu[beta < a] <- 0;
     mu[beta > b] <- 1;
   } else {
@@ -96,12 +96,12 @@ setMethodS3("pairedBoost", "TotalFracBSnpData", function(this, dataN, ...) {
   tfNC <- callGenotypes(tfN, ...);
 
   # Estimate beta correction factors
-  delta <- tfN[,2]-tfNC[,2];
+  delta <- tfN[,2L]-tfNC[,2L];
 
   # Calibrate accordingly
   res <- this;
-  res[,2] <- res[,2] - delta;
-  
+  res[,2] <- res[,2L] - delta;
+
   res;
 })
 
@@ -109,7 +109,7 @@ setMethodS3("pairedBoost", "TotalFracBSnpData", function(this, dataN, ...) {
 ############################################################################
 # HISTORY:
 # 2009-04-28
-# o Added argument 'meanCN=2' to callGenotypes().  It used in order to 
+# o Added argument 'meanCN=2' to callGenotypes().  It used in order to
 #   identify the modes in case the expect CN == 1, e.g. Chr X or Chr Y.
 # 2009-03-31
 # o Added pairedBoost() for TotalFracBSnpData.

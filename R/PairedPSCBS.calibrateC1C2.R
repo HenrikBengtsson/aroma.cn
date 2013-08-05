@@ -418,7 +418,7 @@ setMethodS3("fitC1C2Densities", "PairedPSCBS", function(fit, adjust=0.2, tol=0.0
   }
   names(dList) <- colnames(data)[1:2];
 
-  type <- NULL; rm(type);  # To please R CMD check
+  type <- NULL; rm(list="type");  # To please R CMD check
   pList <- lapply(dList, FUN=function(d) {
     p <- findPeaksAndValleys(d, tol=tol);
     p <- subset(p, type == "peak");

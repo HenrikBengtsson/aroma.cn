@@ -1,6 +1,17 @@
 Package: aroma.cn
 =================
 
+Version: 1.4.0 [2013-08-04]
+o SPEEDUP: Replaced all rm() calls with NULL assignments.
+  Also removed several explicit garbage collector calls.
+o CLEANUP: The formal package dependancy on Bioconductor package
+  'aroma.light' has been relaxed so the package can be installed
+  without it.
+o CLEANUP: Package now only imports R.oo.
+o CLEANUP: Defuncted makeSmoothSplinePredict().
+o Updated package dependencies.
+
+
 Version: 1.3.4 [2013-05-20]
 o CRAN POLICY: Now all Rd \usage{} lines are at most 90 characters long.
 o CRAN POLICY: Now all Rd example lines are at most 100 characters long.
@@ -49,13 +60,13 @@ o CLEANUP/FIX: Used "cache:" field modified instead of "cached:".
 Version: 1.2.16 [2012-11-12]
 o CLEANUP: Now seq_along(x) instead of seq(along=x) everywhere.
   Similarly, seq(ds) where 'ds' is GenericDataFileSet is now
-  replaced by seq_along(ds).  Likewise, seq_len(x) replaces 
+  replaced by seq_along(ds).  Likewise, seq_len(x) replaces
   seq(length=x), and length(ds) replaces nbrOfFiles(ds).
 
 
 Version: 1.2.15 [2012-11-05]
 o CLEANUP: Replaced all whichVector() with which(), because the
-  latter is now the fastest again. 
+  latter is now the fastest again.
 
 
 Version: 1.2.14 [2012-11-01]
@@ -84,7 +95,7 @@ o ROBUSTNESS: Now all static Object methods that calls "next" methods,
 
 Version: 1.2.10 [2012-10-16]
 o ROBUSTNESS/BUG FIX: No longer passing '...' to NextMethod(), cf.
-  R-devel thread 'Do *not* pass '...' to NextMethod() - it'll do it 
+  R-devel thread 'Do *not* pass '...' to NextMethod() - it'll do it
   for you; missing documentation, a bug or just me?' on Oct 16, 2012.
 
 
@@ -138,7 +149,7 @@ o Added trial version of PairedPscbsModel.
 
 Version: 1.2.0 [2012-06-05]
 o Adopted findAtomicAberrations() for CBS from ditto of PairedPSCBS.
-o GENERALIZATION: Now plotTracks() for PruneCNA supports CBS 
+o GENERALIZATION: Now plotTracks() for PruneCNA supports CBS
   segmentation results in additional to PairedPSCBS ones.
 o GENERALIZATION: Now pruneCNA() is implemented for AbstractCBS,
   not just PairedPSCBS objects.
@@ -220,8 +231,8 @@ o Added a namespace to the package, which will be more or less
 
 
 Version: 0.8.3 [2011-10-16]
-o Now deShearC1C2(), translateC1C2() and transformC1C2() also 
-  update C1 and C2 mean levels. 
+o Now deShearC1C2(), translateC1C2() and transformC1C2() also
+  update C1 and C2 mean levels.
 o Now using getLocusData() and getSegments() internally for all
   PairedPSCBS objects whereever applicable.
 
@@ -300,11 +311,11 @@ Version: 0.5.0 [2010-05-14]
 o Package submitted to CRAN.
 o Updated citation information.
 o Package now requires aroma.core v1.6.0.
-o Package pass R CMD check on R v2.11.0 and v2.12.0 devel. 
+o Package pass R CMD check on R v2.11.0 and v2.12.0 devel.
 
 
 Version: 0.4.7 [2010-04-04]
-o Moved normalizeDifferencesToAverage(), normalizeTumorBoost(), 
+o Moved normalizeDifferencesToAverage(), normalizeTumorBoost(),
   callNaiveGenotypes() and internal findPeaksAndValleys()
   to aroma.light v1.5.3.
 
@@ -324,19 +335,19 @@ Version: 0.4.4 [2010-01-05]
 o Added support for transform/untransform functions h(.) and g(.) to
   AbstractCurveNormalization, which allows us to fit say on the log
   scale, e.g. h(x)=log2(x), g(y)=2^y.
-o BUG FIX: getOutputDataSet() of AbstractCurveNormalization returned 
+o BUG FIX: getOutputDataSet() of AbstractCurveNormalization returned
   all files, not just the ones matching the input set.
 
 
 Version: 0.4.3 [2010-01-01]
 o ROBUSTNESS: Using new Arguments$getInstanceOf() were possible.
-o ROBUSTNESS: Now all index arguments are validated correctly 
+o ROBUSTNESS: Now all index arguments are validated correctly
   using the new 'max' argument of Arguments$getIndices().  Before
-  the case where "max == 0" was not handled correctly.  
+  the case where "max == 0" was not handled correctly.
 
 
 Version: 0.4.2 [2009-12-09]
-o Made flavor="v4" of TumorBoostNormalization the default, and if 
+o Made flavor="v4" of TumorBoostNormalization the default, and if
   used then no "flavor" tag is added.
 
 
@@ -361,7 +372,7 @@ o Package passes R CMD check on R v2.10.0.
 Version: 0.3.8 [2009-10-10]
 o Added normalizeTumorBoost() for RawAlleleBFractions.
 o Added callGenotypes() for RawAlleleBFractions.
-o Added RawGenotypeCalls. 
+o Added RawGenotypeCalls.
 
 
 Version: 0.3.7 [2009-10-02]
@@ -384,7 +395,7 @@ o BUG FIX: getTags() of MultiSourceCopyNumberNormalization would return
 Version: 0.3.5 [2009-07-15]
 o ADDED: XYCurveNormalization and PrincipalCurveNormalization.
 o BUG FIX: TumorBoostNormalization: the 'srcFiles' attribute in file
-  footer of the result files contained a duplicated default footer 
+  footer of the result files contained a duplicated default footer
   instead of the tumor-normal pair.
 
 
@@ -393,15 +404,15 @@ o ADDED: low-level callNaiveGenotype() and normalizeTumorBoost().
 
 
 Version: 0.3.3 [2009-07-02]
-o Added model 'flavor' "v4" which corrects heterozygots according 
+o Added model 'flavor' "v4" which corrects heterozygots according
   to "v2" and homozygotes according to "v1".
-o Added new model flavor ("v3") of TumorBoostNormalization that is 
+o Added new model flavor ("v3") of TumorBoostNormalization that is
   an extension of last weeks model flavor.
 
 
 Version: 0.3.2 [2009-06-23]
-o Added an optional flavor ("v2") of TumorBoostNormalization that 
-  avoids over correcting (especially at the heterozygotes), but 
+o Added an optional flavor ("v2") of TumorBoostNormalization that
+  avoids over correcting (especially at the heterozygotes), but
   adjusting the correction factor.  Use argument flavor="v2".
 
 
@@ -419,19 +430,19 @@ o ROBUSTNESS: Now MultiSourceCopyNumberNormalization first write
 o Now getOutputDataSets() of  MultiSourceCopyNumberNormalization only
   returns output data files with a matching fullname in the input set.
 o Added argument 'alignByChromosomes' to MultiSourceCopyNumberNormalization.
-  If TRUE, the signals are shifted per chromosome such that the mean 
+  If TRUE, the signals are shifted per chromosome such that the mean
   of the normalized smoothed signals is the same for all sources.
   This can for instance remove systematic effects on sex chromosomes
   added by some ad hoc preprocessing methods.
 o Added a clearCache() to MultiSourceCopyNumberNormalization.
 o ALPHA: Added TumorBoostNormalization.
-o INTERNAL: Added foundations for TumorBoost, i.e. in 
+o INTERNAL: Added foundations for TumorBoost, i.e. in
   memory classes such as TotalAndFracBSnpData.
 o INTERNAL: Added findPeaksAndValleys().
 o BUG FIX: Added missing argument 'verbose' in getTargetPositions() of
   TotalCnSmoothing.  This caused unwanted verbose output in some cases.
 o BUG FIX: process() of TotalCnSmoothing would not "recognize" fullname
-  translators, that is, the output filenames were always identical to 
+  translators, that is, the output filenames were always identical to
   the input ones.
 o Package pass R CMD check and all redundancy tests.
 
@@ -465,8 +476,8 @@ o Fixed some broken cross links in the Rd help.
 
 
 Version: 0.1.4 [2008-06-12]
-o Now extractRawCopyNumbers() of AromaTotalCnBinaryFile adds 
-  annotation data fields to the returned object, e.g. platform, 
+o Now extractRawCopyNumbers() of AromaTotalCnBinaryFile adds
+  annotation data fields to the returned object, e.g. platform,
   chipType, and the fullname of the source file.
 
 
@@ -480,10 +491,10 @@ o ALPHA: Added TotalCnSmoothing.
 
 
 Version: 0.1.1 [2008-05-18]
-o Package now provides platform-independent classes 
+o Package now provides platform-independent classes
   Aroma{Total|FreqB}CnSignal{File|Set}.   With the more generalized
   aroma.core package, it is now possible retrieve the AromaUgpFile
-  for the above.  This provides the necessary basic methods for 
+  for the above.  This provides the necessary basic methods for
   plotting data along chromosomes.
 
 

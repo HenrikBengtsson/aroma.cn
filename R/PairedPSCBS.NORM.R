@@ -171,12 +171,14 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   # Calculate mBAFs for all loci
   beta <- data[[by]];
   rho <- 2*abs(beta - 1/2);
-  rm(beta);
+  # Not needed anymore
+  beta <- NULL;
 
   # Identify homozygous SNPs
   muN <- data$muN;
   isHom <- (muN == 0 | muN == 1);
-  rm(muN);
+  # Not needed anymore
+  muN <- NULL;
 
   # Drop all homozygous SNPs already here.
   # TO DO
@@ -197,7 +199,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   } # for (kk ...)
 
   # Not needed anymore
-  rm(rho, isHom);
+  rho <- isHom <- NULL;
   verbose && exit(verbose);
 
 
@@ -210,7 +212,8 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   # Update DH segmentation means
   rhoN <- XN[,1,drop=TRUE];
   segs[,"dhMean"] <- rhoN;
-  rm(rhoN);
+  # Not needed anymore
+  rhoN <- NULL;
   verbose && exit(verbose);
 
 
@@ -220,7 +223,8 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   verbose && enter(verbose, "Normalizing locus-level data accordingly");
   modelFit <- attr(XN, "modelFit");
   scale <- modelFit$scale;
-  rm(modelFit, XN);
+  # Not needed anymore
+  modelFit <- XN <- NULL;
 
   # Expand region-level scale factors to locus-level scale factors
   naValue <- as.double(NA);
@@ -242,7 +246,8 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
     beta <- beta + 1/2;
     data[[ff]] <- beta;
   }
-  rm(beta, scales);
+  # Not needed anymore
+  beta <- scales <- NULL;
   verbose && exit(verbose);
 
 

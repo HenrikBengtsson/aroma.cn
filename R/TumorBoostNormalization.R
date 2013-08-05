@@ -66,7 +66,7 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
 
     # Assert that each data set contains the same number of files
     dsList$gcN <- gcN;
-    for (jj in 1:(length(dsList)-1)) {
+    for (jj in 1:(length(dsList)-1L)) {
       keyJJ <- names(dsList)[jj];
       dsJJ <- dsList[[jj]];
       nJJ <- length(dsJJ);
@@ -99,7 +99,7 @@ setConstructorS3("TumorBoostNormalization", function(dsT=NULL, dsN=NULL, gcN=NUL
 
   # Arguments '...':
   args <- list(...);
-  if (length(args) > 0) {
+  if (length(args) > 0L) {
     argsStr <- paste(names(args), collapse=", ");
     throw("Unknown arguments: ", argsStr);
   }
@@ -122,7 +122,7 @@ setMethodS3("as.character", "TumorBoostNormalization", function(x, ...) {
   # To please R CMD check
   this <- x;
 
-  s <- sprintf("%s:", class(this)[1]);
+  s <- sprintf("%s:", class(this)[1L]);
 
   s <- c(s, sprintf("Flavor: %s", getFlavor(this)));
 
@@ -188,7 +188,7 @@ setMethodS3("getTags", "TumorBoostNormalization", function(this, collapse=NULL, 
     tags <- unlist(strsplit(tags, split=","));
   }
 
-  if (length(tags) == 0)
+  if (length(tags) == 0L)
     tags <- NULL;
 
   tags;
@@ -200,7 +200,7 @@ setMethodS3("setTags", "TumorBoostNormalization", function(this, tags="*", ...) 
   if (!is.null(tags)) {
     tags <- Arguments$getCharacters(tags);
     tags <- trim(unlist(strsplit(tags, split=",")));
-    tags <- tags[nchar(tags) > 0];
+    tags <- tags[nchar(tags) > 0L];
   }
 
   this$.tags <- tags;
@@ -306,7 +306,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
   verbose && cat(verbose, "Flavor: ", flavor);
 
   dsList <- getDataSets(this);
-  chipType <- getChipType(dsList[[1]], fullname=FALSE);
+  chipType <- getChipType(dsList[[1L]], fullname=FALSE);
   verbose && cat(verbose, "Chip type: ", chipType);
 
   outPath <- getPath(this);
@@ -337,7 +337,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     }
 
     verbose && enter(verbose, "Reading all data");
-    betaT <- dfList$tumor[units,1,drop=TRUE];
+    betaT <- dfList$tumor[units,1L,drop=TRUE];
     keep <- is.finite(betaT);
     unitsT <- units[keep];
     betaT <- betaT[keep];
@@ -368,7 +368,7 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
     if (flavor == "v1") {
       b <- 1;
     } else if (flavor == "v2") {
-      b <- rep(1, length(delta));
+      b <- rep(1, times=length(delta));
       isDown <- (betaT < betaN);
       idxs <- which(isDown);
       # NOTE: It is possible that 'b' has NA:s.
@@ -376,9 +376,10 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       idxs <- which(!isDown);
       # NOTE: It is possible that 'b' has NA:s.
       b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
-      rm(isDown,isHomA,isHomB,idxs);
+      # Not needed anymore
+      isDown <- isHomA <- isHomB <- idxs <- NULL;
     } else if (flavor == "v3") {
-      b <- rep(1, length(delta));
+      b <- rep(1, times=length(delta));
       isHomA <- (muN == 0);
       isHomB <- (muN == 1);
       isHet <- !isHomA & !isHomB;
@@ -389,9 +390,10 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       idxs <- which((isHet & !isDown) | isHomB);
       # NOTE: It is possible that 'b' has NA:s.
       b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
-      rm(isDown,isHet,isHomA,isHomB,idxs);
+      # Not needed anymore
+      isDown <- isHet <- isHomA <- isHomB <- idxs <- NULL;
     } else if (flavor == "v4") {
-      b <- rep(1, length(delta));
+      b <- rep(1, times=length(delta));
       isHet <- (muN != 0 & muN != 1);
       isDown <- (betaT < betaN);
       idxs <- which(isHet & isDown);
@@ -400,7 +402,8 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       idxs <- which(isHet & !isDown);
       # NOTE: It is possible that 'b' has NA:s.
       b[idxs] <- (1-betaT[idxs])/(1-betaN[idxs]);
-      rm(isDown,isHet,idxs);
+      # Not needed anymore
+      isDown <- isHet <- idxs <- NULL;
     }
     verbose && cat(verbose, "Scaling factor:");
     verbose && str(verbose, b);
@@ -434,7 +437,8 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
       idxs <- which(isHet & !isDown);
       betaTN[idxs] <- 1/2 + sf * (betaTN[idxs] - 1/2);
 
-      rm(isDown, isHom, isHet, idxs, eta, etaC, sf);
+      # Not needed anymore
+      isDown <- isHom <- isHet <- idxs <- eta <- etaC <- sf <- NULL;
       verbose && exit(verbose);
     }
     verbose && str(verbose, betaTN);

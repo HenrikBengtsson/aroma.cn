@@ -325,9 +325,10 @@ setMethodS3("fitDeltaC1C2ShearModel", "PairedPSCBS", function(fit, adjust=0.5, t
   X <- as.matrix(X);
 
   # Region weights from DH counts
-  w <- counts[,2];
+  w <- counts[,2L];
   w <- sqrt(w);
-  rm(counts);
+  # Not needed anymore
+  counts <- NULL;
 
   ## Change-point weights
   if (nbrOfSegments > 1) {
@@ -513,7 +514,7 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
     sHV <- Arguments$getDouble(sHV, range=range);
 
     # Not needed anymore
-    rm(pfpT);
+    pfpT <- NULL;
 
     params <- list(H=H, Hx=Hx, Hy=Hy, Hxy=Hxy, Hd=Hd, parameters=c(sV=sV, sH=sH, sHV=sHV, scaleY=scaleY, scale=scale, phiV=phiV, phiH=phiH, phiHV=phiHV));
 
@@ -589,7 +590,8 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
 
   verbose && cat(verbose, "(radius,alpha,weights):");
   verbose && print(verbose, cbind(radius=radius, alpha=alpha, weights=weights));
-  rm(ok);
+  # Not needed anymore
+  ok <- NULL;
   verbose && exit(verbose);
 
 
@@ -633,13 +635,13 @@ setMethodS3("fitDeltaXYShearModel", "matrix", function(X, weights=NULL, adjust=0
 
   fp <- findPeaksAndValleys(d, tol=tol, ...);
   # Not needed anymore
-  rm(alphaT, rg);
+  alphaT <- rg <- NULL;
 
   verbose && cat(verbose, "Peaks and valleys:");
   verbose && print(verbose, fp);
 
   verbose && cat(verbose, "Peaks:");
-  type <- NULL; rm(type); # To please R CMD check
+  type <- NULL; rm(list="type"); # To please R CMD check
   pfp <- subset(fp, type == "peak");
   verbose && print(verbose, pfp);
   nbrOfPeaks <- nrow(pfp);

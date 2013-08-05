@@ -157,7 +157,8 @@ setMethodS3("findAtomicAberrations", "PairedPSCBS", function(this, H=1, alpha=0.
       verbose && printf(verbose, "t=%.3f (p=%g), (alpha=%g) (L==R)=%s\n",
                          fit$statistic, fit$p.value, alpha, isEqual);
     }
-    rm(dataL, dataR, fit); # Not needed anymore
+    # Not needed anymore
+    dataL <- dataR <- fit <- NULL;
 
     # If the two flanking regions are equal, then we have
     # found an atomic region.

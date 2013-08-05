@@ -13,31 +13,31 @@ setConstructorS3("NaiveFracBGenotyping", function(dataSet=NULL, ...) {
 
 setMethodS3("getDataSet", "NaiveFracBGenotyping", function(this, ...) {
   this$.ds;
-}) 
+})
 
 
 setMethodS3("getGenotypeCallSet", "NaiveFracBGenotyping", function(this, ...) {
-}) 
+})
 
 
 setMethodS3("nbrOfLoci", "NaiveFracBGenotyping", function(this, ...) {
   ds <- getDataSet(this);
   df <- getFile(ds, 1);
   nbrOfLoci(df);
-}) 
+})
 
 
 setMethodS3("nbrOfSNPs", "NaiveFracBGenotyping", function(this, ...) {
   ds <- getDataSet(this);
   df <- getFile(ds, 1);
-  nbrOfSNPs(df);  
-}) 
+  nbrOfSNPs(df);
+})
 
 
 setMethodS3("processOne", "NaiveFracBGenotyping", function(this, df, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
   if (verbose) {
@@ -51,25 +51,25 @@ setMethodS3("processOne", "NaiveFracBGenotyping", function(this, df, ..., verbos
 
   # To do
   gf <- NULL;
- 
+
   verbose && print(verbose, gf);
   verbose && exit(verbose);
 
   gf;
-}) 
+})
 
 
 setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose);
   if (verbose) {
     pushState(verbose);
     on.exit(popState(verbose));
   }
- 
+
 
   verbose && enter(verbose, "Calling genotypes");
   ds <- getDataSet(this);
@@ -84,7 +84,7 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
   verbose && cat(verbose, "Output path: ", outPath);
 
   adjust <- 1.5;
-  type <- NULL; rm(type); # To please R CMD check
+  type <- NULL; rm(list="type"); # To please R CMD check
 
   platform <- getPlatform(df);
   chipType <- getChipType(df);
@@ -113,7 +113,7 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
     fullname <- paste(c(getFullName(df), tags), collapse=",");
     filename <- sprintf("%s.acf", fullname);
     gcPathname <- Arguments$getWritablePathname(filename, path=outPath, mustNotExist=FALSE);
- 
+
     # Create pathname of the resulting genotype confidence score file
     tags <- c(tags, "confidenceScores");
     fullname <- paste(c(getFullName(df), tags), collapse=",");
@@ -171,7 +171,7 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
     calls[mu == 1/2] <- "AB";
     calls[mu ==   1] <- "BB";
     verbose && print(verbose, table(calls, exclude=NULL));
-     
+
     # Calculate confidence scores
     a <- fit$x[1];
     b <- fit$x[2];
@@ -190,10 +190,12 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
     footer <- readFooter(gf);
     footer$method <- "NaiveGenotypeCaller";
     writeFooter(gf, footer);
-    rm(footer);
-     
+    # Not needed anymore
+    footer <- NULL;
+
     updateGenotypes(gf, units=units, calls=calls);
-    rm(calls);
+    # Not needed anymore
+    calls <- NULL;
 
     res <- file.rename(pathnameT, pathname);
     if (!isFile(pathname)) {
@@ -202,8 +204,9 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
     if (isFile(pathnameT)) {
       throw("Failed to rename temporary file: ", pathnameT, " -> ", pathname);
     }
-    rm(pathnameT);
-     
+    # Not needed anymore
+    pathnameT <- NULL
+
     gf <- AromaUnitGenotypeCallFile(pathname);
     print(verbose, gf);
 
@@ -221,11 +224,13 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
     footer <- readFooter(csf);
     footer$method <- "NaiveGenotypeConfidenceScoreEstimator";
     writeFooter(csf, footer);
-    rm(footer);
-     
+    # Not needed anymore
+    footer <- NULL;
+
     csf[units, 1] <- cs;
-    rm(cs);
-     
+    # Not needed anymore
+    cs <- NULL;
+
     res <- file.rename(pathnameT, pathname);
     if (!isFile(pathname)) {
       throw("Failed to rename temporary file: ", pathnameT, " -> ", pathname);
@@ -233,12 +238,13 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
     if (isFile(pathnameT)) {
       throw("Failed to rename temporary file: ", pathnameT, " -> ", pathname);
     }
-    rm(pathnameT); 
+    # Not needed anymore
+    pathnameT <- NULL;
 
     cf <- AromaUnitSignalBinaryFile(pathname);
     verbose && print(verbose, cf);
     verbose && exit(verbose);
-    
+
     verbose && exit(verbose);
   }
 
@@ -256,7 +262,7 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
   verbose && exit(verbose);
 
   res;
-}) 
+})
 
 
 ############################################################################
@@ -265,4 +271,4 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
 # o Added code to process().
 # 2010-08-10
 # o Created.
-############################################################################ 
+############################################################################

@@ -446,7 +446,8 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
         verbose && cat(verbose, "Output pathname: ", pathname);
         copyFile(getPathname(dfT), pathname, verbose=less(verbose,50));
       }
-      rm(filename, pathname);
+      # Not needed anymore
+      filename <- pathname <- NULL;
       verbose && exit(verbose);
     } # if (copyTarget)
 
@@ -503,13 +504,15 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 
     verbose && enter(verbose, "Extracting subset used for fitting normalization function");
     thetaFit <- theta[subsetToFit,,drop=FALSE];
-    rm(subsetToFit);
+    # Not needed anymore
+    subsetToFit <- NULL;
     verbose && str(verbose, thetaFit);
     verbose && exit(verbose);
 
     verbose && enter(verbose, "Calling fit function");
     fit <- fitOne(this, theta=thetaFit, ..., verbose=verbose);
-    rm(thetaFit);
+    # Not needed anymore
+    thetaFit <- NULL;
     verbose && str(verbose, fit);
     verbose && exit(verbose);
 
@@ -534,7 +537,8 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 
     # Allocate normalized signals
     thetaN <- backtransformOne(this, theta=theta, fit=fit, targetDimension=1);
-    rm(theta, fit);
+    # Not needed anymore
+    theta <- fit <- NULL;
     thetaN <- thetaN[,2,drop=TRUE];
     verbose && str(verbose, thetaN);
     verbose && exit(verbose);
@@ -575,12 +579,14 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
     footer <- readFooter(dfN);
     footer$srcFiles <- srcFiles;
     writeFooter(dfN, footer);
-    rm(srcFiles, footer);
+    # Not needed anymore
+    srcFiles <- footer <- NULL;
     verbose && exit(verbose);
 
     verbose && enter(verbose, "Writing to temporary file");
     dfN[,1] <- thetaN;
-    rm(thetaN);
+    # Not needed anymore
+    thetaN <- NULL;
     verbose && exit(verbose);
 
     # Renaming
@@ -590,11 +596,12 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
       throw("Failed to rename temporary file: ", pathnameT, " -> ", pathname);
     }
     verbose && exit(verbose);
-    rm(dfN, pathnameT, pathname);
+    # Not needed anymore
+    dfN <- pathnameT <- pathname <- NULL;
     verbose && exit(verbose);
 
-    # More clean up
-    rm(df);
+    # Not needed anymore
+    df <- NULL;
 
     verbose && exit(verbose);
   } # for (kk ...)

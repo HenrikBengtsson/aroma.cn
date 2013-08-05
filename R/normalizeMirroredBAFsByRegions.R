@@ -92,7 +92,8 @@ setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c(
     scale <- 1 / y;
     verbose && cat(verbose, "Scale factors (one per segment):");
     verbose && str(verbose, scale);
-    rm(y); # Not needed anymore
+    # Not needed anymore
+    y <- NULL;
 
     verbose && exit(verbose);
   } else if (flavor == "total") {
@@ -103,7 +104,8 @@ setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c(
     verbose && cat(verbose, "(TCN,mBAFhom):");
     verbose && str(verbose, X);
     fit <- fitXYCurve(X, ..., verbose=verbose);
-    rm(X);
+    # Not needed anymore
+    X <- NULL;
     verbose && str(verbose, fit);
     verbose && exit(verbose);
 
@@ -118,7 +120,9 @@ devSet(6); plot(y,yHat, xlim=c(0,1), ylim=c(0,1));
 
     # Store the normalization function
     modelFit$subFit <- fit;
-    rm(fit, yHat); # Not needed anymore
+
+    # Not needed anymore
+    fit <- yHat <- NULL;
 
     verbose && exit(verbose);
   }

@@ -6,15 +6,15 @@
 # \description{
 #  @classhierarchy
 #
-#  This class represents the Paired PSCBS method [1], which 
+#  This class represents the Paired PSCBS method [1], which
 #  segments matched tumor-normal parental copy-number data into
 #  piecewise constant segments.
 # }
-# 
-# @synopsis 
+#
+# @synopsis
 #
 # \arguments{
-#   \item{dsT, dsN}{The tumor and the normal 
+#   \item{dsT, dsN}{The tumor and the normal
 #     @see "aroma.core::AromaUnitPscnBinarySet".}
 #   \item{tags}{Tags added to the output data sets.}
 #   \item{...}{(Optional) Additional arguments passed to
@@ -30,15 +30,15 @@
 # }
 #
 # \section{Fields and Methods}{
-#  @allmethods "public"  
+#  @allmethods "public"
 # }
-# 
+#
 # \examples{\dontrun{
 #   @include "../incl/PairedPscbsModel.Rex"
 # }}
 #
 # \references{
-#  [1] ... \cr 
+#  [1] ... \cr
 # }
 #
 # \seealso{
@@ -66,14 +66,14 @@ setConstructorS3("PairedPscbsModel", function(dsT=NULL, dsN=NULL, tags="*", ...,
 
     # Assert that the chip types are compatile
     if (getChipType(dsT) != getChipType(dsN)) {
-        throw("Argument 'dsT' and 'dsN' are of different chip types: ", 
+        throw("Argument 'dsT' and 'dsN' are of different chip types: ",
               getChipType(dsT), " != ", getChipType(dsN));
     }
 
     # Assert that the ds sets have the same number ds files
     nbrOfFiles <- length(dsT);
     if (nbrOfFiles != length(dsN)) {
-      throw("The number of samples in 'dsT' and 'dsN' differ: ", 
+      throw("The number of samples in 'dsT' and 'dsN' differ: ",
              nbrOfFiles, " != ", length(dsN));
     }
   }
@@ -88,7 +88,7 @@ setConstructorS3("PairedPscbsModel", function(dsT=NULL, dsN=NULL, tags="*", ...,
   if (!is.null(seed)) {
     seed <- Arguments$getInteger(seed);
   }
- 
+
   # Arguments '...'; optional arguments to segmentByPairedPSCBS()
   extraArgs <- list(...);
   if (length(extraArgs) > 0) {
@@ -114,7 +114,7 @@ setConstructorS3("PairedPscbsModel", function(dsT=NULL, dsN=NULL, tags="*", ...,
 
   setTags(this, tags);
 
-  this; 
+  this;
 })
 
 
@@ -153,7 +153,7 @@ setMethodS3("setRandomSeed", "PairedPscbsModel", function(this, seed, ...) {
 
   this$.seed <- seed;
   invisible(this);
-}, protected=TRUE) 
+}, protected=TRUE)
 
 
 setMethodS3("getTumorDataSet", "PairedPscbsModel", function(this, ...) {
@@ -190,15 +190,15 @@ setMethodS3("getAsteriskTags", "PairedPscbsModel", function(this, collapse=NULL,
   if (!is.null(collapse)) {
     tags <- paste(tags, collapse=collapse);
   }
-  
+
   tags;
-}, protected=TRUE) 
+}, protected=TRUE)
 
 
 setMethodS3("getName", "PairedPscbsModel", function(this, ...) {
   dsT <- getTumorDataSet(this);
   getName(dsT);
-}) 
+})
 
 
 
@@ -237,7 +237,7 @@ setMethodS3("setTags", "PairedPscbsModel", function(this, tags="*", ...) {
     tags <- trim(unlist(strsplit(tags, split=",")));
     tags <- tags[nchar(tags) > 0];
   }
-  
+
   this$.tags <- tags;
 })
 
@@ -265,7 +265,7 @@ setMethodS3("nbrOfFiles", "PairedPscbsModel", function(this, ...) {
 
 setMethodS3("getRootPath", "PairedPscbsModel", function(this, ...) {
   "pscbsData";
-}, protected=TRUE) 
+}, protected=TRUE)
 
 
 setMethodS3("getPath", "PairedPscbsModel", function(this, create=TRUE, ...) {
@@ -277,7 +277,7 @@ setMethodS3("getPath", "PairedPscbsModel", function(this, create=TRUE, ...) {
   # Full name
   fullname <- getFullName(this);
 
-  # Chip type    
+  # Chip type
   chipType <- getChipType(this, fullname=FALSE);
 
   # The full path
@@ -297,7 +297,7 @@ setMethodS3("getPath", "PairedPscbsModel", function(this, create=TRUE, ...) {
   }
 
   path;
-}, protected=TRUE) 
+}, protected=TRUE)
 
 
 
@@ -360,7 +360,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 ##    chromosomes[chromosomes == "23"] <- "X";   ## TODO
     chromosomes <- intersect(chromosomes, allChromosomes);
   } else if (is.character(chromosomes)) {
-    chromosomes <- Arguments$getChromosomes(chromosomes, 
+    chromosomes <- Arguments$getChromosomes(chromosomes,
                                                 range=range(allChromosomes));
 ##    chromosomes[chromosomes == "23"] <- "X";   ## TODO
     chromosomes <- intersect(chromosomes, getChromosomes(this));
@@ -418,7 +418,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
     names <- c(T=getName(dfT), N=getName(dfN));
     pairName <- paste(unique(names), collapse="_vs_");
 
-    verbose && enter(verbose, sprintf("Array #%d ('%s') of %d", 
+    verbose && enter(verbose, sprintf("Array #%d ('%s') of %d",
                                                 aa, pairName, nbrOfArrays));
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -461,22 +461,22 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
       # Extract the tumor-normal data
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       verbose && enter(verbose, "Extracting tumor-normal data");
-  
+
       tRead <- processTime();
       dataT <- readDataFrame(dfT, verbose=less(verbose,50));
       dataN <- readDataFrame(dfN, verbose=less(verbose,50));
       timers$read <- timers$read + (processTime() - tRead);
-  
+
       data <- data.frame(chromosome=cp$chromosome, x=cp$position,
                          CT=2*dataT$total/dataN$total,
                          betaT=dataT$fracB, betaN=dataN$fracB);
       verbose && str(verbose, data);
-  
+
       # Not needed anymore
-      rm(dfT, dfN, dataT, dataN);
+      dfT <- dfN <- dataT <- dataN <- NULL;
       verbose && exit(verbose);
-  
-  
+
+
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       # Drop TCN outliers
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -486,7 +486,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
         data <- dropSegmentationOutliers(data);
         verbose && exit(verbose);
       }
-  
+
       nbrOfLoci <- nrow(data);
       verbose && cat(verbose, "Number of loci: ", nbrOfLoci);
 
@@ -502,15 +502,15 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
         verbose && print(verbose, gaps);
         knownSegments <- gapsToSegments(gaps, dropGaps=FALSE);
         # Not needed anymore
-        rm(gaps);
+        gaps <- NULL;
         verbose && exit(verbose);
       }
-  
+
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       # Fit segmentation model
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       verbose && enter(verbose, "Calling model fit function");
-  
+
       optArgs <- getOptionalArguments(this);
       verbose && cat(verbose, "Optional arguments (may be ignored/may give an error/warning):");
       verbose && str(verbose, optArgs);
@@ -526,32 +526,32 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
       verbose && str(verbose, fit);
       timers$fit <- timers$fit + (processTime() - tFit);
       # Not needed anymore
-      rm(data);
-  
+      data <- NULL;
+
       verbose && cat(verbose, "Class of fitted object: ", class(fit)[1]);
       verbose && printf(verbose, "Time to fit segmentation model: %.2fmin\n", timers$fit[3]/60);
-  
+
       verbose && exit(verbose);
-  
-  
+
+
       # Garbage collection
       tGc <- processTime();
       gc <- gc();
       timers$gc <- timers$gc + (processTime() - tGc);
       verbose && print(verbose, gc);
-  
+
       verbose && enter(verbose, "Saving to file");
       verbose && cat(verbose, "Pathname: ", pathname);
       tWrite <- processTime();
       saveObject(fit, file=pathname);
       timers$write <- timers$write + (processTime() - tWrite);
       verbose && exit(verbose);
-  
+
       timers$total <- timers$total + (processTime() - tTotal);
-  
+
       # Report time profiling
       totalTime <- processTime() - startTime;
-    
+
       if (verbose) {
         t <- totalTime[3];
         printf(verbose, "Total time: %.2fs == %.2fmin\n", t, t/60);
@@ -572,8 +572,9 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 
     if (.retResults) {
       res[[pairName]] <- fit;
-      rm(fit);
-    }  
+      # Not needed anymore
+      fit <- NULL;
+    }
 
     verbose && exit(verbose);
   } # for (aa in ...)
@@ -590,7 +591,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 # o Now PairedPscbsModel() excludes the actual gaps from the known
 #   segments it passes to segmentByPairedPSCBS().
 # 2012-09-19
-# o Now getOutputDataSet() for PairedPscbsModel returns a 
+# o Now getOutputDataSet() for PairedPscbsModel returns a
 #   PairedPSCBSFileSet.
 # 2012-09-15
 # o Now fit() for PairedPscbsModel generates pair names iff tumor and
@@ -601,4 +602,4 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 # o Now utilizing the new AromaUnitPscnBinarySet class.
 # 2012-07-20
 # o Created from CalMaTeModel.
-############################################################################ 
+############################################################################

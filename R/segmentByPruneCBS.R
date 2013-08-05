@@ -27,8 +27,8 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
   verbose && enter(verbose, "Segment using PruneCBS");
 
   if (debugPlot) {
-    cols <- c("atomic island"="red", 
-              "ambigous atomic region"="orange", 
+    cols <- c("atomic island"="red",
+              "ambigous atomic region"="orange",
               "extreme region"="purple");
   }
 
@@ -40,7 +40,7 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
   while(TRUE) {
     verbose && enter(verbose, sprintf("Segmentation depth %d", depth));
     cnrPrev <- cnr;
-  
+
     fit <- segmentByCBS(cn);
     cnr <- extractCopyNumberRegions(fit);
 
@@ -52,8 +52,8 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
       verbose && exit(verbose);
       break;
     }
-  
-  
+
+
     # Decrease the weights close to change points.
     # This will lower the risk for false change points
     # in succeeding segmentation iterations.
@@ -89,9 +89,10 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
       w[keep] <- 0.2*w[keep];
     }
     cn$w <- w;
-    rm(w);
+    # Not needed anymore
+    w <- NULL;
     verbose && exit(verbose);
-  
+
     if (debugPlot) {
 #      if (depth > 1 && (depth-1) %% np == 0) {
 #        readline("wait...");
@@ -101,7 +102,7 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
       drawLevels(cnr, col="black", lwd=3);
       verbose && print(verbose, cnr);
     }
-  
+
     # Done?
     if (nbrOfRegions(cnr) == 1) {
       cnr$type <- "constant";
@@ -109,7 +110,7 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
       verbose && exit(verbose);
       break;
     }
-  
+
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Find atomic aberrations of minimal length (H) to be pruned
@@ -131,7 +132,7 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
         cnrT <- subset(cnr, fitAR$ambigousRegions);
         verbose && cat(verbose, "atomicSiblings:");
         verbose && print(verbose, cnrT);
-  
+
         # Find the furthest away from the normal state
         data <- as.data.frame(cnrT);
         normalMean <- 0.0;
@@ -147,7 +148,7 @@ setMethodS3("segmentByPruneCBS", "RawGenomicSignals", function(this, ...,       
         minimalRegions <- which.max(abs(dMu));
       }
     }
-  
+
     n <- length(minimalRegions);
     verbose && printf(verbose, "Selected %d minimal regions that are %ss:\n", n, type);
     verbose && print(verbose, minimalRegions);
@@ -219,8 +220,8 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
   verbose && enter(verbose, "Segment using PruneCBS");
 
   if (debugPlot) {
-    cols <- c("atomic island"="red", 
-              "ambigous atomic region"="orange", 
+    cols <- c("atomic island"="red",
+              "ambigous atomic region"="orange",
               "extreme region"="purple");
   }
 
@@ -232,7 +233,7 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
   while(TRUE) {
     verbose && enter(verbose, sprintf("Segmentation depth %d", depth));
     cnrPrev <- cnr;
-  
+
     fit <- segmentByCBS(cn);
     cnr <- extractCopyNumberRegions(fit);
 
@@ -244,8 +245,8 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
       verbose && exit(verbose);
       break;
     }
-  
-  
+
+
     # Decrease the weights close to change points.
     # This will lower the risk for false change points
     # in succeeding segmentation iterations.
@@ -281,9 +282,10 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
       w[keep] <- 0.2*w[keep];
     }
     cn$w <- w;
-    rm(w);
+    # Not needed anymore
+    w <- NULL;
     verbose && exit(verbose);
-  
+
     if (debugPlot) {
 #      if (depth > 1 && (depth-1) %% np == 0) {
 #        readline("wait...");
@@ -293,7 +295,7 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
       drawLevels(cnr, col="black", lwd=3);
       verbose && print(verbose, cnr);
     }
-  
+
     # Done?
     if (nbrOfRegions(cnr) == 1) {
       cnr$type <- "constant";
@@ -301,7 +303,7 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
       verbose && exit(verbose);
       break;
     }
-  
+
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Find minimal region(s) to be pruned
@@ -323,7 +325,7 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
         cnrT <- subset(cnr, fitAR$ambigousRegions);
         verbose && cat(verbose, "atomicSiblings:");
         verbose && print(verbose, cnrT);
-  
+
         # Find the furthest away from the normal state
         data <- as.data.frame(cnrT);
         normalMean <- 0.0;
@@ -339,7 +341,7 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
         minimalRegions <- which.max(abs(dMu));
       }
     }
-  
+
     n <- length(minimalRegions);
     verbose && printf(verbose, "Selected %d minimal regions that are %ss:\n", n, type);
     verbose && print(verbose, minimalRegions);
@@ -400,7 +402,7 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
 # o Added argument 'debugPlot'.
 # 2010-07-19
 # o Added trial version of segmentByPruneCBS().
-# o TO DO: Down-weight loci that were close to earlier 
+# o TO DO: Down-weight loci that were close to earlier
 #   change points in the succeeding segmentations.
 # o Added prototype version of findAtomicRegions().
 # o Added prototype version of callByPruning().

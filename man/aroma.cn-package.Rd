@@ -15,20 +15,15 @@
 
 
 \description{
-  Analysis of copy-number estimates obtained from various platforms.
+  Methods for analyzing DNA copy-number data.  Specifically, this package implements the multi-source copy-number normalization (MSCN) method for normalizing copy-number data obtained on various platforms and technologies.  It also implements the TumorBoost method for normalizing paired tumor-normal SNP data.
 
   This package should be considered to be in an alpha or beta phase.
   You should expect the API to be changing over time.
 }
 
-\section{Requirements}{
-  This package requires the \pkg{aroma.core} package.
-}
-
 \section{Installation and updates}{
 
-  To install this package, see instructions at
-  \url{http://www.aroma-project.org/}.
+  To install this package, call \code{install.packages("aroma.cn")}.
 }
 
 \section{To get started}{

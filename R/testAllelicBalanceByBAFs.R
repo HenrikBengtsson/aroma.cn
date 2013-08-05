@@ -79,7 +79,7 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
   }
 
   # Not needed anymore
-  rm(keep);
+  keep <- NULL;
   verbose && exit(verbose);
 
 
@@ -119,7 +119,7 @@ setMethodS3("testAllelicBalanceByBAFs", "default", function(betaT, muN, flavor=c
   ## nOthers <- length(idxs);
 
   # Not needed anymore
-  rm(isAA, isBB, isAB, idxs, yAA, yBB, yAB);
+  isAA <- isBB <- isAB <- idxs <- yAA <- yBB <- yAB <- NULL;
 
   verbose && cat(verbose, "Number of homozygous SNPs: ", nHoms);
   verbose && cat(verbose, "Number of heterozygous SNPs: ", nHets);

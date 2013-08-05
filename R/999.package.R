@@ -8,14 +8,9 @@
 #   You should expect the API to be changing over time.
 # }
 #
-# \section{Requirements}{
-#   This package requires the \pkg{aroma.core} package.
-# }
-#
 # \section{Installation and updates}{
 #
-#   To install this package, see instructions at
-#   \url{@eval "getUrl(aroma.cn)"}.
+#   To install this package, call \code{install.packages("aroma.cn")}.
 # }
 #
 # \section{To get started}{

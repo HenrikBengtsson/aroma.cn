@@ -141,7 +141,8 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
 
     verbose && printf(verbose, "t=%.3f (p=%g), (L==R)=%s\n",
                                        fit$t, fit$p, isEqual);
-    rm(dataL, dataR, fit); # Not needed anymore
+    # Not needed anymore
+    dataL <- dataR <- fit <- NULL;
 
     # If the two flanking regions are equal, then we have
     # found an atomic region.

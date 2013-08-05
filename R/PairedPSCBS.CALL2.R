@@ -155,7 +155,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
     pvs <- findPeaksAndValleys(d);
     verbose && print(verbose, pvs);
 
-    type <- NULL; rm(type); # To please R CMD check
+    type <- NULL; rm(list="type"); # To please R CMD check
     vs <- subset(pvs, type == "valley");
     v <- vs[1,];
 

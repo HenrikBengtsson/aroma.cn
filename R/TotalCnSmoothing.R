@@ -236,7 +236,8 @@ setMethodS3("getOutputDataSet0", "TotalCnSmoothing", function(this, pattern=NULL
   args$verbose <- less(verbose);
   staticMethod <- clazz$byPath;
   dsOut <- do.call("staticMethod", args=args);
-  rm(staticMethod, args); # Not needed anymore
+  # Not needed anymore
+  staticMethod <- args <- NULL;
   verbose && exit(verbose);
 
   verbose && exit(verbose);
@@ -280,7 +281,8 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
   platform <- getPlatform(targetUgp);
   chipType <- getChipType(targetUgp);
   nbrOfUnits <- nbrOfUnits(targetUgp);
-  rm(targetUgp);
+  # Not needed anymore
+  targetUgp <- NULL;
   verbose && cat(verbose, "Total number of target units:", nbrOfUnits);
   verbose && exit(verbose);
 
@@ -384,7 +386,8 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
                             footer=footer, verbose=less(verbose, 50));
 
     dfOut[,1] <- M;
-    rm(M);
+    # Not needed anymore
+    M <- NULL;
 
     # Renaming temporary file
     pathname <- popTemporaryFile(pathnameT, verbose=verbose);

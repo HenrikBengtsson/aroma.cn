@@ -3,17 +3,24 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 importFrom("R.methodsS3", "throw")
 importFrom("R.methodsS3", "setMethodS3")
+
 import("R.oo")
+
+import("R.utils")
 
 importFrom("R.cache", "loadCache")
 importFrom("R.cache", "saveCache")
 
 importFrom("matrixStats", "weightedMedian")
 
-# importFrom(R.utils, cat)
-import("R.utils")
-
 import("PSCBS")
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# FUTURE IMPORTS, but from now we don't import these packages
+# because they are not available on CRAN.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+## import("aroma.light")
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -25,3 +32,21 @@ export(.conflicts.OK)
 # Export all public methods, that is, those without a preceeding dot
 # in their names.
 exportPattern("^[^\\.]")
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# DECLARATIONS
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+S3method("testAllelicBalanceByBAFs", "default")
+S3method("calculatePairedPSCNByGenotype", "numeric")
+S3method("calculatePairedPSCNByGenotype", "data.frame")
+S3method("calculateTumorPSCNByGenotypeUsingCTCN", "numeric")
+S3method("callXXorXY", "numeric")
+S3method("fitLoessKD", "matrix")
+S3method("fitLoessKD", "data.frame")
+S3method("normalizeLoessKD", "matrix")
+S3method("normalizeLoessKD", "data.frame")
+S3method("normalizeMirroredBAFsByRegions", "matrix")
+S3method("normalizePrincipalCurve", "matrix")
+S3method("fitDeltaXYShearModel", "matrix")
+S3method("extractC1C2", "list")

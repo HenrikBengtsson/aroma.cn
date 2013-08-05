@@ -104,12 +104,12 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
         ds <- dsList[[kk]];
         ds <- Arguments$getInstanceOf(ds, className, .name="dsList");
       }
-      if (length(dsList) < 2) {
+      if (length(dsList) < 2L) {
         throw("Argument 'dsList' must contain more than one ",
                                                          className, ": ", K);
       }
     } else {
-      throw("Argument 'dsList' is not a list: ", class(dsList)[1]);
+      throw("Argument 'dsList' is not a list: ", class(dsList)[1L]);
     }
 
     # Arguments 'fitUgp':
@@ -132,7 +132,7 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
 
   # Arguments '...':
   args <- list(...);
-  if (length(args) > 0) {
+  if (length(args) > 0L) {
     argsStr <- paste(names(args), collapse=", ");
     throw("Unknown arguments: ", argsStr);
   }
@@ -153,7 +153,7 @@ setMethodS3("as.character", "MultiSourceCopyNumberNormalization", function(x, ..
   # To please R CMD check
   this <- x;
 
-  s <- sprintf("%s:", class(this)[1]);
+  s <- sprintf("%s:", class(this)[1L]);
 
   # Tags:
   tags <- getTags(this, collapse=", ");
@@ -256,7 +256,7 @@ setMethodS3("getOutputPaths", "MultiSourceCopyNumberNormalization", function(thi
 
   paths <- lapply(dsList, FUN=function(ds) {
     path <- getPath(ds);
-    path <- getParent(path, 2);
+    path <- getParent(path, 2L);
     rootPath <- basename(path);
     path <- getParent(path);
     rootPath <- "cnData";
@@ -304,7 +304,7 @@ setMethodS3("getOutputDataSets", "MultiSourceCopyNumberNormalization", function(
       verbose && enter(verbose, "Keeping output data files matching input data files");
       # Identify output data files that match the input data files
       fullnames <- getFullNames(ds);
-      df <- getFile(ds, 1);
+      df <- getFile(ds, 1L);
       translator <- getFullNameTranslator(df);
       setFullNamesTranslator(dsOut, translator);
       fullnamesOut <- getFullNames(dsOut);
@@ -441,12 +441,12 @@ setMethodS3("extractTupleOfDataFiles", "MultiSourceCopyNumberNormalization", fun
       ds <- dsList[[kk]];
       ds <- Arguments$getInstanceOf(ds, className, .name="dsList");
     }
-    if (length(dsList) < 2) {
+    if (length(dsList) < 2L) {
       throw("Argument 'dsList' must contain more than one ", className,
                                                      ": ", length(dsList));
     }
   } else {
-    throw("Argument 'dsList' is not a list: ", class(dsList)[1]);
+    throw("Argument 'dsList' is not a list: ", class(dsList)[1L]);
   }
 
   # Argument 'name':
@@ -468,7 +468,7 @@ setMethodS3("extractTupleOfDataFiles", "MultiSourceCopyNumberNormalization", fun
     idx <- indexOf(ds, name);
     df <- NA;
     if (!is.na(idx)) {
-      if (length(idx) > 1) {
+      if (length(idx) > 1L) {
         throw("Multiple occurances identified for this sample: ",
                            getName(ds), " => ", paste(idx, collapse=", "));
       }
@@ -779,7 +779,8 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   df <- dfList[[1]];
   name <- getName(df);
   verbose && cat(verbose, "Sample name: ", name);
-  rm(dfList);
+  # Not needed anymore
+  dfList <- NULL;
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -799,7 +800,8 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   dsSmooth <- getSmoothedDataSets(this, verbose=less(verbose, 1));
   dfSList <- extractTupleOfDataFiles(this, dsList=dsSmooth, name=name,
                                                  verbose=less(verbose, 1));
-  rm(dsSmooth);
+  # Not needed anymore
+  dsSmooth <- NULL;
   verbose && str(verbose, dfSList);
 
   # Identify and exlude missing data sets
@@ -848,15 +850,14 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
     extractMatrix(df, rows=subsetToFit, column=1, drop=TRUE);
   });
 
-  rm(subsetToFit);  # Not needed anymore
+  # Not needed anymore
+  subsetToFit <- NULL;
 
   Y <- as.data.frame(Y);
   colnames(Y) <- NULL;
   Y <- as.matrix(Y);
   dimnames(Y) <- NULL;
   dim <- dim(Y);
-  gc <- gc();
-  verbose && print(verbose, gc);
   verbose && str(verbose, Y);
   verbose && summary(verbose, Y);
   verbose && exit(verbose);
@@ -882,20 +883,19 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   }
 
   verbose && printf(verbose, "Processing time: %.1f seconds\n",
-                                                          as.double(t[3]));
+                                                          as.double(t[3L]));
 
   if (.retData) {
     fit$Y <- Y;
   }
-  rm(Y);
+  # Not needed anymore
+  Y <- NULL;
 
   # Sanity check
   if (!identical(dim(fit$s), dim)) {
     throw("Internal error: The fitted data has a different dimension that the input data: ",
                          paste(dim(fit$s), collapse="x"), " != ", paste(dim, collapse="x"));
   }
-  gc <- gc();
-  verbose && print(verbose, gc);
   verbose && str(verbose, fit);
   verbose && exit(verbose);
 
@@ -927,22 +927,23 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Grouping units by chromosome
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    ugpS <- getAromaUgpFile(dfSList[[1]]);
+    ugpS <- getAromaUgpFile(dfSList[[1L]]);
     chromosomes <- getChromosomes(ugpS);
     verbose && cat(verbose, "Chromosomes: ", seqToHumanReadable(chromosomes));
 
     verbose && enter(verbose, "Grouping units by chromosome");
-    values <- ugpS[,1,drop=TRUE];
+    values <- ugpS[,1L,drop=TRUE];
     unitsS <- list();
     for (chr in chromosomes) {
       chrStr <- sprintf("Chr%02d", chr);
       unitsS[[chrStr]] <- which(values == chr);
     }
-    rm(values);
+    # Not needed anymore
+    values <- NULL;
 #    verbose && str(verbose, unitsS);
     # Dropping chromosomes with too few units
     ns <- sapply(unitsS, FUN=length);
-    unitsS <- unitsS[ns > 5];
+    unitsS <- unitsS[ns > 5L];
     verbose && str(verbose, unitsS);
     verbose && exit(verbose);
 
@@ -951,7 +952,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
     # Calculating means of each chromosome in each source
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     verbose && enter(verbose, "Allocating matrix for smooth data");
-    dfS <- dfSList[[1]];
+    dfS <- dfSList[[1L]];
     naValue <- as.double(NA);
     YSN <- matrix(naValue, nrow=nbrOfUnits(dfS), ncol=nbrOfArrays);
     verbose && cat(verbose, "RAM: ", objectSize(YSN), " bytes");
@@ -971,14 +972,16 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
       verbose && enter(verbose, "Backtransforming smoothed data");
       ySN <- backtransformPrincipalCurve(yS, fit=fit, dimensions=kk,
                                       targetDimension=targetDimension);
-      ySN <- ySN[,1,drop=TRUE];
+      ySN <- ySN[,1L,drop=TRUE];
       verbose && str(verbose, ySN);
-      rm(yS);
+      # Not needed anymore
+      yS <- NULL;
       verbose && exit(verbose);
 
       # Storing
       YSN[,kk] <- ySN;
-      rm(ySN);
+      # Not needed anymore
+      ySN <- NULL;
 
       verbose && exit(verbose);
     } # for (kk ...)
@@ -1021,12 +1024,14 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
       mus[chrStr,] <- alignFit$mus;
       dmus[chrStr,] <- alignFit$deltas;
 
-      rm(alignFit, yList, yNList);
+      # Not needed anymore
+      alignFit <- yList <- yNList <- NULL;
       verbose && exit(verbose);
     } # for (chr ...)
     verbose && exit(verbose);
 
-    rm(YSN);
+    # Not needed anymore
+    YSN <- NULL;
 
     verbose && cat(verbose, "Overall averages:");
     verbose && print(verbose, mus);
@@ -1133,7 +1138,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
   verbose && str(verbose, subsetToUpdate);
 
   nbrOfArrays <- length(dfList);
-  dfNList <- vector("list", nbrOfArrays);
+  dfNList <- vector("list", length=nbrOfArrays);
   for (kk in seq_len(nbrOfArrays)) {
     df <- dfList[[kk]];
     verbose && enter(verbose, sprintf("Source #%d ('%s') of %d", kk,
@@ -1164,7 +1169,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
       verbose && enter(verbose, "Backtransforming data");
       yN <- backtransformPrincipalCurve(y, fit=fit, dimensions=kk,
                                         targetDimension=targetDimension);
-      yN <- yN[,1,drop=TRUE];
+      yN <- yN[,1L,drop=TRUE];
       verbose && str(verbose, yN);
       verbose && exit(verbose);
 
@@ -1182,7 +1187,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
         verbose && cat(verbose, "Chromosomes: ", seqToHumanReadable(chromosomes));
 
         verbose && enter(verbose, "Grouping units by chromosome");
-        values <- ugp[subsetToUpdate,1,drop=TRUE];
+        values <- ugp[subsetToUpdate,1L,drop=TRUE];
         # Sanity check
         stopifnot(length(values) == length(yN));
 
@@ -1192,12 +1197,13 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
           subset <- which(values == chr);
           listOfUnits[[chrStr]] <- subset;
         }
-        rm(values);
+        # Not needed anymore
+        values <- NULL;
         verbose && str(verbose, listOfUnits);
 
         # Dropping chromosomes with too few units
         ns <- sapply(listOfUnits, FUN=length);
-        listOfUnits <- listOfUnits[ns > 5];
+        listOfUnits <- listOfUnits[ns > 5L];
         verbose && str(verbose, listOfUnits);
         verbose && exit(verbose);
 
@@ -1216,7 +1222,8 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
           yN[subset] <- yN[subset] - dmu;
         } # for (chrStr ...)
 
-        rm(listOfUnits);
+        # Not needed anymore
+        listOfUnits <- NULL;
 
         verbose && str(verbose, yN);
 
@@ -1244,11 +1251,12 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
 
       verbose && enter(verbose, "Writing data");
       if (is.null(subsetToUpdate)) {
-        dfN[,1] <- yN;
+        dfN[,1L] <- yN;
       } else {
-        dfN[subsetToUpdate,1] <- yN;
+        dfN[subsetToUpdate,1L] <- yN;
       }
-      rm(yN);
+      # Not needed anymore
+      yN <- NULL;
       verbose && exit(verbose);
 
       verbose && enter(verbose, "Updating file footer");
@@ -1275,10 +1283,12 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
         throw("Failed to rename temporary file: ",
                         pathnameT, " -> ", pathname);
       }
-      rm(pathnameT);
+      # Not needed anymore
+      pathnameT <- NULL;
       verbose && exit(verbose);
       dfN <- newInstance(df, pathname);
-      rm(pathname);
+      # Not needed anymore
+      pathname <- NULL;
 
       verbose && exit(verbose);
 
@@ -1288,16 +1298,16 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
 
     verbose && print(verbose, dfN);
     dfNList[[kk]] <- dfN;
-    rm(dfN);
+    # Not needed anymore
+    dfN <- NULL;
 
     verbose && exit(verbose);
   } # for (kk ...)
   verbose && print(verbose, dfNList);
 
-  # Cleanup
-  rm(subsetToUpdate);  # Not needed anymore
-  gc <- gc();
-  verbose && print(verbose, gc);
+  # Not needed anymore
+  subsetToUpdate <- NULL;
+
   verbose && exit(verbose);
 
   # Return normalized arrays
@@ -1407,7 +1417,8 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
       verbose && enter(verbose, "Normalizing");
       dfNList <- normalizeOne(this, dfList=dfList, fit=fit, ...,
                              force=force, verbose=less(verbose, 1));
-      rm(fit);
+      # Not needed anymore
+      fit <- NULL;
       verbose && print(verbose, dfNList);
 
       # Sanity check
@@ -1416,18 +1427,19 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
       }
 
       verbose && exit(verbose);
-      rm(dfNList);
+      # Not needed anymore
+      dfNList <- NULL;
     }
-    rm(dfList);
+
+    # Not needed anymore
+    dfList <- NULL;
 
     verbose && exit(verbose);
   } # for (kk ...)
   verbose && exit(verbose);
 
-  # Garbage collect
-  rm(dsList);
-  gc <- gc();
-  verbose && print(verbose, gc);
+  # Not needed anymore
+  dsList <- NULL;
 
   outputDataSets <- getOutputDataSets(this, force=TRUE, verbose=less(verbose, 1));
 

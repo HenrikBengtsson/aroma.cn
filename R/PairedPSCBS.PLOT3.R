@@ -31,7 +31,7 @@ setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
       draw(d, side=1, height=0.3, col="lightblue", lwd=2, xpd=FALSE);
     }
     p <- findPeaksAndValleys(d, tol=0.05);
-    type <- NULL; rm(type); # To please R CMD check
+    type <- NULL; rm(list="type"); # To please R CMD check
     p <- subset(p, type == "peak");
     p <- p[order(p$density, decreasing=TRUE),,drop=FALSE];
     p <- head(p, n=8);

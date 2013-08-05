@@ -33,7 +33,7 @@ setMethodS3("extractDeltaC1C2", "PairedPSCBS", function(...) {
   counts <- X[,3:4, drop=FALSE];
 
   # Not needed anymore
-  rm(X);
+  X <- NULL;
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Calculate (dC1,dC2)
@@ -49,7 +49,7 @@ setMethodS3("extractDeltaC1C2", "PairedPSCBS", function(...) {
   w <- sqrt(w);
   w <- w / sum(w, na.rm=TRUE);
 
-  # (a) Smallest of the two flanking (DH) counts 
+  # (a) Smallest of the two flanking (DH) counts
   cpw <- cbind(w[1:(length(w)-1)], w[2:length(w)]);
   cpw <- rowMins(cpw, na.rm=TRUE);
   cpw[is.infinite(cpw)] <- NA;
@@ -69,12 +69,12 @@ setMethodS3("extractC1C2", "list", function(fitList, ...) {
   c1c2List <- lapply(fitList, FUN=function(fit) {
     extractC1C2(fit, ...);
   });
-  
+
   # Append NAs between chromosomes
   c1c2TList <- lapply(c1c2List, FUN=function(c1c2) {
     rbind(c1c2, NA);
   })
-  
+
   c1c2 <- Reduce(rbind, c1c2TList);
 
   w <- sqrt(c1c2[,4]);

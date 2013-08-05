@@ -6,15 +6,15 @@
 % by the Rdoc compiler part of the R.oo package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- \name{PairedPscbsModel}
+\name{PairedPscbsModel}
 \docType{class}
 \alias{PairedPscbsModel}
 
 
- \title{The PairedPscbsModel class}
+\title{The PairedPscbsModel class}
 
- \description{
-  Package:  aroma.cn \cr
+\description{
+ Package:  aroma.cn \cr
 \bold{Class PairedPscbsModel}\cr
 
 \code{\link[R.oo]{Object}}\cr
@@ -31,34 +31,34 @@ extends \link[aroma.core]{ParametersInterface}\cr
 
 
 
-  This class represents the Paired PSCBS method [1], which
-  segments matched tumor-normal parental copy-number data into
-  piecewise constant segments.
- }
+ This class represents the Paired PSCBS method [1], which
+ segments matched tumor-normal parental copy-number data into
+ piecewise constant segments.
+}
 
- \usage{
+\usage{
 PairedPscbsModel(dsT=NULL, dsN=NULL, tags="*", ..., dropTcnOutliers=TRUE,
   gapMinLength=1e+06, seed=NULL)
 }
 
- \arguments{
-   \item{dsT, dsN}{The tumor and the normal
-     \code{\link[aroma.core]{AromaUnitPscnBinarySet}}.}
-   \item{tags}{Tags added to the output data sets.}
-   \item{...}{(Optional) Additional arguments passed to
-     \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
-   \item{dropTcnOutliers}{If \code{\link[base:logical]{TRUE}}, then TCN outliers are dropped using
-     \code{\link[PSCBS]{dropSegmentationOutliers}}.}
-   \item{gapMinLength}{Genomic regions with no data points that are of
-     this length and greater are considered to be "gaps" and are ignored
-     in the segmentation.  If +\code{\link[base:is.finite]{Inf}}, no gaps are identified.}
-   \item{seed}{An optional \code{\link[base]{integer}} specifying the random seed to be
-     used in the segmentation.  Seed needs to be set for exact numerical
-     reproducibility.}
- }
+\arguments{
+  \item{dsT, dsN}{The tumor and the normal
+    \code{\link[aroma.core]{AromaUnitPscnBinarySet}}.}
+  \item{tags}{Tags added to the output data sets.}
+  \item{...}{(Optional) Additional arguments passed to
+    \code{\link[PSCBS]{segmentByPairedPSCBS}}.}
+  \item{dropTcnOutliers}{If \code{\link[base:logical]{TRUE}}, then TCN outliers are dropped using
+    \code{\link[PSCBS]{dropSegmentationOutliers}}.}
+  \item{gapMinLength}{Genomic regions with no data points that are of
+    this length and greater are considered to be "gaps" and are ignored
+    in the segmentation.  If +\code{\link[base:is.finite]{Inf}}, no gaps are identified.}
+  \item{seed}{An optional \code{\link[base]{integer}} specifying the random seed to be
+    used in the segmentation.  Seed needs to be set for exact numerical
+    reproducibility.}
+}
 
- \section{Fields and Methods}{
-  \bold{Methods:}\cr
+\section{Fields and Methods}{
+ \bold{Methods:}\cr
 \tabular{rll}{
  \tab \code{fit} \tab  -\cr
  \tab \code{getChipType} \tab  -\cr
@@ -83,10 +83,10 @@ getParameterSets, getParameters, getParametersAsString
 $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, gc, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, registerFinalizer, save, asThis
 
 
- }
+}
 
- \examples{\dontrun{
-   dataSet <- "GSE12702"
+\examples{\dontrun{
+  dataSet <- "GSE12702"
 tags <- "ASCRMAv2"
 chipType <- "Mapping250K_Nsp"
 ds <- AromaUnitPscnBinarySet$byName(dataSet, tags=tags, chipType=chipType)
@@ -105,13 +105,13 @@ print(seg)
 # Segment all tumor-normal pairs
 fit(seg, verbose=-10)
 
- }}
+}}
 
- \references{
-  [1] ... \cr
- }
+\references{
+ [1] ... \cr
+}
 
- \seealso{
-   ...
- }
+\seealso{
+  ...
+}
 \keyword{classes}
