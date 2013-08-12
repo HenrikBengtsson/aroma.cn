@@ -291,7 +291,8 @@ setMethodS3("getPath", "PairedPscbsModel", function(this, create=TRUE, ...) {
   }
 
   # Verify that it is not the same as the input path
-  inPath <- getPath(getInputDataSet(this));
+  dsList <- getDataSets(this);
+  inPath <- getPath(dsList$tumor);
   if (getAbsolutePath(path) == getAbsolutePath(inPath)) {
     throw("The generated output data path equals the input data path: ", path, " == ", inPath);
   }
@@ -585,6 +586,9 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 
 ############################################################################
 # HISTORY:
+# 2013-08-12
+# o BUG FIX: getPath() for PairedPscbsModel would throw an error on
+#   getInputDataSet() not defined.
 # 2012-11-21
 # o Now class utilizes the new ParametersInterface.
 # 2012-09-20
