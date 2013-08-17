@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.4.2 [2013-08-15]
+o More internal updates.
+
+
 Version: 1.4.1 [2013-08-12]
 o BUG FIX: byPath(), byName() and findByPath() for PairedPSCBSFileSet
   was also affected by the bug described in the R-devel thread

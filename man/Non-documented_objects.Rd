@@ -299,6 +299,19 @@
 \alias{getOutputFileExtension.TotalCnSmoothing}
 \alias{getOutputFileSetClass}
 \alias{getOutputFileSetClass.TotalCnSmoothing}
+\alias{adjustAB}
+\alias{adjustAB.PSCBS}
+\alias{callChangePointFlips}
+\alias{callChangePointFlips.PSCBS}
+\alias{callChangePointFlips.data.frame}
+\alias{callChangePointFlips.matrix}
+\alias{deshearC1C2}
+\alias{deshearC1C2.PSCBS}
+\alias{estimateChangePointFlips}
+\alias{estimateChangePointFlips.data.frame}
+\alias{estimateChangePointFlips.matrix}
+\alias{flipChangePoints}
+\alias{flipChangePoints.PSCBS}
 
 \description{
   This page contains aliases for all "non-documented" objects that

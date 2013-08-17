@@ -1,3 +1,4 @@
+.svn
 ^Makefile$
 ^incl
 ^inst/doc/[.].*[.]rsp$

@@ -15,7 +15,7 @@
 
 
 \description{
-  Methods for analyzing DNA copy-number data.  Specifically, this package implements the multi-source copy-number normalization (MSCN) method for normalizing copy-number data obtained on various platforms and technologies.  It also implements the TumorBoost method for normalizing paired tumor-normal SNP data.
+  Methods for analyzing DNA copy-number data.  Specifically,   this package implements the multi-source copy-number normalization (MSCN)   method for normalizing copy-number data obtained on various platforms and   technologies.  It also implements the TumorBoost method for normalizing   paired tumor-normal SNP data.
 
   This package should be considered to be in an alpha or beta phase.
   You should expect the API to be changing over time.

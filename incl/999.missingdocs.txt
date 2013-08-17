@@ -166,3 +166,9 @@ getOutputDataSet0.TotalCnSmoothing getOutputFileClass
 getOutputFileClass.TotalCnSmoothing getOutputFileExtension
 getOutputFileExtension.TotalCnSmoothing getOutputFileSetClass
 getOutputFileSetClass.TotalCnSmoothing
+adjustAB adjustAB.PSCBS callChangePointFlips
+callChangePointFlips.PSCBS callChangePointFlips.data.frame
+callChangePointFlips.matrix deshearC1C2 deshearC1C2.PSCBS
+estimateChangePointFlips estimateChangePointFlips.data.frame
+estimateChangePointFlips.matrix flipChangePoints
+flipChangePoints.PSCBS
