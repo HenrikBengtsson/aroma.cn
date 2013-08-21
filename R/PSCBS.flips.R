@@ -3,7 +3,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethodS3("estimateChangePointFlips", "matrix", function(C, ...) {
   estimateChangePointFlips(as.data.frame(C), ...);
-})
+}, protected=TRUE)
 
 
 # TODO: Return/incorporate information on flanking segment lengths.
@@ -46,7 +46,7 @@ setMethodS3("estimateChangePointFlips", "data.frame", function(data, ...) {
   gammaB <- pmin(betaA[,2], betaB[,2]);
   call <- (gammaB > gammaA);
   cbind(alpha, betaA=betaA, betaB=betaB, gammaA=gammaA, gammaB=gammaB, call=call);
-})
+}, protected=TRUE)
 
 
 setMethodS3("callChangePointFlips", "matrix", function(C, ...) {
@@ -74,7 +74,7 @@ setMethodS3("adjustAB", "PSCBS", function(fit, ...) {
   params$abAdjusted <- TRUE;
   fit$params <- params;
   fit;
-})
+}, protected=TRUE)
 
 
 setMethodS3("flipChangePoints", "PSCBS", function(fit, flips=callChangePointFlips(fit), ...) {
@@ -119,8 +119,7 @@ setMethodS3("flipChangePoints", "PSCBS", function(fit, flips=callChangePointFlip
   fit$params <- params;
 
   fit;
-})
-
+}, protected=TRUE)
 
 
 setMethodS3("deshearC1C2", "PSCBS", function(fit, S=0, ...) {
@@ -148,11 +147,38 @@ setMethodS3("deshearC1C2", "PSCBS", function(fit, S=0, ...) {
   fit$params <- params;
 
   fit;
-})
+}, protected=TRUE) # deshearC1C2()
+
+
+setMethodS3("estimateDeshearingParameter", "PSCBS", function(fit, ...) {
+  dat <- extractDeltaC1C2(fit);
+
+  ## == atan(dY/dX)
+  alpha <- atan(dat[,2]/dat[,1]);
+
+  ## this is tan(alpha+pi/4)
+  x <- (dat[,2]-dat[,1])/(dat[,2]+dat[,1]);
+
+  ## absolute value should be safe because we are looking for a mode
+  ## close to pi/4.
+  beta <- abs(atan(x)+pi/4);
+
+  fitD <- findPeaksAndValleys(beta);
+  peaks <- subset(fitD, type=="peak");
+
+  ## the closest peak to 0
+  ww <- which.min(abs(peaks$x));
+  xx <- peaks$x[ww];
+
+  ## the deshearing parameter
+  tan(xx);
+}, protected=TRUE) # estimateDeshearingParameter()
 
 
 ##############################################################################
 # HISTORY
+# 2013-08-21
+# o Added PN's sketch on estimateDeshearingParameter().
 # 2013-08-15
 # o Added to aroma.cn.
 # 2013-08-09
