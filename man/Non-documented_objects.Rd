@@ -312,6 +312,8 @@
 \alias{estimateChangePointFlips.matrix}
 \alias{flipChangePoints}
 \alias{flipChangePoints.PSCBS}
+\alias{estimateDeshearingParameter}
+\alias{estimateDeshearingParameter.PSCBS}
 
 \description{
   This page contains aliases for all "non-documented" objects that

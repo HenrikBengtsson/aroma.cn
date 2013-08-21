@@ -172,3 +172,5 @@ callChangePointFlips.matrix deshearC1C2 deshearC1C2.PSCBS
 estimateChangePointFlips estimateChangePointFlips.data.frame
 estimateChangePointFlips.matrix flipChangePoints
 flipChangePoints.PSCBS
+estimateDeshearingParameter
+estimateDeshearingParameter.PSCBS

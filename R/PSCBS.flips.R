@@ -151,19 +151,21 @@ setMethodS3("deshearC1C2", "PSCBS", function(fit, S=0, ...) {
 
 
 setMethodS3("estimateDeshearingParameter", "PSCBS", function(fit, ...) {
-  dat <- extractDeltaC1C2(fit);
+  D <- extractDeltaC1C2(fit);
 
   ## == atan(dY/dX)
-  alpha <- atan(dat[,2]/dat[,1]);
+  alpha <- atan(D[,2L]/D[,1L]);
 
   ## this is tan(alpha+pi/4)
-  x <- (dat[,2]-dat[,1])/(dat[,2]+dat[,1]);
+  x <- (D[,2L]-D[,1L])/(D[,2L]+D[,1L]);
 
   ## absolute value should be safe because we are looking for a mode
   ## close to pi/4.
   beta <- abs(atan(x)+pi/4);
 
   fitD <- findPeaksAndValleys(beta);
+
+  type <- NULL; rm(list="type");  # To please R CMD check
   peaks <- subset(fitD, type=="peak");
 
   ## the closest peak to 0
