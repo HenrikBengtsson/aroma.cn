@@ -31,7 +31,12 @@
 #
 # @keyword internal
 #*/###########################################################################
-setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE) {
+setMethodS3("deShearC1C2_20120922", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X", "-,|,X"), verbose=FALSE) {
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Local functions
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  deShearC1C2 <- deShearC1C2_20120922;
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -150,7 +155,7 @@ setMethodS3("deShearC1C2", "PairedPSCBS", function(fit, ..., dirs=c("|_", "|-", 
   verbose && exit(verbose);
 
   fitO;
-}) # deShearC1C2()
+}, protected=TRUE) # deShearC1C2_20120922()
 
 
 
@@ -825,6 +830,8 @@ setMethodS3("backgroundCorrect", "PairedPSCBS", function(fit, targetMedian=c("sa
 
 ##############################################################################
 # HISTORY
+# 2013-08-21
+# o Retired this version of deShearC1C2() by renaming it.
 # 2012-09-22
 # o Added backgroundCorrect() for PairedPSCBS.
 # o Now fitDeltaC1C2ShearModel() "handles" also single elements.

@@ -136,7 +136,7 @@ setMethodS3("deshearC1C2", "PSCBS", function(fit, S=0, ...) {
   for (name in dhNames) {
     rho <- segs[[name]];;
     rho <- (1+S)/(1-S)*rho;
-    segs[[name]] <- -rho;
+    segs[[name]] <- rho;
   }
 
   fit$output <- segs;
@@ -150,7 +150,7 @@ setMethodS3("deshearC1C2", "PSCBS", function(fit, S=0, ...) {
 }, protected=TRUE) # deshearC1C2()
 
 
-setMethodS3("estimateDeshearingParameter", "PSCBS", function(fit, ...) {
+setMethodS3("estimateDeshearingParameter_20130815", "PSCBS", function(fit, ...) {
   D <- extractDeltaC1C2(fit);
 
   ## == atan(dY/dX)
@@ -174,12 +174,29 @@ setMethodS3("estimateDeshearingParameter", "PSCBS", function(fit, ...) {
 
   ## the deshearing parameter
   tan(xx);
-}, protected=TRUE) # estimateDeshearingParameter()
+}, protected=TRUE) # estimateDeshearingParameter_20130815()
 
+setMethodS3("estimateDeshearingParameter", "PSCBS", function(fit, ...) {
+  D <- extractDeltaC1C2(fit);
+  alpha <- atan(D[,2L]/D[,1L]);
+  alpha <- 360/(2*pi)*alpha;          ## converting to degrees
+  beta <- (alpha + 45) %% 180 - 45;   ## mapping -pi/2 mode to pi/2
+  beta <- 45 - abs(beta-45);          ## shearing is supposed to be
+                                      ## symmetric wrt 45
+
+  beta <- na.omit(beta);
+  fitD <- findPeaksAndValleys(beta);
+  type <- NULL; rm(list = "type");    ## To please R CMD check
+  peaks <- subset(fitD, type == "peak");
+  ww <- which.min(abs(peaks$x));      ## closest peak to 0
+  xx <- peaks$x[ww];
+  atan(xx*(2*pi)/360);
+}, protected=TRUE) # estimateDeshearingParameter()
 
 ##############################################################################
 # HISTORY
 # 2013-08-21
+# o Updated estimateDeshearingParameter().
 # o Added PN's sketch on estimateDeshearingParameter().
 # 2013-08-15
 # o Added to aroma.cn.

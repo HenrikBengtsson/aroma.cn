@@ -1,5 +1,8 @@
 
 if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS")) {
+# Local functions
+deShearC1C2 <- deShearC1C2_20120922;
+
 
 # Load example ASCN data
 data <- PSCBS::exampleData("paired.chr01");

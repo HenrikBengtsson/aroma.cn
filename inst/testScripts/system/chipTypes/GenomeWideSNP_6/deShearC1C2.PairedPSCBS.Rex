@@ -2,6 +2,9 @@ library("aroma.cn");
 library("PSCBS");
 #sourceTo("../aroma.cn/R/PairedPSCBS.NORM.R", modifiedOnly=TRUE);
 
+# Local functions
+deShearC1C2 <- deShearC1C2_20120922;
+
 
 verbose <- Arguments$getVerbose(-8, timestamp=TRUE);
 
