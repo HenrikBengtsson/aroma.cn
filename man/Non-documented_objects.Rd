@@ -314,6 +314,9 @@
 \alias{flipChangePoints.PSCBS}
 \alias{estimateDeshearingParameter}
 \alias{estimateDeshearingParameter.PSCBS}
+\alias{deShearC1C2_20120922}
+\alias{estimateDeshearingParameter_20130815}
+\alias{estimateDeshearingParameter_20130815.PSCBS}
 
 \description{
   This page contains aliases for all "non-documented" objects that

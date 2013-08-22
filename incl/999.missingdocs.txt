@@ -174,3 +174,5 @@ estimateChangePointFlips.matrix flipChangePoints
 flipChangePoints.PSCBS
 estimateDeshearingParameter
 estimateDeshearingParameter.PSCBS
+deShearC1C2_20120922 estimateDeshearingParameter_20130815
+estimateDeshearingParameter_20130815.PSCBS

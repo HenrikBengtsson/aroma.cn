@@ -7,10 +7,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\name{deShearC1C2.PairedPSCBS}
-\alias{deShearC1C2.PairedPSCBS}
+\name{deShearC1C2UNDERSCORE20120922.PairedPSCBS}
+\alias{deShearC1C2_20120922.PairedPSCBS}
+\alias{PairedPSCBS.deShearC1C2_20120922}
+\alias{deShearC1C2_20120922,PairedPSCBS-method}
 \alias{PairedPSCBS.deShearC1C2}
+\alias{deShearC1C2.PairedPSCBS}
 \alias{deShearC1C2,PairedPSCBS-method}
+
 
 \title{Correct for shearing in (C1,C2) space based on region-based PSCN estimates}
 
@@ -19,8 +23,8 @@
 }
 
 \usage{
-\method{deShearC1C2}{PairedPSCBS}(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|", "|-,X", "|,-,X",
-  "-,|,X"), verbose=FALSE)
+\method{deShearC1C2_20120922}{PairedPSCBS}(fit, ..., dirs=c("|_", "|-", "-", "|", "X", "|,-", "-,|",
+  "|-,X", "|,-,X", "-,|,X"), verbose=FALSE)
 }
 
 \arguments{
@@ -41,6 +45,9 @@
 \examples{
 
 if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS")) {
+# Local functions
+deShearC1C2 <- deShearC1C2_20120922;
+
 
 # Load example ASCN data
 data <- PSCBS::exampleData("paired.chr01");

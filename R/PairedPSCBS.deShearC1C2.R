@@ -1,6 +1,7 @@
 ###########################################################################/**
 # @set "class=PairedPSCBS"
-# @RdocMethod deShearC1C2
+# @RdocMethod deShearC1C2_20120922
+# @aliasmethod deShearC1C2
 #
 # @title "Correct for shearing in (C1,C2) space based on region-based PSCN estimates"
 #

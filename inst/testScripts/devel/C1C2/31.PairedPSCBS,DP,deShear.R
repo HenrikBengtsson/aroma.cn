@@ -4,6 +4,8 @@ library("R.devices");
 library("R.menu");
 verbose <- Arguments$getVerbose(-10);
 
+# Local functions
+deShearC1C2 <- deShearC1C2_20120922;
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Local functions
@@ -24,8 +26,8 @@ setMethodS3("doPlots", "PairedPSCBS", function(fit, sampleName=NULL, tags=NULL, 
     stext(side=4, pos=0, dataSet, cex=0.7);
     stext(side=4, pos=1, chipType, cex=0.7);
   });
-  
-  
+
+
   toPNG(sampleName, tags=c("tracks", nCPsTag, tags), width=1200, aspectRatio=0.25, {
     plotTracks(fit, tracks="tcn,c1,c2");
     stext(side=4, pos=0, sampleName);

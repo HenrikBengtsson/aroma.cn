@@ -334,7 +334,7 @@ setMethodS3("calibrateC1C2", "PairedPSCBS", function(fit, ..., force=FALSE, cach
   verbose && exit(verbose);
 
   fit12;
-})
+}) # calibrateC1C2()
 
 
 
