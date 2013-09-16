@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.4.3 [2013-09-16]
+o Updated package dependencies.
+
+
 Version: 1.4.2 [2013-08-21]
 o More internal updates.
 
