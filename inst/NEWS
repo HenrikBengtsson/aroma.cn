@@ -1,7 +1,8 @@
 Package: aroma.cn
 =================
 
-Version: 1.4.3 [2013-09-16]
+Version: 1.4.3 [2013-09-20]
+o CLEANUP: Now importing only what is needed from PSCBS.
 o Updated package dependencies.
 
 
