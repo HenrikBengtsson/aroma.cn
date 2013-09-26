@@ -15,9 +15,12 @@ import("R.utils")
 importFrom("R.cache", "loadCache")
 importFrom("R.cache", "saveCache")
 
+importFrom("matrixStats", "anyMissing")
+importFrom("matrixStats", "rowAlls")
+importFrom("matrixStats", "rowMins")
 importFrom("matrixStats", "colDiffs")
+importFrom("matrixStats", "colSds")
 importFrom("matrixStats", "weightedMedian")
-
 
 ## import("PSCBS")
 importFrom("PSCBS", "dropSegmentationOutliers")
