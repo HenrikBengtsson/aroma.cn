@@ -42,7 +42,7 @@
 #*/###########################################################################
 setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c("plain", "total"), ..., verbose=FALSE) {
   # aroma.light::fitXYCurve()
-  require("aroma.light") || throw("Package not loaded: aroma.light");
+  .requirePkg("aroma.light", quietly=TRUE);
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments

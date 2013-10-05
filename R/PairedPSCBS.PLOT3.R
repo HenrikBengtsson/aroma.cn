@@ -1,6 +1,6 @@
 setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
   # findPeaksAndValleys()
-  require("aroma.light") || throw("Package not loaded: aroma.light");
+  .requirePkg("aroma.light", quietly=TRUE);
 
   # Nothing todo?
   if (nbrOfSegments(fit) < 2) {

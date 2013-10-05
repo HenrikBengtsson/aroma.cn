@@ -25,7 +25,7 @@
 #*/###########################################################################
 setConstructorS3("PrincipalCurveNormalization", function(..., subset=1/20) {
   if (length(list(...)) > 0) {
-    require("aroma.light") || throw("Package not loaded: aroma.light");
+    .requirePkg("aroma.light", quietly=TRUE);
   }
 
   # Arguments 'subset':
@@ -51,14 +51,12 @@ setMethodS3("getSubsetToFit", "PrincipalCurveNormalization", function(this, ...)
 
 
 setMethodS3("fitOne", "PrincipalCurveNormalization", function(this, theta, ...) {
-  require("aroma.light") || throw("Package not loaded: aroma.light");
-
+  .requirePkg("aroma.light", quietly=TRUE);
   fitPrincipalCurve(theta, ...);
 }, protected=TRUE)
 
 setMethodS3("backtransformOne", "PrincipalCurveNormalization", function(this, theta, fit, ...) {
-  require("aroma.light") || throw("Package not loaded: aroma.light");
-
+  .requirePkg("aroma.light", quietly=TRUE);
   backtransformPrincipalCurve(theta, fit=fit, ...);
 }, protected=TRUE)
 

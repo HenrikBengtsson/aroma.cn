@@ -12,12 +12,12 @@ setMethodS3("pairs2", "principal.curve", function(fit, pch=19, cex=0.8, fitCol="
   hasData <- !is.null(fit$Y);
 
   nbrOfVars <- ncol(fit$s);
-  layout(matrix(1:(nbrOfVars-1)^2, nrow=nbrOfVars-1, ncol=nbrOfVars-1, byrow=TRUE));
+  layout(matrix(seq_len((nbrOfVars-1)^2), nrow=nbrOfVars-1L, ncol=nbrOfVars-1L, byrow=TRUE));
   par(mar=c(3,3,1,1)+0.1);
-  for (rr in seq(from=1, to=nbrOfVars)) {
+  for (rr in seq_len(nbrOfVars)) {
     if (rr == nbrOfVars)
       next;
-    for (cc in seq(from=1, to=nbrOfVars)) {
+    for (cc in seq_len(nbrOfVars)) {
       if (cc < rr) {
         plot.new();
       } else if (cc == rr) {
@@ -36,7 +36,8 @@ setMethodS3("pairs2", "principal.curve", function(fit, pch=19, cex=0.8, fitCol="
       }
     } # for (cc ...)
   } # for (rr ...)
-})
+}) # pairs2()
+
 
 ###########################################################################
 # HISTORY:

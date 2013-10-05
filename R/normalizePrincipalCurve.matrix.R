@@ -43,7 +43,7 @@
 #*/#########################################################################
 setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, returnFit=FALSE) {
   # fitPrincipalCurve()
-  require("aroma.light") || throw("Package not loaded: aroma.light");
+  .requirePkg("aroma.light", quietly=TRUE);
 
   # Fit principal curve
   fit <- fitPrincipalCurve(x, ...);

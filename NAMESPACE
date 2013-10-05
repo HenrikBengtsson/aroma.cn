@@ -1,90 +1,464 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # IMPORTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-importFrom("R.methodsS3", "throw")
 importFrom("R.methodsS3", "setMethodS3")
+importFrom("R.oo", "setConstructorS3")
 
-import("R.oo")
+## Importing generics
+importFrom("aroma.core", "fit")
+importFrom("aroma.core", "getChipType")
+importFrom("aroma.core", "getChromosomes") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "getFitFunction")
+importFrom("aroma.core", "getInputDataSet")
+importFrom("aroma.core", "getOptionalArguments")
+importFrom("aroma.core", "getOutputDataSet")
+importFrom("aroma.core", "getOutputDataSet0")
+importFrom("aroma.core", "getOutputFiles")
+importFrom("aroma.core", "getParameters")
+importFrom("aroma.core", "getPlatform")
+importFrom("aroma.core", "getRandomSeed")
+importFrom("aroma.core", "getRootPath")
+importFrom("aroma.core", "getXScale")
+importFrom("aroma.core", "getYScale")
+importFrom("aroma.core", "isHeterozygous")
+importFrom("aroma.core", "isHomozygous")
+importFrom("aroma.core", "loadFit")
+importFrom("aroma.core", "nbrOfLoci") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "normalizeTumorBoost") ## Multi-sources: aroma.core, aroma.light
+importFrom("aroma.core", "plotTracks") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "process")
+importFrom("aroma.core", "setRandomSeed")
+importFrom("R.filesets", "byName")
+importFrom("R.filesets", "byPath")
+importFrom("R.filesets", "findByName")
+importFrom("R.filesets", "getAsteriskTags")
+importFrom("R.filesets", "getDefaultFullName")
+importFrom("R.filesets", "getFullName")
+importFrom("R.filesets", "getTags")
+importFrom("R.filesets", "indexOf")
+importFrom("R.filesets", "nbrOfFiles")
+importFrom("R.filesets", "setTags")
+importFrom("R.oo", "getCalls")
+importFrom("R.oo", "getName") ## Multi-sources: R.oo, R.filesets
+importFrom("R.oo", "getPath") ## Multi-sources: R.oo, R.filesets
+importFrom("R.utils", "loadObject")
 
-import("R.utils")
-## importFrom("R.utils", "Arguments")
-## importFrom("R.utils", "loadObject")
-## importFrom("R.utils", "isFile")
-## importFrom("R.utils", "enter")
+## Importing functions
+importFrom("aroma.core", "append") ## Multi-sources: aroma.core, R.filesets, PSCBS, base
+importFrom("aroma.core", "AromaTransform")
+importFrom("aroma.core", "AromaUnitGenotypeCallFile")
+importFrom("aroma.core", "AromaUnitSignalBinaryFile")
+importFrom("aroma.core", "asThis")
+importFrom("aroma.core", "callNaiveGenotypes") ## Multi-sources: aroma.core, aroma.light
+importFrom("aroma.core", "colMeans") ## Multi-sources: aroma.core, base
+importFrom("aroma.core", "CopyNumberRegions")
+importFrom("aroma.core", "drawLevels") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "dropSegmentationOutliers") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "extractCopyNumberRegions")
+importFrom("aroma.core", "extractGenotypes")
+importFrom("aroma.core", "extractRawCopyNumbers")
+importFrom("aroma.core", "extractRegion") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "extractRegions") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "findLargeGaps") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "getAromaUgpFile")
+importFrom("aroma.core", "getLocusData") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "getParametersAsString")
+importFrom("aroma.core", "getPositions")
+importFrom("aroma.core", "getSignals")
+importFrom("aroma.core", "getUnitsOnChromosome")
+importFrom("aroma.core", "getUnitsOnChromosomes")
+importFrom("aroma.core", "nbrOfRegions")
+importFrom("aroma.core", "nbrOfUnits")
+importFrom("aroma.core", "processTime")
+importFrom("aroma.core", "RawAlleleBFractions")
+importFrom("aroma.core", "readFooter")
+importFrom("aroma.core", "require") ## Multi-sources: aroma.core, base
+importFrom("aroma.core", "segmentByCBS") ## Multi-sources: aroma.core, PSCBS
+importFrom("aroma.core", "updateGenotypes")
+importFrom("aroma.core", "writeFooter")
+importFrom("aroma.core", "xRange")
 
-importFrom("R.cache", "loadCache")
-importFrom("R.cache", "saveCache")
+## TO DO: aroma.light is require():d for now
+## importFrom("aroma.light", "backtransformPrincipalCurve")
+## importFrom("aroma.light", "backtransformXYCurve")
+## importFrom("aroma.light", "findPeaksAndValleys")
+## importFrom("aroma.light", "fitPrincipalCurve")
+## importFrom("aroma.light", "fitXYCurve")
+## importFrom("aroma.light", "normalizeDifferencesToAverage")
+## importFrom("aroma.light", "robustSmoothSpline")
 
 importFrom("matrixStats", "anyMissing")
-importFrom("matrixStats", "rowAlls")
-importFrom("matrixStats", "rowMins")
 importFrom("matrixStats", "colDiffs")
 importFrom("matrixStats", "colSds")
+importFrom("matrixStats", "rowAlls")
+importFrom("matrixStats", "rowMins")
 importFrom("matrixStats", "weightedMedian")
-
-## import("PSCBS")
-importFrom("PSCBS", "dropSegmentationOutliers")
-importFrom("PSCBS", "findLargeGaps")
-importFrom("PSCBS", "gapsToSegments")
-importFrom("PSCBS", "getChromosomes")
-importFrom("PSCBS", "getLocusData")
-importFrom("PSCBS", "getSegments")
-importFrom("PSCBS", "nbrOfSegments")
-importFrom("PSCBS", "getMeanEstimators")
-importFrom("PSCBS", "postsegmentTCN")
-importFrom("PSCBS", "extractC1C2")
-importFrom("PSCBS", "extractDhSegment")
+importFrom("PSCBS", "callCopyNeutral")
+importFrom("PSCBS", "dropRegions")
 importFrom("PSCBS", "estimateDeltaAB")
 importFrom("PSCBS", "estimateKappa")
-importFrom("PSCBS", "segmentByCBS")
-importFrom("PSCBS", "segmentByPairedPSCBS")
-importFrom("PSCBS", "callROH")
-importFrom("PSCBS", "callAB")
-importFrom("PSCBS", "callLOH")
-importFrom("PSCBS", "callCopyNeutral")
-importFrom("PSCBS", "extractLocusLevelTCN")
+importFrom("PSCBS", "extractDhSegment")
 importFrom("PSCBS", "extractLocusLevelC1C2")
-importFrom("PSCBS", "dropRegions")
-importFrom("PSCBS", "mergeTwoSegments")
-importFrom("PSCBS", "setSampleName")
-importFrom("PSCBS", "plotTracks2")
-importFrom("PSCBS", "plotC1C2")
+importFrom("PSCBS", "extractLocusLevelTCN")
+importFrom("PSCBS", "gapsToSegments")
+importFrom("PSCBS", "getMeanEstimators")
+importFrom("PSCBS", "getSegments")
 importFrom("PSCBS", "linesC1C2")
-importFrom("PSCBS", "drawLevels")
+importFrom("PSCBS", "mergeTwoSegments")
+importFrom("PSCBS", "nbrOfSegments")
+importFrom("PSCBS", "plotC1C2")
+importFrom("PSCBS", "plotTracks2")
+importFrom("PSCBS", "postsegmentTCN")
+importFrom("PSCBS", "setSampleName")
+importFrom("R.cache", "loadCache")
+importFrom("R.cache", "saveCache")
+importFrom("R.filesets", "extractMatrix")
+importFrom("R.filesets", "GenericDataFile")
+importFrom("R.filesets", "GenericDataFileSet")
+importFrom("R.filesets", "getChecksum") ## Multi-sources: R.filesets, R.cache
+importFrom("R.filesets", "getFile")
+importFrom("R.filesets", "getFileClass")
+importFrom("R.filesets", "getFilenameExtension")
+importFrom("R.filesets", "getFileSize")
+importFrom("R.filesets", "getFullNames")
+importFrom("R.filesets", "getFullNameTranslator")
+importFrom("R.filesets", "getPathname")
+importFrom("R.filesets", "readDataFrame")
+importFrom("R.filesets", "setFullNamesTranslator")
+importFrom("R.methodsS3", "throw")
+importFrom("R.oo", "BasicObject")
+importFrom("R.oo", "clone") ## Multi-sources: R.oo, R.filesets
+importFrom("R.oo", "equals")
+importFrom("R.oo", "extend")
+importFrom("R.oo", "getVersion")
+importFrom("R.oo", "newInstance")
+importFrom("R.oo", "Object")
+importFrom("R.oo", "objectSize")
+importFrom("R.oo", "Package")
+importFrom("R.oo", "startupMessage")
+importFrom("R.oo", "trim")
+importFrom("R.oo", "uses")
+importFrom("R.utils", "callHooks")
+importFrom("R.utils", "capitalize")
+importFrom("R.utils", "cat") ## Multi-sources: R.utils, base
+importFrom("R.utils", "copyFile")
+importFrom("R.utils", "draw")
+importFrom("R.utils", "enter")
+importFrom("R.utils", "exit")
+importFrom("R.utils", "extract") ## Multi-sources: R.utils, R.filesets
+importFrom("R.utils", "filePath")
+importFrom("R.utils", "getAbsolutePath")
+importFrom("R.utils", "getFilename") ## Multi-sources: R.utils, R.filesets
+importFrom("R.utils", "getParent")
+importFrom("R.utils", "hpaste")
+importFrom("R.utils", "inherits") ## Multi-sources: R.utils, base
+importFrom("R.utils", "isDirectory")
+importFrom("R.utils", "isDone")
+importFrom("R.utils", "isFile") ## Multi-sources: R.utils, R.filesets
+importFrom("R.utils", "less")
+importFrom("R.utils", "mkdirs")
+importFrom("R.utils", "popState")
+importFrom("R.utils", "popTemporaryFile")
+importFrom("R.utils", "printf")
+importFrom("R.utils", "pushState")
+importFrom("R.utils", "pushTemporaryFile")
+importFrom("R.utils", "resample")
+importFrom("R.utils", "saveObject")
+importFrom("R.utils", "seqToHumanReadable")
+importFrom("R.utils", "stext")
+importFrom("R.utils", "subplots")
 
-# import("aroma.core")
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# FUTURE IMPORTS, but from now we don't import these packages
-# because they are not available on CRAN.
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-## import("aroma.light")
+# Manual imports
+importFrom("PSCBS", "callROH")
+importFrom("PSCBS", "callLOH")
+importFrom("PSCBS", "callAB")
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # EXPORTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Object that must exported explicitly
-export(.conflicts.OK)
-
 # Export all public methods, that is, those without a preceeding dot
 # in their names.
 exportPattern("^[^\\.]")
 
+##export("getAsteriskTags")  # Re-exported from aroma.core (from R.filesets)
+
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# DECLARATIONS
+# S3 DECLARATIONS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-S3method("testAllelicBalanceByBAFs", "default")
-S3method("calculatePairedPSCNByGenotype", "numeric")
+# AbstractCBS
+S3method("pruneCNA", "AbstractCBS")
+
+# AbstractCurveNormalization
+S3method("as.character", "AbstractCurveNormalization")
+S3method("backtransformOne", "AbstractCurveNormalization")
+S3method("fitOne", "AbstractCurveNormalization")
+S3method("getAsteriskTags", "AbstractCurveNormalization")
+S3method("getDataSets", "AbstractCurveNormalization")
+S3method("getFullName", "AbstractCurveNormalization")
+S3method("getInputDataSet", "AbstractCurveNormalization")
+S3method("getName", "AbstractCurveNormalization")
+S3method("getOutputDataSet", "AbstractCurveNormalization")
+S3method("getPairedDataSet", "AbstractCurveNormalization")
+S3method("getPath", "AbstractCurveNormalization")
+S3method("getRootPath", "AbstractCurveNormalization")
+S3method("getSubsetToFit", "AbstractCurveNormalization")
+S3method("getTags", "AbstractCurveNormalization")
+S3method("getTargetDataSet", "AbstractCurveNormalization")
+S3method("nbrOfFiles", "AbstractCurveNormalization")
+S3method("process", "AbstractCurveNormalization")
+S3method("setTags", "AbstractCurveNormalization")
+
+# C1C2
+S3method("fitLoess2D", "C1C2")
+S3method("normalizeLoess2D", "C1C2")
+S3method("plot", "C1C2")
+S3method("points", "C1C2")
+
+# CartesianSnpData
+S3method("asCartesianSnpData", "CartesianSnpData")
+S3method("asPolarSnpData", "CartesianSnpData")
+S3method("asTotalFracBSnpData", "CartesianSnpData")
+S3method("pairedBoost", "CartesianSnpData")
+S3method("plot", "CartesianSnpData")
+
+# CBS
+S3method("findAtomicAberrations", "CBS")
+
+# CopyNumberRegions
+S3method("findAtomicAberrations", "CopyNumberRegions")
+S3method("getXScale", "CopyNumberRegions")
+S3method("getYScale", "CopyNumberRegions")
+S3method("plot", "CopyNumberRegions")
+
+# data.frame
 S3method("calculatePairedPSCNByGenotype", "data.frame")
-S3method("calculateTumorPSCNByGenotypeUsingCTCN", "numeric")
-S3method("callXXorXY", "numeric")
-S3method("fitLoessKD", "matrix")
+S3method("callChangePointFlips", "data.frame")
+S3method("estimateChangePointFlips", "data.frame")
 S3method("fitLoessKD", "data.frame")
-S3method("normalizeLoessKD", "matrix")
 S3method("normalizeLoessKD", "data.frame")
+
+# default
+S3method("testAllelicBalanceByBAFs", "default")
+
+# list
+S3method("extractC1C2", "list")
+
+# matrix
+S3method("callChangePointFlips", "matrix")
+S3method("estimateChangePointFlips", "matrix")
+S3method("fitDeltaXYShearModel", "matrix")
+S3method("fitLoessKD", "matrix")
+S3method("normalizeLoessKD", "matrix")
 S3method("normalizeMirroredBAFsByRegions", "matrix")
 S3method("normalizePrincipalCurve", "matrix")
-S3method("fitDeltaXYShearModel", "matrix")
-S3method("extractC1C2", "list")
+
+# MultiSourceCopyNumberNormalization
+S3method("as.character", "MultiSourceCopyNumberNormalization")
+S3method("extractTupleOfDataFiles", "MultiSourceCopyNumberNormalization")
+S3method("fitOne", "MultiSourceCopyNumberNormalization")
+S3method("getAllNames", "MultiSourceCopyNumberNormalization")
+S3method("getAsteriskTags", "MultiSourceCopyNumberNormalization")
+S3method("getFitAromaUgpFile", "MultiSourceCopyNumberNormalization")
+S3method("getInputDataSets", "MultiSourceCopyNumberNormalization")
+S3method("getOutputDataSets", "MultiSourceCopyNumberNormalization")
+S3method("getOutputPaths", "MultiSourceCopyNumberNormalization")
+S3method("getParameters", "MultiSourceCopyNumberNormalization")
+S3method("getPrincipalCurveEstimator", "MultiSourceCopyNumberNormalization")
+S3method("getSmoothedDataSets", "MultiSourceCopyNumberNormalization")
+S3method("getSubsetToFit", "MultiSourceCopyNumberNormalization")
+S3method("getTags", "MultiSourceCopyNumberNormalization")
+S3method("nbrOfDataSets", "MultiSourceCopyNumberNormalization")
+S3method("normalizeOne", "MultiSourceCopyNumberNormalization")
+S3method("plotSmoothedPairsOne", "MultiSourceCopyNumberNormalization")
+S3method("process", "MultiSourceCopyNumberNormalization")
+
+# NaiveFracBGenotyping
+S3method("getDataSet", "NaiveFracBGenotyping")
+S3method("getGenotypeCallSet", "NaiveFracBGenotyping")
+S3method("nbrOfLoci", "NaiveFracBGenotyping")
+S3method("nbrOfSNPs", "NaiveFracBGenotyping")
+S3method("process", "NaiveFracBGenotyping")
+S3method("processOne", "NaiveFracBGenotyping")
+
+# numeric
+S3method("calculatePairedPSCNByGenotype", "numeric")
+S3method("calculateTumorPSCNByGenotypeUsingCTCN", "numeric")
+S3method("callXXorXY", "numeric")
+
+# PairedPSCBS
+S3method("backgroundCorrect", "PairedPSCBS")
+S3method("bootstrap", "PairedPSCBS")
+S3method("calibrateC1C2", "PairedPSCBS")
+S3method("callAllelicBalanceByBAFs", "PairedPSCBS")
+S3method("callCopyNeutralRegions", "PairedPSCBS")
+S3method("deShearC1C2_20120922", "PairedPSCBS")
+S3method("drawC1C2Density", "PairedPSCBS")
+S3method("estimateC2Bias", "PairedPSCBS")
+S3method("extractDeltaC1C2", "PairedPSCBS")
+S3method("extractPolarDeltaC1C2", "PairedPSCBS")
+S3method("findAtomicAberrations", "PairedPSCBS")
+S3method("fitC1C2Densities", "PairedPSCBS")
+S3method("fitC1C2Peaks", "PairedPSCBS")
+S3method("fitDeltaC1C2ShearModel", "PairedPSCBS")
+S3method("normalizeBAFsByRegions", "PairedPSCBS")
+S3method("plotC1C2Grid", "PairedPSCBS")
+S3method("resampleA", "PairedPSCBS")
+S3method("resampleB", "PairedPSCBS")
+S3method("resampleC", "PairedPSCBS")
+S3method("transformC1C2", "PairedPSCBS")
+S3method("translateC1C2", "PairedPSCBS")
+
+# PairedPscbsCaller
+S3method("getAsteriskTags", "PairedPscbsCaller")
+S3method("getOptionalArguments", "PairedPscbsCaller")
+S3method("getParameters", "PairedPscbsCaller")
+S3method("getPath", "PairedPscbsCaller")
+S3method("getPlatform", "PairedPscbsCaller")
+S3method("getRootPath", "PairedPscbsCaller")
+S3method("process", "PairedPscbsCaller")
+
+# PairedPSCBSFile
+S3method("loadFit", "PairedPSCBSFile")
+S3method("loadObject", "PairedPSCBSFile")
+
+# PairedPSCBSFileSet
+S3method("byName", "PairedPSCBSFileSet")
+S3method("byPath", "PairedPSCBSFileSet")
+S3method("findByName", "PairedPSCBSFileSet")
+S3method("getChipType", "PairedPSCBSFileSet")
+S3method("getDefaultFullName", "PairedPSCBSFileSet")
+S3method("getPlatform", "PairedPSCBSFileSet")
+
+# PairedPscbsModel
+S3method("as.character", "PairedPscbsModel")
+S3method("fit", "PairedPscbsModel")
+S3method("getAsteriskTags", "PairedPscbsModel")
+S3method("getChipType", "PairedPscbsModel")
+S3method("getChromosomes", "PairedPscbsModel")
+S3method("getDataSets", "PairedPscbsModel")
+S3method("getFitFunction", "PairedPscbsModel")
+S3method("getFullName", "PairedPscbsModel")
+S3method("getName", "PairedPscbsModel")
+S3method("getNormalDataSet", "PairedPscbsModel")
+S3method("getOptionalArguments", "PairedPscbsModel")
+S3method("getOutputDataSet", "PairedPscbsModel")
+S3method("getParameters", "PairedPscbsModel")
+S3method("getPath", "PairedPscbsModel")
+S3method("getRandomSeed", "PairedPscbsModel")
+S3method("getRootPath", "PairedPscbsModel")
+S3method("getTags", "PairedPscbsModel")
+S3method("getTumorDataSet", "PairedPscbsModel")
+S3method("indexOf", "PairedPscbsModel")
+S3method("nbrOfFiles", "PairedPscbsModel")
+S3method("setRandomSeed", "PairedPscbsModel")
+S3method("setTags", "PairedPscbsModel")
+
+# PeaksAndValleys
+S3method("callPeaks", "PeaksAndValleys")
+
+# PolarSnpData
+S3method("asCartesianSnpData", "PolarSnpData")
+S3method("asPolarSnpData", "PolarSnpData")
+S3method("asTotalFracBSnpData", "PolarSnpData")
+S3method("pairedBoost", "PolarSnpData")
+S3method("plot", "PolarSnpData")
+
+# principal.curve
+S3method("pairs2", "principal.curve")
+
+# PrincipalCurve
+S3method("getBacktransforms", "PrincipalCurve")
+S3method("plotBacktransforms", "PrincipalCurve")
+
+# PrincipalCurveNormalization
+S3method("backtransformOne", "PrincipalCurveNormalization")
+S3method("fitOne", "PrincipalCurveNormalization")
+S3method("getSubsetToFit", "PrincipalCurveNormalization")
+
+# PruneCNA
+S3method("[", "PruneCNA")
+S3method("extractGenerations", "PruneCNA")
+S3method("nbrOfGenerations", "PruneCNA")
+S3method("plotTracks", "PruneCNA")
+
+# PSCBS
+S3method("adjustAB", "PSCBS")
+S3method("callChangePointFlips", "PSCBS")
+S3method("deshearC1C2", "PSCBS")
+S3method("estimateDeshearingParameter", "PSCBS")
+S3method("estimateDeshearingParameter_20130815", "PSCBS")
+S3method("flipChangePoints", "PSCBS")
+
+# RawAlleleBFractions
+S3method("callGenotypes", "RawAlleleBFractions")
+S3method("normalizeTumorBoost", "RawAlleleBFractions")
+
+# RawGenomicSignals
+S3method("segmentByPruneCBS", "RawGenomicSignals")
+S3method("segmentByPruneCBSv1", "RawGenomicSignals")
+
+# RawGenotypeCalls
+S3method("getCalls", "RawGenotypeCalls")
+S3method("getColors", "RawGenotypeCalls")
+S3method("isHeterozygous", "RawGenotypeCalls")
+S3method("isHomozygous", "RawGenotypeCalls")
+
+# SnpData
+S3method("callGenotypes", "SnpData")
+
+# TotalCnBinnedSmoothing
+S3method("getAsteriskTags", "TotalCnBinnedSmoothing")
+S3method("getParameters", "TotalCnBinnedSmoothing")
+S3method("smoothRawCopyNumbers", "TotalCnBinnedSmoothing")
+
+# TotalCnKernelSmoothing
+S3method("getAsteriskTags", "TotalCnKernelSmoothing")
+S3method("getParameters", "TotalCnKernelSmoothing")
+S3method("smoothRawCopyNumbers", "TotalCnKernelSmoothing")
+
+# TotalCnSmoothing
+S3method("getAsteriskTags", "TotalCnSmoothing")
+S3method("getOutputDataSet0", "TotalCnSmoothing")
+S3method("getOutputFileClass", "TotalCnSmoothing")
+S3method("getOutputFileExtension", "TotalCnSmoothing")
+S3method("getOutputFiles", "TotalCnSmoothing")
+S3method("getOutputFileSetClass", "TotalCnSmoothing")
+S3method("getParameters", "TotalCnSmoothing")
+S3method("getPath", "TotalCnSmoothing")
+S3method("getRootPath", "TotalCnSmoothing")
+S3method("getTargetPositions", "TotalCnSmoothing")
+S3method("getTargetUgpFile", "TotalCnSmoothing")
+S3method("process", "TotalCnSmoothing")
+S3method("smoothRawCopyNumbers", "TotalCnSmoothing")
+
+# TotalFracBSnpData
+S3method("asCartesianSnpData", "TotalFracBSnpData")
+S3method("asPolarSnpData", "TotalFracBSnpData")
+S3method("asTotalFracBSnpData", "TotalFracBSnpData")
+S3method("callGenotypes", "TotalFracBSnpData")
+S3method("pairedBoost", "TotalFracBSnpData")
+S3method("plot", "TotalFracBSnpData")
+
+# TumorBoostNormalization
+S3method("as.character", "TumorBoostNormalization")
+S3method("getAsteriskTags", "TumorBoostNormalization")
+S3method("getDataSets", "TumorBoostNormalization")
+S3method("getFlavor", "TumorBoostNormalization")
+S3method("getFullName", "TumorBoostNormalization")
+S3method("getInputDataSet", "TumorBoostNormalization")
+S3method("getName", "TumorBoostNormalization")
+S3method("getNormalDataSet", "TumorBoostNormalization")
+S3method("getNormalGenotypeCallSet", "TumorBoostNormalization")
+S3method("getOutputDataSet", "TumorBoostNormalization")
+S3method("getPath", "TumorBoostNormalization")
+S3method("getRootPath", "TumorBoostNormalization")
+S3method("getTags", "TumorBoostNormalization")
+S3method("nbrOfFiles", "TumorBoostNormalization")
+S3method("process", "TumorBoostNormalization")
+S3method("setTags", "TumorBoostNormalization")
+
+# XYCurveNormalization
+S3method("backtransformOne", "XYCurveNormalization")
+S3method("fitOne", "XYCurveNormalization")

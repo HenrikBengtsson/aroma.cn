@@ -3,12 +3,12 @@ setConstructorS3("PairedPscbsCaller", function(dataSet=NULL, tags="*", calls=c("
   # Load required packages
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   if (!is.null(dataSet)) {
-    require("PSCBS") || throw("Package not loaded: PSCBS");
+    .requirePkg("PSCBS", quietly=TRUE);
   }
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'dataSet':
   if (!is.null(dataSet)) {
     dataSet <- Arguments$getInstanceOf(dataSet, "PairedPSCBSFileSet");
@@ -54,7 +54,7 @@ setMethodS3("getPath", "PairedPscbsCaller", function(this, create=TRUE, ...) {
   # Full name
   fullname <- getFullName(this);
 
-  # Chip type    
+  # Chip type
   ds <- getInputDataSet(this);
   chipType <- getChipType(ds, fullname=FALSE);
 
@@ -103,7 +103,7 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE, ver
   if (verbose) {
     pushState(verbose);
     on.exit(popState(verbose));
-  } 
+  }
 
 
   sms <- getInputDataSet(this);
@@ -128,12 +128,12 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE, ver
   optArgs <- getOptionalArguments(this);
   verbose && cat(verbose, "Optional arguments (may be ignored/may give an error/warning):");
   verbose && str(verbose, optArgs);
-  
+
   for (ii in seq_along(sms)) {
     smf <- getFile(sms, ii);
     sampleName <- getName(smf);
     verbose && enter(verbose, sprintf("Tumor-normal pair #%d ('%s') of %d", ii, sampleName, length(sms)));
-  
+
     filename <- getFilename(smf);
     pathname <- file.path(pathD, filename);
 
@@ -160,21 +160,21 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE, ver
     args <- append(list(fit), argsT);
     fit <- do.call(callROH, args);
     verbose && exit(verbose);
-  
+
     verbose && enter(verbose, "Calling AB");
     args <- append(list(fit), argsT);
     fit <- do.call(callAB, args);
     verbose && exit(verbose);
-  
+
     verbose && enter(verbose, "Calling LOH");
     args <- append(list(fit), argsT);
     fit <- do.call(callLOH, args);
     verbose && exit(verbose);
-  
+
     verbose && enter(verbose, "Saving");
     saveObject(fit, file=pathname);
     verbose && exit(verbose);
-  
+
     verbose && exit(verbose);
   } # for (ii ...)
 

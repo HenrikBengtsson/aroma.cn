@@ -51,7 +51,7 @@ setConstructorS3("PairedPscbsModel", function(dsT=NULL, dsN=NULL, tags="*", ...,
   # Load required packages
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   if (!is.null(dsT)) {
-    require("PSCBS") || throw("Package not loaded: PSCBS");
+    .requirePkg("PSCBS", quietly=TRUE);
   }
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

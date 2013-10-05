@@ -41,7 +41,7 @@
 # }
 #*/###########################################################################
 setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("density"), adjust=1.5, ..., censorAt=c(-0.5,+1.5), verbose=FALSE) {
-  require("aroma.light") || throw("Package not loaded: aroma.light");
+  .requirePkg("aroma.light", quietly=TRUE);
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments

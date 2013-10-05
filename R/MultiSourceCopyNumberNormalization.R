@@ -93,7 +93,7 @@
 setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fitUgp=NULL, subsetToFit=NULL, targetDimension=1, align=c("byChromosome", "none"), tags="*", ...) {
   if (!is.null(dsList)) {
     # aroma.light::fitPrincipalCurve()
-    require("aroma.light") || throw("Package not loaded: aroma.light");
+    .requirePkg("aroma.light", quietly=TRUE);
 
     # Arguments 'dsList':
     if (is.list(dsList)) {
@@ -671,7 +671,7 @@ setMethodS3("getParameters", "MultiSourceCopyNumberNormalization", function(this
 
 setMethodS3("getPrincipalCurveEstimator", "MultiSourceCopyNumberNormalization", function(this, ...) {
   # aroma.light::fitPrincipalCurve()
-  require("aroma.light") || throw("Package not loaded: aroma.light");
+  .requirePkg("aroma.light", quietly=TRUE);
 
   params <- getParameters(this);
   df <- params$pcBandwidth;
