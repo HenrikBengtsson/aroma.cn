@@ -1,7 +1,7 @@
 Package: aroma.cn
 =================
 
-Version: 1.4.6 [2013-10-05]
+Version: 1.4.6 [2013-10-07]
 o ROBUSTNESS: Now importing only what needs to be imported and
   formally declaring all S3 methods in NAMESPACE.
 o CLEANUP: Dropped obsolete usage of autoload().

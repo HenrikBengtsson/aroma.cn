@@ -4,6 +4,19 @@
 importFrom("R.methodsS3", "setMethodS3")
 importFrom("R.oo", "setConstructorS3")
 
+## Importing Class:es
+importFrom("R.oo", "BasicObject")
+importFrom("R.oo", "Object")
+importFrom("R.oo", "Package")
+importFrom("R.filesets", "GenericDataFile")
+importFrom("R.filesets", "GenericDataFileSet")
+importFrom("aroma.core", "AromaTransform")
+importFrom("aroma.core", "AromaUnitGenotypeCallFile")
+importFrom("aroma.core", "AromaUnitSignalBinaryFile")
+importFrom("aroma.core", "CopyNumberRegions")
+importFrom("aroma.core", "RawAlleleBFractions")
+
+
 ## Importing generics
 importFrom("aroma.core", "fit")
 importFrom("aroma.core", "getChipType")
@@ -43,15 +56,11 @@ importFrom("R.oo", "getName") ## Multi-sources: R.oo, R.filesets
 importFrom("R.oo", "getPath") ## Multi-sources: R.oo, R.filesets
 importFrom("R.utils", "loadObject")
 
+
 ## Importing functions
-importFrom("aroma.core", "append") ## Multi-sources: aroma.core, R.filesets, PSCBS, base
-importFrom("aroma.core", "AromaTransform")
-importFrom("aroma.core", "AromaUnitGenotypeCallFile")
-importFrom("aroma.core", "AromaUnitSignalBinaryFile")
 importFrom("aroma.core", "asThis")
 importFrom("aroma.core", "callNaiveGenotypes") ## Multi-sources: aroma.core, aroma.light
 importFrom("aroma.core", "colMeans") ## Multi-sources: aroma.core, base
-importFrom("aroma.core", "CopyNumberRegions")
 importFrom("aroma.core", "drawLevels") ## Multi-sources: aroma.core, PSCBS
 importFrom("aroma.core", "dropSegmentationOutliers") ## Multi-sources: aroma.core, PSCBS
 importFrom("aroma.core", "extractCopyNumberRegions")
@@ -70,23 +79,21 @@ importFrom("aroma.core", "getUnitsOnChromosomes")
 importFrom("aroma.core", "nbrOfRegions")
 importFrom("aroma.core", "nbrOfUnits")
 importFrom("aroma.core", "processTime")
-importFrom("aroma.core", "RawAlleleBFractions")
 importFrom("aroma.core", "readFooter")
 importFrom("aroma.core", "require") ## Multi-sources: aroma.core, base
 importFrom("aroma.core", "segmentByCBS") ## Multi-sources: aroma.core, PSCBS
 importFrom("aroma.core", "updateGenotypes")
 importFrom("aroma.core", "writeFooter")
 importFrom("aroma.core", "xRange")
-
-## TO DO: aroma.light is require():d for now
-## importFrom("aroma.light", "backtransformPrincipalCurve")
-## importFrom("aroma.light", "backtransformXYCurve")
-## importFrom("aroma.light", "findPeaksAndValleys")
-## importFrom("aroma.light", "fitPrincipalCurve")
-## importFrom("aroma.light", "fitXYCurve")
-## importFrom("aroma.light", "normalizeDifferencesToAverage")
-## importFrom("aroma.light", "robustSmoothSpline")
-
+if (FALSE) { # Only suggesting aroma.light for now
+  importFrom("aroma.light", "backtransformPrincipalCurve")
+  importFrom("aroma.light", "backtransformXYCurve")
+  importFrom("aroma.light", "findPeaksAndValleys")
+  importFrom("aroma.light", "fitPrincipalCurve")
+  importFrom("aroma.light", "fitXYCurve")
+  importFrom("aroma.light", "normalizeDifferencesToAverage")
+  importFrom("aroma.light", "robustSmoothSpline")
+}
 importFrom("matrixStats", "anyMissing")
 importFrom("matrixStats", "colDiffs")
 importFrom("matrixStats", "colSds")
@@ -112,9 +119,8 @@ importFrom("PSCBS", "postsegmentTCN")
 importFrom("PSCBS", "setSampleName")
 importFrom("R.cache", "loadCache")
 importFrom("R.cache", "saveCache")
+importFrom("R.filesets", "append") ## Multi-sources: R.filesets, PSCBS, base
 importFrom("R.filesets", "extractMatrix")
-importFrom("R.filesets", "GenericDataFile")
-importFrom("R.filesets", "GenericDataFileSet")
 importFrom("R.filesets", "getChecksum") ## Multi-sources: R.filesets, R.cache
 importFrom("R.filesets", "getFile")
 importFrom("R.filesets", "getFileClass")
@@ -126,15 +132,12 @@ importFrom("R.filesets", "getPathname")
 importFrom("R.filesets", "readDataFrame")
 importFrom("R.filesets", "setFullNamesTranslator")
 importFrom("R.methodsS3", "throw")
-importFrom("R.oo", "BasicObject")
 importFrom("R.oo", "clone") ## Multi-sources: R.oo, R.filesets
 importFrom("R.oo", "equals")
 importFrom("R.oo", "extend")
 importFrom("R.oo", "getVersion")
 importFrom("R.oo", "newInstance")
-importFrom("R.oo", "Object")
 importFrom("R.oo", "objectSize")
-importFrom("R.oo", "Package")
 importFrom("R.oo", "startupMessage")
 importFrom("R.oo", "trim")
 importFrom("R.oo", "uses")
@@ -169,6 +172,7 @@ importFrom("R.utils", "stext")
 importFrom("R.utils", "subplots")
 
 # Manual imports
+importFrom("R.utils", "Arguments")
 importFrom("PSCBS", "callROH")
 importFrom("PSCBS", "callLOH")
 importFrom("PSCBS", "callAB")

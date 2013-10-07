@@ -1,10 +1,10 @@
 Package: aroma.cn
 Version: 1.4.6
-Depends: R (>= 2.15.0), R.utils (>= 1.27.1), aroma.core (>= 2.10.5)
-Imports: R.methodsS3 (>= 1.5.1), R.oo (>= 1.15.1), R.filesets (>= 2.2.3),
-         R.cache (>= 0.8.1), matrixStats (>= 0.8.12), PSCBS (>= 0.38.0)
+Depends: R (>= 2.15.0), R.utils (>= 1.27.5), aroma.core (>= 2.10.5)
+Imports: R.methodsS3 (>= 1.5.2), R.oo (>= 1.15.6), R.filesets (>= 2.2.4),
+         R.cache (>= 0.8.3), matrixStats (>= 0.8.12), PSCBS (>= 0.38.0)
 Suggests: aroma.light (>= 1.28.0), DNAcopy (>= 1.30.0), GLAD (>= 1.12.0)
-Date: 2013-10-05
+Date: 2013-10-07
 Title: Copy-number analysis of large microarray data sets
 Authors@R: c(
   person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
