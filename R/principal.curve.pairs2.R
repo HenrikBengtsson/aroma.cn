@@ -1,4 +1,4 @@
-setMethodS3("pairs2", "principal.curve", function(fit, pch=19, cex=0.8, fitCol="red", fitLwd=2, fitLty=1, xlim=NULL, ylim=xlim, lower.panel=NULL, ...) {
+setMethodS3("pairs2", "principal.curve", function(fit, pch=19L, cex=0.8, fitCol="red", fitLwd=2, fitLty=1L, xlim=NULL, ylim=xlim, lower.panel=NULL, ...) {
   r <- range(c(fit$s, fit$Y), na.rm=TRUE);
 
   # Argument 'xlim' & 'ylim':
@@ -23,7 +23,7 @@ setMethodS3("pairs2", "principal.curve", function(fit, pch=19, cex=0.8, fitCol="
       } else if (cc == rr) {
       } else {
         plot(NA, xlim=xlim, ylim=ylim, xlab="", ylab="");
-        abline(a=0, b=1, lty=3, col="#999999", lwd=2);
+        abline(a=0, b=1, lty=3L, col="#999999", lwd=2);
         if (hasData) {
           y <- fit$Y[,c(cc,rr),drop=FALSE];
           points(y, pch=pch, cex=cex, ...);
@@ -31,6 +31,8 @@ setMethodS3("pairs2", "principal.curve", function(fit, pch=19, cex=0.8, fitCol="
 
         if (fitLwd > 0) {
           y <- fit$s[,c(cc,rr),drop=FALSE];
+          o <- order(y[,1L,drop=TRUE]);
+          y <- y[o,,drop=FALSE];
           lines(y, col=fitCol, lwd=fitLwd, lty=fitLty);
         }
       }
@@ -41,6 +43,9 @@ setMethodS3("pairs2", "principal.curve", function(fit, pch=19, cex=0.8, fitCol="
 
 ###########################################################################
 # HISTORY:
+# 2013-10-08
+# o BUG FIX: pairs2() for 'principal.curve' would assume that the
+#   fitted curve was ordered by the first dimension in each panel.
 # 2009-01-12
 # o Extracted from MultiSourceCopyNumberNormalization.R.
 ###########################################################################
