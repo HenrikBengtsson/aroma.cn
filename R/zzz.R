@@ -1,7 +1,3 @@
-# Allows conflicts. For more information, see library() and
-# conflicts() in [R] base.
-.conflicts.OK <- TRUE
-
 .requirePkg <- function(name, quietly=FALSE) {
   # Nothing to do?
   if (is.element(sprintf("package:%s", name), search())) {

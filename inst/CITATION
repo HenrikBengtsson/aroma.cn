@@ -1,9 +1,9 @@
-citHeader("Please cite aroma.cn as");
+citHeader("Please cite aroma.cn one or more of approprite reference below");
 
 citEntry(
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # BibTeX entry:
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   entry = "Article",
   author = "H. Bengtsson and Pierre Neuvial and Terence P Speed",
   title = "TumorBoost: Normalization of allele-specific tumor copy numbers from a single pair of tumor-normal genotyping microarrays",
@@ -12,13 +12,14 @@ citEntry(
   month = "May",
   volume = "11",
   number = "245",
+  doi = "10.1186/1471-2105-11-245",
   url = "http://www.biomedcentral.com/1471-2105/11/245/",
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   textVersion = paste(sep="",
-    "H. Bengtsson, P. Neuvial and T.P. Speed",
+    "H. Bengtsson, P. Neuvial and T.P. Speed. ",
     "TumorBoost: Normalization of allele-specific tumor copy numbers from a single pair of tumor-normal genotyping microarrays, ",
     "BMC Bioinformatics, ",
     "2010"
@@ -27,32 +28,35 @@ citEntry(
 
 
 citEntry(
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # BibTeX entry:
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   entry = "Article",
   author = "Henrik Bengtsson and Amrita Ray and Paul Spellman and Terence P Speed",
   title = "A single-sample method for normalizing and combining full-resolutioncopy numbers from multiple platforms, labs and analysis methods",
   journal = "Bioinformatics",
   year = "2009",
-  month = "February",
+  volume = "25",
+  number = "7",
+  doi = "10.1093/bioinformatics/btp074",
+  url = "http://bioinformatics.oxfordjournals.org/cgi/content/full/25/7/861",
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   textVersion = paste(sep="",
     "H. Bengtsson, A. Ray, P. Spellman and T.P. Speed. ",
     "A single-sample method for normalizing and combining full-resolutioncopy numbers from multiple platforms, labs and analysis methods, ",
-    "Bioinformatics, ", 
+    "Bioinformatics, ",
     "2009"
   )
 );
 
 
 citEntry(
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # BibTeX entry:
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   entry="TechReport",
   author = "H. Bengtsson and K. Simpson and J. Bullard and K. Hansen",
   title = "{aroma.affymetrix}: A generic framework in {R} for analyzing small
@@ -62,9 +66,9 @@ citEntry(
   month = "February",
   number = "745",
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   textVersion = paste(sep="",
     "H. Bengtsson; K. Simpson; J. Bullard; K. Hansen. ",
     "aroma.affymetrix: A generic framework in R for analyzing small to very large Affymetrix data sets in bounded memory, ",
@@ -76,23 +80,25 @@ citEntry(
 
 
 citEntry(
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # BibTeX entry:
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   entry="Article",
   author = "Henrik Bengtsson and R. Irizarry and B. Carvalho and T.P. Speed",
   title = "Estimation and assessment of raw copy numbers at the single locus level",
   journal = "Bioinformatics",
   year = "2008",
-  url = "http://dx.doi.org/10.1093/bioinformatics/btn016",
+  volume = "24",
+  number = "6",
+  url = "http://bioinformatics.oxfordjournals.org/cgi/content/full/24/6/759",
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   textVersion = paste(sep="",
     "H. Bengtsson, R. Irizarry, B. Carvalho, & T.P. Speed. ",
     "Estimation and assessment of raw copy numbers at the single locus level, ",
-    "Bioinformatics, ", 
+    "Bioinformatics, ",
     "2008"
   )
 );

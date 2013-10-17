@@ -154,7 +154,6 @@ importFrom("R.utils", "getAbsolutePath")
 importFrom("R.utils", "getFilename") ## Multi-sources: R.utils, R.filesets
 importFrom("R.utils", "getParent")
 importFrom("R.utils", "hpaste")
-importFrom("R.utils", "inherits") ## Multi-sources: R.utils, base
 importFrom("R.utils", "isDirectory")
 importFrom("R.utils", "isDone")
 importFrom("R.utils", "isFile") ## Multi-sources: R.utils, R.filesets
@@ -171,12 +170,18 @@ importFrom("R.utils", "seqToHumanReadable")
 importFrom("R.utils", "stext")
 importFrom("R.utils", "subplots")
 
+## Manually adjusted
+## Cannot import explicitly from 'base';
+## importFrom("base", "inherits") ## Multi-sources: R.utils, base
+
 # Manual imports
-importFrom("R.utils", "Arguments")
 importFrom("PSCBS", "callROH")
 importFrom("PSCBS", "callLOH")
 importFrom("PSCBS", "callAB")
-
+importFrom("R.utils", "Arguments")
+if (packageVersion("R.utils") < "1.27.5") {
+  importFrom("R.utils", "cat.default")
+}
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # EXPORTS

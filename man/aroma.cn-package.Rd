@@ -47,9 +47,9 @@
 
 \references{
 
-Please cite aroma.cn as
+Please cite aroma.cn one or more of approprite reference below
 
-  H. Bengtsson, P. Neuvial and T.P. SpeedTumorBoost: Normalization of
+  H. Bengtsson, P. Neuvial and T.P. Speed. TumorBoost: Normalization of
   allele-specific tumor copy numbers from a single pair of tumor-normal
   genotyping microarrays, BMC Bioinformatics, 2010
 
