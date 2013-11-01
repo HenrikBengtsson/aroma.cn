@@ -1,6 +1,6 @@
 Package: aroma.cn
 =================
-
+ 
 Version: 1.5.0 [2013-10-17]
 o Minor tweaks to NAMESPACE.
 o Updated package dependencies.
@@ -46,7 +46,7 @@ o BUG FIX: getPath() for PairedPscbsModel would throw an error on
 Version: 1.4.0 [2013-08-04]
 o SPEEDUP: Replaced all rm() calls with NULL assignments.
   Also removed several explicit garbage collector calls.
-o CLEANUP: The formal package dependancy on Bioconductor package
+o CLEANUP: The formal package dependency on Bioconductor package
   'aroma.light' has been relaxed so the package can be installed
   without it.
 o CLEANUP: Package now only imports R.oo.
@@ -276,7 +276,7 @@ Version: 0.8.3 [2011-10-16]
 o Now deShearC1C2(), translateC1C2() and transformC1C2() also
   update C1 and C2 mean levels.
 o Now using getLocusData() and getSegments() internally for all
-  PairedPSCBS objects whereever applicable.
+  PairedPSCBS objects wherever applicable.
 
 
 Version: 0.8.2 [2011-08-07]
