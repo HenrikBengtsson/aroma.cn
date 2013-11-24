@@ -104,9 +104,6 @@ orthogonalizeC1C2
   points.C1C2 resampleA resampleA.PairedPSCBS resampleB
   resampleB.PairedPSCBS resampleC resampleC.PairedPSCBS
   callPeaks callPeaks.data.frame
-   extractDeltaC1C2
-  extractDeltaC1C2.PairedPSCBS extractPolarDeltaC1C2
-  extractPolarDeltaC1C2.PairedPSCBS 
    estimateC2Bias estimateC2Bias.PairedPSCBS
   fitC1C2Densities fitC1C2Densities.PairedPSCBS fitC1C2Peaks
   fitC1C2Peaks.PairedPSCBS plotC1C2Grid plotC1C2Grid.PairedPSCBS
