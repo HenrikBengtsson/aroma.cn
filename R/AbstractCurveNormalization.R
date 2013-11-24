@@ -108,7 +108,6 @@ setMethodS3("as.character", "AbstractCurveNormalization", function(x, ...) {
   this <- x;
 
   s <- sprintf("%s:", class(this)[1]);
-
   dsList <- getDataSets(this);
   s <- c(s, sprintf("Data sets (%d):", length(dsList)));
   for (kk in seq_along(dsList)) {
@@ -116,9 +115,7 @@ setMethodS3("as.character", "AbstractCurveNormalization", function(x, ...) {
     s <- c(s, sprintf("<%s>:", capitalize(names(dsList)[kk])));
     s <- c(s, as.character(ds));
   }
-
-  class(s) <- "GenericSummary";
-  s;
+  GenericSummary(s);
 }, protected=TRUE)
 
 

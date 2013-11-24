@@ -134,8 +134,7 @@ setMethodS3("as.character", "TumorBoostNormalization", function(x, ...) {
     s <- c(s, as.character(ds));
   }
 
-  class(s) <- "GenericSummary";
-  s;
+  GenericSummary(s);
 }, protected=TRUE)
 
 

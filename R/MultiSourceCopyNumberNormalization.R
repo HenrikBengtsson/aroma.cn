@@ -175,9 +175,7 @@ setMethodS3("as.character", "MultiSourceCopyNumberNormalization", function(x, ..
 
   # Parameters:
   s <- c(s, sprintf("Parameters: %s", getParametersAsString(this)));
-
-  class(s) <- "GenericSummary";
-  s;
+  GenericSummary(s);
 }, protected=TRUE)
 
 
