@@ -170,7 +170,6 @@
 \alias{bootstrap}
 \alias{bootstrap.PairedPSCBS}
 \alias{C1C2toAB}
-\alias{deShearC1C2}
 \alias{extractC1C2}
 \alias{extractC1C2.list}
 \alias{fitLoess2D}
@@ -193,19 +192,10 @@
 \alias{resampleC.PairedPSCBS}
 \alias{callPeaks}
 \alias{callPeaks.data.frame}
-\alias{deShearC1C2_v0}
-\alias{deShearC1C2_v0.PairedPSCBS}
 \alias{extractDeltaC1C2}
 \alias{extractDeltaC1C2.PairedPSCBS}
 \alias{extractPolarDeltaC1C2}
 \alias{extractPolarDeltaC1C2.PairedPSCBS}
-\alias{fitC1C2ShearModel}
-\alias{fitC1C2ShearModel.PairedPSCBS}
-\alias{fitDeltaC1C2ShearModel}
-\alias{fitDeltaC1C2ShearModel.PairedPSCBS}
-\alias{fitDeltaXYShearModel}
-\alias{fitDeltaXYShearModel.matrix}
-\alias{calibrateC1C2}
 \alias{estimateC2Bias}
 \alias{estimateC2Bias.PairedPSCBS}
 \alias{fitC1C2Densities}
@@ -299,24 +289,6 @@
 \alias{getOutputFileExtension.TotalCnSmoothing}
 \alias{getOutputFileSetClass}
 \alias{getOutputFileSetClass.TotalCnSmoothing}
-\alias{adjustAB}
-\alias{adjustAB.PSCBS}
-\alias{callChangePointFlips}
-\alias{callChangePointFlips.PSCBS}
-\alias{callChangePointFlips.data.frame}
-\alias{callChangePointFlips.matrix}
-\alias{deshearC1C2}
-\alias{deshearC1C2.PSCBS}
-\alias{estimateChangePointFlips}
-\alias{estimateChangePointFlips.data.frame}
-\alias{estimateChangePointFlips.matrix}
-\alias{flipChangePoints}
-\alias{flipChangePoints.PSCBS}
-\alias{estimateDeshearingParameter}
-\alias{estimateDeshearingParameter.PSCBS}
-\alias{deShearC1C2_20120922}
-\alias{estimateDeshearingParameter_20130815}
-\alias{estimateDeshearingParameter_20130815.PSCBS}
 
 \description{
   This page contains aliases for all "non-documented" objects that

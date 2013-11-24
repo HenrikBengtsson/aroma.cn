@@ -285,11 +285,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 # 2010-10-10 [HB]
 # o Added memoization to normalizeBAFsByRegions().
 # 2010-09-26 [HB]
-# o Added argument 'adjust' to deShearC1C2() with new default.
-# o Added sanity checks to deShearC1C2().
 # o Now normalizeBAFsByRegions() for PairedPSCBS handles multiple chromosomes.
-# 2010-09-22 [PN]
-# o Added deShearC1C2() for PairedPSCBS.
 # 2010-09-19 [HB+PN]
 # o Added orthogonalizeC1C2() for PairedPSCBS.
 # 2010-09-15 [HB]

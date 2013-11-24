@@ -243,8 +243,6 @@ S3method("plot", "CopyNumberRegions")
 
 # data.frame
 S3method("calculatePairedPSCNByGenotype", "data.frame")
-S3method("callChangePointFlips", "data.frame")
-S3method("estimateChangePointFlips", "data.frame")
 S3method("fitLoessKD", "data.frame")
 S3method("normalizeLoessKD", "data.frame")
 
@@ -255,9 +253,6 @@ S3method("testAllelicBalanceByBAFs", "default")
 S3method("extractC1C2", "list")
 
 # matrix
-S3method("callChangePointFlips", "matrix")
-S3method("estimateChangePointFlips", "matrix")
-S3method("fitDeltaXYShearModel", "matrix")
 S3method("fitLoessKD", "matrix")
 S3method("normalizeLoessKD", "matrix")
 S3method("normalizeMirroredBAFsByRegions", "matrix")
@@ -299,10 +294,8 @@ S3method("callXXorXY", "numeric")
 # PairedPSCBS
 S3method("backgroundCorrect", "PairedPSCBS")
 S3method("bootstrap", "PairedPSCBS")
-S3method("calibrateC1C2", "PairedPSCBS")
 S3method("callAllelicBalanceByBAFs", "PairedPSCBS")
 S3method("callCopyNeutralRegions", "PairedPSCBS")
-S3method("deShearC1C2_20120922", "PairedPSCBS")
 S3method("drawC1C2Density", "PairedPSCBS")
 S3method("estimateC2Bias", "PairedPSCBS")
 S3method("extractDeltaC1C2", "PairedPSCBS")
@@ -310,14 +303,11 @@ S3method("extractPolarDeltaC1C2", "PairedPSCBS")
 S3method("findAtomicAberrations", "PairedPSCBS")
 S3method("fitC1C2Densities", "PairedPSCBS")
 S3method("fitC1C2Peaks", "PairedPSCBS")
-S3method("fitDeltaC1C2ShearModel", "PairedPSCBS")
 S3method("normalizeBAFsByRegions", "PairedPSCBS")
 S3method("plotC1C2Grid", "PairedPSCBS")
 S3method("resampleA", "PairedPSCBS")
 S3method("resampleB", "PairedPSCBS")
 S3method("resampleC", "PairedPSCBS")
-S3method("transformC1C2", "PairedPSCBS")
-S3method("translateC1C2", "PairedPSCBS")
 
 # PairedPscbsCaller
 S3method("getAsteriskTags", "PairedPscbsCaller")
@@ -391,14 +381,6 @@ S3method("[", "PruneCNA")
 S3method("extractGenerations", "PruneCNA")
 S3method("nbrOfGenerations", "PruneCNA")
 S3method("plotTracks", "PruneCNA")
-
-# PSCBS
-S3method("adjustAB", "PSCBS")
-S3method("callChangePointFlips", "PSCBS")
-S3method("deshearC1C2", "PSCBS")
-S3method("estimateDeshearingParameter", "PSCBS")
-S3method("estimateDeshearingParameter_20130815", "PSCBS")
-S3method("flipChangePoints", "PSCBS")
 
 # RawAlleleBFractions
 S3method("callGenotypes", "RawAlleleBFractions")

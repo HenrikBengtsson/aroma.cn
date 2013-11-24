@@ -1,5 +1,10 @@
 Package: aroma.cn
 =================
+
+Version: 1.5.1 [2013-10-23]
+o CLEANUP: Removed several internal prototype methods no longer
+  needed or that have been moved to the Mikado package.
+
  
 Version: 1.5.0 [2013-10-17]
 o Minor tweaks to NAMESPACE.
