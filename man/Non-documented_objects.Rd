@@ -192,10 +192,6 @@
 \alias{resampleC.PairedPSCBS}
 \alias{callPeaks}
 \alias{callPeaks.data.frame}
-\alias{extractDeltaC1C2}
-\alias{extractDeltaC1C2.PairedPSCBS}
-\alias{extractPolarDeltaC1C2}
-\alias{extractPolarDeltaC1C2.PairedPSCBS}
 \alias{estimateC2Bias}
 \alias{estimateC2Bias.PairedPSCBS}
 \alias{fitC1C2Densities}

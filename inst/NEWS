@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.5.2 [2013-12-17]
+o Package no longer uses ':::' in calls.
+
+
 Version: 1.5.1 [2013-10-23]
 o CLEANUP: Removed several internal prototype methods no longer
   needed or that have been moved to the Mikado package.
