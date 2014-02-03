@@ -29,7 +29,7 @@ setMethodS3("plot", "C1C2", function(x, xlim=c(0,4), ylim=xlim, xlab=expression(
 
 setMethodS3("points", "C1C2", function(x, cex=sqrt(x[,"w"])+1/8, ...) {
   x <- x[,c("C1","C2"),drop=FALSE];
-  NextMethod("points", x, cex=cex);
+  NextMethod("points", object=x, cex=cex);
 })
 
 
@@ -48,6 +48,9 @@ setMethodS3("normalizeLoess2D", "C1C2", function(X, ...) {
 
 ##############################################################################
 # HISTORY
+# 2014-02-04
+# o ROBUSTNESS: Now points() for C1C2 passes (modified) argument 'x' to
+#   NextMethod() as 'object=x'.
 # 2012-09-21 [HB]
 # o Now extractDeltaC1C2() makes sure that there are splitters between
 #   chromosomes and gaps.
