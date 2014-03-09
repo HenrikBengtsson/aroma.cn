@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.5.5 [2014-03-09]
+o Updated package dependencies.
+o Package requires R (>= 2.15.1) [and Bioc (>= 2.11.0)].
+
+
 Version: 1.5.4 [2014-02-03]
 o ROBUSTNESS: Now points() for C1C2 passes (modified) argument 'x' to
   NextMethod() as 'object=x'.
@@ -11,7 +16,7 @@ o Updated package dependencies.
 
 
 Version: 1.5.2 [2013-12-17]
-o Package no longer uses ':::' in calls.
+o CLEANUP: Package no longer uses ':::' in calls.
 
 
 Version: 1.5.1 [2013-10-23]
