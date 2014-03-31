@@ -285,6 +285,10 @@
 \alias{getOutputFileExtension.TotalCnSmoothing}
 \alias{getOutputFileSetClass}
 \alias{getOutputFileSetClass.TotalCnSmoothing}
+\alias{doSegmentByPairedPSCBS}
+\alias{doSegmentByPairedPSCBS.AromaUnitPscnBinarySet}
+\alias{findLargeGaps.AromaUgpFile}
+\alias{findLargeGaps.AromaUnitPscnBinarySet}
 
 \description{
   This page contains aliases for all "non-documented" objects that
