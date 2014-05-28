@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.5.7 [2014-05-28]
+o Added 'Recommends' field to DESCRIPTION.
+
+
 Version: 1.5.6 [2014-03-31]
 o Added doSegmentByPairedPSCBS() for AromaUnitPscnBinarySet.
 

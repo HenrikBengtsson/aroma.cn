@@ -558,7 +558,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
         t <- totalTime[3]/nbrOfLoci;
         printf(verbose, "Total time per 1000 locus (with %d loci): %.2fs\n", nbrOfLoci, 1000*t);
         # Get distribution of what is spend where
-        t <- base::lapply(timers, FUN=function(timer) unname(timer[3]));
+        t <- lapply(timers, FUN=function(timer) unname(timer[3]));
         t <- unlist(t);
         t <- 100 * t / t["total"];
         printf(verbose, "Fraction of time spent on different tasks: Fitting: %.1f%%, Reading: %.1f%%, Writing: %.1f%%, Explicit garbage collection: %.1f%%\n", t["fit"], t["read"], t["write"], t["gc"]);
