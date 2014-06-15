@@ -1,8 +1,11 @@
 Package: aroma.cn
 =================
 
-Version: 1.5.7 [2014-05-28]
-o Added 'Recommends' field to DESCRIPTION.
+Version: 1.5.7 [2014-06-14]
+o Package now requires R (>= 3.0.0) and BioC (>= 2.13), which were 
+  released April 2013 and are in fact old and it's recommended to
+  use a more recent version of R.
+o Updated package dependencies.
 
 
 Version: 1.5.6 [2014-03-31]
