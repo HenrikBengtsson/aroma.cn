@@ -1,8 +1,14 @@
 Package: aroma.cn
 =================
 
+Version: 1.5.8 [2014-09-04]
+o ROBUSTNESS: It could be that process() for AbstractCurveNormalization
+  would generate an error due to read-only permissions introduced
+  by copying the target file without resetting the file permissions.
+
+
 Version: 1.5.7 [2014-06-14]
-o Package now requires R (>= 3.0.0) and BioC (>= 2.13), which were 
+o Package now requires R (>= 3.0.0) and BioC (>= 2.13), which were
   released April 2013 and are in fact old and it's recommended to
   use a more recent version of R.
 o Updated package dependencies.

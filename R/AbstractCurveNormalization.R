@@ -441,7 +441,7 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
         verbose && cat(verbose, "Already copied: ", pathname);
       } else {
         verbose && cat(verbose, "Output pathname: ", pathname);
-        copyFile(getPathname(dfT), pathname, verbose=less(verbose,50));
+        copyFile(getPathname(dfT), pathname, copy.mode=FALSE, verbose=less(verbose,50));
       }
       # Not needed anymore
       filename <- pathname <- NULL;
@@ -616,6 +616,10 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 
 ############################################################################
 # HISTORY:
+# 2014-09-04
+# o ROBUSTNESS: It could be that process() for AbstractCurveNormalization
+#   would generate an error due to read-only permissions introduced
+#   by copying the target file without resetting the file permissions.
 # 2012-04-16
 # o DOCUMENTATION: Removed reference to aroma.light::fitPrincipalCurve().
 # 2010-01-05
