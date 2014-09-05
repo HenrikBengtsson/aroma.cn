@@ -5,6 +5,7 @@ Version: 1.5.8 [2014-09-04]
 o ROBUSTNESS: It could be that process() for AbstractCurveNormalization
   would generate an error due to read-only permissions introduced
   by copying the target file without resetting the file permissions.
+o Added a few missing NAMESPACE imports.
 
 
 Version: 1.5.7 [2014-06-14]
