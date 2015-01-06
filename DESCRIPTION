@@ -6,7 +6,7 @@ Imports: R.methodsS3 (>= 1.6.1), R.oo (>= 1.18.0), R.filesets (>= 2.6.0),
 Suggests: aroma.light (>= 1.32.0), DNAcopy (>= 1.36.0), GLAD (>= 1.12.0)
 SuggestsNote: Recommended: aroma.light, DNAcopy
 Date: 2014-09-04
-Title: Copy-number analysis of large microarray data sets
+Title: Copy-number Analysis of Large Microarray Data Sets
 Authors@R: c(
   person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
                                  email="henrikb@braju.com"),
@@ -17,6 +17,7 @@ Description: Methods for analyzing DNA copy-number data.  Specifically,
   technologies.  It also implements the TumorBoost method for normalizing
   paired tumor-normal SNP data.
 License: LGPL (>= 2.1)
-URL: http://www.aroma-project.org/
+URL: http://www.aroma-project.org/, https://github.com/HenrikBengtsson/aroma.core
+BugReports: https://github.com/HenrikBengtsson/aroma.core/issue/ 
 LazyLoad: TRUE
 biocViews: ProprietaryPlatforms, aCGH, CopyNumberVariants, SNP, Microarray, OneChannel, TwoChannel, DataImport, DataRepresentation, Preprocessing, QualityControl
