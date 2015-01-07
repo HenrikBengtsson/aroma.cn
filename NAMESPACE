@@ -91,6 +91,9 @@ importFrom("aroma.core", "segmentByCBS") ## Multi-sources: aroma.core, PSCBS
 importFrom("aroma.core", "updateGenotypes")
 importFrom("aroma.core", "writeFooter")
 importFrom("aroma.core", "xRange")
+importFrom("aroma.core", "colBinnedSmoothing.matrix")
+importFrom("aroma.core", "colKernelSmoothing.matrix")
+
 if (FALSE) { # Only suggesting aroma.light for now
   importFrom("aroma.light", "backtransformPrincipalCurve")
   importFrom("aroma.light", "backtransformXYCurve")
@@ -177,6 +180,7 @@ importFrom("R.utils", "saveObject")
 importFrom("R.utils", "seqToHumanReadable")
 importFrom("R.utils", "stext")
 importFrom("R.utils", "subplots")
+importFrom("R.utils", "use")
 
 ## Manually adjusted
 ## Cannot import explicitly from 'base';

@@ -41,9 +41,6 @@
 # @keyword internal
 #*/###########################################################################
 setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c("plain", "total"), ..., verbose=FALSE) {
-  # aroma.light::fitXYCurve()
-  .requirePkg("aroma.light", quietly=TRUE);
-
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -103,7 +100,7 @@ setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c(
     X <- data[,c(3,2),drop=FALSE];
     verbose && cat(verbose, "(TCN,mBAFhom):");
     verbose && str(verbose, X);
-    fit <- fitXYCurve(X, ..., verbose=verbose);
+    fit <- .fitXYCurve(X, ..., verbose=verbose);
     # Not needed anymore
     X <- NULL;
     verbose && str(verbose, fit);
@@ -112,7 +109,7 @@ setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c(
     verbose && enter(verbose, "Predict scale factors");
     yHat <- fit$predictY(data[,3,drop=TRUE]);
     y <- data[,2];
-devSet(6); plot(y,yHat, xlim=c(0,1), ylim=c(0,1));
+    plot(y,yHat, xlim=c(0,1), ylim=c(0,1));
     scale <- 1 / yHat;
     verbose && cat(verbose, "Predicted scale factors (one per segment):");
     verbose && str(verbose, scale);

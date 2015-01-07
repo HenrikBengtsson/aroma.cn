@@ -1,6 +1,11 @@
 Package: aroma.cn
 =================
 
+Version: 1.5.9 [2015-01-06]
+o ROBUSTNESS: Package now does a better job importing objects from
+  suggested packages.
+
+
 Version: 1.5.8 [2014-09-04]
 o ROBUSTNESS: It could be that process() for AbstractCurveNormalization
   would generate an error due to read-only permissions introduced

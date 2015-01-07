@@ -42,11 +42,8 @@
 # @keyword internal
 #*/#########################################################################
 setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, returnFit=FALSE) {
-  # fitPrincipalCurve()
-  .requirePkg("aroma.light", quietly=TRUE);
-
   # Fit principal curve
-  fit <- fitPrincipalCurve(x, ...);
+  fit <- .fitPrincipalCurve(x, ...);
 
   # Flip direction of 'lambda'?
   rho <- cor(fit$lambda, x[,1L], use="complete.obs");

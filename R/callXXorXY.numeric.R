@@ -41,8 +41,6 @@
 # }
 #*/###########################################################################
 setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("density"), adjust=1.5, ..., censorAt=c(-0.5,+1.5), verbose=FALSE) {
-  .requirePkg("aroma.light", quietly=TRUE);
-
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -83,14 +81,14 @@ setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("densi
   betaT[betaT < censorAt[1]] <- -Inf;
   betaT[betaT > censorAt[2]] <- +Inf;
   betaT <- betaT[is.finite(betaT)];
-  fit <- findPeaksAndValleys(betaT, adjust=adjust, ...);
+  fit <- .findPeaksAndValleys(betaT, adjust=adjust, ...);
   isXYByChrX <- (sum(fit$type == "peak") == 2);
 
   if (isXYByChrX && (length(betaY) > 100)) {
     betaT <- betaY;
     betaT[betaT < censorAt[1]] <- -Inf;
     betaT[betaT > censorAt[2]] <- +Inf;
-    fit <- findPeaksAndValleys(betaT, adjust=adjust, ...);
+    fit <- .findPeaksAndValleys(betaT, adjust=adjust, ...);
     isXYByChrY <- (sum(fit$type == "peak") == 2);
     if (isXYByChrY != isXYByChrX) {
       throw("Allele B fractions for ChrX and ChrY are inconsistent.");

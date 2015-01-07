@@ -25,7 +25,7 @@ setMethodS3("getBacktransforms", "PrincipalCurve", function(fit, dimensions=NULL
 
   for (kk in seq_along(dimensions)) {
     dim <- dimensions[kk];
-    yN <- backtransformPrincipalCurve(y, fit=fit, dimensions=dim,
+    yN <- .backtransformPrincipalCurve(y, fit=fit, dimensions=dim,
                                       targetDimension=targetDimension);
     yN <- yN[,1L,drop=TRUE];
     xy <- cbind(y, yN);

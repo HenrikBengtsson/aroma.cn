@@ -1,7 +1,4 @@
 setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
-  # findPeaksAndValleys()
-  .requirePkg("aroma.light", quietly=TRUE);
-
   # Nothing todo?
   if (nbrOfSegments(fit) < 2) {
     return(invisible());
@@ -30,7 +27,7 @@ setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
     if (cc == 2) {
       draw(d, side=1, height=0.3, col="lightblue", lwd=2, xpd=FALSE);
     }
-    p <- findPeaksAndValleys(d, tol=0.05);
+    p <- .findPeaksAndValleys(d, tol=0.05);
     type <- NULL; rm(list="type"); # To please R CMD check
     p <- subset(p, type == "peak");
     p <- p[order(p$density, decreasing=TRUE),,drop=FALSE];
