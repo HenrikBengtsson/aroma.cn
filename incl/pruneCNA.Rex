@@ -1,3 +1,5 @@
+library("aroma.cn")
+
 set.seed(0xBEEF)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -5,9 +7,9 @@ set.seed(0xBEEF)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Build up CN profile generation by generation, via aroma.cn::cnr()
 pT <- cnr(1,2000, mean=2) +
-      cnr(1000,1500) + 
+      cnr(1000,1500) +
       cnr(1000,1250) +
-      cnr(1650,1800) + 
+      cnr(1650,1800) +
       cnr(200,300) - cnr(650,800)
 print(pT)
 

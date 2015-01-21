@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.6.0 [2015-01-20]
+o ROBUSTNESS: Added the first package tests.
+
+
 Version: 1.5.9 [2015-01-06]
 o ROBUSTNESS: Package now does a better job importing objects from
   suggested packages.
