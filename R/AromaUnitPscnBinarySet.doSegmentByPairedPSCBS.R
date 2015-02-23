@@ -2,8 +2,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   # Assert packages
   use("R.filesets (>= 2.6.0)")
 
-  use("aroma.light (>= 1.34.0)")
-  pairedAlleleSpecificCopyNumbers <- aroma.light::pairedAlleleSpecificCopyNumbers
+  pairedAlleleSpecificCopyNumbers <- .pairedAlleleSpecificCopyNumbers
 
   use("PSCBS (>= 0.43.0)")
   segmentByPairedPSCBS <- PSCBS::segmentByPairedPSCBS
