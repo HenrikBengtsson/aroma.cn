@@ -229,6 +229,15 @@ S3method("nbrOfFiles", "AbstractCurveNormalization")
 S3method("process", "AbstractCurveNormalization")
 S3method("setTags", "AbstractCurveNormalization")
 
+# AromaUnitPscnBinarySet
+S3method("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet")
+
+# AromaUgpFile
+S3method("findLargeGaps", "AromaUgpFile")
+
+# AromaUnitPscnBinarySet
+S3method("findLargeGaps", "AromaUnitPscnBinarySet")
+
 # C1C2
 S3method("fitLoess2D", "C1C2")
 S3method("normalizeLoess2D", "C1C2")
@@ -253,6 +262,7 @@ S3method("plot", "CopyNumberRegions")
 
 # data.frame
 S3method("calculatePairedPSCNByGenotype", "data.frame")
+S3method("callPeaks", "data.frame")
 S3method("fitLoessKD", "data.frame")
 S3method("normalizeLoessKD", "data.frame")
 
@@ -300,6 +310,7 @@ S3method("processOne", "NaiveFracBGenotyping")
 S3method("calculatePairedPSCNByGenotype", "numeric")
 S3method("calculateTumorPSCNByGenotypeUsingCTCN", "numeric")
 S3method("callXXorXY", "numeric")
+S3method("makeSmoothSplinePredict", "numeric")
 
 # PairedPSCBS
 S3method("backgroundCorrect", "PairedPSCBS")
@@ -316,6 +327,8 @@ S3method("plotC1C2Grid", "PairedPSCBS")
 S3method("resampleA", "PairedPSCBS")
 S3method("resampleB", "PairedPSCBS")
 S3method("resampleC", "PairedPSCBS")
+S3method("transformC1C2", "PairedPSCBS")
+S3method("translateC1C2", "PairedPSCBS")
 
 # PairedPscbsCaller
 S3method("getAsteriskTags", "PairedPscbsCaller")
