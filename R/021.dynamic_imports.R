@@ -43,5 +43,8 @@
 
 .pairedAlleleSpecificCopyNumbers <- function(...) {
   .requireAromaLight()
-  aroma.light::pairedAlleleSpecificCopyNumbers(...)
+  use("aroma.light (>= 1.34.0)")
+  ns <- getNamespace("aroma.light")
+  pairedAlleleSpecificCopyNumbers <- get("pairedAlleleSpecificCopyNumbers", mode="function", envir=ns)
+  pairedAlleleSpecificCopyNumbers(...)
 }
