@@ -1,3 +1,4 @@
+library("aroma.cn")
 
 if (Sys.getenv("_R_CHECK_FULL_") != "" && require("PSCBS")) {
 # Local functions

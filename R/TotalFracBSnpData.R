@@ -42,7 +42,7 @@ setMethodS3("callGenotypes", "TotalFracBSnpData", function(this, adjust=1.5, mea
   nbrOfUnits <- nrow(data);
 
   beta <- data[,"fracB"];
-  fit <- findPeaksAndValleys(beta, adjust=adjust);
+  fit <- .findPeaksAndValleys(beta, adjust=adjust);
   type <- NULL; rm(list="type"); # To please R CMD check
   fit <- subset(fit, type == "valley");
   nbrOfGenotypeGroups <- nrow(fit)+1;

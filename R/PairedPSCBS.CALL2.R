@@ -152,7 +152,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
   if (maxScore == "auto") {
     verbose && enter(verbose, "Estimating 'maxScore' cutoff empirically");
     d <- density(na.omit(df$ai), from=0, to=10, adjust=0.1);
-    pvs <- findPeaksAndValleys(d);
+    pvs <- .findPeaksAndValleys(d);
     verbose && print(verbose, pvs);
 
     type <- NULL; rm(list="type"); # To please R CMD check

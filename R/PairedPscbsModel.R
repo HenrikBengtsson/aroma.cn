@@ -176,9 +176,12 @@ setMethodS3("getOutputDataSet", "PairedPscbsModel", function(this, ...) {
 
 
 setMethodS3("getFitFunction", "PairedPscbsModel", function(this, ...) {
+  use("PSCBS (>= 0.43.0)")
+  segmentByPairedPSCBS <- PSCBS::segmentByPairedPSCBS
+
   defaultSeed <- getRandomSeed(this);
   fitFcn <- function(..., seed=defaultSeed) {
-    PSCBS::segmentByPairedPSCBS(..., seed=seed);
+    segmentByPairedPSCBS(..., seed=seed);
   }
   fitFcn;
 }, protected=TRUE)

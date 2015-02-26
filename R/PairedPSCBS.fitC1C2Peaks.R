@@ -26,7 +26,7 @@ setMethodS3("fitC1C2Peaks", "PairedPSCBS", function(fit, ..., tol=0.05, onError=
   if (nrow(idxs) < 2) {
     msg <- sprintf("Cannot fit relationship between C1 and C2. Too few common peaks: %d", nrow(idxs));
     if (onError == "error") {
-      devSet("Exception"); devSet("Exception"); plotC1C2Grid(fit);
+      plotC1C2Grid(fit);
       throw(msg);
     }
     if (onError == "warning") {
@@ -86,7 +86,7 @@ setMethodS3("fitC1C2Densities", "PairedPSCBS", function(fit, adjust=0.2, tol=0.0
 
   type <- NULL; rm(list="type");  # To please R CMD check
   pList <- lapply(dList, FUN=function(d) {
-    p <- findPeaksAndValleys(d, tol=tol);
+    p <- .findPeaksAndValleys(d, tol=tol);
     p <- subset(p, type == "peak");
     p <- p[order(p[[orderBy]], decreasing=c("x"=FALSE, "density"=TRUE)[orderBy]),,drop=FALSE];
   });

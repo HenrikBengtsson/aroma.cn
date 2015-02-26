@@ -51,13 +51,11 @@ setMethodS3("getSubsetToFit", "PrincipalCurveNormalization", function(this, ...)
 
 
 setMethodS3("fitOne", "PrincipalCurveNormalization", function(this, theta, ...) {
-  .requirePkg("aroma.light", quietly=TRUE);
-  fitPrincipalCurve(theta, ...);
+  .fitPrincipalCurve(theta, ...);
 }, protected=TRUE)
 
 setMethodS3("backtransformOne", "PrincipalCurveNormalization", function(this, theta, fit, ...) {
-  .requirePkg("aroma.light", quietly=TRUE);
-  backtransformPrincipalCurve(theta, fit=fit, ...);
+  .backtransformPrincipalCurve(theta, fit=fit, ...);
 }, protected=TRUE)
 
 

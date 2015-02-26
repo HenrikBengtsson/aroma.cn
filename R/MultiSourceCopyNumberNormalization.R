@@ -693,13 +693,13 @@ setMethodS3("getPrincipalCurveEstimator", "MultiSourceCopyNumberNormalization", 
     o <- order(lambda);
     lambda <- lambda[o];
     xj <- xj[o];
-    fit <- robustSmoothSpline(lambda, xj, ..., df=df);
+    fit <- .robustSmoothSpline(lambda, xj, ..., df=df);
     predict(fit, x=lambda)$y;
   }
 
   # Create principal curve estimator
   fcn <- function(Y, ...) {
-    fitPrincipalCurve(Y, smoother=smoother, ...);
+    .fitPrincipalCurve(Y, smoother=smoother, ...);
   }
   attr(fcn, "smoother") <- smoother;
   attr(fcn, "df") <- df;
@@ -968,7 +968,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
       verbose && exit(verbose);
 
       verbose && enter(verbose, "Backtransforming smoothed data");
-      ySN <- backtransformPrincipalCurve(yS, fit=fit, dimensions=kk,
+      ySN <- .backtransformPrincipalCurve(yS, fit=fit, dimensions=kk,
                                       targetDimension=targetDimension);
       ySN <- ySN[,1L,drop=TRUE];
       verbose && str(verbose, ySN);
@@ -1014,7 +1014,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
       verbose && enter(verbose, "Estimating averages and shifts toward targetDimension");
       verbose && cat(verbose, "Target dimension: ", targetDimension);
       # Estimate averages and shifts toward targetDimension
-      yNList <- normalizeDifferencesToAverage(yList, baseline=targetDimension);
+      yNList <- .normalizeDifferencesToAverage(yList, baseline=targetDimension);
       alignFit <- attr(yNList, "fit");
       verbose && str(verbose, alignFit);
       verbose && exit(verbose);
@@ -1165,7 +1165,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
       # Normalizing data
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       verbose && enter(verbose, "Backtransforming data");
-      yN <- backtransformPrincipalCurve(y, fit=fit, dimensions=kk,
+      yN <- .backtransformPrincipalCurve(y, fit=fit, dimensions=kk,
                                         targetDimension=targetDimension);
       yN <- yN[,1L,drop=TRUE];
       verbose && str(verbose, yN);

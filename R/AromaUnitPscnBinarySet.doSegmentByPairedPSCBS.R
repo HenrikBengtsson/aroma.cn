@@ -1,7 +1,15 @@
 setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, pscnN, ..., ascn=c("classic", "paired"), avgDH=c("median", "mean"), tbn=TRUE, B=1000L, cache=TRUE, subset=NULL, verbose=FALSE) {
   # Assert packages
-  R.utils::use("R.filesets (>= 2.5.0)")
-  R.utils::use("PSCBS (>= 0.41.4)")
+  use("R.filesets (>= 2.6.0)")
+
+  pairedAlleleSpecificCopyNumbers <- .pairedAlleleSpecificCopyNumbers
+
+  use("PSCBS (>= 0.43.0)")
+  segmentByPairedPSCBS <- PSCBS::segmentByPairedPSCBS
+  dropSegmentationOutliers <- PSCBS::dropSegmentationOutliers
+  bootstrapSegmentsAndChangepoints <- PSCBS::bootstrapSegmentsAndChangepoints
+  bootstrapTCNandDHByRegion <- PSCBS::bootstrapTCNandDHByRegion
+
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
@@ -28,7 +36,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   # Argument 'ascn':
   ascn <- match.arg(ascn)
   if (ascn == "paired") {
-    R.utils::use("aroma.light (>= 1.33.3)")
+    use("aroma.light (>= 1.34.0)")
   }
 
   # Argument 'avgDH':
@@ -120,10 +128,10 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   # Process via dsApplyInPairs()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   res <- dsApplyInPairs(pscnT, pscnN, FUN=function(dsPair, dataA, ..., ascn=c("classic", "paired"), tbn=TRUE, B=NULL, cache=FALSE, subset=NULL, seed=NULL, verbose=FALSE) {
-    R.utils::use("R.utils (>= 1.29.8)", verbose=TRUE)
-    R.utils::use("aroma.light", verbose=TRUE)
-    R.utils::use("PSCBS (>= 0.41.4)", verbose=TRUE)
-    R.utils::use("aroma.cn (>= 1.5.5)", verbose=TRUE)
+    use("R.utils (>= 1.34.0)", verbose=TRUE)
+    use("aroma.light", verbose=TRUE)
+    use("PSCBS (>= 0.43.0)", verbose=TRUE)
+    use("aroma.cn (>= 1.5.5)", verbose=TRUE)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Validate arguments
@@ -137,7 +145,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
     # Argument 'ascn':
     ascn <- match.arg(ascn)
     if (ascn == "paired") {
-      R.utils::use("aroma.light (>= 1.33.3)", verbose=TRUE)
+      use("aroma.light (>= 1.34.0)", verbose=TRUE)
     }
 
     # Argument 'verbose':
@@ -262,6 +270,8 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
 
 
 setMethodS3("findLargeGaps", "AromaUgpFile", function(this, ...) {
+  findLargeGaps <- PSCBS::findLargeGaps
+
   data <- this[,1:2];
   colnames(data)[2L] <- "x";
   findLargeGaps(data, ...);
@@ -269,6 +279,8 @@ setMethodS3("findLargeGaps", "AromaUgpFile", function(this, ...) {
 
 
 setMethodS3("findLargeGaps", "AromaUnitPscnBinarySet", function(this, ...) {
+  findLargeGaps <- PSCBS::findLargeGaps
+
   ugp <- getAromaUgpFile(this);
   findLargeGaps(ugp, ...);
 }, protected=TRUE)
