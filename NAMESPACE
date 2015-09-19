@@ -324,7 +324,6 @@ S3method("processOne", "NaiveFracBGenotyping")
 S3method("calculatePairedPSCNByGenotype", "numeric")
 S3method("calculateTumorPSCNByGenotypeUsingCTCN", "numeric")
 S3method("callXXorXY", "numeric")
-S3method("makeSmoothSplinePredict", "numeric")
 
 # PairedPSCBS
 S3method("backgroundCorrect", "PairedPSCBS")

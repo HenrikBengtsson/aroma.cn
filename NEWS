@@ -5,6 +5,8 @@ Version: 1.6.0-9000 [2015-09-18]
 o Package now requires R (>= 3.1.1) released July 2014. This allows
   us to use BioC (>= 3.0) (October 2014).
 o ROBUSTNESS: Explicitly importing core R functions.
+o CLEANUP: Removed makeSmoothSplinePredict() defunct since Aug 2013.
+  callPeaks() for data.frame made defunct.
 
 
 Version: 1.6.0 [2015-02-23]
