@@ -193,6 +193,20 @@ importFrom("PSCBS", "callAB")
 importFrom("R.utils", "Arguments")
 
 
+importFrom("graphics",
+           "abline", "axis", "box", "grid", "layout",
+           "lines", "pairs", "par", "plot", "plot.new", "points",
+           "title")
+
+importFrom("stats",
+           "coef", "cor", "density", "lm", "loess", "median",
+           "na.omit", "pchisq", "pnorm", "predict", "qnorm", "sd",
+           "smooth.spline", "t.test", "var.test")
+
+importFrom("utils",
+           "data", "head", "str")
+
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # EXPORTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

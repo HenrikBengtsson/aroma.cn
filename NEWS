@@ -1,6 +1,10 @@
 Package: aroma.cn
 =================
 
+Version: 1.6.0-9000 [2015-09-18]
+o ROBUSTNESS: Explicitly importing core R functions.
+
+
 Version: 1.6.0 [2015-02-23]
 o ROBUSTNESS: Added the first package tests.
 o Bumped package dependencies.
