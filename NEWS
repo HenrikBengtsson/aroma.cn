@@ -7,7 +7,7 @@ o Package now requires R (>= 3.1.1) released July 2014. This allows
 o Bumped package dependencies.
 o ROBUSTNESS: Explicitly importing core R functions.
 o CLEANUP: Removed makeSmoothSplinePredict() defunct since Aug 2013.
-  Make callPeaks() for data.frame defunct.
+  Make callPeaks() for data.frame defunct (was deprecated).
 
 
 Version: 1.6.0 [2015-02-23]
