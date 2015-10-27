@@ -203,8 +203,7 @@ importFrom("stats",
            "na.omit", "pchisq", "pnorm", "predict", "qnorm", "sd",
            "smooth.spline", "t.test", "var.test")
 
-importFrom("utils",
-           "data", "head", "str")
+importFrom("utils", "head", "str")
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
