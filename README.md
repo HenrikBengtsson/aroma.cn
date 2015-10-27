@@ -7,6 +7,15 @@ R package aroma.cn is available on [CRAN](http://cran.r-project.org/package=arom
 install.packages('aroma.cn')
 ```
 
+### Pre-release version
+
+To install the pre-release version that is available in branch `develop`, use:
+```r
+source('http://callr.org/install#HenrikBengtsson/aroma.cn@develop')
+```
+This will install the package from source.  
+
+
 
 ## Software status
 
