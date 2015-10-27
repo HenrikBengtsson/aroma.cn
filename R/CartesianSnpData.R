@@ -5,7 +5,7 @@ setConstructorS3("CartesianSnpData", function(data=NULL, ...) {
 })
 
 
-setMethodS3("plot", "CartesianSnpData", function(x, xlim=range(data, na.rm=TRUE), ylim=xlim, ...) {
+setMethodS3("plot", "CartesianSnpData", function(x, xlim=range(x, na.rm=TRUE), ylim=xlim, ...) {
   NextMethod("plot", xlim=xlim, ylim=ylim);
 })
 
@@ -93,7 +93,7 @@ setMethodS3("pairedBoost", "CartesianSnpData", function(this, dataN, scaleByCN=T
   # Calibrate accordingly
   res <- this;
   res <- res - delta;
-  
+
   res;
 })
 

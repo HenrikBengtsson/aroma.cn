@@ -137,18 +137,6 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
 
 
 
-setMethodS3("callPeaks", "data.frame", function(fit, ...) {
-  .Deprecated(msg="callPeaks() for data.frame:s is deprecated.  It will eventually be removed from the package.");
-
-  # Argument 'fit';
-  stopifnot(all(is.element(c("type", "x", "density"), colnames(fit))));
-  class(fit) <- c("PeaksAndValleys", class(fit));
-  callPeaks(fit, ...);
-}, private=TRUE, deprecated=TRUE)
-
-
-
-
 ##############################################################################
 # HISTORY
 # 2013-08-04 [HB]

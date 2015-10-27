@@ -193,6 +193,19 @@ importFrom("PSCBS", "callAB")
 importFrom("R.utils", "Arguments")
 
 
+importFrom("graphics",
+           "abline", "axis", "box", "grid", "layout",
+           "lines", "pairs", "par", "plot", "plot.new", "points",
+           "title")
+
+importFrom("stats",
+           "coef", "cor", "density", "lm", "loess", "median",
+           "na.omit", "pchisq", "pnorm", "predict", "qnorm", "sd",
+           "smooth.spline", "t.test", "var.test")
+
+importFrom("utils", "head", "str")
+
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # EXPORTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -310,7 +323,6 @@ S3method("processOne", "NaiveFracBGenotyping")
 S3method("calculatePairedPSCNByGenotype", "numeric")
 S3method("calculateTumorPSCNByGenotypeUsingCTCN", "numeric")
 S3method("callXXorXY", "numeric")
-S3method("makeSmoothSplinePredict", "numeric")
 
 # PairedPSCBS
 S3method("backgroundCorrect", "PairedPSCBS")

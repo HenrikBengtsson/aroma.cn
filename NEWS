@@ -1,10 +1,19 @@
 Package: aroma.cn
 =================
 
+Version: 1.6.1 [2015-10-27]
+o Package now requires R (>= 3.1.1) released July 2014. This allows
+  us to use BioC (>= 3.0) (October 2014).
+o Bumped package dependencies.
+o ROBUSTNESS: Explicitly importing core R functions.
+o CLEANUP: Removed makeSmoothSplinePredict() defunct since Aug 2013.
+  Make callPeaks() for data.frame defunct (was deprecated).
+
+
 Version: 1.6.0 [2015-02-23]
 o ROBUSTNESS: Added the first package tests.
 o Bumped package dependencies.
-o Package now requires R (>= 3.0.3) and Bioc (>= 2.13) which were 
+o Package now requires R (>= 3.0.3) and Bioc (>= 2.13) which were
   released March 2014 and are in fact old; it's recommended to use
   a more recent version of R.
 
