@@ -103,7 +103,6 @@ if (FALSE) { # Only suggesting aroma.light for now
   importFrom("aroma.light", "normalizeDifferencesToAverage")
   importFrom("aroma.light", "robustSmoothSpline")
 }
-importFrom("matrixStats", "anyMissing")
 importFrom("matrixStats", "colDiffs")
 importFrom("matrixStats", "colSds")
 importFrom("matrixStats", "rowAlls")

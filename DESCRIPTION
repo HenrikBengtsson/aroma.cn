@@ -1,5 +1,5 @@
 Package: aroma.cn
-Version: 1.6.1
+Version: 1.6.1-9000
 Depends:
   R (>= 3.1.1),
   R.utils (>= 2.1.0),
@@ -10,7 +10,7 @@ Imports:
   R.filesets (>= 2.9.0),
   R.cache (>= 0.10.0),
   matrixStats (>= 0.15.0),
-  PSCBS (>= 0.50.0)
+  PSCBS (>= 0.60.0)
 Suggests:
   aroma.light (>= 2.2.1),
   DNAcopy (>= 1.40.0),
@@ -20,7 +20,7 @@ SuggestsNote:
   Recommended:
   aroma.light,
   DNAcopy
-Date: 2015-10-27
+Date: 2015-11-19
 Title: Copy-Number Analysis of Large Microarray Data Sets
 Authors@R: c(
   person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),

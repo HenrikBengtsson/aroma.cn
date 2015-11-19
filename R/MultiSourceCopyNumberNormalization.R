@@ -308,7 +308,7 @@ setMethodS3("getOutputDataSets", "MultiSourceCopyNumberNormalization", function(
       fullnamesOut <- getFullNames(dsOut);
       idxs <- match(fullnames, fullnamesOut);
       verbose && str(verbose, idxs);
-      if (anyMissing(idxs)) {
+      if (anyNA(idxs)) {
         throw("Should not happen.");
       }
       verbose && cat(verbose, "Number of files dropped: ", length(dsOut) - length(idxs));
@@ -1207,7 +1207,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
 
         # Dropping chromosomes for which there is no shift estimate
         idxs <- match(names(listOfUnits), rownames(dmus));
-        if (anyMissing(idxs)) {
+        if (anyNA(idxs)) {
           verbose && cat(verbose, "Shift estimates are not available for some chromosomes, which are skipped:");
           verbose && print(verbose, names(listOfUnits[!is.finite(idxs)]));
           listOfUnits <- listOfUnits[is.finite(idxs)];

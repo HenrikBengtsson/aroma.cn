@@ -325,7 +325,7 @@ setMethodS3("getOutputDataSet", "AbstractCurveNormalization", function(this, ...
   fullnamesOut <- getFullNames(res);
   idxs <- match(fullnames, fullnamesOut);
   verbose && str(verbose, idxs);
-  if (anyMissing(idxs)) {
+  if (anyNA(idxs)) {
     throw("Should not happen.");
   }
   verbose && cat(verbose, "Number of files dropped: ", length(res) - length(idxs));
