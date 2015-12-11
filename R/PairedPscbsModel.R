@@ -381,7 +381,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
   # Setup
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   path <- getPath(this);
-  mkdirs(path);
+  mkdirs(path, mustWork=TRUE)
 
   fitFcn <- getFitFunction(this, verbose=less(verbose, 50));
 
