@@ -1,6 +1,6 @@
 
   C1C2toAB <- function(xy, ...) {
-    dxy <- colDiffs(xy[,1:2]);
+    dxy <- colDiffs(xy, cols=1:2);
 #print(dxy);
     # (l,b) = Length and slope of line
     l <- sqrt(dxy[,1]^2 + dxy[,2]^2);

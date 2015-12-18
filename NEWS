@@ -1,8 +1,8 @@
 Package: aroma.cn
 =================
 
-Version: 1.6.1-9000 [2015-11-19]
-o ...
+Version: 1.6.1-9000 [2015-12-17]
+o Utilizing subsetted calculations of matrixStats (>= 0.50.0).
 
 
 Version: 1.6.1 [2015-10-27]
