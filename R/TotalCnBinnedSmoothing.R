@@ -97,7 +97,7 @@ setMethodS3("smoothRawCopyNumbers", "TotalCnBinnedSmoothing", function(this, raw
   verbose && cat(verbose, "Calling binnedSmoothing() with arguments:");
   verbose && str(verbose, args);
   args$verbose <- less(verbose, 20);
-  smoothCNs <- do.call("binnedSmoothing", args=args);
+  smoothCNs <- do.call(binnedSmoothing, args=args);
 
   verbose && exit(verbose);
 

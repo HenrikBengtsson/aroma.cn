@@ -22,6 +22,7 @@ importFrom("aroma.core", "CopyNumberRegions")
 importFrom("aroma.core", "RawAlleleBFractions")
 
 ## Importing generics
+importFrom("aroma.core", "binnedSmoothing")
 importFrom("aroma.core", "fit")
 importFrom("aroma.core", "getChipType")
 importFrom("aroma.core", "getChromosomes") ## Multi-sources: aroma.core, PSCBS
@@ -39,6 +40,7 @@ importFrom("aroma.core", "getXScale")
 importFrom("aroma.core", "getYScale")
 importFrom("aroma.core", "isHeterozygous")
 importFrom("aroma.core", "isHomozygous")
+importFrom("aroma.core", "kernelSmoothing")
 importFrom("aroma.core", "loadFit")
 importFrom("aroma.core", "nbrOfLoci") ## Multi-sources: aroma.core, PSCBS
 importFrom("aroma.core", "normalizeTumorBoost") ## Multi-sources: aroma.core, aroma.light

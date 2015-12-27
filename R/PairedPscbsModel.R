@@ -524,7 +524,7 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
       verbose && str(verbose, args);
       args <- c(args, list(...), list(verbose=less(verbose, 1)));
       tFit <- processTime();
-      fit <- do.call("fitFcn", args);
+      fit <- do.call(fitFcn, args);
       fit <- setSampleName(fit, pairName);
       verbose && str(verbose, fit);
       timers$fit <- timers$fit + (processTime() - tFit);
