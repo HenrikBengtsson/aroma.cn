@@ -207,7 +207,7 @@ if (is.null(data)) {
     verbose && enter(verbose, "Calculating average |beta| for heterozygotes region by region");
     dataCC <- as.data.frame(regions);
     dataCC[,"mean"] <- 2*2^dataCC[,"mean"];
-    for (rr in seq(length=nrow(dataCC))) {
+    for (rr in seq_len(nrow(dataCC))) {
       reg <- c(dataCC[rr,"start"], dataCC[rr,"stop"]);
       fracBRR <- extractRegion(fracB, region=reg);
       n <- nbrOfLoci(fracBRR);

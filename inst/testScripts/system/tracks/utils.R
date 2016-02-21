@@ -99,7 +99,7 @@ textPlotAnnotations <- function(pa=NULL, ...) {
   while (TRUE) {
     str(pa);
     names <- names(pa);
-    names(names) <- seq(along=names);
+    names(names) <- seq_along(names);
     choices <- c(names, r="RESET", s="SAVE", c="CANCEL");
     choice <- textMenu(choices, title="Select attribute:", value=FALSE);
     choiceStr <- names(choices)[choice];

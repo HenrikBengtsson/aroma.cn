@@ -92,7 +92,7 @@ srcCols <- gray(seq(from=0.3, to=0.8, length.out=5));
 methodNames <- names(methods);
 segCols <- segCols[methodNames];
 
-for (ii in seq(along=sampleNames)) {
+for (ii in seq_along(sampleNames)) {
   sampleName <- sampleNames[ii];
   verbose && enter(verbose, sprintf("Sample #%d ('%s') of %d", 
                                       ii, sampleName, length(sampleNames)));
@@ -100,7 +100,7 @@ for (ii in seq(along=sampleNames)) {
   dfList <- getFileList(dsList, sampleName);
   print(dfList);
   
-  for (cc in seq(along=chromosomes)) {
+  for (cc in seq_along(chromosomes)) {
     chromosome <- chromosomes[cc];
     chrTag <- sprintf("Chr%02d", chromosome);
     verbose && enter(verbose, sprintf("Chromosome #%d ('%s') of %d", 
@@ -132,7 +132,7 @@ for (ii in seq(along=sampleNames)) {
              horiz=TRUE, bty="n", x.intersp=0.5, cex=cex);
       
       fitList <- list();
-      for (mm in seq(along=methods)) {
+      for (mm in seq_along(methods)) {
         methodName <- methodNames[mm];
         segmentByFcn <- methods[[mm]];
         verbose && enter(verbose, sprintf("Segmentation #%d ('%s') of %d", 

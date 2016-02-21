@@ -123,7 +123,7 @@ nbrOfCPs <- c(100, 50, 25)[1:2];
 if (!exists("fitList", mode="list")) {
   fitList <- list();
 }
-for (kk in seq(along=nbrOfCPs)) {
+for (kk in seq_along(nbrOfCPs)) {
   key <- sprintf("nbrOfCPs=%d", nbrOfCPs[kk]);
 
   verbose && enter(verbose, sprintf("Change point set #%d ('%s') of %d", kk, key, length(nbrOfCPs)));

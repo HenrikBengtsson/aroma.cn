@@ -77,9 +77,9 @@ xlim <- xRange;
 name <- getNames(dsList[[1]])[array];
 
 devSet("panels");
-layout(seq(along=cnList));
+layout(seq_along(cnList));
 par(mar=c(4.2,4.2,1.3,2.1));
-for (kk in seq(along=cnList)) {
+for (kk in seq_along(cnList)) {
   cn <- cnList[[kk]];
   cnS <- cnSList[[kk]];
   plot(cn, pch=".", cex=2, col="gray", xlim=xlim, ylim=Mlim);

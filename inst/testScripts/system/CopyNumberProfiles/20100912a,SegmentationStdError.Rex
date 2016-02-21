@@ -34,7 +34,7 @@ w <- 1 / getLength(pT); w <- w / sum(w, na.rm=TRUE);
 eps <- rnorm(length(w), mean=0, sd=w);
 cols <- c("magenta", "red", "orange")[2];
 sigmas <- c(1,2,3)[2];
-for (kk in seq(along=sigmas)) {
+for (kk in seq_along(sigmas)) {
   sigma <- sigmas[kk];
   key <- sprintf("Tumor w/ %.1fx noise", sigma);
   cnr <- clone(pT);
@@ -49,7 +49,7 @@ for (kk in seq(along=sigmas)) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 subplots(length(profiles), ncol=1);
 par(mar=c(0.1,4,2,2)+0.1);
-for (kk in seq(along=profiles)) {
+for (kk in seq_along(profiles)) {
   p <- profiles[[kk]];
   xlim <- c(-50, xMax(p$cn)/1e6);
   plot(p$cn, col="gray", xlim=xlim, ylim=c(0,5), axes=FALSE);

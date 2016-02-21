@@ -51,7 +51,7 @@ outPath <- file.path("callData", fullname, chipType);
 units <- NULL;
 if (is.null(units)) {
   df <- getFile(dsN, 1);
-  units <- seq(length=nbrOfUnits(df));
+  units <- seq_len(nbrOfUnits(df));
   rm(df);
 }
 

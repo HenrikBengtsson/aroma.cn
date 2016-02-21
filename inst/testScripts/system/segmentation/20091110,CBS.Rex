@@ -59,7 +59,7 @@ for (ii in seq(ds)) {
 
   x <- getPositions(ugp);
 
-  for (cc in seq(along=chromosomes)) {
+  for (cc in seq_along(chromosomes)) {
     chromosome <- chromosomes[cc];
     chrTag <- sprintf("Chr%02d", chromosome);
     verbose && enter(verbose, sprintf("Chromosome %d ('%s') of %d", 

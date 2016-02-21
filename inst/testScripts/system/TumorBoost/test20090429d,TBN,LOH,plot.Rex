@@ -144,7 +144,7 @@ print(fracBList);
 devSet(sprintf("fracB,%s", genotypeTag));
 subplots(length(fracBList), ncol=1);
 par(mar=c(3,3,1,1)+0.1);
-for (kk in seq(along=fracBList)) {
+for (kk in seq_along(fracBList)) {
   fracB <- fracBList[[kk]];
   fracBT <- extractSubset(fracB, subset=hets);
   plot(fracBT, pch=".");
@@ -159,7 +159,7 @@ for (kk in seq(along=fracBList)) {
 devSet(sprintf("mFracB,%s", genotypeTag));
 subplots(length(fracBList), ncol=1);
 par(mar=c(3,3,1,1)+0.1);
-for (kk in seq(along=fracBList)) {
+for (kk in seq_along(fracBList)) {
   fracB <- fracBList[[kk]];
   fracBT <- extractSubset(fracB, subset=hets);
   mFracBT <- extractRawMirroredAlleleBFractions(fracBT);

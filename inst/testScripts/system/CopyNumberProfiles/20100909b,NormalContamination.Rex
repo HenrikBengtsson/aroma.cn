@@ -58,7 +58,7 @@ profiles <- list(
 kappas <- c(0.2, 0.4, 0.8);
 cols <- c("magenta", "red", "orange");
 ltys <- c(1,1,1);
-for (kk in seq(along=kappas)) {
+for (kk in seq_along(kappas)) {
   kappa <- kappas[kk];
   key <- sprintf("%d%% tumor", round(100*(1-kappa)));
   cnr <- kappa * pN + (1-kappa)*pT;
@@ -72,7 +72,7 @@ for (kk in seq(along=kappas)) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 subplots(length(profiles)-1, ncol=1);
 par(mar=c(0.1,4,2,2)+0.1);
-for (kk in seq(along=profiles)[(-1)]) {
+for (kk in seq_along(profiles)[(-1)]) {
   p <- profiles[[kk]];
   xlim <- c(-50, xMax(p$cn)/1e6);
   plot(p$cn, col="gray", xlim=xlim, ylim=c(0,5), axes=FALSE);

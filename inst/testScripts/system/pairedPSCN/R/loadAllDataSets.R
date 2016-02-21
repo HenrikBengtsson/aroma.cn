@@ -53,7 +53,7 @@ loadAllDataSets <- function(dataSet, chipType="*", pattern=NULL, ..., rootPath="
   ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   dsList <- list();
   verbose && enter(verbose, "Loading data sets");
-  for (kk in seq(along=dataSets)) {
+  for (kk in seq_along(dataSets)) {
     dataSet <- dataSets[kk];
     verbose && enter(verbose, sprintf("Data set #%d ('%s') of %d",
                                       kk, dataSet, length(dataSets)));
