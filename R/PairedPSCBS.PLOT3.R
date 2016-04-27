@@ -1,4 +1,4 @@
-setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
+setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, grid=TRUE, ...) {
   # Nothing todo?
   if (nbrOfSegments(fit) < 2) {
     return(invisible());
@@ -27,31 +27,36 @@ setMethodS3("drawC1C2Density", "PairedPSCBS", function(fit, ...) {
     if (cc == 2) {
       draw(d, side=1, height=0.3, col="lightblue", lwd=2, xpd=FALSE);
     }
-    p <- .findPeaksAndValleys(d, tol=0.05);
-    type <- NULL; rm(list="type"); # To please R CMD check
-    p <- subset(p, type == "peak");
-    p <- p[order(p$density, decreasing=TRUE),,drop=FALSE];
-    p <- head(p, n=8);
-    if (cc == 1) {
-      abline(v=p$x, lty=3, col="gray");
-    } else {
-      abline(h=p$x, lty=3, col="gray");
+
+    if (grid) {
+      p <- .findPeaksAndValleys(d, tol=0.05);
+      type <- NULL; rm(list="type"); # To please R CMD check
+      p <- subset(p, type == "peak");
+      p <- p[order(p$density, decreasing=TRUE),,drop=FALSE];
+      p <- head(p, n=8);
+      if (cc == 1) {
+        abline(v=p$x, lty=3, col="gray");
+      } else {
+        abline(h=p$x, lty=3, col="gray");
+      }
     }
   }
   box();
 }) # drawC1C2Density()
 
 
-setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., Clim=c(0,4), main=NULL) {
+setMethodS3("plotC1C2Grid", "PairedPSCBS", function(fit, ..., grid=TRUE, Clim=c(0,4), main=NULL) {
   plotC1C2(fit, ..., Clim=Clim);
   title(main=main);
-  drawC1C2Density(fit, ...);
+  drawC1C2Density(fit, grid=grid, ...);
 })
 
 
 
 ##############################################################################
 # HISTORY
+# 2014-03-25
+# o Added argument 'grid' to drawC1C2Density().
 # 2012-04-16
 # o CLEANUP: drawC1C2Density() for PairedPSCBS no longer needs to require
 #   'aroma.core', because draw() for 'density objects are in R.utils 1.10.0.

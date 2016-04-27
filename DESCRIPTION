@@ -20,7 +20,7 @@ SuggestsNote:
   Recommended:
   aroma.light,
   DNAcopy
-Date: 2015-12-17
+Date: 2016-04-26
 Title: Copy-Number Analysis of Large Microarray Data Sets
 Authors@R: c(
   person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),

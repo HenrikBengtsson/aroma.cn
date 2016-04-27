@@ -1,7 +1,8 @@
 Package: aroma.cn
 =================
 
-Version: 1.6.1-9000 [2015-12-17]
+Version: 1.6.1-9000 [2016-04-26]
+o drawC1C2Density() gained argument 'grid'.
 o Utilizing subsetted calculations of matrixStats (>= 0.50.0).
 
 
