@@ -1,10 +1,5 @@
 setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, pscnN, ..., ascn=c("classic", "paired"), avgDH=c("median", "mean"), tbn=TRUE, B=1000L, cache=TRUE, subset=NULL, verbose=FALSE) {
-  # Assert packages
-  use("R.filesets (>= 2.6.0)")
-
   pairedAlleleSpecificCopyNumbers <- .pairedAlleleSpecificCopyNumbers
-
-  use("PSCBS (>= 0.43.0)")
   segmentByPairedPSCBS <- PSCBS::segmentByPairedPSCBS
   dropSegmentationOutliers <- PSCBS::dropSegmentationOutliers
   bootstrapSegmentsAndChangepoints <- PSCBS::bootstrapSegmentsAndChangepoints
@@ -128,10 +123,10 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   # Process via dsApplyInPairs()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   res <- dsApplyInPairs(pscnT, pscnN, FUN=function(dsPair, dataA, ..., ascn=c("classic", "paired"), tbn=TRUE, B=NULL, cache=FALSE, subset=NULL, seed=NULL, verbose=FALSE) {
-    use("R.utils (>= 1.34.0)", verbose=TRUE)
+    use("R.utils", verbose=TRUE)
     use("aroma.light", verbose=TRUE)
-    use("PSCBS (>= 0.43.0)", verbose=TRUE)
-    use("aroma.cn (>= 1.5.5)", verbose=TRUE)
+    use("PSCBS", verbose=TRUE)
+    use("aroma.cn", verbose=TRUE)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Validate arguments
