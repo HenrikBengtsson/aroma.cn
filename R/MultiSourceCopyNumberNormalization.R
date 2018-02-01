@@ -868,7 +868,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   verbose && str(verbose, pcEstimator);
   t <- system.time({
     fit <- pcEstimator(Y);
-  });
+  }, gcFirst = FALSE);
   verbose && cat(verbose, "Fitting time:");
   verbose && print(verbose, t);
 
