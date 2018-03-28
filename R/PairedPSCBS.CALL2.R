@@ -45,40 +45,40 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'maxScore':
   if (is.character(maxScore)) {
-    maxScore <- match.arg(maxScore);
+    maxScore <- match.arg(maxScore)
   } else {
-    maxScore <- Arguments$getDouble(maxScore, range=c(0,Inf));
+    maxScore <- Arguments$getDouble(maxScore, range=c(0,Inf))
   }
 
   # Extract segments
-  segs <- as.data.frame(fit);
+  segs <- as.data.frame(fit)
 
   # Argument 'force':
-  force <- Arguments$getLogical(force);
+  force <- Arguments$getLogical(force)
 
   # Argument 'cache':
-  cache <- Arguments$getLogical(cache);
+  cache <- Arguments$getLogical(cache)
 
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
   # Nothing to do?
   if (!force && !is.null(segs$abCall)) {
     # Allelic balance segments are already called
-    return(fit);
+    return(fit)
   }
 
-  verbose && enter(verbose, "Calling allelic balance by BAFs");
+  verbose && enter(verbose, "Calling allelic balance by BAFs")
 
   # Extract data
-  data <- getLocusData(fit);
-  betaTN <- data$betaTN;
-  muN <- data$muN;
+  data <- getLocusData(fit)
+  betaTN <- data$betaTN
+  muN <- data$muN
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Check for cached results
@@ -87,112 +87,112 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
     data=list(betaTN=betaTN, muN=muN, segments=as.data.frame(fit)),
     maxScore = maxScore,
     version="2011-11-02"
-  );
-  dirs <- c("aroma.cn", "ortho");
+  )
+  dirs <- c("aroma.cn", "ortho")
   if (!force) {
-    res <- loadCache(key=key, dirs=dirs);
+    res <- loadCache(key=key, dirs=dirs)
     if (!is.null(res)) {
-      verbose && cat(verbose, "Cached results found.");
-      verbose && exit(verbose);
-      return(res);
+      verbose && cat(verbose, "Cached results found.")
+      verbose && exit(verbose)
+      return(res)
     }
   }
 
 
 
-  nbrOfSegments <- nrow(segs);
-  naValue <- as.double(NA);
-  df <- NULL;
+  nbrOfSegments <- nrow(segs)
+  naValue <- as.double(NA)
+  df <- NULL
   for (kk in seq_len(nbrOfSegments)) {
-    verbose && enter(verbose, sprintf("Segment #%d of %d", kk, nbrOfSegments));
+    verbose && enter(verbose, sprintf("Segment #%d of %d", kk, nbrOfSegments))
 
-    fitS <- extractDhSegment(fit, idx=kk, what="SNPs");
+    fitS <- extractDhSegment(fit, idx=kk, what="SNPs")
     if (is.null(fitS)) {
-      verbose && cat(verbose, "A divider. Skipping.");
+      verbose && cat(verbose, "A divider. Skipping.")
       dfKK <- data.frame(
         statistic=as.double(NA),
         p.value=as.double(NA)
-      );
-      df <- rbind(df, dfKK);
-      verbose && exit(verbose);
-      next;
+      )
+      df <- rbind(df, dfKK)
+      verbose && exit(verbose)
+      next
     }
 
-    verbose && print(verbose, fitS);
+    verbose && print(verbose, fitS)
 
-    dataS <- getLocusData(fitS);
-    betaTN <- dataS$betaTN;
-    muN <- dataS$muN;
+    dataS <- getLocusData(fitS)
+    betaTN <- dataS$betaTN
+    muN <- dataS$muN
 
-    verbose && summary(verbose, betaTN);
-    verbose && summary(verbose, muN);
+    verbose && summary(verbose, betaTN)
+    verbose && summary(verbose, muN)
 
     # AD HOC: For some unknown reason does resample() introduce NAs.
     # /HB 2010-09-15
-    keep <- is.finite(betaTN) & is.finite(muN);
-    keep <- which(keep);
-    betaTN <- betaTN[keep];
-    muN <- muN[keep];
+    keep <- is.finite(betaTN) & is.finite(muN)
+    keep <- which(keep)
+    betaTN <- betaTN[keep]
+    muN <- muN[keep]
 
-    fitKK <- testAllelicBalanceByBAFs(betaTN, muN=muN);
+    fitKK <- testAllelicBalanceByBAFs(betaTN, muN=muN)
 
     dfKK <- data.frame(
       statistic=fitKK$statistic,
       p.value=fitKK$p.value
-    );
+    )
 
-    df <- rbind(df, dfKK);
+    df <- rbind(df, dfKK)
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   } # for (kk ...)
-  rownames(df) <- NULL;
+  rownames(df) <- NULL
 
-  colnames(df) <- c("ai", "ai.p.value");
+  colnames(df) <- c("ai", "ai.p.value")
 
   if (maxScore == "auto") {
-    verbose && enter(verbose, "Estimating 'maxScore' cutoff empirically");
-    d <- density(na.omit(df$ai), from=0, to=10, adjust=0.1);
-    pvs <- .findPeaksAndValleys(d);
-    verbose && print(verbose, pvs);
+    verbose && enter(verbose, "Estimating 'maxScore' cutoff empirically")
+    d <- density(na.omit(df$ai), from=0, to=10, adjust=0.1)
+    pvs <- .findPeaksAndValleys(d)
+    verbose && print(verbose, pvs)
 
-    type <- NULL; rm(list="type"); # To please R CMD check
-    vs <- subset(pvs, type == "valley");
-    v <- vs[1,];
+    type <- NULL; rm(list="type") # To please R CMD check
+    vs <- subset(pvs, type == "valley")
+    v <- vs[1,]
 
-    maxScore <- v$x;
+    maxScore <- v$x
 
     # Sanity check
-    maxScore <- Arguments$getDouble(maxScore, range=c(0,Inf));
+    maxScore <- Arguments$getDouble(maxScore, range=c(0,Inf))
 
-    attr(maxScore, "modelFit") <- list(density=d, pvs=pvs, v=v);
+    attr(maxScore, "modelFit") <- list(density=d, pvs=pvs, v=v)
 
-    verbose && cat(verbose, "maxScore: ", maxScore);
-    verbose && exit(verbose);
+    verbose && cat(verbose, "maxScore: ", maxScore)
+    verbose && exit(verbose)
   }
 
-  params <- fit$params;
-  paramsT <- list(maxScore=maxScore);
-  params <- c(params, paramsT);
+  params <- fit$params
+  paramsT <- list(maxScore=maxScore)
+  params <- c(params, paramsT)
 
-  df$abCall <- (df$ai <= maxScore);
+  df$abCall <- (df$ai <= maxScore)
 
-  segs <- cbind(segs, df);
+  segs <- cbind(segs, df)
 
-  fitC <- fit;
-  fitC$output <- segs;
-  fitC$params <- params;
+  fitC <- fit
+  fitC$output <- segs
+  fitC$params <- params
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Save to cache
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   if (cache) {
-    saveCache(key=key, dirs=dirs, fitC);
+    saveCache(key=key, dirs=dirs, fitC)
   }
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
-  fitC;
+  fitC
 })
 
 
@@ -228,8 +228,8 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
 #*/###########################################################################
 setMethodS3("callCopyNeutralRegions", "PairedPSCBS", function(fit, ...) {
   # Call allelic balance or not, unless already done
-  fit <- callAllelicBalanceByBAFs(fit, ...);
-  callCopyNeutral(fit, flavor="TCN|AB", ...);
+  fit <- callAllelicBalanceByBAFs(fit, ...)
+  callCopyNeutral(fit, flavor="TCN|AB", ...)
 })
 
 

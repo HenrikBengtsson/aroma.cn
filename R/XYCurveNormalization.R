@@ -20,15 +20,15 @@
 # @author "HB"
 #*/###########################################################################
 setConstructorS3("XYCurveNormalization", function(...) {
-  extend(AbstractCurveNormalization(...), "XYCurveNormalization");
+  extend(AbstractCurveNormalization(...), "XYCurveNormalization")
 })
 
 setMethodS3("fitOne", "XYCurveNormalization", function(this, theta, ...) {
-  .fitXYCurve(theta, ...);
+  .fitXYCurve(theta, ...)
 }, protected=TRUE)
 
 setMethodS3("backtransformOne", "XYCurveNormalization", function(this, theta, fit, ...) {
-  .backtransformXYCurve(theta, fit=fit, ...);
+  .backtransformXYCurve(theta, fit=fit, ...)
 }, protected=TRUE)
 
 

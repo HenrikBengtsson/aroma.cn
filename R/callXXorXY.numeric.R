@@ -45,61 +45,61 @@ setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("densi
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'betaX':
-  betaX <- as.double(betaX);
+  betaX <- as.double(betaX)
 
   # Argument 'betaY':
   if (!is.null(betaY)) {
-    betaY <- as.double(betaY);
+    betaY <- as.double(betaY)
   }
 
   # Argument 'flavor':
-  flavor <- match.arg(flavor);
+  flavor <- match.arg(flavor)
 
   # Argument 'adjust':
-  adjust <- as.double(adjust);
+  adjust <- as.double(adjust)
   if (length(adjust) != 1) {
-    stop("Argument 'adjust' must be single value: ", adjust);
+    stop("Argument 'adjust' must be single value: ", adjust)
   }
   if (adjust <= 0) {
-    stop("Argument 'adjust' must be positive: ", adjust);
+    stop("Argument 'adjust' must be positive: ", adjust)
   }
 
   # Argument 'censorAt':
-  censorAt <- Arguments$getDoubles(censorAt, length=c(2,2));
+  censorAt <- Arguments$getDoubles(censorAt, length=c(2,2))
 
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
-  verbose && enter(verbose, "Calling gender from allele B fractions (BAFs)");
+  verbose && enter(verbose, "Calling gender from allele B fractions (BAFs)")
 
-  betaT <- betaX;
-  betaT[betaT < censorAt[1]] <- -Inf;
-  betaT[betaT > censorAt[2]] <- +Inf;
-  betaT <- betaT[is.finite(betaT)];
-  fit <- .findPeaksAndValleys(betaT, adjust=adjust, ...);
-  isXYByChrX <- (sum(fit$type == "peak") == 2);
+  betaT <- betaX
+  betaT[betaT < censorAt[1]] <- -Inf
+  betaT[betaT > censorAt[2]] <- +Inf
+  betaT <- betaT[is.finite(betaT)]
+  fit <- .findPeaksAndValleys(betaT, adjust=adjust, ...)
+  isXYByChrX <- (sum(fit$type == "peak") == 2)
 
   if (isXYByChrX && (length(betaY) > 100)) {
-    betaT <- betaY;
-    betaT[betaT < censorAt[1]] <- -Inf;
-    betaT[betaT > censorAt[2]] <- +Inf;
-    fit <- .findPeaksAndValleys(betaT, adjust=adjust, ...);
-    isXYByChrY <- (sum(fit$type == "peak") == 2);
+    betaT <- betaY
+    betaT[betaT < censorAt[1]] <- -Inf
+    betaT[betaT > censorAt[2]] <- +Inf
+    fit <- .findPeaksAndValleys(betaT, adjust=adjust, ...)
+    isXYByChrY <- (sum(fit$type == "peak") == 2)
     if (isXYByChrY != isXYByChrX) {
-      throw("Allele B fractions for ChrX and ChrY are inconsistent.");
+      throw("Allele B fractions for ChrX and ChrY are inconsistent.")
     }
   }
 
-  res <- ifelse(isXYByChrX, "XY", "XX");
+  res <- ifelse(isXYByChrX, "XY", "XX")
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
-  res;
+  res
 }) # callXXorXY()
 
 
