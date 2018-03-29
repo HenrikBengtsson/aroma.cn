@@ -25,10 +25,3 @@ setMethodS3("normalizeTumorBoost", "RawAlleleBFractions", function(this, betaN, 
   betaTN$y <- xBetaTN
   betaTN
 })
-
-############################################################################
-# HISTORY:
-# 2009-10-10
-# o Added normalizeTumorBoost() for RawAlleleBFractions.
-# o Added callGenotypes() for RawAlleleBFractions.
-############################################################################

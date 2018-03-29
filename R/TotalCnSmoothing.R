@@ -408,33 +408,3 @@ setMethodS3("process", "TotalCnSmoothing", function(this, ..., verbose=FALSE) {
 setMethodS3("getOutputFiles", "TotalCnSmoothing", function(this, ...) {
   NextMethod("getOutputFiles", pattern=".*[.]asb$")
 }, protected=TRUE)
-
-
-
-############################################################################
-# HISTORY:
-# 2012-10-11
-# o Added custom getOutputDataSet0() for TotalCnSmoothing that utilizes
-#   getOutputFileExtension().
-# o Added getOutputFileClass() and getOutputFileExtension() for
-#   TotalCnSmoothing.
-# 2011-12-15
-# o Moved argument 'bandwidth' to TotalCnKernelSmoothing.
-# o ROBUSTNESS: Now process() of TotalCnSmoothing write output atomically.
-# 2009-05-05
-# o BUG FIX: process() of TotalCnSmoothing would not "recognize" fullname
-#   translators, that is, the output filenames were always identical to
-#   the input ones.
-# 2009-05-04
-# o BUG FIX: Added missing argument 'verbose' in getTargetPositions() of
-#   TotalCnSmoothing.  This caused unwanted verbose output in some cases.
-# 2009-02-08
-# o Now the root path is smoothCnData/ and no longer cnData/.
-# o Any subclass must implement smoothRawCopyNumbers().
-# o Made TotalCnSmoothing an abstract class, cf. TotalCnKernelSmoothing.
-# 2009-01-26
-# o Adopted to the new AromaUnitTotalCnBinarySet.
-# o Added Rdoc comments.
-# 2008-05-23
-# o Created.
-############################################################################

@@ -207,21 +207,3 @@ setMethodS3("findAtomicAberrations", "PairedPSCBS", function(this, H=1, alpha=0.
 
   res
 }, protected=TRUE) # findAtomicAberrations()
-
-
-
-
-############################################################################
-# HISTORY:
-# 2011-02-06
-# o Now dealing with cases when two regions could not be compared
-#   resulting in a missing value (NA).
-# o Added  argument 'minNbrOfLoci' for specifying the minimum number
-#   of data points required in either of the two flanking regions.
-#   If fewer than this, then the two regions are considered equal
-#   (and hence merged at H=0).
-# 2011-01-12
-# o Created findAtomicAberrations() for PairedPSCBS from ditto for
-#   CopyNumberRegions currently in aroma.cn.
-# o Created.
-############################################################################

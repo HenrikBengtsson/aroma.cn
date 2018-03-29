@@ -608,21 +608,3 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 
   invisible(res)
 })
-
-############################################################################
-# HISTORY:
-# 2014-09-04
-# o ROBUSTNESS: It could be that process() for AbstractCurveNormalization
-#   would generate an error due to read-only permissions introduced
-#   by copying the target file without resetting the file permissions.
-# 2012-04-16
-# o DOCUMENTATION: Removed reference to aroma.light::fitPrincipalCurve().
-# 2010-01-05
-# o BUG FIX: getOutputDataSet() of AbstractCurveNormalization returned all
-#   files, not just the ones matching the input set.
-# o Added support for transform/untransform functions h(.) and g(.) to
-#   AbstractCurveNormalization, which allows us to fit say on the log
-#   scale, e.g. h(x)=log2(x), g(y)=2^y.
-# 2009-07-15
-# o Created.
-############################################################################

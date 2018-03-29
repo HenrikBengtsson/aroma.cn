@@ -52,13 +52,3 @@ setMethodS3("pairedBoost", "PolarSnpData", function(this, dataN, ...) {
   
   res
 })
-
-
-
-############################################################################
-# HISTORY:
-# 2009-03-31
-# o Added pairedBoost() for PolarSnpData.
-# 2009-03-30
-# o Created.
-############################################################################

@@ -190,16 +190,3 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE, ver
 setMethodS3("getPlatform", "PairedPscbsCaller", function(this, ...) {
   "GenericPlatform"
 }, protected=TRUE)
-
-
-
-##########################################################################
-# HISTORY:
-# 2013-01-07
-# o BUG FIX: process() for PairedPscbsCaller used the global 'verbose'.
-# 2012-09-20
-# o Now PairedPscbsCaller() passes '...' to the internal callers.
-# 2012-09-19
-# o Made as an AromaTransform for now.
-# o Created.
-##########################################################################

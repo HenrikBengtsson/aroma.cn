@@ -96,12 +96,3 @@ setMethodS3("pairedBoost", "CartesianSnpData", function(this, dataN, scaleByCN=T
 
   res
 })
-
-
-############################################################################
-# HISTORY:
-# 2009-03-31
-# o Added pairedBoost() for CartesianSnpData.
-# 2009-03-30
-# o Created.
-############################################################################

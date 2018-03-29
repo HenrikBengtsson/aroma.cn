@@ -153,31 +153,3 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
 
   fitList
 }) # prunceCNA()
-
-
-
-############################################################################
-# HISTORY:
-# 2012-06-05
-# o Now pruneCNA() is for AbstractCBS, not just PairedPSCBS objects.
-# 2011-01-18
-# o Added class 'PruneCNA' to the return object of pruneCNA().
-# o Now pruneCNA() returns pruned objects with the dropped segments
-#   included in a separate list.
-# o Added argument 'maxGeneration' to pruneCNA().
-# 2010-09-08
-# o Updated to use findAtomicAberrations().
-# 2010-07-24
-# o CLEAN UP: Now the notation of the code better reflect the algorithm.
-# o Now findAtomicRegions() returns ambigous atomic regions too.
-# o Added argument 'ylim'.
-# 2010-07-20
-# o Added argument 'debugPlot'.
-# 2010-07-19
-# o Added trial version of segmentByPruneCBS().
-# o TO DO: Down-weight loci that were close to earlier
-#   change points in the succeeding segmentations.
-# o Added prototype version of findAtomicRegions().
-# o Added prototype version of callByPruning().
-# o Created.
-############################################################################

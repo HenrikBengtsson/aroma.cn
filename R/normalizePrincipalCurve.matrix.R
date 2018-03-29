@@ -78,18 +78,3 @@ setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, r
 
   xN
 }) # normalizePrincipalCurve()
-
-
-
-###########################################################################
-# HISTORY:
-# 2012-04-16
-# o Now normalizePrincipalCurve() explicitly require aroma.light.
-# 2012-03-30
-# o Added Rdoc comments.
-# 2008-10-08
-# o Removed implementation for data.frame:s.
-# 2008-05-27
-# o Added normalizePrincipalCurve().
-# o Created.  Will probably end up in aroma.light.
-###########################################################################

@@ -30,11 +30,3 @@ setMethodS3("fitOne", "XYCurveNormalization", function(this, theta, ...) {
 setMethodS3("backtransformOne", "XYCurveNormalization", function(this, theta, fit, ...) {
   .backtransformXYCurve(theta, fit=fit, ...)
 }, protected=TRUE)
-
-
-
-############################################################################
-# HISTORY:
-# 2009-07-15
-# o Created.
-############################################################################

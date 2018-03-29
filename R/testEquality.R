@@ -170,18 +170,3 @@ testEqualityC1C2ByChiSq <- function(dataL, dataR, alpha=0.02, ...) {
 
   isEqual
 } # testEqualityC1C2ByChiSq()
-
-
-
-############################################################################
-# HISTORY:
-# 2011-01-23
-# o Added testEqualityC1C2ByChiSq() stub.
-# 2011-01-22
-# o Added testEqualityC1orC2ByT().
-# 2011-01-18
-# o Added testEqualityC1C2ByMean().
-# 2011-01-12
-# o Added testEqualityTCN().
-# o Created.
-############################################################################

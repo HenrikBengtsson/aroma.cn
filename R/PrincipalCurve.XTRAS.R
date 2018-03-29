@@ -58,14 +58,3 @@ setMethodS3("plotBacktransforms", "PrincipalCurve", function(fit, ..., col="red"
 
   invisible(XY)
 }) # plotBacktransforms()
-
-
-############################################################################
-# HISTORY:
-# 2013-10-08
-# o Added arguments 'col', 'lwd' and 'lty' to plotBacktransforms() and
-#   argument 'xlim' now defaults to the maximum range of the data.
-# 2010-01-14
-# o Added getBacktransforms() and plotBacktransforms().
-# o Created.
-############################################################################

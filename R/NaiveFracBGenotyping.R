@@ -263,12 +263,3 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
 
   res
 })
-
-
-############################################################################
-# HISTORY:
-# 2010-08-26
-# o Added code to process().
-# 2010-08-10
-# o Created.
-############################################################################

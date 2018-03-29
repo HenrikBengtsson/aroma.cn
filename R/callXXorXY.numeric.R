@@ -101,18 +101,3 @@ setMethodS3("callXXorXY", "numeric", function(betaX, betaY=NULL, flavor=c("densi
 
   res
 }) # callXXorXY()
-
-
-###########################################################################
-# HISTORY:
-# 2012-04-16 [HB]
-# o Now callXXorXY() explicitly requires aroma.light.
-# 2011-03-03 [HB]
-# o TYPO: Used betaX[is.finite(betaT)] instead of betaT[is.finite(betaT)],
-#   but the results would have been identical either way.
-# 2010-07-22 [PN]
-# o No longer calling gender from chr Y when gender is estimated as
-# "XX" from chr X.
-# 2009-11-03
-# o Created.
-###########################################################################

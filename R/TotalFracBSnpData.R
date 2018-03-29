@@ -104,15 +104,3 @@ setMethodS3("pairedBoost", "TotalFracBSnpData", function(this, dataN, ...) {
 
   res
 })
-
-
-############################################################################
-# HISTORY:
-# 2009-04-28
-# o Added argument 'meanCN=2' to callGenotypes().  It used in order to
-#   identify the modes in case the expect CN == 1, e.g. Chr X or Chr Y.
-# 2009-03-31
-# o Added pairedBoost() for TotalFracBSnpData.
-# 2009-03-30
-# o Created.
-############################################################################

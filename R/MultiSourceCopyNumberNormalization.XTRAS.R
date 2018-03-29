@@ -130,12 +130,3 @@ setMethodS3("plotSmoothedPairsOne", "MultiSourceCopyNumberNormalization", functi
 
   verbose && exit(verbose)
 }, protected=TRUE)
-
-
-
-############################################################################
-# HISTORY:
-# 2010-01-14
-# o Added getBacktransforms() and plotBacktransforms().
-# o Added plotSmoothedPairsOne() to MultiSourceCopyNumberNormalization.
-############################################################################

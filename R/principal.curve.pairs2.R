@@ -39,13 +39,3 @@ setMethodS3("pairs2", "principal.curve", function(fit, pch=19L, cex=0.8, fitCol=
     } # for (cc ...)
   } # for (rr ...)
 }) # pairs2()
-
-
-###########################################################################
-# HISTORY:
-# 2013-10-08
-# o BUG FIX: pairs2() for 'principal.curve' would assume that the
-#   fitted curve was ordered by the first dimension in each panel.
-# 2009-01-12
-# o Extracted from MultiSourceCopyNumberNormalization.R.
-###########################################################################

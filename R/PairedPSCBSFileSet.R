@@ -95,21 +95,3 @@ setMethodS3("getChipType", "PairedPSCBSFileSet", function(this, ...) {
   }
   res
 })
-
-
-#############################################################################
-# HISTORY:
-# 2013-08-12
-# o BUG FIX: byPath(), byName() and findByPath() for PairedPSCBSFileSet
-#   was also affected by the bug described in the R-devel thread
-#   'Do *not* pass '...' to NextMethod() - it'll do it for you; missing
-#   documentation, a bug or just me?' on Oct 16, 2012.
-# 2012-09-19
-# o Added getDefaultFullName().
-# o AD HOC: Added getChipType() and getPlatform(). Just so that this object
-#   can be used in PairedPscbsCaller.
-# o Updated byPath() to recognize *,PairedPSCBS.xdr files.  Keeping *.RData
-#   in case some code/scripts relies on it.
-# 2011-01-18
-# o Created.
-#############################################################################

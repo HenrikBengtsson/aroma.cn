@@ -39,12 +39,3 @@ setMethodS3("getColors", "RawGenotypeCalls", function(this, colorMap=c(AA="red",
   col[is.na(col)] <- colorMap["NA"]
   col
 })
-
-
-
-############################################################################
-# HISTORY:
-# 2009-10-10
-# o Added RawGenotypeCalls.
-# o Created.
-############################################################################ 

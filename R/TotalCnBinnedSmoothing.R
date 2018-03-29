@@ -103,14 +103,3 @@ setMethodS3("smoothRawCopyNumbers", "TotalCnBinnedSmoothing", function(this, raw
 
   smoothCNs
 }, protected=TRUE)
-
-
-
-############################################################################
-# HISTORY:
-# 2012-08-26
-# o DOCUMENTATION: Added a help section on binning with target loci being
-#   identical to the input loci.
-# 2012-01-16
-# o Created from TotalCnKernelSmoothing.R.
-############################################################################

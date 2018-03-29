@@ -123,18 +123,3 @@ setMethodS3("smoothRawCopyNumbers", "TotalCnKernelSmoothing", function(this, raw
 
   smoothCNs
 }, protected=TRUE)
-
-
-
-############################################################################
-# HISTORY:
-# 2011-12-15
-# o Moved argument 'bandwidth' to TotalCnKernelSmoothing.
-# 2009-02-08
-# o Created from TotalCnSmoothing.R.
-# 2009-01-26
-# o Adopted to the new AromaUnitTotalCnBinarySet.
-# o Added Rdoc comments.
-# 2008-05-23
-# o Created.
-############################################################################

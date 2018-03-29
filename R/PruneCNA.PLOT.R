@@ -143,18 +143,3 @@ setMethodS3("plotTracks", "PruneCNA", function(this, nrow=length(this), ncol=1, 
     verbose && exit(verbose)
   } # for (kk ...)
 }) # plotTracks()
-
-
-############################################################################
-# HISTORY:
-# 2012-06-05 [HB]
-# o Now plotTracks() for PruneCNA supports CBS segmentation results
-#   in additional to PairedPSCBS ones.
-# 2011-07-10 [HB]
-# o Updated code to work with the new column names in PSCBS v0.11.0.
-# 2011-01-19
-# o Now plotTracks() of PruneCNA utilizes plotTracks2() for PairedPSCBS.
-# o Dropped argument 'tracks'.
-# 2011-01-18
-# o Added plotTracks() for PruneCNA.
-############################################################################

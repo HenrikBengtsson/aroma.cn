@@ -387,24 +387,3 @@ setMethodS3("segmentByPruneCBSv1", "RawGenomicSignals", function(this, ...,     
 
   res
 }, protected=TRUE) # segmentByPruneCBSv1()
-
-
-
-############################################################################
-# HISTORY:
-# 2010-09-08
-# o Updated to use findAtomicAberrations().
-# 2010-07-24
-# o CLEAN UP: Now the notation of the code better reflect the algorithm.
-# o Now findAtomicRegions() returns ambigous atomic regions too.
-# o Added argument 'ylim'.
-# 2010-07-20
-# o Added argument 'debugPlot'.
-# 2010-07-19
-# o Added trial version of segmentByPruneCBS().
-# o TO DO: Down-weight loci that were close to earlier
-#   change points in the succeeding segmentations.
-# o Added prototype version of findAtomicRegions().
-# o Added prototype version of callByPruning().
-# o Created.
-############################################################################

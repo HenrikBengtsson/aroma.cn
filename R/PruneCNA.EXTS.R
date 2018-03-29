@@ -22,12 +22,3 @@ setMethodS3("[", "PruneCNA", function(x, i) {
 
   extractGenerations(this, generations=i)
 })
-
-
-############################################################################
-# HISTORY:
-# 2011-02-06
-# o Added nbrOfGenerations(), extractGenerations() and "[" for PruneCNA.
-# o BUG FIX: The test for identifying atomic islands from a set of
-#   atomic regions assumed all atomic regions where of length H=1.
-############################################################################

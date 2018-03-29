@@ -261,21 +261,3 @@ setMethodS3("calculateTumorPSCNByGenotypeUsingCTCN", "numeric", function(CT, bet
 
   list(CT=CTx, betaT=betaTx, muN=muNx)
 }) # calculateTumorPSCNByGenotypeUsingCTCN()
-
-
-
-############################################################################
-# HISTORY:
-# 2012-09-16
-# o Renamed to calculatePairedPSCNByGenotype().
-# o Workname: "SACKS"? (from Sack's coffee in Berkeley)
-# o Added calculateTumorPSCNByGenotypeUsingTheta().
-# o Added calculateTumorPSCNByGenotype().
-# o Created.
-# 2012-09-14 [two strange looking scientist hanging out at the Cal Fountain
-#   across from Caffe Strada just before sunset]
-# o Decided to go back to this tumor PSCN definition from 2009, which was 
-#   discussed while trying to come up with an alternative interpretation
-#   of that TumorBoost normalization is doing.  See PN's extensive
-#   "private" report [1] on this.
-############################################################################ 

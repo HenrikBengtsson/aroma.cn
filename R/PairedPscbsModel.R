@@ -577,28 +577,3 @@ setMethodS3("fit", "PairedPscbsModel", function(this, arrays=NULL, chromosomes=g
 
   invisible(res)
 }) # fit()
-
-
-############################################################################
-# HISTORY:
-# 2013-08-12
-# o BUG FIX: getPath() for PairedPscbsModel would throw an error on
-#   getInputDataSet() not defined.
-# 2012-11-21
-# o Now class utilizes the new ParametersInterface.
-# 2012-09-20
-# o Now PairedPscbsModel() excludes the actual gaps from the known
-#   segments it passes to segmentByPairedPSCBS().
-# 2012-09-19
-# o Now getOutputDataSet() for PairedPscbsModel returns a
-#   PairedPSCBSFileSet.
-# 2012-09-15
-# o Now fit() for PairedPscbsModel generates pair names iff tumor and
-#   normal names don't match, e.g. 'GSM517071_vs_GSM517072' (if match
-#   then just 'Patient1').  It also generated "pair" tags.
-# 2012-07-22
-# o fit() seems to work now.
-# o Now utilizing the new AromaUnitPscnBinarySet class.
-# 2012-07-20
-# o Created from CalMaTeModel.
-############################################################################

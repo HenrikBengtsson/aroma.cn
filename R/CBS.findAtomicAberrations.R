@@ -200,11 +200,3 @@ setMethodS3("findAtomicAberrations", "CBS", function(this, H=1, alpha=0.02, flav
 
   res
 }, protected=TRUE) # findAtomicAberrations()
-
-
-############################################################################
-# HISTORY:
-# 2012-06-05
-# o Added findAtomicAberrations() for CBS from ditto for PairedPSCBS.
-# o Created.
-############################################################################
