@@ -277,7 +277,6 @@ S3method("plot", "CopyNumberRegions")
 
 # data.frame
 S3method("calculatePairedPSCNByGenotype", "data.frame")
-S3method("callPeaks", "data.frame")
 S3method("fitLoessKD", "data.frame")
 S3method("normalizeLoessKD", "data.frame")
 

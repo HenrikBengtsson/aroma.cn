@@ -6,8 +6,9 @@ o drawC1C2Density() gained argument 'grid'.
 o Utilizing subsetted calculations of matrixStats (>= 0.50.0).
 o CLEANUP: Now importing generic extractC1C2() from PSCBS to
   avoid creating a new one.
-o DEPRECATION: Deprecated nbrOfFiles() methods; please use length()
+o CLEANUP: Deprecated nbrOfFiles() methods; please use length()
   on corresponding input data sets.
+o CLEANUP: Removed defunct callPeaks() for data.frame:s.
 
 
 Version: 1.6.1 [2015-10-27]
@@ -16,7 +17,7 @@ o Package now requires R (>= 3.1.1) released July 2014. This allows
 o Bumped package dependencies.
 o ROBUSTNESS: Explicitly importing core R functions.
 o CLEANUP: Removed makeSmoothSplinePredict() defunct since Aug 2013.
-  Make callPeaks() for data.frame defunct (was deprecated).
+  Made callPeaks() for data.frame:s defunct (was deprecated).
 
 
 Version: 1.6.0 [2015-02-23]
