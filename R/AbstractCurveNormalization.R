@@ -292,12 +292,6 @@ setMethodS3("getPath", "AbstractCurveNormalization", function(this, create=TRUE,
 }, protected=TRUE)
 
 
-setMethodS3("nbrOfFiles", "AbstractCurveNormalization", function(this, ...) {
-  ds <- getInputDataSet(this)
-  length(ds)
-}, protected=TRUE)
-
-
 setMethodS3("getOutputDataSet", "AbstractCurveNormalization", function(this, ..., verbose=FALSE) {
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments

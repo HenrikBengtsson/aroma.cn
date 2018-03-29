@@ -258,13 +258,6 @@ setMethodS3("getChipType", "PairedPscbsModel", function(this, ...) {
 })
 
 
-setMethodS3("nbrOfFiles", "PairedPscbsModel", function(this, ...) {
-  dsT <- getTumorDataSet(this)
-  length(dsT)
-})
-
-
-
 setMethodS3("getRootPath", "PairedPscbsModel", function(this, ...) {
   "pscbsData"
 }, protected=TRUE)
