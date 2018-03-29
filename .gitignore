@@ -7,3 +7,5 @@
 .test
 .o
 .dll
+.Rproj.user
+*.Rproj*

@@ -2,7 +2,7 @@
 # Imports from aroma.light
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 .requireAromaLight <- function() {
-  .requirePkg("aroma.light", quietly=TRUE);
+  .requirePkg("aroma.light", quietly=TRUE)
   requireNamespace("aroma.light") || throw("Package not loaded: aroma.light")
 }
 

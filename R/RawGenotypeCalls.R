@@ -4,40 +4,40 @@ setConstructorS3("RawGenotypeCalls", function(...) {
 
 setMethodS3("getCalls", "RawGenotypeCalls", function(this, flavor=c("fracB", "AB"), ...) {
   # Argument 'flavor':
-  flavor <- match.arg(flavor);
+  flavor <- match.arg(flavor)
 
-  y <- getSignals(this);
+  y <- getSignals(this)
   if (flavor == "fracB") {
-    calls <- y;
+    calls <- y
   } else if (flavor == "AB") {
-    naValue <- as.character(NA);
-    calls <- rep(naValue, times=nbrOfLoci(this));
-    calls[y == 0] <- "AA";
-    calls[y == 1/2] <- "AB";
-    calls[y == 1] <- "BB";
+    naValue <- as.character(NA)
+    calls <- rep(naValue, times=nbrOfLoci(this))
+    calls[y == 0] <- "AA"
+    calls[y == 1/2] <- "AB"
+    calls[y == 1] <- "BB"
   }
-  calls;
+  calls
 })
 
 setMethodS3("isHeterozygous", "RawGenotypeCalls", function(this, ...) {
-  calls <- getCalls(this, flavor="fracB", ...);
-  res <- (is.finite(calls) & (calls == 1/2));
-  res;
+  calls <- getCalls(this, flavor="fracB", ...)
+  res <- (is.finite(calls) & (calls == 1/2))
+  res
 })
 
 setMethodS3("isHomozygous", "RawGenotypeCalls", function(this, ...) {
-  calls <- getCalls(this, flavor="fracB", ...);
-  res <- (is.finite(calls) & (calls != 1/2));
-  res;
+  calls <- getCalls(this, flavor="fracB", ...)
+  res <- (is.finite(calls) & (calls != 1/2))
+  res
 })
 
 setMethodS3("getColors", "RawGenotypeCalls", function(this, colorMap=c(AA="red", AB="black", BB="red", "NA"="#999999"), ...) {
   # Argument 'colorMap':
-  colorMap <- Arguments$getCharacters(colorMap, useNames=TRUE);
-  calls <- getCalls(this, flavor="AB");
-  col <- colorMap[calls];
-  col[is.na(col)] <- colorMap["NA"];
-  col;
+  colorMap <- Arguments$getCharacters(colorMap, useNames=TRUE)
+  calls <- getCalls(this, flavor="AB")
+  col <- colorMap[calls]
+  col[is.na(col)] <- colorMap["NA"]
+  col
 })
 
 

@@ -15,7 +15,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
 
   # Argument 'pscnN':
   if (inherits(pscnN, "AromaUnitPscnBinaryFile")) {
-    pscnN <- newInstance(pscnT, pscnN);
+    pscnN <- newInstance(pscnT, pscnN)
   }
   pscnN <- Arguments$getInstanceOf(pscnN, "AromaUnitPscnBinarySet")
   ugpN <- getAromaUgpFile(pscnN)
@@ -72,7 +72,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   ## sampleNames <- sprintf("HC1143,TvsN,%s", sampleNames)
 
   # Output pathnames
-  ascnTag <- switch(ascn, classic=NULL, paired="pASCN");
+  ascnTag <- switch(ascn, classic=NULL, paired="pASCN")
   subsetTag <- sprintf("subset=%g", subset)
   tags <- c(ascnTag, subsetTag)
   datasetF <- paste(c(getFullName(pscnT), tags), collapse=",")
@@ -135,7 +135,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
     dsPair <- AromaUnitPscnBinarySet(dsPair)
 
     # Argument 'dataA':
-    dataA <- Arguments$getInstanceOf(dataA, "data.frame");
+    dataA <- Arguments$getInstanceOf(dataA, "data.frame")
 
     # Argument 'ascn':
     ascn <- match.arg(ascn)
@@ -267,17 +267,17 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
 setMethodS3("findLargeGaps", "AromaUgpFile", function(this, ...) {
   findLargeGaps <- PSCBS::findLargeGaps
 
-  data <- this[,1:2];
-  colnames(data)[2L] <- "x";
-  findLargeGaps(data, ...);
+  data <- this[,1:2]
+  colnames(data)[2L] <- "x"
+  findLargeGaps(data, ...)
 }, protected=TRUE)
 
 
 setMethodS3("findLargeGaps", "AromaUnitPscnBinarySet", function(this, ...) {
   findLargeGaps <- PSCBS::findLargeGaps
 
-  ugp <- getAromaUgpFile(this);
-  findLargeGaps(ugp, ...);
+  ugp <- getAromaUgpFile(this)
+  findLargeGaps(ugp, ...)
 }, protected=TRUE)
 
 ##############################################################################

@@ -43,40 +43,40 @@
 #*/#########################################################################
 setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, returnFit=FALSE) {
   # Fit principal curve
-  fit <- .fitPrincipalCurve(x, ...);
+  fit <- .fitPrincipalCurve(x, ...)
 
   # Flip direction of 'lambda'?
-  rho <- cor(fit$lambda, x[,1L], use="complete.obs");
-  flip <- (rho < 0);
+  rho <- cor(fit$lambda, x[,1L], use="complete.obs")
+  flip <- (rho < 0)
 
   # Sanity check
-  stopifnot(identical(dim(fit$s), dim(x)));
-  dx <- (fit$s - x);
+  stopifnot(identical(dim(fit$s), dim(x)))
+  dx <- (fit$s - x)
 
   # Sanity check
-  stopifnot(identical(dim(dx), dim(x)));
-  stopifnot(identical(nrow(dx), length(fit$lambda)));
-  xN <- fit$lambda + dx;
-  stopifnot(identical(dim(xN), dim(x)));
+  stopifnot(identical(dim(dx), dim(x)))
+  stopifnot(identical(nrow(dx), length(fit$lambda)))
+  xN <- fit$lambda + dx
+  stopifnot(identical(dim(xN), dim(x)))
 
   if (flip) {
-    xN <- -xN;
+    xN <- -xN
   }
 
   if (center) {
     # Same center for each column
     for (cc in seq_len(ncol(x))) {
-      mu <- median(x[,cc], na.rm=TRUE);
-      muN <- median(xN[,cc], na.rm=TRUE);
-      xN[,cc] <- xN[,cc] - (muN-mu);
+      mu <- median(x[,cc], na.rm=TRUE)
+      muN <- median(xN[,cc], na.rm=TRUE)
+      xN[,cc] <- xN[,cc] - (muN-mu)
     }
   }
 
   # Return fit?
   if (returnFit)
-    attr(xN, "fit") <- fit;
+    attr(xN, "fit") <- fit
 
-  xN;
+  xN
 }) # normalizePrincipalCurve()
 
 
