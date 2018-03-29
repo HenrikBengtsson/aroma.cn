@@ -381,13 +381,14 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
 
 
   verbose && enter(verbose, "Paired (x,y)-curve normalization")
-  nbrOfFiles <- nbrOfFiles(this)
+  ds <- getInputDataSet(this)
+  
+  nbrOfFiles <- length(ds)
   verbose && cat(verbose, "Number of arrays: ", nbrOfFiles)
 
   copyTarget <- this$.copyTarget
   verbose && cat(verbose, "Copying target arrays: ", copyTarget)
 
-  ds <- getInputDataSet(this)
   chipType <- getChipType(ds, fullname=FALSE)
   verbose && cat(verbose, "Chip type: ", chipType)
 

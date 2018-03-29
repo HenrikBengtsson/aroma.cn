@@ -298,7 +298,9 @@ setMethodS3("process", "TumorBoostNormalization", function(this, ..., force=FALS
   units <- NULL
 
   verbose && enter(verbose, "TumorBoost normalization")
-  nbrOfFiles <- nbrOfFiles(this)
+  ds <- getInputDataSet(this)
+  
+  nbrOfFiles <- length(ds)
   verbose && cat(verbose, "Number of arrays: ", nbrOfFiles)
 
   flavor <- getFlavor(this)

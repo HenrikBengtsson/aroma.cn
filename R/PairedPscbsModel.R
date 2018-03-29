@@ -131,7 +131,8 @@ setMethodS3("as.character", "PairedPscbsModel", function(x, ...) {
     s <- c(s, as.character(ds))
   }
 
-  nbrOfFiles <- nbrOfFiles(this)
+  dsT <- getTumorDataSet(x)
+  nbrOfFiles <- length(dsT)
   s <- c(s, sprintf("Number of arrays: %d", nbrOfFiles))
    s <- c(s, sprintf("Additional parameters: %s", getParametersAsString(this)))
 
