@@ -5,6 +5,7 @@
 .benchmark
 .check
 .test
+.make/
 .o
 .dll
 .Rproj.user
