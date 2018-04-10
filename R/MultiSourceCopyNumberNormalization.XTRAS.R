@@ -106,7 +106,7 @@ setMethodS3("plotSmoothedPairsOne", "MultiSourceCopyNumberNormalization", functi
     extractMatrix(df, units=units, drop=TRUE)
   })
   verbose && str(verbose, M)
-  stopifnot(is.matrix(M))
+  stop_if_not(is.matrix(M))
   verbose && exit(verbose)
 
   verbose && enter(verbose, "Generating data source labels")

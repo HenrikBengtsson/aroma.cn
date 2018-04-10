@@ -26,7 +26,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   if (length(pscnN) == 1L) {
     pscnN <- pscnN[rep(1L, times=length(pscnT))]
   }
-  stopifnot(length(pscnN) == length(pscnT))
+  stop_if_not(length(pscnN) == length(pscnT))
 
   # Argument 'ascn':
   ascn <- match.arg(ascn)
@@ -99,7 +99,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   pairNames <- pairNames[todo]
   pscnT <- pscnT[todo]
   pscnN <- pscnN[todo]
-  stopifnot(length(pscnT) == length(pscnN))
+  stop_if_not(length(pscnT) == length(pscnN))
 
   verbose && print(verbose, "Tumor data set:")
   verbose && print(verbose, pscnT)

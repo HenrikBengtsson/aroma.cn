@@ -138,7 +138,7 @@ setMethodS3("process", "PairedPscbsCaller", function(this, ..., force=FALSE, ver
     pathname <- file.path(pathD, filename)
 
     # Sanity check
-    stopifnot(getAbsolutePath(pathname) != getAbsolutePath(getFullName(smf)))
+    stop_if_not(getAbsolutePath(pathname) != getAbsolutePath(getFullName(smf)))
 
     if (!force && isFile(pathname)) {
       verbose && cat(verbose, "Already called. Skipping.")

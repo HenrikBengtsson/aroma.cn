@@ -143,7 +143,7 @@ setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c(
   verbose && exit(verbose)
 
   # Sanity check
-  stopifnot(dim(dataN) == dim)
+  stop_if_not(dim(dataN) == dim)
 
   dataN
 }) # normalizeMirroredBAFsByRegions()

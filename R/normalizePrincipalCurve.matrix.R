@@ -50,14 +50,14 @@ setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, r
   flip <- (rho < 0)
 
   # Sanity check
-  stopifnot(identical(dim(fit$s), dim(x)))
+  stop_if_not(identical(dim(fit$s), dim(x)))
   dx <- (fit$s - x)
 
   # Sanity check
-  stopifnot(identical(dim(dx), dim(x)))
-  stopifnot(identical(nrow(dx), length(fit$lambda)))
+  stop_if_not(identical(dim(dx), dim(x)))
+  stop_if_not(identical(nrow(dx), length(fit$lambda)))
   xN <- fit$lambda + dx
-  stopifnot(identical(dim(xN), dim(x)))
+  stop_if_not(identical(dim(xN), dim(x)))
 
   if (flip) {
     xN <- -xN

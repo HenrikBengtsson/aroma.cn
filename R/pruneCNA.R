@@ -99,7 +99,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
             verbose && exit(verbose)
             verbose && cat(verbose, "Number of segments left: ", nT)
             # Sanity check
-            stopifnot(n0-nT == hh)
+            stop_if_not(n0-nT == hh)
           }
 
           fitDrop <- fitTT$dropped
@@ -117,7 +117,7 @@ setMethodS3("pruneCNA", "AbstractCBS", function(fit, ..., maxGeneration=Inf, onA
           verbose && exit(verbose)
           verbose && cat(verbose, "Number of segments left: ", n1)
           # Sanity check
-          stopifnot(n0-n1 == hh+1)
+          stop_if_not(n0-n1 == hh+1)
 
           fitT <- fitTT
 

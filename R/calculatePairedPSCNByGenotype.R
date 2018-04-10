@@ -110,10 +110,10 @@ setMethodS3("calculatePairedPSCNByGenotype", "numeric", function(thetaT, betaT, 
   betaT <- CTB / CT
 
   # Sanity checks
-  stopifnot(all(betaT[isAA] == 0))
-  stopifnot(all(betaT[isBB] == 1))
-  stopifnot(all(CTA[isBB] == 0))
-  stopifnot(all(CTB[isAA] == 0))
+  stop_if_not(all(betaT[isAA] == 0))
+  stop_if_not(all(betaT[isBB] == 1))
+  stop_if_not(all(CTA[isBB] == 0))
+  stop_if_not(all(CTB[isAA] == 0))
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -127,9 +127,9 @@ setMethodS3("calculatePairedPSCNByGenotype", "numeric", function(thetaT, betaT, 
   # Return calculate data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Sanity check
-  stopifnot(length(CTx) == J)
-  stopifnot(length(betaTx) == J)
-  stopifnot(length(muNx) == J)
+  stop_if_not(length(CTx) == J)
+  stop_if_not(length(betaTx) == J)
+  stop_if_not(length(muNx) == J)
 
   list(CT=CTx, betaT=betaTx, muN=muNx)
 }) # calculatePairedPSCNByGenotype()
@@ -237,10 +237,10 @@ setMethodS3("calculateTumorPSCNByGenotypeUsingCTCN", "numeric", function(CT, bet
   betaT <- CTB / CT
 
   # Sanity checks
-  stopifnot(all(betaT[isAA] == 0, na.rm=TRUE))
-  stopifnot(all(betaT[isBB] == 1, na.rm=TRUE))
-  stopifnot(all(CTA[isBB] == 0, na.rm=TRUE))
-  stopifnot(all(CTB[isAA] == 0, na.rm=TRUE))
+  stop_if_not(all(betaT[isAA] == 0, na.rm=TRUE))
+  stop_if_not(all(betaT[isBB] == 1, na.rm=TRUE))
+  stop_if_not(all(CTA[isBB] == 0, na.rm=TRUE))
+  stop_if_not(all(CTB[isAA] == 0, na.rm=TRUE))
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -255,9 +255,9 @@ setMethodS3("calculateTumorPSCNByGenotypeUsingCTCN", "numeric", function(CT, bet
   # Return calculate data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Sanity check
-  stopifnot(length(CTx) == J)
-  stopifnot(length(betaTx) == J)
-  stopifnot(length(muNx) == J)
+  stop_if_not(length(CTx) == J)
+  stop_if_not(length(betaTx) == J)
+  stop_if_not(length(muNx) == J)
 
   list(CT=CTx, betaT=betaTx, muN=muNx)
 }) # calculateTumorPSCNByGenotypeUsingCTCN()

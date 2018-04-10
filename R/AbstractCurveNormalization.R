@@ -548,7 +548,7 @@ setMethodS3("process", "AbstractCurveNormalization", function(this, ..., force=F
     }
 
     # Sanity check
-    stopifnot(length(thetaN) == nbrOfUnits)
+    stop_if_not(length(thetaN) == nbrOfUnits)
 
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
