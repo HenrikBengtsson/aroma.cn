@@ -137,10 +137,10 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
 
 
   data <- getLocusData(fit)
-  stop_if_not(!is.null(data))
+  .stop_if_not(!is.null(data))
 
   segs <- getSegments(fit, splitters=TRUE)
-  stop_if_not(!is.null(segs))
+  .stop_if_not(!is.null(segs))
 
   chromosomes <- getChromosomes(fit)
   nbrOfChromosomes <- length(chromosomes)

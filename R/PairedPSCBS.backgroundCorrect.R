@@ -25,7 +25,7 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, s
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   segs <- getSegments(fit, splitters=FALSE)
-  stop_if_not(!is.null(segs))
+  .stop_if_not(!is.null(segs))
 
   nbrOfSegments <- nrow(segs)
   verbose && cat(verbose, "Number of segments: ", nbrOfSegments)
@@ -69,7 +69,7 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'fcn':
-  stop_if_not(is.function(fcn))
+  .stop_if_not(is.function(fcn))
 
   # Argument 'verbose':
   verbose <- Arguments$getVerbose(verbose)
@@ -85,7 +85,7 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   segs <- getSegments(fit, splitters=FALSE)
-  stop_if_not(!is.null(segs))
+  .stop_if_not(!is.null(segs))
 
   nbrOfSegments <- nrow(segs)
   verbose && cat(verbose, "Number of segments: ", nbrOfSegments)

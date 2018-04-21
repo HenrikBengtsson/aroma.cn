@@ -43,7 +43,7 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'fit'
-  stop_if_not(all(is.element(c("type", "x", "density"), colnames(fit))))
+  .stop_if_not(all(is.element(c("type", "x", "density"), colnames(fit))))
 
   # Argument 'expected':
   expected <- Arguments$getNumerics(expected)

@@ -40,8 +40,8 @@ testEqualityTcnByMean <- function(dataL, dataR, alpha=0.02, ...) {
 
 testEqualityC1C2ByMean <- function(dataL, dataR, alpha=0.02, ...) {
   # Sanity checks
-  stop_if_not(is.matrix(dataL))
-  stop_if_not(is.matrix(dataR))
+  .stop_if_not(is.matrix(dataL))
+  .stop_if_not(is.matrix(dataR))
 
   nL <- nrow(dataL)
   nR <- nrow(dataR)
@@ -54,7 +54,7 @@ testEqualityC1C2ByMean <- function(dataL, dataR, alpha=0.02, ...) {
   deltas <- abs(muL - muR)
 
   # Sanity checks
-  stop_if_not(length(deltas) == 2)
+  .stop_if_not(length(deltas) == 2)
 
   # Eucledian distance
   delta <- sqrt(sum(deltas^2, na.rm=TRUE))
@@ -76,8 +76,8 @@ testEqualityC1C2ByMean <- function(dataL, dataR, alpha=0.02, ...) {
 
 testEqualityC1orC2ByT <- function(dataL, dataR, alpha=0.02, ...) {
   # Sanity checks
-  stop_if_not(is.matrix(dataL))
-  stop_if_not(is.matrix(dataR))
+  .stop_if_not(is.matrix(dataL))
+  .stop_if_not(is.matrix(dataR))
 
   nL <- nrow(dataL)
   nR <- nrow(dataR)
@@ -109,8 +109,8 @@ testEqualityC1orC2ByT <- function(dataL, dataR, alpha=0.02, ...) {
 
 testEqualityC1C2ByChiSq <- function(dataL, dataR, alpha=0.02, ...) {
   # Sanity checks
-  stop_if_not(is.matrix(dataL))
-  stop_if_not(is.matrix(dataR))
+  .stop_if_not(is.matrix(dataL))
+  .stop_if_not(is.matrix(dataR))
 
   nL <- nrow(dataL)
   nR <- nrow(dataR)

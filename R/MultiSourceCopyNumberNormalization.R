@@ -1187,7 +1187,7 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
         verbose && enter(verbose, "Grouping units by chromosome")
         values <- ugp[subsetToUpdate,1L,drop=TRUE]
         # Sanity check
-        stop_if_not(length(values) == length(yN))
+        .stop_if_not(length(values) == length(yN))
 
         listOfUnits <- list()
         for (chr in chromosomes) {
