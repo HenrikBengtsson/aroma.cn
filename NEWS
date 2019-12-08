@@ -1,7 +1,7 @@
 Package: aroma.cn
 =================
 
-Version: 1.6.1-9000 [2018-03-28]
+Version: 1.6.1-9000 [2019-12-08]
 o drawC1C2Density() gained argument 'grid'.
 o Utilizing subsetted calculations of matrixStats (>= 0.50.0).
 o CLEANUP: Now importing generic extractC1C2() from PSCBS to

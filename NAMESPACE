@@ -144,7 +144,7 @@ importFrom("R.filesets", "getFullNameTranslator")
 importFrom("R.filesets", "getPathname")
 importFrom("R.filesets", "readDataFrame")
 importFrom("R.filesets", "setFullNamesTranslator")
-importFrom("R.methodsS3", "throw")
+importFrom("R.oo", "throw")
 importFrom("R.oo", "clone") ## Multi-sources: R.oo, R.filesets
 importFrom("R.oo", "equals")
 importFrom("R.oo", "extend")

@@ -6,7 +6,7 @@ Depends:
   aroma.core (>= 3.0.0)
 Imports:
   R.methodsS3 (>= 1.7.1),
-  R.oo (>= 1.21.0),
+  R.oo (>= 1.23.0),
   R.filesets (>= 2.11.0),
   R.cache (>= 0.12.0),
   matrixStats (>= 0.51.0),
@@ -20,7 +20,6 @@ SuggestsNote:
   Recommended:
   aroma.light,
   DNAcopy
-Date: 2016-11-23
 Title: Copy-Number Analysis of Large Microarray Data Sets
 Authors@R: c(
   person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
