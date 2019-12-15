@@ -101,7 +101,7 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
     verbose && print(verbose, xd)
 
     # Call the strongest peak first, then the 2nd strongest and so on...
-    naValue <- as.integer(NA)
+    naValue <- NA_integer_
     calls <- rep(naValue, times=nrow(xd))
     expectedLeft <- expected
     for (kk in seq_len(nrow(xd))) {
@@ -123,7 +123,7 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
   verbose && cat(verbose, "Expected values:")
   verbose && print(verbose, expected[calls])
 
-  fitC <- cbind(fit, callId=as.integer(NA), call=as.double(NA))
+  fitC <- cbind(fit, callId=NA_integer_, call=NA_real_)
   fitC[subset,"callId"] <- calls[r]
   fitC[subset,"call"] <- expected[calls[r]]
   attr(fitC, "expected") <- expected

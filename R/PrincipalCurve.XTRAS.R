@@ -19,7 +19,7 @@ setMethodS3("getBacktransforms", "PrincipalCurve", function(fit, dimensions=NULL
 
   y <- seq(from=range[1L], to=range[2L], length.out=length.out)
 
-  naValue <- as.double(NA)
+  naValue <- NA_real_
   dim <- c(length(y), 2L, length(dimensions))
   XY <- array(naValue, dim=dim)
 

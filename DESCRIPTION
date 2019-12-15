@@ -8,7 +8,7 @@ Imports:
   R.methodsS3 (>= 1.7.1),
   R.oo (>= 1.23.0),
   R.filesets (>= 2.13.0),
-  R.cache (>= 0.13.0),
+  R.cache (>= 0.14.0),
   matrixStats (>= 0.55.0),
   PSCBS (>= 0.65.0)
 Suggests:

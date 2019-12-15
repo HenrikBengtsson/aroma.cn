@@ -135,7 +135,7 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
     gender <- callXXorXY(beta[is23], beta[is24], adjust=adjust, from=0, to=1)
 
     # Call genotypes
-    naValue <- as.double(NA)
+    naValue <- NA_real_
     fit <- NULL
     mu <- rep(naValue, times=length(units))
     cs <- rep(naValue, times=length(units))
@@ -166,7 +166,7 @@ setMethodS3("process", "NaiveFracBGenotyping", function(this, ..., verbose=FALSE
 
 
     # Translate genotype calls in fracB space to (AA,AB,BB,...)
-    calls <- rep(as.character(NA), times=length(mu))
+    calls <- rep(NA_character_, times=length(mu))
     calls[mu ==   0] <- "AA"
     calls[mu == 1/2] <- "AB"
     calls[mu ==   1] <- "BB"

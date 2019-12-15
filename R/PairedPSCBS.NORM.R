@@ -184,7 +184,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   # TO DO
 
   # Allocate
-  naValue <- as.double(NA)
+  naValue <- NA_real_
   X <- matrix(naValue, nrow=nbrOfSegments, ncol=3)
   for (kk in seq_len(nbrOfSegments)) {
     chrKK <- as.numeric(segs[kk,"chromosome"])
@@ -227,7 +227,7 @@ setMethodS3("normalizeBAFsByRegions", "PairedPSCBS", function(fit, by=c("betaTN"
   modelFit <- XN <- NULL
 
   # Expand region-level scale factors to locus-level scale factors
-  naValue <- as.double(NA)
+  naValue <- NA_real_
   scales <- rep(naValue, times=length(data$betaT))
   for (kk in seq_len(nbrOfSegments)) {
     chrKK <- as.numeric(segs[kk,"chromosome"])

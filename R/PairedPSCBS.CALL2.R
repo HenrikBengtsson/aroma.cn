@@ -101,7 +101,7 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
 
 
   nbrOfSegments <- nrow(segs)
-  naValue <- as.double(NA)
+  naValue <- NA_real_
   df <- NULL
   for (kk in seq_len(nbrOfSegments)) {
     verbose && enter(verbose, sprintf("Segment #%d of %d", kk, nbrOfSegments))
@@ -110,8 +110,8 @@ setMethodS3("callAllelicBalanceByBAFs", "PairedPSCBS", function(fit, maxScore="a
     if (is.null(fitS)) {
       verbose && cat(verbose, "A divider. Skipping.")
       dfKK <- data.frame(
-        statistic=as.double(NA),
-        p.value=as.double(NA)
+        statistic=NA_real_,
+        p.value=NA_real_
       )
       df <- rbind(df, dfKK)
       verbose && exit(verbose)

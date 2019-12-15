@@ -10,7 +10,7 @@ setMethodS3("getCalls", "RawGenotypeCalls", function(this, flavor=c("fracB", "AB
   if (flavor == "fracB") {
     calls <- y
   } else if (flavor == "AB") {
-    naValue <- as.character(NA)
+    naValue <- NA_character_
     calls <- rep(naValue, times=nbrOfLoci(this))
     calls[y == 0] <- "AA"
     calls[y == 1/2] <- "AB"

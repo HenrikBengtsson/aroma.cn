@@ -6,7 +6,7 @@ setMethodS3("callGenotypes", "RawAlleleBFractions", function(this, ...) {
   data <- as.matrix(data)
   data2 <- TotalFracBSnpData(data)
   data3 <- callGenotypes(data2)
-  naValue <- as.double(NA)
+  naValue <- NA_real_
   mu <- rep(naValue, times=nbrOfLoci(this))
   mu[keep] <- data3[,2]
   res <- clone(this)

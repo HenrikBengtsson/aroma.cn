@@ -951,7 +951,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     verbose && enter(verbose, "Allocating matrix for smooth data")
     dfS <- dfSList[[1L]]
-    naValue <- as.double(NA)
+    naValue <- NA_real_
     YSN <- matrix(naValue, nrow=nbrOfUnits(dfS), ncol=nbrOfArrays)
     verbose && cat(verbose, "RAM: ", objectSize(YSN), " bytes")
     verbose && exit(verbose)
@@ -991,7 +991,7 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
 
     # Allocate matrices to hold all mean and shift values
     nbrOfChromosomes <- length(unitsS)
-    naValue <- as.double(NA)
+    naValue <- NA_real_
     mus <- matrix(naValue, nrow=nbrOfChromosomes, ncol=nbrOfArrays)
     rownames(mus) <- names(unitsS)
     dmus <- mus

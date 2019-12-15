@@ -33,7 +33,7 @@ setMethodS3("fitLoessKD", "matrix", function(X, Y, ...) {
     }
 
     X <- as.matrix(X)
-    naValue <- as.double(NA)
+    naValue <- NA_real_
     Y <- array(naValue, dim=dim(X))
     ok <- rowAlls(is.finite(X))
     ok <- which(ok)
