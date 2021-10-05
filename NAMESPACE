@@ -184,10 +184,6 @@ importFrom("R.utils", "stext")
 importFrom("R.utils", "subplots")
 importFrom("R.utils", "use")
 
-## Manually adjusted
-## Cannot import explicitly from 'base';
-## importFrom("base", "inherits") ## Multi-sources: R.utils, base
-
 # Manual imports
 importFrom("PSCBS", "callROH")
 importFrom("PSCBS", "callLOH")
