@@ -1,15 +1,15 @@
 Package: aroma.cn
-Version: 1.6.1-9000
+Version: 1.6.1-9001
 Depends:
   R (>= 3.1.2),
-  R.utils (>= 2.9.0),
-  aroma.core (>= 3.2.0)
+  R.utils (>= 2.11.0),
+  aroma.core (>= 3.2.2)
 Imports:
-  R.methodsS3 (>= 1.7.1),
-  R.oo (>= 1.23.0),
-  R.filesets (>= 2.13.0),
-  R.cache (>= 0.14.0),
-  matrixStats (>= 0.55.0),
+  R.methodsS3 (>= 1.8.1),
+  R.oo (>= 1.24.0),
+  R.filesets (>= 2.14.0),
+  R.cache (>= 0.15.0),
+  matrixStats (>= 0.61.0),
   PSCBS (>= 0.65.0)
 Suggests:
   aroma.light (>= 2.2.1),

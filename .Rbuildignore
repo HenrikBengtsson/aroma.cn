@@ -8,14 +8,8 @@
 ^OVERVIEW[.]md$
 ^README[.]md$
 ^CONDUCT[.]md$
+^CONTRIBUTING[.]md$
 
-#----------------------------
-# Travis-CI et al.
-#----------------------------
-^[.]travis[.]yml$
-^travis-tool[.]sh$
-^pkg-build[.]sh$
-^appveyor[.]yml$
 
 #----------------------------
 # R related
@@ -26,13 +20,7 @@
 ^vignettes/[.]install_extras$
 ^Makefile$
 ^incl
-^NAMESPACE,.*[.]txt$
-^nohup.*$
 ^revdep
-^[.]R
-^[.]benchmark
-^[.]devel
-^[.]test
 ^[.]check
 ^.*[.]tar[.]gz$
 ^.*\.Rproj$

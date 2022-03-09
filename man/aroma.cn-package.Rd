@@ -49,23 +49,26 @@
 
 Please cite aroma.cn one or more of approprite reference below
 
-  H. Bengtsson, P. Neuvial and T.P. Speed. TumorBoost: Normalization of allele-specific tumor
-  copy numbers from a single pair of tumor-normal genotyping microarrays, BMC Bioinformatics,
-  2010
+  H. Bengtsson, P. Neuvial and T.P. Speed. TumorBoost: Normalization of
+  allele-specific tumor copy numbers from a single pair of tumor-normal
+  genotyping microarrays, BMC Bioinformatics, 2010
 
-  H. Bengtsson, A. Ray, P. Spellman and T.P. Speed. A single-sample method for normalizing and
-  combining full-resolutioncopy numbers from multiple platforms, labs and analysis methods,
-  Bioinformatics, 2009
+  H. Bengtsson, A. Ray, P. Spellman and T.P. Speed. A single-sample
+  method for normalizing and combining full-resolutioncopy numbers from
+  multiple platforms, labs and analysis methods, Bioinformatics, 2009
 
-  H. Bengtsson; K. Simpson; J. Bullard; K. Hansen. aroma.affymetrix: A generic framework in R
-  for analyzing small to very large Affymetrix data sets in bounded memory, Tech Report 745,
-  Department of Statistics, University of California, Berkeley, February 2008
+  H. Bengtsson; K. Simpson; J. Bullard; K. Hansen. aroma.affymetrix: A
+  generic framework in R for analyzing small to very large Affymetrix
+  data sets in bounded memory, Tech Report 745, Department of
+  Statistics, University of California, Berkeley, February 2008
 
-  H. Bengtsson, R. Irizarry, B. Carvalho, & T.P. Speed. Estimation and assessment of raw copy
-  numbers at the single locus level, Bioinformatics, 2008
+  H. Bengtsson, R. Irizarry, B. Carvalho, & T.P. Speed. Estimation and
+  assessment of raw copy numbers at the single locus level,
+  Bioinformatics, 2008
 
-To see these entries in BibTeX format, use 'print(<citation>, bibtex=TRUE)', 'toBibtex(.)', or
-set 'options(citation.bibtex.max=999)'.
+To see these entries in BibTeX format, use 'print(<citation>,
+bibtex=TRUE)', 'toBibtex(.)', or set
+'options(citation.bibtex.max=999)'.
 
 }
 \keyword{package}
