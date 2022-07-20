@@ -49,8 +49,8 @@
 #
 # % \references{
 # %   [1] \url{http://www.definethat.com/define/7274.htm}
-# %   [2] \url{http://en.wikipedia.org/wiki/Atomic_(order_theory)}
-# %   [3] \url{http://en.wikipedia.org/wiki/Atomic_(measure_theory)}
+# %   [2] \url{https://en.wikipedia.org/wiki/Atomic_(order_theory)}
+# %   [3] \url{https://en.wikipedia.org/wiki/Atomic_(measure_theory)}
 # % }
 #
 # \seealso{
@@ -66,10 +66,10 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
   # Local functions
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   extractSignals <- function(data, region, ...) {
-    data <- extractRegion(data, region=region);
-    y <- getSignals(data);
-    y <- y[is.finite(y)];
-    y;
+    data <- extractRegion(data, region=region)
+    y <- getSignals(data)
+    y <- y[is.finite(y)]
+    y
   } # extractSignals()
 
   testEquality <- function(dataL, dataR, alpha=0.02, ...) {
@@ -77,14 +77,14 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
     #  H0: muL == muR
     #  H1: muL != muR
     fit <- t.test(dataL, dataR, paired=FALSE, var.equal=TRUE,
-                                              alternative="two.sided");
-    t <- fit$statistic;
-    p <- fit$p.value;
-    fit$isSignificant <- (p < alpha);
-    isEqual <- (!fit$isSignificant);
-    attr(isEqual, "fit") <- fit;
+                                              alternative="two.sided")
+    t <- fit$statistic
+    p <- fit$p.value
+    fit$isSignificant <- (p < alpha)
+    isEqual <- (!fit$isSignificant)
+    attr(isEqual, "fit") <- fit
 
-    isEqual;
+    isEqual
   } # testEquality()
 
 
@@ -92,66 +92,66 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'data':
-  data <- Arguments$getInstanceOf(data, "RawCopyNumbers");
+  data <- Arguments$getInstanceOf(data, "RawCopyNumbers")
 
   # Argument 'H':
-  H <- Arguments$getInteger(H, range=c(1,Inf));
+  H <- Arguments$getInteger(H, range=c(1,Inf))
 
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
-  nbrOfRegions <- nbrOfRegions(cnr);
+  nbrOfRegions <- nbrOfRegions(cnr)
 
   # Nothing to do?
   if (nbrOfRegions < H+2) {
     res <- list(
       atomicRegions=integer(0),
       atomicIslands=integer(0)
-    );
-    return(res);
+    )
+    return(res)
   }
 
-  verbose && enter(verbose, "Call equivalent copy-number states by pruning");
+  verbose && enter(verbose, "Call equivalent copy-number states by pruning")
 
   # Initial set of atomic regions
-  atomicRegions <- NULL;
+  atomicRegions <- NULL
 
-  start <- cnr$start;
-  stop <- cnr$stop;
-  nbrOfPositions <- (nbrOfRegions-H);
+  start <- cnr$start
+  stop <- cnr$stop
+  nbrOfPositions <- (nbrOfRegions-H)
   for (rr in 2:nbrOfPositions) {
-    verbose && enter(verbose, sprintf("Region #%d of %d", rr, nbrOfPositions));
+    verbose && enter(verbose, sprintf("Region #%d of %d", rr, nbrOfPositions))
 
     # The two flanking regions
-    xRangeL <- c(start[rr-1], stop[rr-1]);
-    xRangeR <- c(start[rr+H], stop[rr+H]);
+    xRangeL <- c(start[rr-1], stop[rr-1])
+    xRangeR <- c(start[rr+H], stop[rr+H])
 
     # Extract their data
-    dataL <- extractSignals(data, region=xRangeL);
-    dataR <- extractSignals(data, region=xRangeR);
+    dataL <- extractSignals(data, region=xRangeL)
+    dataR <- extractSignals(data, region=xRangeR)
 
     # Test if they are equal
-    isEqual <- testEquality(dataL, dataR, alpha=alpha);
-    fit <- attr(isEqual, "fit");
+    isEqual <- testEquality(dataL, dataR, alpha=alpha)
+    fit <- attr(isEqual, "fit")
 
     verbose && printf(verbose, "t=%.3f (p=%g), (L==R)=%s\n",
-                                       fit$t, fit$p, isEqual);
+                                       fit$t, fit$p, isEqual)
     # Not needed anymore
-    dataL <- dataR <- fit <- NULL;
+    dataL <- dataR <- fit <- NULL
 
     # If the two flanking regions are equal, then we have
     # found an atomic region.
     if (isEqual) {
-      atomicRegions <- c(atomicRegions, rr);
-      verbose && print(verbose, atomicRegions);
+      atomicRegions <- c(atomicRegions, rr)
+      verbose && print(verbose, atomicRegions)
     }
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   } # for (rr ...)
 
   # Table of atomic regions of length K found
@@ -162,16 +162,16 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
     lastRegion  = atomicRegions+(H-1L),
     start       = start[atomicRegions],
     stop        = stop[atomicRegions+(H-1L)]
-  );
+  )
 
   # Atomic islands = atomic regions that are not next
   # to another atomic region
-  dups <- which(diff(atomicRegions) == 1);
+  dups <- which(diff(atomicRegions) == 1)
   if (length(dups) > 0) {
-    dups <- c(dups, dups+1L);
-    atomicIslands <- atomicRegions[-dups];
+    dups <- c(dups, dups+1L)
+    atomicIslands <- atomicRegions[-dups]
   } else {
-    atomicIslands <- atomicRegions;
+    atomicIslands <- atomicRegions
   }
 
   res <- list(
@@ -180,32 +180,9 @@ setMethodS3("findAtomicAberrations", "CopyNumberRegions", function(cnr, data, H=
     atomicIslands=atomicIslands,
     ambigousRegions=setdiff(atomicRegions, atomicIslands),
     res=res
-  );
+  )
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
-  res;
+  res
 }, protected=TRUE) # findAtomicAberrations()
-
-
-############################################################################
-# HISTORY:
-# 2010-09-08
-# o Added Rdoc comments with an informative code example.
-# 2010-09-07
-# o Renamed to findAtomicAberrations().
-# o Added support for width argument 'H'.
-# 2010-07-24
-# o CLEAN UP: Now the notation of the code better reflect the algorithm.
-# o Now findAtomicRegions() returns ambigous atomic regions too.
-# o Added argument 'ylim'.
-# 2010-07-20
-# o Added argument 'debugPlot'.
-# 2010-07-19
-# o Added trial version of segmentByPruneCBS().
-# o TO DO: Down-weight loci that were close to earlier
-#   change points in the succeeding segmentations.
-# o Added prototype version of findAtomicRegions().
-# o Added prototype version of callByPruning().
-# o Created.
-############################################################################

@@ -227,7 +227,7 @@ if (is.null(data)) {
     dataCC <- as.data.frame(regions);
     dataCC$mean <- 2*2^dataCC$mean;
     
-    for (rr in seq(length=nrow(dataCC))) {
+    for (rr in seq_len(nrow(dataCC))) {
       reg <- c(dataCC[rr,"start"], dataCC[rr,"stop"]);
       fracBRR <- extractRegion(fracB, region=reg);
       cnHRR <- extractRegion(cnH, region=reg);

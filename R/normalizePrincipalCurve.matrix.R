@@ -43,53 +43,38 @@
 #*/#########################################################################
 setMethodS3("normalizePrincipalCurve", "matrix", function(x, ..., center=TRUE, returnFit=FALSE) {
   # Fit principal curve
-  fit <- .fitPrincipalCurve(x, ...);
+  fit <- .fitPrincipalCurve(x, ...)
 
   # Flip direction of 'lambda'?
-  rho <- cor(fit$lambda, x[,1L], use="complete.obs");
-  flip <- (rho < 0);
+  rho <- cor(fit$lambda, x[,1L], use="complete.obs")
+  flip <- (rho < 0)
 
   # Sanity check
-  stopifnot(identical(dim(fit$s), dim(x)));
-  dx <- (fit$s - x);
+  .stop_if_not(identical(dim(fit$s), dim(x)))
+  dx <- (fit$s - x)
 
   # Sanity check
-  stopifnot(identical(dim(dx), dim(x)));
-  stopifnot(identical(nrow(dx), length(fit$lambda)));
-  xN <- fit$lambda + dx;
-  stopifnot(identical(dim(xN), dim(x)));
+  .stop_if_not(identical(dim(dx), dim(x)))
+  .stop_if_not(identical(nrow(dx), length(fit$lambda)))
+  xN <- fit$lambda + dx
+  .stop_if_not(identical(dim(xN), dim(x)))
 
   if (flip) {
-    xN <- -xN;
+    xN <- -xN
   }
 
   if (center) {
     # Same center for each column
     for (cc in seq_len(ncol(x))) {
-      mu <- median(x[,cc], na.rm=TRUE);
-      muN <- median(xN[,cc], na.rm=TRUE);
-      xN[,cc] <- xN[,cc] - (muN-mu);
+      mu <- median(x[,cc], na.rm=TRUE)
+      muN <- median(xN[,cc], na.rm=TRUE)
+      xN[,cc] <- xN[,cc] - (muN-mu)
     }
   }
 
   # Return fit?
   if (returnFit)
-    attr(xN, "fit") <- fit;
+    attr(xN, "fit") <- fit
 
-  xN;
+  xN
 }) # normalizePrincipalCurve()
-
-
-
-###########################################################################
-# HISTORY:
-# 2012-04-16
-# o Now normalizePrincipalCurve() explicitly require aroma.light.
-# 2012-03-30
-# o Added Rdoc comments.
-# 2008-10-08
-# o Removed implementation for data.frame:s.
-# 2008-05-27
-# o Added normalizePrincipalCurve().
-# o Created.  Will probably end up in aroma.light.
-###########################################################################

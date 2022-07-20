@@ -66,5 +66,9 @@ Please cite aroma.cn one or more of approprite reference below
   assessment of raw copy numbers at the single locus level,
   Bioinformatics, 2008
 
+To see these entries in BibTeX format, use 'print(<citation>,
+bibtex=TRUE)', 'toBibtex(.)', or set
+'options(citation.bibtex.max=999)'.
+
 }
 \keyword{package}

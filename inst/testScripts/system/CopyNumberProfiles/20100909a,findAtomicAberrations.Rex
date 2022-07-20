@@ -60,7 +60,7 @@ for (H in Hs) {
   fit <- findAtomicAberrations(cnr=pT, data=cn, H=H, verbose=verbose);
   df <- fit$res;
   
-  for (kk in seq(length=nrow(df))) {
+  for (kk in seq_len(nrow(df))) {
     dfKK <- df[kk,];
     segments <- as.integer(dfKK[,c("firstRegion", "lastRegion")]);
     segments <- segments[1]:segments[2];

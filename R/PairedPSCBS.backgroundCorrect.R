@@ -2,64 +2,64 @@ setMethodS3("translateC1C2", "PairedPSCBS", function(fit, dC1=0, dC2=0, sC1=1, s
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  dC1 <- Arguments$getNumeric(dC1);
-  dC2 <- Arguments$getNumeric(dC2);
-  sC1 <- Arguments$getNumeric(sC1);
-  sC2 <- Arguments$getNumeric(sC2);
+  dC1 <- Arguments$getNumeric(dC1)
+  dC2 <- Arguments$getNumeric(dC2)
+  sC1 <- Arguments$getNumeric(sC1)
+  sC2 <- Arguments$getNumeric(sC2)
 
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
-  verbose && enter(verbose, "Scaling and translating by (C1,C2)");
-  verbose && cat(verbose, "sC1: ", sC1);
-  verbose && cat(verbose, "sC2: ", sC2);
-  verbose && cat(verbose, "dC1: ", dC1);
-  verbose && cat(verbose, "dC2: ", dC2);
+  verbose && enter(verbose, "Scaling and translating by (C1,C2)")
+  verbose && cat(verbose, "sC1: ", sC1)
+  verbose && cat(verbose, "sC2: ", sC2)
+  verbose && cat(verbose, "dC1: ", dC1)
+  verbose && cat(verbose, "dC2: ", dC2)
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  segs <- getSegments(fit, splitters=FALSE);
-  stopifnot(!is.null(segs));
+  segs <- getSegments(fit, splitters=FALSE)
+  .stop_if_not(!is.null(segs))
 
-  nbrOfSegments <- nrow(segs);
-  verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
+  nbrOfSegments <- nrow(segs)
+  verbose && cat(verbose, "Number of segments: ", nbrOfSegments)
 
   # (C1,C2,...)
-  X <- extractC1C2(fit, splitters=FALSE);
+  X <- extractC1C2(fit, splitters=FALSE)
 
   # (C1,C2)
-  C1C2 <- X[,1:2, drop=FALSE];
+  C1C2 <- X[,1:2, drop=FALSE]
 
-  C1C2[,1] <- dC1 + sC1*C1C2[,1];
-  C1C2[,2] <- dC2 + sC2*C1C2[,2];
+  C1C2[,1] <- dC1 + sC1*C1C2[,1]
+  C1C2[,2] <- dC2 + sC2*C1C2[,2]
 
-  verbose && enter(verbose, "(C1,C2) to (TCN,DH)");
+  verbose && enter(verbose, "(C1,C2) to (TCN,DH)")
   # (C1,C2) -> (TCN,DH)
-  gamma <- rowSums(C1C2, na.rm=TRUE);
-  dh <- 2*(C1C2[,2]/gamma - 1/2);
-  verbose && exit(verbose);
+  gamma <- rowSums(C1C2, na.rm=TRUE)
+  dh <- 2*(C1C2[,2]/gamma - 1/2)
+  verbose && exit(verbose)
 
   # Update segmentation means
-  segs[,"tcnMean"] <- gamma;
-  segs[,"dhMean"] <- dh;
-  segs[,"c1Mean"] <- C1C2[,1];
-  segs[,"c2Mean"] <- C1C2[,2];
+  segs[,"tcnMean"] <- gamma
+  segs[,"dhMean"] <- dh
+  segs[,"c1Mean"] <- C1C2[,1]
+  segs[,"c2Mean"] <- C1C2[,2]
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Return results
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  fitO <- fit;
-  fitO$output <- segs;
+  fitO <- fit
+  fitO$output <- segs
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
-  fitO;
+  fitO
 })
 
 
@@ -69,87 +69,87 @@ setMethodS3("transformC1C2", "PairedPSCBS", function(fit, fcn, ..., verbose=FALS
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'fcn':
-  stopifnot(is.function(fcn));
+  .stop_if_not(is.function(fcn))
 
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
-  verbose && enter(verbose, "Transform (C1,C2) by a function");
+  verbose && enter(verbose, "Transform (C1,C2) by a function")
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  segs <- getSegments(fit, splitters=FALSE);
-  stopifnot(!is.null(segs));
+  segs <- getSegments(fit, splitters=FALSE)
+  .stop_if_not(!is.null(segs))
 
-  nbrOfSegments <- nrow(segs);
-  verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
+  nbrOfSegments <- nrow(segs)
+  verbose && cat(verbose, "Number of segments: ", nbrOfSegments)
 
   # (C1,C2,...)
-  X <- extractC1C2(fit, splitters=FALSE);
+  X <- extractC1C2(fit, splitters=FALSE)
 
   # (C1,C2)
-  C1C2 <- X[,1:2, drop=FALSE];
+  C1C2 <- X[,1:2, drop=FALSE]
 
-  C1C2 <- fcn(C1C2, ...);
+  C1C2 <- fcn(C1C2, ...)
 
-  verbose && enter(verbose, "(C1,C2) to (TCN,DH)");
+  verbose && enter(verbose, "(C1,C2) to (TCN,DH)")
   # (C1,C2) -> (TCN,DH)
-  gamma <- rowSums(C1C2, na.rm=TRUE);
-  dh <- 2*(C1C2[,2]/gamma - 1/2);
-  verbose && exit(verbose);
+  gamma <- rowSums(C1C2, na.rm=TRUE)
+  dh <- 2*(C1C2[,2]/gamma - 1/2)
+  verbose && exit(verbose)
 
   # Update segmentation means
-  segs[,"tcnMean"] <- gamma;
-  segs[,"dhMean"] <- dh;
-  segs[,"c1Mean"] <- C1C2[,1];
-  segs[,"c2Mean"] <- C1C2[,2];
+  segs[,"tcnMean"] <- gamma
+  segs[,"dhMean"] <- dh
+  segs[,"c1Mean"] <- C1C2[,1]
+  segs[,"c2Mean"] <- C1C2[,2]
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Return results
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  fitO <- fit;
-  fitO$output <- segs;
+  fitO <- fit
+  fitO$output <- segs
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
-  fitO;
+  fitO
 })
 
 
 
 setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
   # Identify region in allelic balance
-  segs <- getSegments(fit, splitters=FALSE);
-  abCall <- segs$abCall;
+  segs <- getSegments(fit, splitters=FALSE)
+  abCall <- segs$abCall
   if (is.null(abCall)) {
-    throw("Allelic balance has not been called.");
+    throw("Allelic balance has not been called.")
   }
-  idxs <- which(segs$abCall);
-  segs <- segs[idxs,,drop=FALSE];
+  idxs <- which(segs$abCall)
+  segs <- segs[idxs,,drop=FALSE]
 
   # Extract (TCN,DH)
-  gamma <- segs[, "tcnMean"];
-  rho <- segs[, "dhMean"];
+  gamma <- segs[, "tcnMean"]
+  rho <- segs[, "dhMean"]
 
   # Calculate (C1,C2)
-  C1 <- 1/2 * (1 - rho) * gamma;
-  C2 <- gamma - C1;
+  C1 <- 1/2 * (1 - rho) * gamma
+  C2 <- gamma - C1
 
   # Calculate bias in C2
-  dC2 <- C2 - C1;
+  dC2 <- C2 - C1
 
   # Calculate weighted average of all C2 biases
-  w <- segs[,"dhNbrOfLoci"];
-  w <- w / sum(w, na.rm=TRUE);
-  dC2 <- weightedMedian(dC2, w=w);
+  w <- segs[,"dhNbrOfLoci"]
+  w <- w / sum(w, na.rm=TRUE)
+  dC2 <- weightedMedian(dC2, w=w)
 
-  dC2;
+  dC2
 }) # estimateC2Bias()
 
 
@@ -157,61 +157,61 @@ setMethodS3("estimateC2Bias", "PairedPSCBS", function(fit, ...) {
 setMethodS3("backgroundCorrect", "PairedPSCBS", function(fit, targetMedian=c("same", "none"), ...) {
   # Argument 'targetMedian':
   if (is.character(targetMedian)) {
-    targetMedian <- match.arg(targetMedian);
+    targetMedian <- match.arg(targetMedian)
   } else {
-    targetMedian <- Arguments$getDouble(targetMedian, range=c(0,Inf));
+    targetMedian <- Arguments$getDouble(targetMedian, range=c(0,Inf))
   }
 
-  modelFit <- list();
+  modelFit <- list()
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # (1) Estimate background (e.g. normal contamination and more)
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  kappa <- estimateKappa(fit);
-  modelFit$kappa <- kappa;
-  fitBG <- translateC1C2(fit, dC1=-kappa, dC2=-kappa);
+  kappa <- estimateKappa(fit)
+  modelFit$kappa <- kappa
+  fitBG <- translateC1C2(fit, dC1=-kappa, dC2=-kappa)
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # (2) Rescale
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Calculate current median
-  modelFit$targetMedian <- targetMedian;
+  modelFit$targetMedian <- targetMedian
   if (!identical(targetMedian, "none")) {
-    segsBG <- getSegments(fitBG);
-    count <- segsBG[["tcnNbrOfLoci"]];
-    # chrs <- 1:22;
-    # if (!is.null(chrs)) segsBG <- subset(segsBG, chromosome %in% chrs);
-    CTBG <- segsBG[["tcnMean"]];
-    muBG <- weightedMedian(CTBG, w=count);
-    muBG <- Arguments$getDouble(muBG, range=c(0,Inf));
-    modelFit$muBG <- muBG;
+    segsBG <- getSegments(fitBG)
+    count <- segsBG[["tcnNbrOfLoci"]]
+    # chrs <- 1:22
+    # if (!is.null(chrs)) segsBG <- subset(segsBG, chromosome %in% chrs)
+    CTBG <- segsBG[["tcnMean"]]
+    muBG <- weightedMedian(CTBG, w=count)
+    muBG <- Arguments$getDouble(muBG, range=c(0,Inf))
+    modelFit$muBG <- muBG
 
     if (identical(targetMedian, "same")) {
-      segs <- getSegments(fit);
-      # if (!is.null(chrs)) segs <- subset(segs, chromosome %in% chrs);
-      CT <- segs[["tcnMean"]];
-      mu <- weightedMedian(CT, w=count);
-      mu <- Arguments$getDouble(mu, range=c(0,Inf));
+      segs <- getSegments(fit)
+      # if (!is.null(chrs)) segs <- subset(segs, chromosome %in% chrs)
+      CT <- segs[["tcnMean"]]
+      mu <- weightedMedian(CT, w=count)
+      mu <- Arguments$getDouble(mu, range=c(0,Inf))
     } else if (is.numeric(targetMedian)) {
-      mu <- targetMedian;
+      mu <- targetMedian
     }
-    modelFit$mu <- mu;
+    modelFit$mu <- mu
 
-    scale <- mu/muBG;
-    modelFit$scale <- scale;
+    scale <- mu/muBG
+    modelFit$scale <- scale
 
-    fitBG <- translateC1C2(fitBG, sC1=scale, sC2=scale);
+    fitBG <- translateC1C2(fitBG, sC1=scale, sC2=scale)
   } # if (!identical(targetMedian, "none"))
 
 
   # Store model fit
-  postMethods <- fit$postMethods;
-  if (is.null(postMethods)) postMethods <- list();
-  postMethods$backgroundCorrection <- list(modelFit=modelFit);
-  fitBG$postMethods <- postMethods;
+  postMethods <- fit$postMethods
+  if (is.null(postMethods)) postMethods <- list()
+  postMethods$backgroundCorrection <- list(modelFit=modelFit)
+  fitBG$postMethods <- postMethods
 
-  fitBG;
+  fitBG
 }) # backgroundCorrect()
 
 

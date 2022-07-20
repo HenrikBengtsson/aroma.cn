@@ -5,5 +5,12 @@
 .benchmark
 .check
 .test
+.make/
 .o
 .dll
+.Rproj.user
+*.Rproj*
+revdep/checks
+revdep/library
+revdep/data.sqlite
+

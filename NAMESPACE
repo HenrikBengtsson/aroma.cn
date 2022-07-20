@@ -22,6 +22,7 @@ importFrom("aroma.core", "CopyNumberRegions")
 importFrom("aroma.core", "RawAlleleBFractions")
 
 ## Importing generics
+importFrom("aroma.core", "binnedSmoothing")
 importFrom("aroma.core", "fit")
 importFrom("aroma.core", "getChipType")
 importFrom("aroma.core", "getChromosomes") ## Multi-sources: aroma.core, PSCBS
@@ -39,6 +40,7 @@ importFrom("aroma.core", "getXScale")
 importFrom("aroma.core", "getYScale")
 importFrom("aroma.core", "isHeterozygous")
 importFrom("aroma.core", "isHomozygous")
+importFrom("aroma.core", "kernelSmoothing")
 importFrom("aroma.core", "loadFit")
 importFrom("aroma.core", "nbrOfLoci") ## Multi-sources: aroma.core, PSCBS
 importFrom("aroma.core", "normalizeTumorBoost") ## Multi-sources: aroma.core, aroma.light
@@ -103,7 +105,6 @@ if (FALSE) { # Only suggesting aroma.light for now
   importFrom("aroma.light", "normalizeDifferencesToAverage")
   importFrom("aroma.light", "robustSmoothSpline")
 }
-importFrom("matrixStats", "anyMissing")
 importFrom("matrixStats", "colDiffs")
 importFrom("matrixStats", "colSds")
 importFrom("matrixStats", "rowAlls")
@@ -115,6 +116,7 @@ importFrom("PSCBS", "callCopyNeutral")
 importFrom("PSCBS", "dropRegions")
 importFrom("PSCBS", "estimateDeltaAB")
 importFrom("PSCBS", "estimateKappa")
+importFrom("PSCBS", "extractC1C2")
 importFrom("PSCBS", "extractDhSegment")
 importFrom("PSCBS", "extractLocusLevelC1C2")
 importFrom("PSCBS", "extractLocusLevelTCN")
@@ -142,7 +144,7 @@ importFrom("R.filesets", "getFullNameTranslator")
 importFrom("R.filesets", "getPathname")
 importFrom("R.filesets", "readDataFrame")
 importFrom("R.filesets", "setFullNamesTranslator")
-importFrom("R.methodsS3", "throw")
+importFrom("R.oo", "throw")
 importFrom("R.oo", "clone") ## Multi-sources: R.oo, R.filesets
 importFrom("R.oo", "equals")
 importFrom("R.oo", "extend")
@@ -182,16 +184,13 @@ importFrom("R.utils", "stext")
 importFrom("R.utils", "subplots")
 importFrom("R.utils", "use")
 
-## Manually adjusted
-## Cannot import explicitly from 'base';
-## importFrom("base", "inherits") ## Multi-sources: R.utils, base
-
 # Manual imports
 importFrom("PSCBS", "callROH")
 importFrom("PSCBS", "callLOH")
 importFrom("PSCBS", "callAB")
 importFrom("R.utils", "Arguments")
 
+importFrom("future.apply", "future_mapply")
 
 importFrom("graphics",
            "abline", "axis", "box", "grid", "layout",
@@ -275,7 +274,6 @@ S3method("plot", "CopyNumberRegions")
 
 # data.frame
 S3method("calculatePairedPSCNByGenotype", "data.frame")
-S3method("callPeaks", "data.frame")
 S3method("fitLoessKD", "data.frame")
 S3method("normalizeLoessKD", "data.frame")
 

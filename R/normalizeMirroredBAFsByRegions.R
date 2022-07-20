@@ -45,107 +45,107 @@ setMethodS3("normalizeMirroredBAFsByRegions", "matrix", function(data, flavor=c(
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Arguments 'data':
-  dim <- dim(data);
+  dim <- dim(data)
   if (!is.element(dim[2], c(2,3))) {
-    dimStr <- sprintf("%dx%d", dim[1], dim[2]);
-    throw("Argument 'data' must be an Kx2 or Kx3 matrix: ", dimStr);
+    dimStr <- sprintf("%dx%d", dim[1], dim[2])
+    throw("Argument 'data' must be an Kx2 or Kx3 matrix: ", dimStr)
   }
-  nbrOfSegments <- nrow(data);
+  nbrOfSegments <- nrow(data)
 
   # Argument 'flavor':
-  flavor <- match.arg(flavor);
+  flavor <- match.arg(flavor)
   if (flavor == "total") {
     if (dim[2] < 3) {
-      throw("Argument 'data' must contain 3 column when flavor=\"total\": ", dim[2]);
+      throw("Argument 'data' must contain 3 column when flavor=\"total\": ", dim[2])
     }
   }
 
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
-  verbose && enter(verbose, "Rescaling segment-level mirrored allele B fractions (mBAFs)");
+  verbose && enter(verbose, "Rescaling segment-level mirrored allele B fractions (mBAFs)")
 
-  verbose && cat(verbose, "Flavor: ", flavor);
-  verbose && cat(verbose, "Number of segments: ", nbrOfSegments);
-  verbose && cat(verbose, "Mirrored allele B fractions (data):");
-  verbose && str(verbose, data);
-  verbose && summary(verbose, data);
+  verbose && cat(verbose, "Flavor: ", flavor)
+  verbose && cat(verbose, "Number of segments: ", nbrOfSegments)
+  verbose && cat(verbose, "Mirrored allele B fractions (data):")
+  verbose && str(verbose, data)
+  verbose && summary(verbose, data)
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Estimate normalization function/scale factors
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  modelFit <- list(scale=NA);
+  modelFit <- list(scale=NA)
   if (flavor == "plain") {
-    verbose && enter(verbose, "Estimating scale factors for each segment independently");
+    verbose && enter(verbose, "Estimating scale factors for each segment independently")
 
     # Estimate the scale factors for each segment independently
-    y <- data[,2,drop=TRUE];
-    scale <- 1 / y;
-    verbose && cat(verbose, "Scale factors (one per segment):");
-    verbose && str(verbose, scale);
+    y <- data[,2,drop=TRUE]
+    scale <- 1 / y
+    verbose && cat(verbose, "Scale factors (one per segment):")
+    verbose && str(verbose, scale)
     # Not needed anymore
-    y <- NULL;
+    y <- NULL
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   } else if (flavor == "total") {
-    verbose && enter(verbose, "Estimating scale factors globally as a function of total copy numbers");
+    verbose && enter(verbose, "Estimating scale factors globally as a function of total copy numbers")
 
-    verbose && enter(verbose, "Fit global relationship between homozygous mBAFs and TCNs");
-    X <- data[,c(3,2),drop=FALSE];
-    verbose && cat(verbose, "(TCN,mBAFhom):");
-    verbose && str(verbose, X);
-    fit <- .fitXYCurve(X, ..., verbose=verbose);
+    verbose && enter(verbose, "Fit global relationship between homozygous mBAFs and TCNs")
+    X <- data[,c(3,2),drop=FALSE]
+    verbose && cat(verbose, "(TCN,mBAFhom):")
+    verbose && str(verbose, X)
+    fit <- .fitXYCurve(X, ..., verbose=verbose)
     # Not needed anymore
-    X <- NULL;
-    verbose && str(verbose, fit);
-    verbose && exit(verbose);
+    X <- NULL
+    verbose && str(verbose, fit)
+    verbose && exit(verbose)
 
-    verbose && enter(verbose, "Predict scale factors");
-    yHat <- fit$predictY(data[,3,drop=TRUE]);
-    y <- data[,2];
-    plot(y,yHat, xlim=c(0,1), ylim=c(0,1));
-    scale <- 1 / yHat;
-    verbose && cat(verbose, "Predicted scale factors (one per segment):");
-    verbose && str(verbose, scale);
-    verbose && exit(verbose);
+    verbose && enter(verbose, "Predict scale factors")
+    yHat <- fit$predictY(data[,3,drop=TRUE])
+    y <- data[,2]
+    plot(y,yHat, xlim=c(0,1), ylim=c(0,1))
+    scale <- 1 / yHat
+    verbose && cat(verbose, "Predicted scale factors (one per segment):")
+    verbose && str(verbose, scale)
+    verbose && exit(verbose)
 
     # Store the normalization function
-    modelFit$subFit <- fit;
+    modelFit$subFit <- fit
 
     # Not needed anymore
-    fit <- yHat <- NULL;
+    fit <- yHat <- NULL
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   }
 
   # Store the scale estimates
-  modelFit$scale <- scale;
+  modelFit$scale <- scale
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Normalizing mBAFs
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  verbose && enter(verbose, "Normalizing the mirrored allele B fractions");
-  dataN <- data;
-  dataN[,1:2] <- scale * data[,1:2];
-  verbose && str(verbose, dataN);
-  verbose && summary(verbose, dataN);
-  verbose && exit(verbose);
+  verbose && enter(verbose, "Normalizing the mirrored allele B fractions")
+  dataN <- data
+  dataN[,1:2] <- scale * data[,1:2]
+  verbose && str(verbose, dataN)
+  verbose && summary(verbose, dataN)
+  verbose && exit(verbose)
 
-  attr(dataN, "modelFit") <- modelFit;
+  attr(dataN, "modelFit") <- modelFit
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
   # Sanity check
-  stopifnot(dim(dataN) == dim);
+  .stop_if_not(dim(dataN) == dim)
 
-  dataN;
+  dataN
 }) # normalizeMirroredBAFsByRegions()
 
 

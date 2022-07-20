@@ -4,19 +4,12 @@
 ^.svn
 ^.git
 ^.make
-INSTALL[.]md
-OVERVIEW[.]md
-README[.]md
+^INSTALL[.]md$
+^OVERVIEW[.]md$
+^README[.]md$
+^CONDUCT[.]md$
+^CONTRIBUTING[.]md$
 
-#----------------------------
-# Travis-CI et al.
-#----------------------------
-^[.]travis[.]yml$
-^travis-tool[.]sh$
-^pkg-build[.]sh$
-^appveyor[.]yml$
-^covr-utils.R$
-^[.]covr[.]R$
 
 #----------------------------
 # R related
@@ -27,11 +20,8 @@ README[.]md
 ^vignettes/[.]install_extras$
 ^Makefile$
 ^incl
-^NAMESPACE,.*[.]txt$
-^nohup.*$
-^[.]R
-^[.]benchmark
-^[.]devel
-^[.]test
+^revdep
 ^[.]check
 ^.*[.]tar[.]gz$
+^.*\.Rproj$
+^\.Rproj\.user$

@@ -52,7 +52,7 @@
 #   sample one by one.
 # }
 #
-# \section{Different preprocessing methods normalize ChrX \& ChrY differently}{
+# \section{Different preprocessing methods normalize ChrX & ChrY differently}{
 #    Some preprocessing methods estimate copy numbers on sex chromosomes
 #    differently from the autosomal chromosomes.  The way this is done may
 #    vary from method to method and we cannot assume anything about what
@@ -93,48 +93,48 @@
 setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fitUgp=NULL, subsetToFit=NULL, targetDimension=1, align=c("byChromosome", "none"), tags="*", ...) {
   if (!is.null(dsList)) {
     # aroma.light::fitPrincipalCurve()
-    .requirePkg("aroma.light", quietly=TRUE);
+    .requirePkg("aroma.light", quietly=TRUE)
 
     # Arguments 'dsList':
     if (is.list(dsList)) {
-      K <- length(dsList);
+      K <- length(dsList)
 
-      className <- "AromaUnitTotalCnBinarySet";
+      className <- "AromaUnitTotalCnBinarySet"
       for (kk in seq_len(K)) {
-        ds <- dsList[[kk]];
-        ds <- Arguments$getInstanceOf(ds, className, .name="dsList");
+        ds <- dsList[[kk]]
+        ds <- Arguments$getInstanceOf(ds, className, .name="dsList")
       }
       if (length(dsList) < 2L) {
         throw("Argument 'dsList' must contain more than one ",
-                                                         className, ": ", K);
+                                                         className, ": ", K)
       }
     } else {
-      throw("Argument 'dsList' is not a list: ", class(dsList)[1L]);
+      throw("Argument 'dsList' is not a list: ", class(dsList)[1L])
     }
 
     # Arguments 'fitUgp':
-    fitUgp <- Arguments$getInstanceOf(fitUgp, "AromaUgpFile");
+    fitUgp <- Arguments$getInstanceOf(fitUgp, "AromaUgpFile")
 
     # Argument 'subsetToFit':
     if (is.null(subsetToFit)) {
     } else if (is.character(subsetToFit)) {
-      throw("Yet not implemented: Argument 'subsetToFit' is of type character.");
+      throw("Yet not implemented: Argument 'subsetToFit' is of type character.")
     } else {
-      subsetToFit <- Arguments$getIndices(subsetToFit, max=nbrOfUnits(fitUgp));
+      subsetToFit <- Arguments$getIndices(subsetToFit, max=nbrOfUnits(fitUgp))
     }
 
     # Argument 'align'
-    align <- match.arg(align);
+    align <- match.arg(align)
 
     # Argument 'targetDimension'
-    targetDimension <- Arguments$getIndex(targetDimension, max=K);
+    targetDimension <- Arguments$getIndex(targetDimension, max=K)
   }
 
   # Arguments '...':
-  args <- list(...);
+  args <- list(...)
   if (length(args) > 0L) {
-    argsStr <- paste(names(args), collapse=", ");
-    throw("Unknown arguments: ", argsStr);
+    argsStr <- paste(names(args), collapse=", ")
+    throw("Unknown arguments: ", argsStr)
   }
 
   extend(Object(), c("MultiSourceCopyNumberNormalization", uses("ParametersInterface")),
@@ -151,31 +151,31 @@ setConstructorS3("MultiSourceCopyNumberNormalization", function(dsList=NULL, fit
 
 setMethodS3("as.character", "MultiSourceCopyNumberNormalization", function(x, ...) {
   # To please R CMD check
-  this <- x;
+  this <- x
 
-  s <- sprintf("%s:", class(this)[1L]);
+  s <- sprintf("%s:", class(this)[1L])
 
   # Tags:
-  tags <- getTags(this, collapse=", ");
-  s <- c(s, sprintf("Tags: %s", tags));
+  tags <- getTags(this, collapse=", ")
+  s <- c(s, sprintf("Tags: %s", tags))
 
   # Data sets:
-  dsList <- getInputDataSets(this);
-  s <- c(s, sprintf("Data sets (%d):", length(dsList)));
+  dsList <- getInputDataSets(this)
+  s <- c(s, sprintf("Data sets (%d):", length(dsList)))
   for (kk in seq_along(dsList)) {
-    ds <- dsList[[kk]];
-    s <- c(s, as.character(ds));
+    ds <- dsList[[kk]]
+    s <- c(s, as.character(ds))
   }
 
   # All common array names:
-  names <- getAllNames(this);
-  n <- length(names);
-  s <- c(s, sprintf("Number of common array names: %d", n));
-  s <- c(s, sprintf("Names: %s [%d]", hpaste(names), n));
+  names <- getAllNames(this)
+  n <- length(names)
+  s <- c(s, sprintf("Number of common array names: %d", n))
+  s <- c(s, sprintf("Names: %s [%d]", hpaste(names), n))
 
   # Parameters:
-  s <- c(s, sprintf("Parameters: %s", getParametersAsString(this)));
-  GenericSummary(s);
+  s <- c(s, sprintf("Parameters: %s", getParametersAsString(this)))
+  GenericSummary(s)
 }, protected=TRUE)
 
 
@@ -205,68 +205,68 @@ setMethodS3("as.character", "MultiSourceCopyNumberNormalization", function(x, ..
 # }
 #*/###########################################################################
 setMethodS3("getInputDataSets", "MultiSourceCopyNumberNormalization", function(this, ...) {
-  this$.dsList;
+  this$.dsList
 })
 
 
 
 setMethodS3("nbrOfDataSets", "MultiSourceCopyNumberNormalization", function(this, ...) {
-  length(getInputDataSets(this));
-});
+  length(getInputDataSets(this))
+})
 
 
 setMethodS3("getAsteriskTags", "MultiSourceCopyNumberNormalization", function(this, ...) {
-  tags <- "mscn";
+  tags <- "mscn"
 
   # Align-by-chromosome tag?
-  align <- this$.align;
+  align <- this$.align
   if (align != "none") {
-    tags <- c(tags, align);
+    tags <- c(tags, align)
   }
 
-  tags <- paste(tags, collapse=",");
-  tags;
+  tags <- paste(tags, collapse=",")
+  tags
 })
 
 setMethodS3("getTags", "MultiSourceCopyNumberNormalization", function(this, collapse=NULL, ...) {
-  tags <- this$.tags;
+  tags <- this$.tags
 
   # Split tags
-  tags <- unlist(strsplit(tags, split=","));
+  tags <- unlist(strsplit(tags, split=","))
 
   # Asterisk tags
-  tags[tags == "*"] <- getAsteriskTags(this);
+  tags[tags == "*"] <- getAsteriskTags(this)
 
   # Split tags
-  tags <- unlist(strsplit(tags, split=","));
+  tags <- unlist(strsplit(tags, split=","))
 
   # Collapse?
   if (!is.null(collapse)) {
-    tags <- paste(tags, collapse=collapse);
+    tags <- paste(tags, collapse=collapse)
   }
 
-  tags;
+  tags
 })
 
 setMethodS3("getOutputPaths", "MultiSourceCopyNumberNormalization", function(this, ...) {
-  dsList <- getInputDataSets(this);
-  tags <- getTags(this);
+  dsList <- getInputDataSets(this)
+  tags <- getTags(this)
 
   paths <- lapply(dsList, FUN=function(ds) {
-    path <- getPath(ds);
-    path <- getParent(path, 2L);
-    rootPath <- basename(path);
-    path <- getParent(path);
-    rootPath <- "cnData";
-    path <- Arguments$getWritablePath(rootPath);
+    path <- getPath(ds)
+    path <- getParent(path, 2L)
+    rootPath <- basename(path)
+    path <- getParent(path)
+    rootPath <- "cnData"
+    path <- Arguments$getWritablePath(rootPath)
 
-    fullname <- getFullName(ds);
-    fullname <- paste(c(fullname, tags), collapse=",");
-    chipType <- getChipType(ds);
-    file.path(path, fullname, chipType);
-  });
-  paths <- unlist(paths, use.names=FALSE);
-  paths;
+    fullname <- getFullName(ds)
+    fullname <- paste(c(fullname, tags), collapse=",")
+    chipType <- getChipType(ds)
+    file.path(path, fullname, chipType)
+  })
+  paths <- unlist(paths, use.names=FALSE)
+  paths
 }, protected=TRUE)
 
 
@@ -275,59 +275,59 @@ setMethodS3("getOutputDataSets", "MultiSourceCopyNumberNormalization", function(
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
-  verbose && enter(verbose, "Retrieving list of output data sets");
+  verbose && enter(verbose, "Retrieving list of output data sets")
 
-  dsList <- getInputDataSets(this);
-  paths <- getOutputPaths(this);
-  dsOutList <- list();
+  dsList <- getInputDataSets(this)
+  paths <- getOutputPaths(this)
+  dsOutList <- list()
   for (kk in seq_along(dsList)) {
-    ds <- dsList[[kk]];
+    ds <- dsList[[kk]]
     verbose && enter(verbose, sprintf("Data set %d ('%s') of %d",
-                                    kk, getFullName(ds), length(dsList)));
+                                    kk, getFullName(ds), length(dsList)))
 
-    path <- paths[[kk]];
+    path <- paths[[kk]]
     if (isDirectory(path)) {
-      verbose && enter(verbose, "Scanning directory for matching data files");
-      verbose && cat(verbose, "Path: ", path);
+      verbose && enter(verbose, "Scanning directory for matching data files")
+      verbose && cat(verbose, "Path: ", path)
 
-      dsOut <- byPath(ds, path=path, ..., verbose=less(verbose, 10));
+      dsOut <- byPath(ds, path=path, ..., verbose=less(verbose, 10))
 
-      verbose && enter(verbose, "Keeping output data files matching input data files");
+      verbose && enter(verbose, "Keeping output data files matching input data files")
       # Identify output data files that match the input data files
-      fullnames <- getFullNames(ds);
-      df <- getFile(ds, 1L);
-      translator <- getFullNameTranslator(df);
-      setFullNamesTranslator(dsOut, translator);
-      fullnamesOut <- getFullNames(dsOut);
-      idxs <- match(fullnames, fullnamesOut);
-      verbose && str(verbose, idxs);
-      if (anyMissing(idxs)) {
-        throw("Should not happen.");
+      fullnames <- getFullNames(ds)
+      df <- getFile(ds, 1L)
+      translator <- getFullNameTranslator(df)
+      setFullNamesTranslator(dsOut, translator)
+      fullnamesOut <- getFullNames(dsOut)
+      idxs <- match(fullnames, fullnamesOut)
+      verbose && str(verbose, idxs)
+      if (anyNA(idxs)) {
+        throw("Should not happen.")
       }
-      verbose && cat(verbose, "Number of files dropped: ", length(dsOut) - length(idxs));
-      verbose && cat(verbose, "Number of files kept: ", length(idxs));
-      dsOut <- extract(dsOut, idxs);
-      verbose && exit(verbose);
+      verbose && cat(verbose, "Number of files dropped: ", length(dsOut) - length(idxs))
+      verbose && cat(verbose, "Number of files kept: ", length(idxs))
+      dsOut <- extract(dsOut, idxs)
+      verbose && exit(verbose)
 
-      verbose && exit(verbose);
+      verbose && exit(verbose)
     } else {
-      dsOut <- NA;
+      dsOut <- NA
     }
-    dsOutList[[kk]] <- dsOut;
+    dsOutList[[kk]] <- dsOut
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   } # for (kk ...)
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
-  dsOutList;
+  dsOutList
 })
 
 
@@ -358,7 +358,7 @@ setMethodS3("getOutputDataSets", "MultiSourceCopyNumberNormalization", function(
 # }
 #*/###########################################################################
 setMethodS3("getFitAromaUgpFile", "MultiSourceCopyNumberNormalization", function(this, ...) {
-  this$.fitUgp;
+  this$.fitUgp
 }, protected=TRUE)
 
 
@@ -391,12 +391,12 @@ setMethodS3("getFitAromaUgpFile", "MultiSourceCopyNumberNormalization", function
 #*/###########################################################################
 setMethodS3("getAllNames", "MultiSourceCopyNumberNormalization", function(this, ...) {
   # Identify all array names across all sources
-  dsList <- getInputDataSets(this);
-  allNames <- lapply(dsList, getNames, ...);
-  allNames <- unlist(allNames, use.names=FALSE);
-  allNames <- unique(allNames);
-  allNames <- sort(allNames);
-  allNames;
+  dsList <- getInputDataSets(this)
+  allNames <- lapply(dsList, getNames, ...)
+  allNames <- unlist(allNames, use.names=FALSE)
+  allNames <- unique(allNames)
+  allNames <- sort(allNames)
+  allNames
 })
 
 
@@ -434,61 +434,61 @@ setMethodS3("extractTupleOfDataFiles", "MultiSourceCopyNumberNormalization", fun
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Arguments 'dsList':
   if (is.list(dsList)) {
-    className <- "AromaUnitTotalCnBinarySet";
+    className <- "AromaUnitTotalCnBinarySet"
     for (kk in seq_along(dsList)) {
-      ds <- dsList[[kk]];
-      ds <- Arguments$getInstanceOf(ds, className, .name="dsList");
+      ds <- dsList[[kk]]
+      ds <- Arguments$getInstanceOf(ds, className, .name="dsList")
     }
     if (length(dsList) < 2L) {
       throw("Argument 'dsList' must contain more than one ", className,
-                                                     ": ", length(dsList));
+                                                     ": ", length(dsList))
     }
   } else {
-    throw("Argument 'dsList' is not a list: ", class(dsList)[1L]);
+    throw("Argument 'dsList' is not a list: ", class(dsList)[1L])
   }
 
   # Argument 'name':
-  name <- Arguments$getCharacter(name);
+  name <- Arguments$getCharacter(name)
 
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
 
-  verbose && enter(verbose, "Getting list tuple of data files for one sample");
-  verbose && cat(verbose, "Sample name: ", name);
+  verbose && enter(verbose, "Getting list tuple of data files for one sample")
+  verbose && cat(verbose, "Sample name: ", name)
 
   dfList <- lapply(dsList, function(ds) {
-    idx <- indexOf(ds, name);
-    df <- NA;
+    idx <- indexOf(ds, name)
+    df <- NA
     if (!is.na(idx)) {
       if (length(idx) > 1L) {
         throw("Multiple occurances identified for this sample: ",
-                           getName(ds), " => ", paste(idx, collapse=", "));
+                           getName(ds), " => ", paste(idx, collapse=", "))
       }
-      df <- getFile(ds, idx);
+      df <- getFile(ds, idx)
     }
-    df;
-  });
+    df
+  })
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Filter out missing data files in order to identify the set of files
   # to fit the model on
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   if (na.rm) {
-    keep <- sapply(dfList, FUN=function(df) !identical(df, NA));
-    dfList <- dfList[keep];
+    keep <- sapply(dfList, FUN=function(df) !identical(df, NA))
+    dfList <- dfList[keep]
   }
 
-  verbose && cat(verbose, "Number of arrays: ", length(dfList));
+  verbose && cat(verbose, "Number of arrays: ", length(dfList))
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
-  dfList;
+  dfList
 }, protected=TRUE)
 
 
@@ -535,48 +535,48 @@ setMethodS3("getSmoothedDataSets", "MultiSourceCopyNumberNormalization", functio
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
-  dsSmoothList <- this$.dsSmoothList;
+  dsSmoothList <- this$.dsSmoothList
   if (is.null(dsSmoothList)) {
-    verbose && enter(verbose, "Smoothing all data sets to the same set of loci");
-    dsList <- getInputDataSets(this);
-    verbose && cat(verbose, "Number of data sets: ", length(dsList));
+    verbose && enter(verbose, "Smoothing all data sets to the same set of loci")
+    dsList <- getInputDataSets(this)
+    verbose && cat(verbose, "Number of data sets: ", length(dsList))
 
-    targetUgp <- getFitAromaUgpFile(this);
-    verbose && print(verbose, targetUgp);
+    targetUgp <- getFitAromaUgpFile(this)
+    verbose && print(verbose, targetUgp)
 
-    kernel <- "gaussian";
-    sd <- 50e3;
-    verbose && printf(verbose, "Kernel: %s\n", kernel);
-    verbose && printf(verbose, "Bandwidth (sd): %.2f\n", sd);
+    kernel <- "gaussian"
+    sd <- 50e3
+    verbose && printf(verbose, "Kernel: %s\n", kernel)
+    verbose && printf(verbose, "Bandwidth (sd): %.2f\n", sd)
 
-    dsSmoothList <- list();
+    dsSmoothList <- list()
     for (kk in seq_along(dsList)) {
-      ds <- dsList[[kk]];
+      ds <- dsList[[kk]]
       verbose && enter(verbose, sprintf("Data set %d ('%s') of %d",
-                                         kk, getFullName(ds), length(dsList)));
+                                         kk, getFullName(ds), length(dsList)))
       sm <- TotalCnKernelSmoothing(ds, targetUgp=targetUgp,
-                                       kernel=kernel, bandwidth=sd);
-      verbose && print(verbose, sm);
-      dsSmoothList[[kk]] <- process(sm, verbose=less(verbose, 1));
-      verbose && exit(verbose);
+                                       kernel=kernel, bandwidth=sd)
+      verbose && print(verbose, sm)
+      dsSmoothList[[kk]] <- process(sm, verbose=less(verbose, 1))
+      verbose && exit(verbose)
     }
-    names(dsSmoothList) <- names(dsList);
+    names(dsSmoothList) <- names(dsList)
 
     # Cache in memory
-    this$.dsSmoothList <- dsSmoothList;
+    this$.dsSmoothList <- dsSmoothList
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   }
 
 
-  dsSmoothList;
+  dsSmoothList
 }, protected=TRUE)
 
 
@@ -616,96 +616,96 @@ setMethodS3("getSubsetToFit", "MultiSourceCopyNumberNormalization", function(thi
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
-  units <- this$.subsetToFit;
+  units <- this$.subsetToFit
   if (is.null(units)) {
-    verbose && enter(verbose, "Identify subset of (smoothed) units for fitting the model");
+    verbose && enter(verbose, "Identify subset of (smoothed) units for fitting the model")
 
-    ugp <- getFitAromaUgpFile(this);
-    verbose && print(verbose, ugp);
+    ugp <- getFitAromaUgpFile(this)
+    verbose && print(verbose, ugp)
 
-    verbose && enter(verbose, "Querying UGP for units on chromosomes of interest");
-    chromosomes <- 1:22;
+    verbose && enter(verbose, "Querying UGP for units on chromosomes of interest")
+    chromosomes <- 1:22
     verbose && cat(verbose, "Chromosomes to fit: ",
-                                               seqToHumanReadable(chromosomes));
+                                               seqToHumanReadable(chromosomes))
     units <- sapply(chromosomes, FUN=function(cc) {
-      getUnitsOnChromosome(ugp, cc);
-    });
-    units <- unlist(units, use.names=FALSE);
-    units <- unique(units);
-    units <- sort(units);
-    verbose && str(verbose, units);
-    verbose && exit(verbose);
+      getUnitsOnChromosome(ugp, cc)
+    })
+    units <- unlist(units, use.names=FALSE)
+    units <- unique(units)
+    units <- sort(units)
+    verbose && str(verbose, units)
+    verbose && exit(verbose)
 
-    this$.subsetToFit <- units;
+    this$.subsetToFit <- units
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   }
 
 
-  units;
+  units
 }, protected=TRUE)
 
 
 
 setMethodS3("getParameters", "MultiSourceCopyNumberNormalization", function(this, ...) {
-  params <- NextMethod("getParameters");
+  params <- NextMethod("getParameters")
 
-  params$subsetToFit <- getSubsetToFit(this, ...);
-  params$fitUgp <- getFitAromaUgpFile(this, ...);
-  params$align <- this$.align;
-  params$targetDimension <- this$.targetDimension;
-  params$pcBandwidth <- this$.pcBandwidth;
+  params$subsetToFit <- getSubsetToFit(this, ...)
+  params$fitUgp <- getFitAromaUgpFile(this, ...)
+  params$align <- this$.align
+  params$targetDimension <- this$.targetDimension
+  params$pcBandwidth <- this$.pcBandwidth
 
-  params;
+  params
 }, protected=TRUE)
 
 
 setMethodS3("getPrincipalCurveEstimator", "MultiSourceCopyNumberNormalization", function(this, ...) {
   # aroma.light::fitPrincipalCurve()
-  .requirePkg("aroma.light", quietly=TRUE);
+  .requirePkg("aroma.light", quietly=TRUE)
 
-  params <- getParameters(this);
-  df <- params$pcBandwidth;
+  params <- getParameters(this)
+  df <- params$pcBandwidth
   if (is.null(df)) {
-    df <- 5;
+    df <- 5
   }
-  df <- Arguments$getDouble(df);
+  df <- Arguments$getDouble(df)
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Local functions
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   smoother <- function(lambda, xj, ...) {
-    o <- order(lambda);
-    lambda <- lambda[o];
-    xj <- xj[o];
-    fit <- smooth.spline(lambda, xj, ..., df=df, keep.data=FALSE);
-    predict(fit, x=lambda)$y;
+    o <- order(lambda)
+    lambda <- lambda[o]
+    xj <- xj[o]
+    fit <- smooth.spline(lambda, xj, ..., df=df, keep.data=FALSE)
+    predict(fit, x=lambda)$y
   }
 
   robustSmoother <- function(lambda, xj, ...) {
-    o <- order(lambda);
-    lambda <- lambda[o];
-    xj <- xj[o];
-    fit <- .robustSmoothSpline(lambda, xj, ..., df=df);
-    predict(fit, x=lambda)$y;
+    o <- order(lambda)
+    lambda <- lambda[o]
+    xj <- xj[o]
+    fit <- .robustSmoothSpline(lambda, xj, ..., df=df)
+    predict(fit, x=lambda)$y
   }
 
   # Create principal curve estimator
   fcn <- function(Y, ...) {
-    .fitPrincipalCurve(Y, smoother=smoother, ...);
+    .fitPrincipalCurve(Y, smoother=smoother, ...)
   }
-  attr(fcn, "smoother") <- smoother;
-  attr(fcn, "df") <- df;
+  attr(fcn, "smoother") <- smoother
+  attr(fcn, "df") <- df
 
-  fcn;
-}, protected=TRUE);
+  fcn
+}, protected=TRUE)
 
 
 
@@ -744,95 +744,95 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
   # Argument 'force':
-  force <- Arguments$getLogical(force);
+  force <- Arguments$getLogical(force)
 
 
 
-  verbose && enter(verbose, "Fitting one sample across multiple sources");
+  verbose && enter(verbose, "Fitting one sample across multiple sources")
 
   if (is.character(dfList)) {
-    verbose && enter(verbose, "Extracting list of input data files");
-    name <- dfList;
-    verbose && cat(verbose, "Sample name: ", name);
-    dsList <- getInputDataSets(this);
+    verbose && enter(verbose, "Extracting list of input data files")
+    name <- dfList
+    verbose && cat(verbose, "Sample name: ", name)
+    dsList <- getInputDataSets(this)
     dfList <- extractTupleOfDataFiles(this, dsList=dsList, name=name,
-                                                verbose=less(verbose, 1));
-    verbose && print(verbose, dfList);
-    verbose && exit(verbose);
+                                                verbose=less(verbose, 1))
+    verbose && print(verbose, dfList)
+    verbose && exit(verbose)
   }
 
-  nbrOfArrays <- length(dfList);
-  verbose && cat(verbose, "Number of arrays: ", nbrOfArrays);
+  nbrOfArrays <- length(dfList)
+  verbose && cat(verbose, "Number of arrays: ", nbrOfArrays)
 
   # Get name of the sample from the tuple of input arrays
   # (We do it this way so that we at some stage can process() one sample
   #  at the time without first smoothing all samples. /HB 2008-08-18)
-  df <- dfList[[1]];
-  name <- getName(df);
-  verbose && cat(verbose, "Sample name: ", name);
+  df <- dfList[[1]]
+  name <- getName(df)
+  verbose && cat(verbose, "Sample name: ", name)
   # Not needed anymore
-  dfList <- NULL;
+  dfList <- NULL
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Get model parameters
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  params <- getParameters(this, verbose=less(verbose, 1));
-  verbose && str(verbose, params);
-  subsetToFit <- params$subsetToFit;
-  align <- params$align;
-  targetDimension <- params$targetDimension;
-  pcEstimator <- getPrincipalCurveEstimator(this);
+  params <- getParameters(this, verbose=less(verbose, 1))
+  verbose && str(verbose, params)
+  subsetToFit <- params$subsetToFit
+  align <- params$align
+  targetDimension <- params$targetDimension
+  pcEstimator <- getPrincipalCurveEstimator(this)
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Identify list of data files to fit model to
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Smooth data towards target UGP, which specifies the common set of loci
-  dsSmooth <- getSmoothedDataSets(this, verbose=less(verbose, 1));
+  dsSmooth <- getSmoothedDataSets(this, verbose=less(verbose, 1))
   dfSList <- extractTupleOfDataFiles(this, dsList=dsSmooth, name=name,
-                                                 verbose=less(verbose, 1));
+                                                 verbose=less(verbose, 1))
   # Not needed anymore
-  dsSmooth <- NULL;
-  verbose && str(verbose, dfSList);
+  dsSmooth <- NULL
+  verbose && str(verbose, dfSList)
 
   # Identify and exlude missing data sets
-  keep <- sapply(dfSList, FUN=function(df) !identical(df, NA));
-  keep <- which(keep);
-  dfSList <- dfSList[keep];
+  keep <- sapply(dfSList, FUN=function(df) !identical(df, NA))
+  keep <- which(keep)
+  dfSList <- dfSList[keep]
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Already fitted?
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  fullnames <- sapply(dfSList, getFullName);
-  fullnames <- unname(fullnames);
+  fullnames <- sapply(dfSList, getFullName)
+  fullnames <- unname(fullnames)
 
-  chipTypes <- sapply(dfSList, getChipType);
-  chipTypes <- unname(chipTypes);
+  chipTypes <- sapply(dfSList, getChipType)
+  chipTypes <- unname(chipTypes)
 
-  checkSums <- sapply(dfSList, getChecksum);
-  checkSums <- unname(checkSums);
+  checkSums <- sapply(dfSList, getChecksum)
+  checkSums <- unname(checkSums)
 
-  df <- params$pcBandwidth;
+  df <- params$pcBandwidth
 
   key <- list(method="fitOne", class="MultiSourceCopyNumberNormalization",
            fullnames=fullnames, chipTypes=chipTypes, checkSums=checkSums,
            subsetToFit=subsetToFit, align=align, df=df,
-           .retData=.retData, version="2010-01-14");
-  dirs <- c("aroma.cn", "MultiSourceCopyNumberNormalization");
+           .retData=.retData, version="2010-01-14")
+  dirs <- c("aroma.cn", "MultiSourceCopyNumberNormalization")
   if (!force) {
-    fit <- loadCache(key=key, dirs=dirs);
+    fit <- loadCache(key=key, dirs=dirs)
     if (!is.null(fit)) {
-      verbose && cat(verbose, "Cached results found.");
-      verbose && exit(verbose);
-      return(fit);
+      verbose && cat(verbose, "Cached results found.")
+      verbose && exit(verbose)
+      return(fit)
     }
   }
 
@@ -840,220 +840,220 @@ setMethodS3("fitOne", "MultiSourceCopyNumberNormalization", function(this, dfLis
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Extract smoothed data
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  verbose && enter(verbose, "Extracting data");
-  verbose && cat(verbose, "Subset of units used for fitting:");
-  verbose && str(verbose, subsetToFit);
+  verbose && enter(verbose, "Extracting data")
+  verbose && cat(verbose, "Subset of units used for fitting:")
+  verbose && str(verbose, subsetToFit)
   # Extracting data for sample to be normalized
   Y <- lapply(dfSList, FUN=function(df) {
-    extractMatrix(df, rows=subsetToFit, column=1, drop=TRUE);
-  });
+    extractMatrix(df, rows=subsetToFit, column=1, drop=TRUE)
+  })
 
   # Not needed anymore
-  subsetToFit <- NULL;
+  subsetToFit <- NULL
 
-  Y <- as.data.frame(Y);
-  colnames(Y) <- NULL;
-  Y <- as.matrix(Y);
-  dimnames(Y) <- NULL;
-  dim <- dim(Y);
-  verbose && str(verbose, Y);
-  verbose && summary(verbose, Y);
-  verbose && exit(verbose);
+  Y <- as.data.frame(Y)
+  colnames(Y) <- NULL
+  Y <- as.matrix(Y)
+  dimnames(Y) <- NULL
+  dim <- dim(Y)
+  verbose && str(verbose, Y)
+  verbose && summary(verbose, Y)
+  verbose && exit(verbose)
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Fit principal curve to smoothed data (Y[,1], Y[,2], ..., Y[,K])
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  verbose && enter(verbose, "Fitting across-source normalization function");
-  verbose && cat(verbose, "Estimator for principal curves:");
-  verbose && str(verbose, pcEstimator);
+  verbose && enter(verbose, "Fitting across-source normalization function")
+  verbose && cat(verbose, "Estimator for principal curves:")
+  verbose && str(verbose, pcEstimator)
   t <- system.time({
-    fit <- pcEstimator(Y);
-  });
-  verbose && cat(verbose, "Fitting time:");
-  verbose && print(verbose, t);
+    fit <- pcEstimator(Y)
+  }, gcFirst = FALSE)
+  verbose && cat(verbose, "Fitting time:")
+  verbose && print(verbose, t)
 
   # Flip direction of the curve ('lambda')?
-  rho <- cor(fit$lambda, Y[,1], use="complete.obs");
-  flip <- (rho < 0);
+  rho <- cor(fit$lambda, Y[,1], use="complete.obs")
+  flip <- (rho < 0)
   if (flip) {
-    fit$lambda <- max(fit$lambda, na.rm=TRUE) - fit$lambda;
-    verbose && cat(verbose, "Direction of fitted curve ('lambda') was flipped such that it increases with the signal.");
+    fit$lambda <- max(fit$lambda, na.rm=TRUE) - fit$lambda
+    verbose && cat(verbose, "Direction of fitted curve ('lambda') was flipped such that it increases with the signal.")
   }
 
   verbose && printf(verbose, "Processing time: %.1f seconds\n",
-                                                          as.double(t[3L]));
+                                                          as.double(t[3L]))
 
   if (.retData) {
-    fit$Y <- Y;
+    fit$Y <- Y
   }
   # Not needed anymore
-  Y <- NULL;
+  Y <- NULL
 
   # Sanity check
   if (!identical(dim(fit$s), dim)) {
     throw("Internal error: The fitted data has a different dimension that the input data: ",
-                         paste(dim(fit$s), collapse="x"), " != ", paste(dim, collapse="x"));
+                         paste(dim(fit$s), collapse="x"), " != ", paste(dim, collapse="x"))
   }
-  verbose && str(verbose, fit);
-  verbose && exit(verbose);
+  verbose && str(verbose, fit)
+  verbose && exit(verbose)
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Standardize the channels to a target channel?
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  targetChannel <- NULL;
+  targetChannel <- NULL
   if (!is.null(targetChannel)) {
 ##     for (kk in seq_len(dim[2])) {
 ##       if (kk == targetChannel) {
-##         targetTransform <- function(x, ...) x;
+##         targetTransform <- function(x, ...) x
 ##       } else {
-##         targetTransform <- makeSmoothSplinePredict(Yn[,kk], Yn[,targetChannel]);
+##         targetTransform <- makeSmoothSplinePredict(Yn[,kk], Yn[,targetChannel])
 ##       }
 ##     } # for (kk ...)
   }
 
-#  class(fit) <- c("MultiSourceCopyNumberNormalizationFit", class(fit));
+#  class(fit) <- c("MultiSourceCopyNumberNormalizationFit", class(fit))
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Shift each chromosome?
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   if (is.element(align, c("byChromosome"))) {
-    verbose && enter(verbose, "Calculating shift for each chromosome");
-    verbose && cat(verbose, "align=", align);
+    verbose && enter(verbose, "Calculating shift for each chromosome")
+    verbose && cat(verbose, "align=", align)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Grouping units by chromosome
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    ugpS <- getAromaUgpFile(dfSList[[1L]]);
-    chromosomes <- getChromosomes(ugpS);
-    verbose && cat(verbose, "Chromosomes: ", seqToHumanReadable(chromosomes));
+    ugpS <- getAromaUgpFile(dfSList[[1L]])
+    chromosomes <- getChromosomes(ugpS)
+    verbose && cat(verbose, "Chromosomes: ", seqToHumanReadable(chromosomes))
 
-    verbose && enter(verbose, "Grouping units by chromosome");
-    values <- ugpS[,1L,drop=TRUE];
-    unitsS <- list();
+    verbose && enter(verbose, "Grouping units by chromosome")
+    values <- ugpS[,1L,drop=TRUE]
+    unitsS <- list()
     for (chr in chromosomes) {
-      chrStr <- sprintf("Chr%02d", chr);
-      unitsS[[chrStr]] <- which(values == chr);
+      chrStr <- sprintf("Chr%02d", chr)
+      unitsS[[chrStr]] <- which(values == chr)
     }
     # Not needed anymore
-    values <- NULL;
-#    verbose && str(verbose, unitsS);
+    values <- NULL
+#    verbose && str(verbose, unitsS)
     # Dropping chromosomes with too few units
-    ns <- sapply(unitsS, FUN=length);
-    unitsS <- unitsS[ns > 5L];
-    verbose && str(verbose, unitsS);
-    verbose && exit(verbose);
+    ns <- sapply(unitsS, FUN=length)
+    unitsS <- unitsS[ns > 5L]
+    verbose && str(verbose, unitsS)
+    verbose && exit(verbose)
 
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Calculating means of each chromosome in each source
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    verbose && enter(verbose, "Allocating matrix for smooth data");
-    dfS <- dfSList[[1L]];
-    naValue <- as.double(NA);
-    YSN <- matrix(naValue, nrow=nbrOfUnits(dfS), ncol=nbrOfArrays);
-    verbose && cat(verbose, "RAM: ", objectSize(YSN), " bytes");
-    verbose && exit(verbose);
+    verbose && enter(verbose, "Allocating matrix for smooth data")
+    dfS <- dfSList[[1L]]
+    naValue <- NA_real_
+    YSN <- matrix(naValue, nrow=nbrOfUnits(dfS), ncol=nbrOfArrays)
+    verbose && cat(verbose, "RAM: ", objectSize(YSN), " bytes")
+    verbose && exit(verbose)
 
-    verbose && enter(verbose, "Loading and backtransforming *smoothed* data");
+    verbose && enter(verbose, "Loading and backtransforming *smoothed* data")
     for (kk in seq_len(nbrOfArrays)) {
-      dfS <- dfSList[[kk]];
+      dfS <- dfSList[[kk]]
       verbose && enter(verbose, sprintf("Source #%d ('%s') of %d", kk,
-                                        getFullName(dfS), nbrOfArrays));
+                                        getFullName(dfS), nbrOfArrays))
 
-      verbose && enter(verbose, "Loading smoothed data");
-      yS <- extractMatrix(dfS, column=1, drop=TRUE);
-      verbose && str(verbose, yS);
-      verbose && exit(verbose);
+      verbose && enter(verbose, "Loading smoothed data")
+      yS <- extractMatrix(dfS, column=1, drop=TRUE)
+      verbose && str(verbose, yS)
+      verbose && exit(verbose)
 
-      verbose && enter(verbose, "Backtransforming smoothed data");
+      verbose && enter(verbose, "Backtransforming smoothed data")
       ySN <- .backtransformPrincipalCurve(yS, fit=fit, dimensions=kk,
-                                      targetDimension=targetDimension);
-      ySN <- ySN[,1L,drop=TRUE];
-      verbose && str(verbose, ySN);
+                                      targetDimension=targetDimension)
+      ySN <- ySN[,1L,drop=TRUE]
+      verbose && str(verbose, ySN)
       # Not needed anymore
-      yS <- NULL;
-      verbose && exit(verbose);
+      yS <- NULL
+      verbose && exit(verbose)
 
       # Storing
-      YSN[,kk] <- ySN;
+      YSN[,kk] <- ySN
       # Not needed anymore
-      ySN <- NULL;
+      ySN <- NULL
 
-      verbose && exit(verbose);
+      verbose && exit(verbose)
     } # for (kk ...)
-    verbose && summary(verbose, YSN);
-    verbose && str(verbose, YSN);
-    verbose && exit(verbose);
+    verbose && summary(verbose, YSN)
+    verbose && str(verbose, YSN)
+    verbose && exit(verbose)
 
-    verbose && enter(verbose, "Calculating shifts chromosome by chromosome");
+    verbose && enter(verbose, "Calculating shifts chromosome by chromosome")
 
     # Allocate matrices to hold all mean and shift values
-    nbrOfChromosomes <- length(unitsS);
-    naValue <- as.double(NA);
-    mus <- matrix(naValue, nrow=nbrOfChromosomes, ncol=nbrOfArrays);
-    rownames(mus) <- names(unitsS);
-    dmus <- mus;
+    nbrOfChromosomes <- length(unitsS)
+    naValue <- NA_real_
+    mus <- matrix(naValue, nrow=nbrOfChromosomes, ncol=nbrOfArrays)
+    rownames(mus) <- names(unitsS)
+    dmus <- mus
 
     for (chr in seq_len(nbrOfChromosomes)) {
-      chrStr <- sprintf("Chr%02d", chr);
+      chrStr <- sprintf("Chr%02d", chr)
       verbose && enter(verbose, sprintf("Chromosome #%d of %d",
-                                                     chr, nbrOfChromosomes));
+                                                     chr, nbrOfChromosomes))
       # Get the units
-      unitsCC <- unitsS[[chrStr]];
+      unitsCC <- unitsS[[chrStr]]
 
-      verbose && enter(verbose, "Extracting backtransformed *smoothed* data");
-      yList <- list();
+      verbose && enter(verbose, "Extracting backtransformed *smoothed* data")
+      yList <- list()
       for (kk in seq_len(nbrOfArrays)) {
-        yList[[kk]] <- YSN[unitsCC,kk,drop=TRUE];
+        yList[[kk]] <- YSN[unitsCC,kk,drop=TRUE]
       } # for (kk ...)
-      verbose && str(verbose, yList);
-      verbose && exit(verbose);
+      verbose && str(verbose, yList)
+      verbose && exit(verbose)
 
-      verbose && enter(verbose, "Estimating averages and shifts toward targetDimension");
-      verbose && cat(verbose, "Target dimension: ", targetDimension);
+      verbose && enter(verbose, "Estimating averages and shifts toward targetDimension")
+      verbose && cat(verbose, "Target dimension: ", targetDimension)
       # Estimate averages and shifts toward targetDimension
-      yNList <- .normalizeDifferencesToAverage(yList, baseline=targetDimension);
-      alignFit <- attr(yNList, "fit");
-      verbose && str(verbose, alignFit);
-      verbose && exit(verbose);
+      yNList <- .normalizeDifferencesToAverage(yList, baseline=targetDimension)
+      alignFit <- attr(yNList, "fit")
+      verbose && str(verbose, alignFit)
+      verbose && exit(verbose)
 
-      mus[chrStr,] <- alignFit$mus;
-      dmus[chrStr,] <- alignFit$deltas;
+      mus[chrStr,] <- alignFit$mus
+      dmus[chrStr,] <- alignFit$deltas
 
       # Not needed anymore
-      alignFit <- yList <- yNList <- NULL;
-      verbose && exit(verbose);
+      alignFit <- yList <- yNList <- NULL
+      verbose && exit(verbose)
     } # for (chr ...)
-    verbose && exit(verbose);
+    verbose && exit(verbose)
 
     # Not needed anymore
-    YSN <- NULL;
+    YSN <- NULL
 
-    verbose && cat(verbose, "Overall averages:");
-    verbose && print(verbose, mus);
-    verbose && cat(verbose, "Overall shifts:");
-    verbose && print(verbose, dmus);
-    verbose && cat(verbose, "Target dimension: ", targetDimension);
-    verbose && exit(verbose);
+    verbose && cat(verbose, "Overall averages:")
+    verbose && print(verbose, mus)
+    verbose && cat(verbose, "Overall shifts:")
+    verbose && print(verbose, dmus)
+    verbose && cat(verbose, "Target dimension: ", targetDimension)
+    verbose && exit(verbose)
 
     fit$alignParams <- list(
       dmus=dmus,
       mus=mus
-    );
+    )
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   } # if (align ...)
 
-  verbose && str(verbose, fit);
+  verbose && str(verbose, fit)
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Save to cache
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  saveCache(key=key, dirs=dirs, fit);
+  saveCache(key=key, dirs=dirs, fit)
 
-  fit;
+  fit
 }, protected=TRUE)  # fitOne()
 
 
@@ -1071,245 +1071,245 @@ setMethodS3("normalizeOne", "MultiSourceCopyNumberNormalization", function(this,
 
 
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
   # Argument 'force':
-  force <- Arguments$getLogical(force);
+  force <- Arguments$getLogical(force)
 
 
 
-  verbose && enter(verbose, "Normalize one sample across multiple sources");
+  verbose && enter(verbose, "Normalize one sample across multiple sources")
 
   # Get name of the sample from the tuple of input arrays
   # (We do it this way so that we at some stage can process() one sample
   #  at the time without first smoothing all samples. /HB 2008-08-18)
-  df <- dfList[[1]];
-  name <- getName(df);
-  verbose && cat(verbose, "Sample name: ", name);
+  df <- dfList[[1]]
+  name <- getName(df)
+  verbose && cat(verbose, "Sample name: ", name)
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Get model parameters
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  params <- getParameters(this, verbose=less(verbose, 1));
-  verbose && str(verbose, params);
-  subsetToUpdate <- params$subsetToUpdate;
-  targetDimension <- params$targetDimension;
-  align <- params$align;
+  params <- getParameters(this, verbose=less(verbose, 1))
+  verbose && str(verbose, params)
+  subsetToUpdate <- params$subsetToUpdate
+  targetDimension <- params$targetDimension
+  align <- params$align
 
   # Get (and create) the output paths
-  outputPaths <- getOutputPaths(this);
+  outputPaths <- getOutputPaths(this)
 
   if (is.element(align, c("byChromosome"))) {
-    verbose && enter(verbose, "Estimate alignment parameters");
-    verbose && cat(verbose, "align=", align);
+    verbose && enter(verbose, "Estimate alignment parameters")
+    verbose && cat(verbose, "align=", align)
 
-    verbose && enter(verbose, "Extracting align-by-chromosome parameters");
-    alignParams <- fit$alignParams;
-    verbose && str(verbose, alignParams);
+    verbose && enter(verbose, "Extracting align-by-chromosome parameters")
+    alignParams <- fit$alignParams
+    verbose && str(verbose, alignParams)
     # Sanity check
     if (is.null(alignParams)) {
-      throw("Internal error: No shift estimates found.");
+      throw("Internal error: No shift estimates found.")
     }
 
-    dmus <- alignParams$dmus;
-    verbose && print(verbose, dmus);
+    dmus <- alignParams$dmus
+    verbose && print(verbose, dmus)
     # Sanity check
     if (is.null(dmus)) {
-      throw("Internal error: No shift estimates found.");
+      throw("Internal error: No shift estimates found.")
     }
-    verbose && exit(verbose);
+    verbose && exit(verbose)
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   } # if (align ...)
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Normalizing array by array
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  verbose && enter(verbose, "Normalizing source by source (array by array)");
-  verbose && cat(verbose, "Units to be updated:");
-  verbose && str(verbose, subsetToUpdate);
+  verbose && enter(verbose, "Normalizing source by source (array by array)")
+  verbose && cat(verbose, "Units to be updated:")
+  verbose && str(verbose, subsetToUpdate)
 
-  nbrOfArrays <- length(dfList);
-  dfNList <- vector("list", length=nbrOfArrays);
+  nbrOfArrays <- length(dfList)
+  dfNList <- vector("list", length=nbrOfArrays)
   for (kk in seq_len(nbrOfArrays)) {
-    df <- dfList[[kk]];
+    df <- dfList[[kk]]
     verbose && enter(verbose, sprintf("Source #%d ('%s') of %d", kk,
-                                            getFullName(df), nbrOfArrays));
+                                            getFullName(df), nbrOfArrays))
 
-    outputPath <- outputPaths[[kk]];
+    outputPath <- outputPaths[[kk]]
     # Here we really should use the fullname /HB 2009-05-05
-    filename <- getFilename(df);
-    pathname <- Arguments$getWritablePathname(filename, path=outputPath, ...);
+    filename <- getFilename(df)
+    pathname <- Arguments$getWritablePathname(filename, path=outputPath, ...)
     if (!force && isFile(pathname)) {
-      verbose && cat(verbose, "Already normalized.");
-      dfN <- newInstance(df, pathname);
+      verbose && cat(verbose, "Already normalized.")
+      dfN <- newInstance(df, pathname)
     } else {
-      verbose && enter(verbose, "Normalizing");
+      verbose && enter(verbose, "Normalizing")
 
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       # Reading data
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      verbose && enter(verbose, "Reading data");
-      y <- extractMatrix(df, rows=subsetToUpdate, column=1, drop=TRUE);
-      verbose && str(verbose, y);
-      verbose && exit(verbose);
+      verbose && enter(verbose, "Reading data")
+      y <- extractMatrix(df, rows=subsetToUpdate, column=1, drop=TRUE)
+      verbose && str(verbose, y)
+      verbose && exit(verbose)
 
 
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       # Normalizing data
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      verbose && enter(verbose, "Backtransforming data");
+      verbose && enter(verbose, "Backtransforming data")
       yN <- .backtransformPrincipalCurve(y, fit=fit, dimensions=kk,
-                                        targetDimension=targetDimension);
-      yN <- yN[,1L,drop=TRUE];
-      verbose && str(verbose, yN);
-      verbose && exit(verbose);
+                                        targetDimension=targetDimension)
+      yN <- yN[,1L,drop=TRUE]
+      verbose && str(verbose, yN)
+      verbose && exit(verbose)
 
 
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       # Aligning signals chromosome by chromosome?
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       if (is.element(align, c("byChromosome"))) {
-        verbose && enter(verbose, "Align genomic signals");
-        verbose && cat(verbose, "align=", align);
+        verbose && enter(verbose, "Align genomic signals")
+        verbose && cat(verbose, "align=", align)
 
-        verbose && enter(verbose, "Aligning signals for each chromosome");
-        ugp <- getAromaUgpFile(df);
-        chromosomes <- getChromosomes(ugp);
-        verbose && cat(verbose, "Chromosomes: ", seqToHumanReadable(chromosomes));
+        verbose && enter(verbose, "Aligning signals for each chromosome")
+        ugp <- getAromaUgpFile(df)
+        chromosomes <- getChromosomes(ugp)
+        verbose && cat(verbose, "Chromosomes: ", seqToHumanReadable(chromosomes))
 
-        verbose && enter(verbose, "Grouping units by chromosome");
-        values <- ugp[subsetToUpdate,1L,drop=TRUE];
+        verbose && enter(verbose, "Grouping units by chromosome")
+        values <- ugp[subsetToUpdate,1L,drop=TRUE]
         # Sanity check
-        stopifnot(length(values) == length(yN));
+        .stop_if_not(length(values) == length(yN))
 
-        listOfUnits <- list();
+        listOfUnits <- list()
         for (chr in chromosomes) {
-          chrStr <- sprintf("Chr%02d", chr);
-          subset <- which(values == chr);
-          listOfUnits[[chrStr]] <- subset;
+          chrStr <- sprintf("Chr%02d", chr)
+          subset <- which(values == chr)
+          listOfUnits[[chrStr]] <- subset
         }
         # Not needed anymore
-        values <- NULL;
-        verbose && str(verbose, listOfUnits);
+        values <- NULL
+        verbose && str(verbose, listOfUnits)
 
         # Dropping chromosomes with too few units
-        ns <- sapply(listOfUnits, FUN=length);
-        listOfUnits <- listOfUnits[ns > 5L];
-        verbose && str(verbose, listOfUnits);
-        verbose && exit(verbose);
+        ns <- sapply(listOfUnits, FUN=length)
+        listOfUnits <- listOfUnits[ns > 5L]
+        verbose && str(verbose, listOfUnits)
+        verbose && exit(verbose)
 
         # Dropping chromosomes for which there is no shift estimate
-        idxs <- match(names(listOfUnits), rownames(dmus));
-        if (anyMissing(idxs)) {
-          verbose && cat(verbose, "Shift estimates are not available for some chromosomes, which are skipped:");
-          verbose && print(verbose, names(listOfUnits[!is.finite(idxs)]));
-          listOfUnits <- listOfUnits[is.finite(idxs)];
+        idxs <- match(names(listOfUnits), rownames(dmus))
+        if (anyNA(idxs)) {
+          verbose && cat(verbose, "Shift estimates are not available for some chromosomes, which are skipped:")
+          verbose && print(verbose, names(listOfUnits[!is.finite(idxs)]))
+          listOfUnits <- listOfUnits[is.finite(idxs)]
         }
 
         # Aligning mean signals chromosome by chromosome
         for (chrStr in names(listOfUnits)) {
-          subset <- listOfUnits[[chrStr]];
-          dmu <- dmus[chrStr,kk];
-          yN[subset] <- yN[subset] - dmu;
+          subset <- listOfUnits[[chrStr]]
+          dmu <- dmus[chrStr,kk]
+          yN[subset] <- yN[subset] - dmu
         } # for (chrStr ...)
 
         # Not needed anymore
-        listOfUnits <- NULL;
+        listOfUnits <- NULL
 
-        verbose && str(verbose, yN);
+        verbose && str(verbose, yN)
 
-        verbose && exit(verbose);
+        verbose && exit(verbose)
 
-        verbose && exit(verbose);
+        verbose && exit(verbose)
       } # if (align ...)
 
 
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       # Writing normalized data
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      verbose && enter(verbose, "Storing normalized data");
-      verbose && cat(verbose, "Output pathname: ", pathname);
+      verbose && enter(verbose, "Storing normalized data")
+      verbose && cat(verbose, "Output pathname: ", pathname)
 
-      verbose && enter(verbose, "Create output file");
-      pathnameT <- sprintf("%s.tmp", pathname);
-      verbose && cat(verbose, "Temporary pathname: ", pathnameT);
-      pathnameT <- Arguments$getWritablePathname(pathnameT, mustNotExist=TRUE);
+      verbose && enter(verbose, "Create output file")
+      pathnameT <- sprintf("%s.tmp", pathname)
+      verbose && cat(verbose, "Temporary pathname: ", pathnameT)
+      pathnameT <- Arguments$getWritablePathname(pathnameT, mustNotExist=TRUE)
 
-      file.copy(getPathname(df), pathnameT);
-      dfN <- newInstance(df, pathnameT);
-      verbose && print(verbose, dfN);
-      verbose && exit(verbose);
+      file.copy(getPathname(df), pathnameT)
+      dfN <- newInstance(df, pathnameT)
+      verbose && print(verbose, dfN)
+      verbose && exit(verbose)
 
-      verbose && enter(verbose, "Writing data");
+      verbose && enter(verbose, "Writing data")
       if (is.null(subsetToUpdate)) {
-        dfN[,1L] <- yN;
+        dfN[,1L] <- yN
       } else {
-        dfN[subsetToUpdate,1L] <- yN;
+        dfN[subsetToUpdate,1L] <- yN
       }
       # Not needed anymore
-      yN <- NULL;
-      verbose && exit(verbose);
+      yN <- NULL
+      verbose && exit(verbose)
 
-      verbose && enter(verbose, "Updating file footer");
-      footer <- readFooter(dfN);
-      srcFile <- df;
+      verbose && enter(verbose, "Updating file footer")
+      footer <- readFooter(dfN)
+      srcFile <- df
       footer$srcFile <- list(
         filename = getFilename(srcFile),
         filesize = getFileSize(srcFile),
         checksum = getChecksum(srcFile)
-      );
-      pkg <- aroma.cn;
+      )
+      pkg <- aroma.cn
       footer$createdBy <- list(
         class=class(this)[1],
         package = getName(pkg),
         version = getVersion(pkg)
-      );
-      footer$createdOn <- format(Sys.time(), "%Y%m%d %H:%M:%S", usetz=TRUE);
-      writeFooter(dfN, footer);
-      verbose && exit(verbose);
+      )
+      footer$createdOn <- format(Sys.time(), "%Y%m%d %H:%M:%S", usetz=TRUE)
+      writeFooter(dfN, footer)
+      verbose && exit(verbose)
 
-      verbose && enter(verbose, "Renaming temporary filename");
-      file.rename(pathnameT, pathname);
+      verbose && enter(verbose, "Renaming temporary filename")
+      file.rename(pathnameT, pathname)
       if (isFile(pathnameT) || !isFile(pathname)) {
         throw("Failed to rename temporary file: ",
-                        pathnameT, " -> ", pathname);
+                        pathnameT, " -> ", pathname)
       }
       # Not needed anymore
-      pathnameT <- NULL;
-      verbose && exit(verbose);
-      dfN <- newInstance(df, pathname);
+      pathnameT <- NULL
+      verbose && exit(verbose)
+      dfN <- newInstance(df, pathname)
       # Not needed anymore
-      pathname <- NULL;
+      pathname <- NULL
 
-      verbose && exit(verbose);
+      verbose && exit(verbose)
 
 
-      verbose && exit(verbose);
+      verbose && exit(verbose)
     }
 
-    verbose && print(verbose, dfN);
-    dfNList[[kk]] <- dfN;
+    verbose && print(verbose, dfN)
+    dfNList[[kk]] <- dfN
     # Not needed anymore
-    dfN <- NULL;
+    dfN <- NULL
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   } # for (kk ...)
-  verbose && print(verbose, dfNList);
+  verbose && print(verbose, dfNList)
 
   # Not needed anymore
-  subsetToUpdate <- NULL;
+  subsetToUpdate <- NULL
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
   # Return normalized arrays
-  invisible(dfNList);
+  invisible(dfNList)
 }, protected=TRUE)  # normalizeOne()
 
 
@@ -1348,10 +1348,10 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
@@ -1360,156 +1360,88 @@ setMethodS3("process", "MultiSourceCopyNumberNormalization", function(this, ...,
   #
   # This is a multi-source (same sample across sources) whole-genome method.
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  verbose && enter(verbose, "Multi-source normalize all samples");
-  allNames <- getAllNames(this);
-  nbrOfSamples <- length(allNames);
+  verbose && enter(verbose, "Multi-source normalize all samples")
+  allNames <- getAllNames(this)
+  nbrOfSamples <- length(allNames)
   verbose && cat(verbose, "Number of unique samples in all sets: ",
-                                                               nbrOfSamples);
-  verbose && str(verbose, allNames);
+                                                               nbrOfSamples)
+  verbose && str(verbose, allNames)
 
   # Get the input data sets
-  dsList <- getInputDataSets(this);
+  dsList <- getInputDataSets(this)
 
   # Get (and create) the output paths
-  outputPaths <- getOutputPaths(this);
+  outputPaths <- getOutputPaths(this)
 
 
-  verbose && enter(verbose, "Processing each array");
+  verbose && enter(verbose, "Processing each array")
   for (kk in seq_len(nbrOfSamples)) {
-    name <- allNames[kk];
+    name <- allNames[kk]
     verbose && enter(verbose, sprintf("Sample #%d ('%s') of %d",
-                                                    kk, name, nbrOfSamples));
+                                                    kk, name, nbrOfSamples))
 
 
-    verbose && enter(verbose, "Identifying source data files");
+    verbose && enter(verbose, "Identifying source data files")
     dfList <- extractTupleOfDataFiles(this, dsList=dsList, name=name,
-                                                   verbose=less(verbose, 1));
-    verbose && print(verbose, dfList);
-    verbose && exit(verbose);
+                                                   verbose=less(verbose, 1))
+    verbose && print(verbose, dfList)
+    verbose && exit(verbose)
 
 
-    verbose && enter(verbose, "Check if all arrays are already normalized");
-    isDone <- TRUE;
+    verbose && enter(verbose, "Check if all arrays are already normalized")
+    isDone <- TRUE
     for (jj in seq_along(dfList)) {
-      df <- dfList[[jj]];
-      outputPath <- outputPaths[[jj]];
-      filename <- getFilename(df);
-      pathname <- Arguments$getWritablePathname(filename, path=outputPath, ...);
-      isDone <- isDone && isFile(pathname);
+      df <- dfList[[jj]]
+      outputPath <- outputPaths[[jj]]
+      filename <- getFilename(df)
+      pathname <- Arguments$getWritablePathname(filename, path=outputPath, ...)
+      isDone <- isDone && isFile(pathname)
       if (!isDone)
-        break;
+        break
     }
-    verbose && cat(verbose, "Is done: ", isDone);
-    verbose && exit(verbose);
+    verbose && cat(verbose, "Is done: ", isDone)
+    verbose && exit(verbose)
 
     if (!force && isDone) {
-      verbose && cat(verbose, "Normalized data files already exist");
+      verbose && cat(verbose, "Normalized data files already exist")
     } else {
-      verbose && enter(verbose, "Fitting model");
+      verbose && enter(verbose, "Fitting model")
       fit <- fitOne(this, dfList=dfList, ..., force=force,
                                            verbose=less(verbose, 1))
-      verbose && str(verbose, fit);
-      verbose && exit(verbose);
+      verbose && str(verbose, fit)
+      verbose && exit(verbose)
 
 
-      verbose && enter(verbose, "Normalizing");
+      verbose && enter(verbose, "Normalizing")
       dfNList <- normalizeOne(this, dfList=dfList, fit=fit, ...,
-                             force=force, verbose=less(verbose, 1));
+                             force=force, verbose=less(verbose, 1))
       # Not needed anymore
-      fit <- NULL;
-      verbose && print(verbose, dfNList);
+      fit <- NULL
+      verbose && print(verbose, dfNList)
 
       # Sanity check
       if (length(dfNList) != length(dfList)) {
-        throw("The number of normalized arrays does not match the number of source arrays: ", length(dfNList), " != ", length(dfList));
+        throw("The number of normalized arrays does not match the number of source arrays: ", length(dfNList), " != ", length(dfList))
       }
 
-      verbose && exit(verbose);
+      verbose && exit(verbose)
       # Not needed anymore
-      dfNList <- NULL;
+      dfNList <- NULL
     }
 
     # Not needed anymore
-    dfList <- NULL;
+    dfList <- NULL
 
-    verbose && exit(verbose);
+    verbose && exit(verbose)
   } # for (kk ...)
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
   # Not needed anymore
-  dsList <- NULL;
+  dsList <- NULL
 
-  outputDataSets <- getOutputDataSets(this, force=TRUE, verbose=less(verbose, 1));
+  outputDataSets <- getOutputDataSets(this, force=TRUE, verbose=less(verbose, 1))
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
-  invisible(outputDataSets);
+  invisible(outputDataSets)
 })
-
-
-###########################################################################
-# HISTORY:
-# 2013-01-07
-# o BUG FIX: getPrincipalCurveEstimator() used non-existing 'verbose'.
-# 2012-11-21
-# o Now class utilizes the new ParametersInterface.
-# 2012-11-13
-# o CLEANUP/FIX: Used "cache:" field modified instead of "cached:".
-#   After correction, all clearCache() methods could be dropped.
-# 2012-04-16
-# o MultiSourceCopyNumberNormalization() now explicitly requires the
-#   'aroma.light' package, instead of assuming it is loaded.
-# 2010-04-04
-# o Added citation for MSCN to the Rdocs.
-# 2010-01-14
-# o Added protected getPrincipalCurveEstimator() for the
-#   MultiSourceCopyNumberNormalization class.  This is done in order to
-#   one day support custom principal-curve estimators.
-# 2009-09-30
-# o Now the alignment is done using normalizeDifferencesToAverage(),
-#   which is robust against outliers and waviness etc.  The previous
-#   method which normalized towards the same overall median is dropped.
-# o Renamed argument 'alignByChromosome' to "align" in order to allow for
-#   more types of aligned.
-# o BUG FIX: getTags() of MultiSourceCopyNumberNormalization would return
-#   all asterisk tags as merged, e.g. c("mscn,align", "tagA", "tagB").
-# 2009-05-17
-# o Now the constructor of MultiSourceCopyNumberNormalization asserts that
-#   there are no stray arguments.
-# 2009-05-06
-# o Now the 'alignByChromosome' is corrected using median estimates.
-# 2009-05-05
-# o Now getOutputDataSets() of  MultiSourceCopyNumberNormalization only
-#   returns output data files with a matching fullname in the input set.
-# o Added a clearCache() to MultiSourceCopyNumberNormalization.
-# 2009-05-03
-# o Added argument 'alignByChromosome'.  If used, the signals are shifted
-#   per chromosome such that the mean of the normalized smoothed signals
-#   is the same for all sources.
-# o Added getAsteriskTags() and getTags().
-# o Now normalized data is first written to a temporary file, which is
-#   then renamed.
-# 2009-02-08
-# o Fixed verbose output of gc(); used cat() instead of print().
-# o Updated to make use of TotalCnKernelSmoothing().
-# 2009-01-26
-# o Adapted to new aroma.core::AromaUnitTotalCnBinary{Set|File} classes.
-# 2008-10-08
-# o Added argument 'targetDimension' to the constructor.
-# o Now fitOne() makes sure the fitted curve has a "positive" direction.
-# o Added argument 'subsetToFit' with some support, but still incomplete.
-# 2008-10-07
-# o Updated fitOne() and normalizeOne() to make use of the updated/new
-#   fit- and backtransformPrincipalCurve() functions.
-# 2008-08-18
-# o Added normalizeOne() and process().
-# o Added utility function extractTupleOfDataFiles().
-# o Added Rdoc comments.
-# 2008-07-04
-# o Added as.character().
-# o BUG FIX: getAllNames() did return duplicated names.
-# 2008-06-24
-# o Created first stub from existing "manual" scripts.
-# 2008-05-27
-# o Created "manual" script.
-###########################################################################

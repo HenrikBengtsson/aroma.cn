@@ -11,7 +11,7 @@ extractMergedLHTrack <- function(lhList, chromosome, sort=TRUE, ...) {
   # Merge the all LH tracks
   lh <- clone(lhs[[1]]);
   lhs <- lhs[-1];
-  for (kk in seq(along=lhs)) {
+  for (kk in seq_along(lhs)) {
     lh <- append(lh, lhs[[kk]]);
   }
 
@@ -23,7 +23,7 @@ extractMergedLHTrack <- function(lhList, chromosome, sort=TRUE, ...) {
 } # extractMergedLHTrack()
 
 plotLHTracks <- function(lhList, ..., lhLim=c(0,1), g=NULL, h=NULL) {
-  subplots(seq(along=chromosomes), ncol=3);
+  subplots(seq_along(chromosomes), ncol=3);
   par(mar=c(2,2,0,0.5)+0.1, mgp=c(3,0.7,0));
 
   chrTags <- names(lhList[[1]]);
@@ -102,7 +102,7 @@ print(dsList);
 # does this for you.  This is almost like having a 
 # GenericDataFileDataFrame. /HB 2009-12-18
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-for (kk in seq(along=dsList)) {
+for (kk in seq_along(dsList)) {
   ds <- dsList[[kk]];
   tags <- setdiff(getTags(ds)[-1], c("TBN", "NGC"));
   tags <- c(tags, "NGC");
@@ -110,7 +110,7 @@ for (kk in seq(along=dsList)) {
   setFullNamesTranslator(gc, tcgaSampleFnt);
   gc <- extract(gc, sampleNames);
 
-  for (ii in seq(length=nbrOfFiles(ds))) {
+  for (ii in seq_len(nbrOfFiles(ds))) {
     df <- getFile(ds, ii);
     gf <- getFile(gc, indexOf(gc, getName(df)));
     df$callFile <- gf;
@@ -124,14 +124,14 @@ for (kk in seq(along=dsList)) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Attach total CNs to each of the above samples
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-for (kk in seq(along=dsList)) {
+for (kk in seq_along(dsList)) {
   ds <- dsList[[kk]];
   tags <- setdiff(getTags(ds)[-1], c("TBN", "NGC"));
   dsC <- AromaUnitTotalCnBinarySet$byName(dataSet, tags=tags, chipType="*", paths="rawCnData/");
   setFullNamesTranslator(dsC, tcgaSampleFnt);
   dsC <- extract(dsC, sampleNames);
 
-  for (ii in seq(length=nbrOfFiles(ds))) {
+  for (ii in seq_len(nbrOfFiles(ds))) {
     df <- getFile(ds, ii);
     dfC <- getFile(dsC, indexOf(dsC, getName(df)));
     df$tcnFile <- dfC;
@@ -146,7 +146,7 @@ for (kk in seq(along=dsList)) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 chromosomes <- 1:24;
 unitsList <- list();
-for (kk in seq(along=dsList)) {
+for (kk in seq_along(dsList)) {
   ds <- dsList[[kk]];
   df <- getFile(ds, 1);
   gf <- df$callFile;
@@ -165,7 +165,7 @@ for (kk in seq(along=dsList)) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 bafList <- list();
 tcnList <- list();
-for (kk in seq(along=dsList)) {
+for (kk in seq_along(dsList)) {
   ds <- dsList[[kk]];
   df <- getFile(ds, 1);
   gf <- df$callFile;
@@ -211,13 +211,13 @@ print(fitUgp);
 
 lhSList <- list();
 tcnSList <- list();
-for (kk in seq(along=lhList)) {
+for (kk in seq_along(lhList)) {
   lhs <- lhList[[kk]];
   tcns <- tcnList[[kk]];
 
   lhSs <- list();
   tcnSs <- list();
-  for (cc in seq(along=lhs)) {
+  for (cc in seq_along(lhs)) {
     lh <- lhs[[cc]];
     tcn <- tcns[[cc]];
 
@@ -312,7 +312,7 @@ if (!isFile(pathname)) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Color each chromosome differently
 lhSs <- lhSList[[1]];
-cols <- lapply(seq(along=lhSs), FUN=function(kk) {
+cols <- lapply(seq_along(lhSs), FUN=function(kk) {
   rep(kk, times=nbrOfLoci(lhSs[[kk]]));
 });
 cols <- unlist(cols, use.names=FALSE);

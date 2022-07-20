@@ -90,7 +90,7 @@ verbose && cat(verbose, "Chromosome ", chr);
   width <- 1280;
   aspect <- 0.6*1/3;
 
-  cols <- rep(NA, length=length(x));
+  cols <- rep(NA_character_, length=length(x));
   cols[beta[,"genotypeN"] == 0] <- "#999999";
   cols[beta[,"genotypeN"] == 1] <- "black";
   cols[beta[,"genotypeN"] == 2] <- "#999999";
@@ -142,7 +142,7 @@ verbose && cat(verbose, "Chromosome ", chr);
   ylim <- c(-0.1,1.1);
   ylab <- "Allele B Fraction";
   ylabs <- list(fracBN="Normal BAF", fracBT="Tumor BAF");
-  cols <- rep(NA, length=nrow(beta));
+  cols <- rep(NA_character_, length=nrow(beta));
   cols[beta[,"genotypeN"] == 1] <- "black";
   cols[beta[,"genotypeN"] != 1] <- "#999999";
 

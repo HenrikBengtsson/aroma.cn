@@ -1,10 +1,5 @@
 setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, pscnN, ..., ascn=c("classic", "paired"), avgDH=c("median", "mean"), tbn=TRUE, B=1000L, cache=TRUE, subset=NULL, verbose=FALSE) {
-  # Assert packages
-  use("R.filesets (>= 2.6.0)")
-
   pairedAlleleSpecificCopyNumbers <- .pairedAlleleSpecificCopyNumbers
-
-  use("PSCBS (>= 0.43.0)")
   segmentByPairedPSCBS <- PSCBS::segmentByPairedPSCBS
   dropSegmentationOutliers <- PSCBS::dropSegmentationOutliers
   bootstrapSegmentsAndChangepoints <- PSCBS::bootstrapSegmentsAndChangepoints
@@ -20,7 +15,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
 
   # Argument 'pscnN':
   if (inherits(pscnN, "AromaUnitPscnBinaryFile")) {
-    pscnN <- newInstance(pscnT, pscnN);
+    pscnN <- newInstance(pscnT, pscnN)
   }
   pscnN <- Arguments$getInstanceOf(pscnN, "AromaUnitPscnBinarySet")
   ugpN <- getAromaUgpFile(pscnN)
@@ -31,7 +26,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   if (length(pscnN) == 1L) {
     pscnN <- pscnN[rep(1L, times=length(pscnT))]
   }
-  stopifnot(length(pscnN) == length(pscnT))
+  .stop_if_not(length(pscnN) == length(pscnT))
 
   # Argument 'ascn':
   ascn <- match.arg(ascn)
@@ -77,7 +72,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   ## sampleNames <- sprintf("HC1143,TvsN,%s", sampleNames)
 
   # Output pathnames
-  ascnTag <- switch(ascn, classic=NULL, paired="pASCN");
+  ascnTag <- switch(ascn, classic=NULL, paired="pASCN")
   subsetTag <- sprintf("subset=%g", subset)
   tags <- c(ascnTag, subsetTag)
   datasetF <- paste(c(getFullName(pscnT), tags), collapse=",")
@@ -104,7 +99,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
   pairNames <- pairNames[todo]
   pscnT <- pscnT[todo]
   pscnN <- pscnN[todo]
-  stopifnot(length(pscnT) == length(pscnN))
+  .stop_if_not(length(pscnT) == length(pscnN))
 
   verbose && print(verbose, "Tumor data set:")
   verbose && print(verbose, pscnT)
@@ -125,13 +120,13 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Process via dsApplyInPairs()
+  # Process
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  res <- dsApplyInPairs(pscnT, pscnN, FUN=function(dsPair, dataA, ..., ascn=c("classic", "paired"), tbn=TRUE, B=NULL, cache=FALSE, subset=NULL, seed=NULL, verbose=FALSE) {
-    use("R.utils (>= 1.34.0)", verbose=TRUE)
+  void <- future_mapply(pscnT, pscnN, FUN=function(dsPair, dataA, ..., ascn=c("classic", "paired"), tbn=TRUE, B=NULL, cache=FALSE, subset=NULL, seed=NULL, verbose=FALSE) {
+    use("R.utils", verbose=TRUE)
     use("aroma.light", verbose=TRUE)
-    use("PSCBS (>= 0.43.0)", verbose=TRUE)
-    use("aroma.cn (>= 1.5.5)", verbose=TRUE)
+    use("PSCBS", verbose=TRUE)
+    use("aroma.cn", verbose=TRUE)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Validate arguments
@@ -140,7 +135,7 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
     dsPair <- AromaUnitPscnBinarySet(dsPair)
 
     # Argument 'dataA':
-    dataA <- Arguments$getInstanceOf(dataA, "data.frame");
+    dataA <- Arguments$getInstanceOf(dataA, "data.frame")
 
     # Argument 'ascn':
     ascn <- match.arg(ascn)
@@ -272,17 +267,17 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
 setMethodS3("findLargeGaps", "AromaUgpFile", function(this, ...) {
   findLargeGaps <- PSCBS::findLargeGaps
 
-  data <- this[,1:2];
-  colnames(data)[2L] <- "x";
-  findLargeGaps(data, ...);
+  data <- this[,1:2]
+  colnames(data)[2L] <- "x"
+  findLargeGaps(data, ...)
 }, protected=TRUE)
 
 
 setMethodS3("findLargeGaps", "AromaUnitPscnBinarySet", function(this, ...) {
   findLargeGaps <- PSCBS::findLargeGaps
 
-  ugp <- getAromaUgpFile(this);
-  findLargeGaps(ugp, ...);
+  ugp <- getAromaUgpFile(this)
+  findLargeGaps(ugp, ...)
 }, protected=TRUE)
 
 ##############################################################################

@@ -62,7 +62,7 @@ profiles <- list(
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 kappas <- c(0.5, 0.3);
 ltys <- c(1,1,1);
-for (kk in seq(along=kappas)) {
+for (kk in seq_along(kappas)) {
   kappa <- kappas[kk];
   key <- sprintf("%d%% Tumor #1 + %d%% Tumor #2", 
                    round(100*kappa), round(100*(1-kappa)));
@@ -77,7 +77,7 @@ for (kk in seq(along=kappas)) {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 subplots(length(profiles), ncol=1);
 par(mar=c(0.1,4,2,2)+0.1);
-for (kk in seq(along=profiles)) {
+for (kk in seq_along(profiles)) {
   p <- profiles[[kk]];
   xlim <- c(-50, xMax(p$cn)/1e6);
   plot(p$cn, col="gray", xlim=xlim, ylim=c(0,4.5), axes=FALSE);

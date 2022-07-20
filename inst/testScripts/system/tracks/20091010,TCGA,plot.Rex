@@ -155,7 +155,7 @@ main <- function(data, pa=NULL, region=NULL, tracks=NULL) {
       }
       paTag <- digest(pa, algo="crc32");
 
-      for (kk in seq(along=dataT)) {
+      for (kk in seq_along(dataT)) {
         key <- names(dataT)[kk];
         trackTag <- key;
         tags <- c(chrTag, regionTag, trackTag);

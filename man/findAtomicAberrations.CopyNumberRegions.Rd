@@ -118,7 +118,7 @@ for (H in 1:3) {
   fit <- findAtomicAberrations(cnr=pT, data=cn, H=H, verbose=verbose)
   df <- fit$res
 
-  for (kk in seq(length=nrow(df))) {
+  for (kk in seq_len(nrow(df))) {
     dfKK <- df[kk,]
     segments <- as.integer(dfKK[,c("firstRegion", "lastRegion")])
     segments <- segments[1]:segments[2]
@@ -136,8 +136,8 @@ for (H in 1:3) {
 
 % \references{
 %   [1] \url{http://www.definethat.com/define/7274.htm}
-%   [2] \url{http://en.wikipedia.org/wiki/Atomic_(order_theory)}
-%   [3] \url{http://en.wikipedia.org/wiki/Atomic_(measure_theory)}
+%   [2] \url{https://en.wikipedia.org/wiki/Atomic_(order_theory)}
+%   [3] \url{https://en.wikipedia.org/wiki/Atomic_(measure_theory)}
 % }
 
 \seealso{

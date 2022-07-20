@@ -227,7 +227,7 @@ for (chr in 1:22) {
   subplots(length(c1c2List), ncol=1, byrow=FALSE);
   par(mar=c(1,3.5,1,0.5)+1);
 
-  for (kk in seq(along=c1c2List)) {
+  for (kk in seq_along(c1c2List)) {
     c1c2 <- c1c2List[[kk]];
     plot(NA, xlim=xrange, ylim=Clim);
     stext(side=3, pos=1, chrTag);

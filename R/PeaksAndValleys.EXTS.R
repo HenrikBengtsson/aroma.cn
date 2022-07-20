@@ -42,47 +42,47 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Validate arguments
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Argument 'fit';
-  stopifnot(all(is.element(c("type", "x", "density"), colnames(fit))));
+  # Argument 'fit'
+  .stop_if_not(all(is.element(c("type", "x", "density"), colnames(fit))))
 
   # Argument 'expected':
-  expected <- Arguments$getNumerics(expected);
+  expected <- Arguments$getNumerics(expected)
 
   # Argument 'flavor':
-  flavor <- match.arg(flavor);
+  flavor <- match.arg(flavor)
 
   # Argument 'verbose':
-  verbose <- Arguments$getVerbose(verbose);
+  verbose <- Arguments$getVerbose(verbose)
   if (verbose) {
-    pushState(verbose);
-    on.exit(popState(verbose));
+    pushState(verbose)
+    on.exit(popState(verbose))
   }
 
 
-  verbose && enter(verbose, "Calling peaks");
-  verbose && cat(verbose, "Flavor: ", flavor);
+  verbose && enter(verbose, "Calling peaks")
+  verbose && cat(verbose, "Flavor: ", flavor)
 
-  verbose && cat(verbose, "All expected peaks:");
-  verbose && print(verbose, expected);
+  verbose && cat(verbose, "All expected peaks:")
+  verbose && print(verbose, expected)
 
-  verbose && enter(verbose, "Extracing peaks");
-  subset <- which(fit$type == "peak");
-  fitP <- fit[subset,,drop=FALSE];
-  verbose && print(verbose, fitP);
-  verbose && exit(verbose);
+  verbose && enter(verbose, "Extracing peaks")
+  subset <- which(fit$type == "peak")
+  fitP <- fit[subset,,drop=FALSE]
+  verbose && print(verbose, fitP)
+  verbose && exit(verbose)
 
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Calling peaks
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  xd <- fitP[,c("x", "density"),drop=FALSE];
+  xd <- fitP[,c("x", "density"),drop=FALSE]
 
   if (flavor == "all") {
     calls <- sapply(xd$x, FUN=function(x) {
-      dist <- abs(x - expected);
-      which.min(dist);
-    });
+      dist <- abs(x - expected)
+      which.min(dist)
+    })
     r <- seq_along(calls); ## default ranks (used below)
   } else if (flavor == "decreasing") {
     # It is probably better to call the strongest peaks first for which
@@ -90,49 +90,49 @@ setMethodS3("callPeaks", "PeaksAndValleys", function(fit, expected=c(-1/2,-1/4,0
     # /HB 2010-09-19
 
     # Order peaks by density
-    o <- order(xd[,"density"], decreasing=TRUE);
-    verbose && cat(verbose, "Reordering:");
-    verbose && print(verbose, o);
+    o <- order(xd[,"density"], decreasing=TRUE)
+    verbose && cat(verbose, "Reordering:")
+    verbose && print(verbose, o)
     # The ranks (for later)
-    r <- seq_along(o); r[o] <- r;
-    verbose && cat(verbose, "Rank:");
-    verbose && print(verbose, r);
-    xd <- xd[o,,drop=FALSE];
-    verbose && print(verbose, xd);
+    r <- seq_along(o); r[o] <- r
+    verbose && cat(verbose, "Rank:")
+    verbose && print(verbose, r)
+    xd <- xd[o,,drop=FALSE]
+    verbose && print(verbose, xd)
 
     # Call the strongest peak first, then the 2nd strongest and so on...
-    naValue <- as.integer(NA);
-    calls <- rep(naValue, times=nrow(xd));
-    expectedLeft <- expected;
+    naValue <- NA_integer_
+    calls <- rep(naValue, times=nrow(xd))
+    expectedLeft <- expected
     for (kk in seq_len(nrow(xd))) {
       # All expected modes called?
       if (!any(is.finite(expectedLeft))) {
-        break;
+        break
       }
       # Mode #kk
-      x <- xd[kk,"x"];
-      dx <- abs(x - expectedLeft);
-      call <- which.min(dx);
-      expectedLeft[call] <- NA;
-      calls[kk] <- call;
+      x <- xd[kk,"x"]
+      dx <- abs(x - expectedLeft)
+      call <- which.min(dx)
+      expectedLeft[call] <- NA
+      calls[kk] <- call
     } # for (kk ...)
   } # if (flavor ...)
 
-  verbose && cat(verbose, "Calls:");
-  verbose && print(verbose, calls);
-  verbose && cat(verbose, "Expected values:");
-  verbose && print(verbose, expected[calls]);
+  verbose && cat(verbose, "Calls:")
+  verbose && print(verbose, calls)
+  verbose && cat(verbose, "Expected values:")
+  verbose && print(verbose, expected[calls])
 
-  fitC <- cbind(fit, callId=as.integer(NA), call=as.double(NA));
-  fitC[subset,"callId"] <- calls[r];
-  fitC[subset,"call"] <- expected[calls[r]];
-  attr(fitC, "expected") <- expected;
+  fitC <- cbind(fit, callId=NA_integer_, call=NA_real_)
+  fitC[subset,"callId"] <- calls[r]
+  fitC[subset,"call"] <- expected[calls[r]]
+  attr(fitC, "expected") <- expected
 
-  verbose && print(verbose, fitC);
+  verbose && print(verbose, fitC)
 
-  verbose && exit(verbose);
+  verbose && exit(verbose)
 
-  fitC;
+  fitC
 }, protected=TRUE) # callPeaks()
 
 

@@ -69,13 +69,13 @@ MultiSourceCopyNumberNormalization(dsList=NULL, fitUgp=NULL, subsetToFit=NULL,
 \section{Fields and Methods}{
  \bold{Methods:}\cr
 \tabular{rll}{
- \tab \code{getAllNames} \tab  -\cr
+ \tab \code{\link[aroma.cn:getAllNames.MultiSourceCopyNumberNormalization]{getAllNames}} \tab Gets the names of all unique samples across all sources.\cr
  \tab \code{getAsteriskTags} \tab  -\cr
- \tab \code{getInputDataSets} \tab  -\cr
+ \tab \code{\link[aroma.cn:getInputDataSets.MultiSourceCopyNumberNormalization]{getInputDataSets}} \tab Gets the list of data sets to be normalized.\cr
  \tab \code{getOutputDataSets} \tab  -\cr
  \tab \code{getTags} \tab  -\cr
  \tab \code{nbrOfDataSets} \tab  -\cr
- \tab \code{process} \tab  -\cr
+ \tab \code{\link[aroma.cn:process.MultiSourceCopyNumberNormalization]{process}} \tab Normalizes all samples.\cr
 }
 
 
@@ -83,7 +83,7 @@ MultiSourceCopyNumberNormalization(dsList=NULL, fitUgp=NULL, subsetToFit=NULL,
 getParameterSets, getParameters, getParametersAsString
 
  \bold{Methods inherited from Object}:\cr
-$, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, objectSize, print, save, asThis
+$, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCache, clone, detach, equals, extend, finalize, getEnvironment, getFieldModifier, getFieldModifiers, getFields, getInstantiationTime, getStaticInstance, hasField, hashCode, ll, load, names, objectSize, print, save, asThis
 
 
 }
@@ -98,7 +98,7 @@ $, $<-, [[, [[<-, as.character, attach, attachLocally, clearCache, clearLookupCa
   sample one by one.
 }
 
-\section{Different preprocessing methods normalize ChrX \& ChrY differently}{
+\section{Different preprocessing methods normalize ChrX & ChrY differently}{
    Some preprocessing methods estimate copy numbers on sex chromosomes
    differently from the autosomal chromosomes.  The way this is done may
    vary from method to method and we cannot assume anything about what
