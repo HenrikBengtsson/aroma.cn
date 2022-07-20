@@ -52,7 +52,7 @@
 #   sample one by one.
 # }
 #
-# \section{Different preprocessing methods normalize ChrX \& ChrY differently}{
+# \section{Different preprocessing methods normalize ChrX & ChrY differently}{
 #    Some preprocessing methods estimate copy numbers on sex chromosomes
 #    differently from the autosomal chromosomes.  The way this is done may
 #    vary from method to method and we cannot assume anything about what
