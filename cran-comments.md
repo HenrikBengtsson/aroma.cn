@@ -1,32 +1,60 @@
-# CRAN submission aroma.cn 1.6.1
-on 2015-10-27
+# CRAN submission aroma.cn 1.7.0
 
-Updates related to R / CRAN:
+on 2022-07-20
 
-* Explicitly importing core R functions
+This submission addresses Rd issues detected by R-devel.
 
 Thanks in advance
 
 
 ## Notes not sent to CRAN
+
+### R CMD check validation
+
 The package has been verified using `R CMD check --as-cran` on:
 
-* Platform x86_64-pc-linux-gnu (64-bit):
-  - R version 3.1.3 (2015-03-09)
-  - R version 3.2.2 Patched (2015-10-26 r69575)
-  - R Under development (unstable) (2015-10-24 r69569)
+| R version     | GitHub | R-hub    | mac/win-builder |
+| ------------- | ------ | -------- | --------------- |
+| 4.0.x         | L      |          |                 |
+| 4.1.x         | L M W  |          |                 |
+| 4.2.x         | L M W  | . M M1 . |  . W            |
+| devel         | L M W  | .        |    W            |
 
-* Platform: x86_64-apple-darwin13.4.0 (64-bit):
-  - R version 3.2.2 Patched (2015-10-22 r69556)
+*Legend: OS: L = Linux, M = macOS, M1 = macOS M1, W = Windows*
 
-* Platform x86_64-w64-mingw32/x64 (64-bit):
-  - R version 3.1.3 (2015-03-09)
-  - R version 3.2.2 (2015-08-14)
-  - R version 3.2.2 Patched (2015-10-24 r69569)
-  - R Under development (unstable) (2015-10-23 r69563)
 
-It has also verified using the <http://win-builder.r-project.org/> service.
+R-hub checks:
 
-Moreover, the update cause no issues for any of the following
-1 reverse dependency on CRAN and Bioconductor, which have been
-tested with `R CMD check --as-cran`: MPAgenomics 1.1.2.
+```r
+res <- rhub::check(platform = c(
+#  "debian-clang-devel", "debian-gcc-patched", "linux-x86_64-centos-epel",
+  "macos-highsierra-release-cran", "macos-m1-bigsur-release"
+#  "windows-x86_64-release"
+))
+print(res)
+```
+
+gives
+
+```
+── aroma.cn 1.7.0: WARNING
+
+  Build ID:   aroma.cn_1.7.0.tar.gz-aebdabc8ef73495da51e9e066d3712d9
+  Platform:   macOS 10.13.6 High Sierra, R-release, CRAN's setup
+  Submitted:  2m 29.7s ago
+  Build time: 2m 19.4s
+
+❯ checking whether package ‘aroma.cn’ can be installed ... WARNING
+  See below...
+
+0 errors ✔ | 1 warning ✖ | 0 notes ✔
+
+── aroma.cn 1.7.0: OK
+
+  Build ID:   aroma.cn_1.7.0.tar.gz-021f6b9dd67d46f1a6330d017177a007
+  Platform:   Apple Silicon (M1), macOS 11.6 Big Sur, R-release
+  Submitted:  2m 29.7s ago
+  Build time: 1m 21.9s
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+```
