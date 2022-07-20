@@ -120,9 +120,9 @@ setMethodS3("doSegmentByPairedPSCBS", "AromaUnitPscnBinarySet", function(pscnT, 
 
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Process via dsApplyInPairs()
+  # Process
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  res <- dsApplyInPairs(pscnT, pscnN, FUN=function(dsPair, dataA, ..., ascn=c("classic", "paired"), tbn=TRUE, B=NULL, cache=FALSE, subset=NULL, seed=NULL, verbose=FALSE) {
+  void <- future_mapply(pscnT, pscnN, FUN=function(dsPair, dataA, ..., ascn=c("classic", "paired"), tbn=TRUE, B=NULL, cache=FALSE, subset=NULL, seed=NULL, verbose=FALSE) {
     use("R.utils", verbose=TRUE)
     use("aroma.light", verbose=TRUE)
     use("PSCBS", verbose=TRUE)

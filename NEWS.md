@@ -4,19 +4,23 @@
 
  * `drawC1C2Density()` gained argument `grid`.
  
-## Miscellaneous
-
- * Utilizing subsetted calculations of **matrixStats** (>= 0.50.0).
-
- * CLEANUP: Now importing generic `extractC1C2()` from PSCBS to
-  avoid creating a new one.
-
 ## Deprecated & Defunct
 
  * Deprecated `nbrOfFiles()` methods; please use `length()` on
    corresponding input data sets.
    
  * Removed defunct `callPeaks()` for data.frame:s.
+
+## Miscellaneous
+
+ * CLEANUP: Now `doSegmentByPairedPSCBS()` uses `future_mapply()` of
+   **future.apply** instead of deprecated `dsApplyInPairs()` of
+   **R.filesets**.
+   
+ * Utilizing subsetted calculations of **matrixStats** (>= 0.50.0).
+
+ * CLEANUP: Now importing generic `extractC1C2()` from PSCBS to
+  avoid creating a new one.
 
 
 # Version 1.6.1 [2015-10-27]

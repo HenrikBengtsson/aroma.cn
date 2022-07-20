@@ -190,6 +190,7 @@ importFrom("PSCBS", "callLOH")
 importFrom("PSCBS", "callAB")
 importFrom("R.utils", "Arguments")
 
+importFrom("future", "future_mapply")
 
 importFrom("graphics",
            "abline", "axis", "box", "grid", "layout",
