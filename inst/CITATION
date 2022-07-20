@@ -13,7 +13,7 @@ citEntry(
   volume = "11",
   number = "245",
   doi = "10.1186/1471-2105-11-245",
-  url = "http://www.biomedcentral.com/1471-2105/11/245/",
+  url = "https://www.biomedcentral.com/1471-2105/11/245/",
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
@@ -39,7 +39,7 @@ citEntry(
   volume = "25",
   number = "7",
   doi = "10.1093/bioinformatics/btp074",
-  url = "http://bioinformatics.oxfordjournals.org/cgi/content/full/25/7/861",
+  url = "https://bioinformatics.oxfordjournals.org/cgi/content/full/25/7/861",
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
@@ -90,7 +90,7 @@ citEntry(
   year = "2008",
   volume = "24",
   number = "6",
-  url = "http://bioinformatics.oxfordjournals.org/cgi/content/full/24/6/759",
+  url = "https://bioinformatics.oxfordjournals.org/cgi/content/full/24/6/759",
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
