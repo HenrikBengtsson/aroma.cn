@@ -1,4 +1,4 @@
-# Version (development version)
+# Version 1.7.0 (2022-07-20)
 
 ## New Features
 
@@ -23,7 +23,7 @@
   avoid creating a new one.
 
 
-# Version 1.6.1 [2015-10-27]
+# Version 1.6.1 (2015-10-27)
 
 ## Miscellaneous
 
@@ -40,7 +40,7 @@
    `callPeaks()` for data.frame:s defunct (was deprecated).
 
 
-# Version 1.6.0 [2015-02-23]
+# Version 1.6.0 (2015-02-23)
 
 ## Miscellaneous
 
@@ -53,7 +53,7 @@
    a more recent version of R.
 
 
-# Version 1.5.9 [2015-01-06]
+# Version 1.5.9 (2015-01-06)
 
 ## Miscellaneous
 
@@ -61,7 +61,7 @@
    suggested packages.
 
 
-# Version 1.5.8 [2014-09-04]
+# Version 1.5.8 (2014-09-04)
 
 ## Bug Fixes
 
@@ -74,7 +74,7 @@
  * Added a few missing NAMESPACE imports.
    
 
-# Version 1.5.7 [2014-06-14]
+# Version 1.5.7 (2014-06-14)
 
 ## Miscellaneous
 
@@ -85,14 +85,14 @@
  * Updated package dependencies.
 
 
-# Version 1.5.6 [2014-03-31]
+# Version 1.5.6 (2014-03-31)
 
 ## New Features
 
  * Added `doSegmentByPairedPSCBS()` for `AromaUnitPscnBinarySet`.
 
 
-# Version 1.5.5 [2014-03-09]
+# Version 1.5.5 (2014-03-09)
 
 ## Miscellaneous
 
@@ -101,7 +101,7 @@
  * Package requires R (>= 2.15.1) and Bioconductor (>= 2.11.0).
 
 
-# Version 1.5.4 [2014-02-03]
+# Version 1.5.4 (2014-02-03)
 
 ## Bug Fixes
 
@@ -109,21 +109,21 @@
    `NextMethod()` as `object = x`.
 
 
-# Version 1.5.3 [2014-01-30]
+# Version 1.5.3 (2014-01-30)
 
 ## Miscellaneous
 
  * Updated package dependencies.
 
 
-# Version 1.5.2 [2013-12-17]
+# Version 1.5.2 (2013-12-17)
 
 ## Miscellaneous
 
  * CLEANUP: Package no longer uses `:::` in calls.
 
 
-# Version 1.5.1 [2013-10-23]
+# Version 1.5.1 (2013-10-23)
 
 ## Miscellaneous
 
@@ -131,7 +131,7 @@
    needed or that have been moved to the (private) **Mikado** package.
 
 
-# Version 1.5.0 [2013-10-17]
+# Version 1.5.0 (2013-10-17)
 
 ## Miscellaneous
 
@@ -142,7 +142,7 @@
  * Package requires R (>= 2.15.0) and Bioconductor (>= 2.10.0).
 
 
-# Version 1.4.6 [2013-10-07]
+# Version 1.4.6 (2013-10-07)
 
 ## Miscellaneous
 
@@ -152,7 +152,7 @@
  * CLEANUP: Dropped obsolete usage of `autoload()`.
 
 
-# Version 1.4.5 [2013-09-28]
+# Version 1.4.5 (2013-09-28)
 
 ## New Features
 
@@ -164,7 +164,7 @@
  * Updated package dependencies.
 
 
-# Version 1.4.4 [2013-09-26]
+# Version 1.4.4 (2013-09-26)
 
 ## Bug Fixes
 
@@ -173,7 +173,7 @@
    **matrixStats** in the past.
 
 
-# Version 1.4.3 [2013-09-20]
+# Version 1.4.3 (2013-09-20)
 
 ## Miscellaneous
 
@@ -182,14 +182,14 @@
  * Updated package dependencies.
 
 
-# Version 1.4.2 [2013-08-21]
+# Version 1.4.2 (2013-08-21)
 
 ## Miscellaneous
 
  * More internal updates.
 
 
-# Version 1.4.1 [2013-08-12]
+# Version 1.4.1 (2013-08-12)
 
 ## Bug Fixes
 
@@ -202,7 +202,7 @@
    `getInputDataSet()` not defined.
 
 
-# Version 1.4.0 [2013-08-04]
+# Version 1.4.0 (2013-08-04)
 
 ## Deprecated & Defunct
 
@@ -222,7 +222,7 @@
  * Updated package dependencies.
 
 
-# Version 1.3.4 [2013-05-20]
+# Version 1.3.4 (2013-05-20)
 
 ## Miscellaneous
 
@@ -231,7 +231,7 @@
  * CRAN POLICY: Now all Rd example lines are at most 100 characters long.
 
 
-# Version 1.3.3 [2013-04-22]
+# Version 1.3.3 (2013-04-22)
 
 ## Significant Changes
 
@@ -242,7 +242,7 @@
  * Utilizing new `startupMessage()` of **R.oo**.
 
 
-# Version 1.3.2 [2013-04-22]
+# Version 1.3.2 (2013-04-22)
 
 ## Miscellaneous
 
@@ -254,7 +254,7 @@
    imported in the namespace.
 
 
-# Version 1.3.1 [2013-01-17]
+# Version 1.3.1 (2013-01-17)
 
 ## Miscellaneous
 
@@ -262,7 +262,7 @@
    mean-level estimators than the sample mean have been used.
 
 
-# Version 1.3.0 [2013-01-07]
+# Version 1.3.0 (2013-01-07)
 
 ## Bug Fixes
 
@@ -273,21 +273,21 @@
  * Bumped up the package dependencies.
 
 
-# Version 1.2.20 [2012-12-19]
+# Version 1.2.20 (2012-12-19)
 
 ## Bug Fixes
 
  * Some `example()` scripts used non-defined values.
 
 
-# Version 1.2.19 [2012-11-26]
+# Version 1.2.19 (2012-11-26)
 
 ## Miscellaneous
 
  * Bumped up the package dependencies.
 
 
-# Version 1.2.18 [2012-11-21]
+# Version 1.2.18 (2012-11-21)
 
 ## New Features
 
@@ -296,7 +296,7 @@
  * DOCUMENTATION: Hiding more internal methods from the help indices.
 
 
-# Version 1.2.17 [2012-11-13]
+# Version 1.2.17 (2012-11-13)
 
 ## Bug Fixes
 
@@ -304,7 +304,7 @@
    After correction, all `clearCache()` methods could be dropped.
 
 
-# Version 1.2.16 [2012-11-12]
+# Version 1.2.16 (2012-11-12)
 
 ## Miscellaneous
 
@@ -314,7 +314,7 @@
    `seq(length = x)`, and `length(ds)` replaces `nbrOfFiles(ds)`.
 
 
-# Version 1.2.15 [2012-11-05]
+# Version 1.2.15 (2012-11-05)
 
 ## Miscellaneous
 
@@ -322,7 +322,7 @@
    latter is now the fastest again.
 
 
-# Version 1.2.14 [2012-11-01]
+# Version 1.2.14 (2012-11-01)
 
 ## Miscellaneous
 
@@ -332,7 +332,7 @@
    but `R CMD check` cannot known that.
 
 
-# Version 1.2.13 [2012-10-29]
+# Version 1.2.13 (2012-10-29)
 
 ## Miscellaneous
 
@@ -340,7 +340,7 @@
    `filePath(..., expandLinks = "any")`.
 
 
-# Version 1.2.12 [2012-10-21]
+# Version 1.2.12 (2012-10-21)
 
 ## Miscellaneous
 
@@ -350,7 +350,7 @@
    fails it gives a more informative error message.
 
 
-# Version 1.2.11 [2012-10-17]
+# Version 1.2.11 (2012-10-17)
 
 ## Miscellaneous
 
@@ -358,7 +358,7 @@
    utilizes `NextMethod()`, which became possible with **R.oo** v1.10.0.
 
 
-# Version 1.2.10 [2012-10-16]
+# Version 1.2.10 (2012-10-16)
 
 ## Bug Fixes
 
@@ -367,7 +367,7 @@
    for you; missing documentation, a bug or just me?' on Oct 16, 2012.
 
 
-# Version 1.2.9 [2012-10-11]
+# Version 1.2.9 (2012-10-11)
 
 ## New Features
 
@@ -375,14 +375,14 @@
    `TotalCnSmoothing`.
 
 
-# Version 1.2.8 [2012-09-23]
+# Version 1.2.8 (2012-09-23)
 
 ## Miscellaneous
 
  * More internal updates.
 
 
-# Version 1.2.7 [2012-09-20]
+# Version 1.2.7 (2012-09-20)
 
 ## New Features
 
@@ -394,7 +394,7 @@
    segments it passes to `segmentByPairedPSCBS()`.
 
 
-# Version 1.2.6 [2012-09-19]
+# Version 1.2.6 (2012-09-19)
 
 ## New Features
 
@@ -410,14 +410,14 @@
  * Additional internal updates.
  
 
-# Version 1.2.5 [2012-09-16]
+# Version 1.2.5 (2012-09-16)
 
 ## New Features
 
  * Added `calculateTumorPSCNByGenotype()`.
 
 
-# Version 1.2.4 [2012-09-15]
+# Version 1.2.4 (2012-09-15)
 
 ## New Features
 
@@ -430,14 +430,14 @@
  * Bumped up the package dependencies.
 
 
-# Version 1.2.3 [2012-09-05]
+# Version 1.2.3 (2012-09-05)
 
 ## Miscellaneous
 
  * Bumped up the package dependencies.
 
 
-# Version 1.2.2 [2012-08-26]
+# Version 1.2.2 (2012-08-26)
 
 ## Miscellaneous
  
@@ -446,14 +446,14 @@
  * Bumped up the package dependencies.
 
 
-# Version 1.2.1 [2012-07-22]
+# Version 1.2.1 (2012-07-22)
 
 ## New Features
 
  * Added trial version of `PairedPscbsModel`.
 
 
-# Version 1.2.0 [2012-06-05]
+# Version 1.2.0 (2012-06-05)
 
 ## New Features
 
@@ -474,35 +474,35 @@
  * Updated package dependencies.
 
 
-# Version 1.1.1 [2012-04-16]
+# Version 1.1.1 (2012-04-16)
 
 ## Miscellaneous
  
  * Updated package dependencies.
 
 
-# Version 1.1.0 [2012-04-10]
+# Version 1.1.0 (2012-04-10)
 
 ## Miscellaneous
  
  * Updated package dependencies.
 
 
-# Version 1.0.6 [2012-03-30]
+# Version 1.0.6 (2012-03-30)
 
 ## Miscellaneous
  
  * Added help for `normalizePrincipalCurve()`.
 
 
-# Version 1.0.5 [2012-03-06]
+# Version 1.0.5 (2012-03-06)
 
 ## Bug Fixes
 
  * One of the PSCBS examples gave an error.
 
 
-# Version 1.0.4 [2012-02-27]
+# Version 1.0.4 (2012-02-27)
 
 ## Bug Fixes
 
@@ -510,7 +510,7 @@
    there was only one segment, or less than two finite (C1,C2):s.
 
 
-# Version 1.0.3 [2012-02-24]
+# Version 1.0.3 (2012-02-24)
 
 ## Miscellaneous
  
@@ -518,7 +518,7 @@
    dependencies was also updated.
 
 
-# Version 1.0.2 [2012-02-23]
+# Version 1.0.2 (2012-02-23)
 
 ## Miscellaneous
  
@@ -527,14 +527,14 @@
  * Additional internal updates.
 
 
-# Version 1.0.1 [2012-01-16]
+# Version 1.0.1 (2012-01-16)
 
 ## New Features
 
  * Added `TotalCnBinnedSmoothing()`.
 
 
-# Version 1.0.0 [2012-01-11]
+# Version 1.0.0 (2012-01-11)
 
 ## Miscellaneous
  
@@ -545,7 +545,7 @@
 * ROBUSTNESS: Updated package dependencies.
   
 
-# Version 0.9.5 [2011-12-15]
+# Version 0.9.5 (2011-12-15)
 
 ## New Features
 
@@ -554,7 +554,7 @@
  * Additional internal updates.
 
 
-# Version 0.9.4 [2011-11-28]
+# Version 0.9.4 (2011-11-28)
 
 ## Miscellaneous
  
@@ -563,7 +563,7 @@
  * Additional internal updates.
 
 
-# Version 0.9.3 [2011-11-12]
+# Version 0.9.3 (2011-11-12)
 
 ## Miscellaneous
  
@@ -572,7 +572,7 @@
  * Some internal updates.
 
 
-# Version 0.9.2 [2011-11-02]
+# Version 0.9.2 (2011-11-02)
 
 ## Bug Fixes
 
@@ -580,14 +580,14 @@
    so that results prior to **PSCBS** v0.13.3 will not be retrieved.
 
 
-# Version 0.9.1 [2011-10-31]
+# Version 0.9.1 (2011-10-31)
 
 ## Miscellaneous
  
  * Added Rdoc comments to `callPeaks()` for `PeaksAndValleys`.
 
 
-# Version 0.9.0 [2011-10-28]
+# Version 0.9.0 (2011-10-28)
 
 ## Miscellaneous
  
@@ -595,7 +595,7 @@
    a requirement starting with R v2.14.0.
 
 
-# Version 0.8.3 [2011-10-16]
+# Version 0.8.3 (2011-10-16)
 
 ## New Features
 
@@ -606,7 +606,7 @@
    `PairedPSCBS` objects wherever applicable.
 
 
-# Version 0.8.2 [2011-08-07]
+# Version 0.8.2 (2011-08-07)
 
 ## Miscellaneous
  
@@ -614,7 +614,7 @@
    contained a NAMESPACE file, which shouldn't have been there.
 
 
-# Version 0.8.1 [2011-07-27]
+# Version 0.8.1 (2011-07-27)
 
 ## Bug Fixes
 
@@ -625,7 +625,7 @@
    **base**).
 
 
-# Version 0.8.0 [2011-07-10]
+# Version 0.8.0 (2011-07-10)
 
 ## Bug Fixes
 
@@ -640,7 +640,7 @@
  * CLEANUP: Removed some internal functions from the help index.
  
 
-# Version 0.7.3 [2011-06-25]
+# Version 0.7.3 (2011-06-25)
 
 ## Miscellaneous
 
@@ -653,21 +653,21 @@
  * Now package refers to **PSCBS** package (not old psCBS).
 
 
-# Version 0.7.2 [2011-04-03]
+# Version 0.7.2 (2011-04-03)
 
 ## Miscellaneous
 
  * CLEANUP: Utilizing `hpaste()` internally wherever applicable.
 
 
-# Version 0.7.1 [2011-03-03]
+# Version 0.7.1 (2011-03-03)
 
 ## Miscellaneous
 
  * Fixed a small code typo that didn't make a difference.
 
 
-# Version 0.7.0 [2011-01-19]
+# Version 0.7.0 (2011-01-19)
 
 ## New Features
 
@@ -678,7 +678,7 @@
  * Removed a NOTE from `R CMD check`.
 
 
-# Version 0.6.4 [2010-11-04]
+# Version 0.6.4 (2010-11-04)
 
 ## Miscellaneous
 
@@ -687,35 +687,35 @@
  * Added more internal utility functions for future usage.
 
 
-# Version 0.6.3 [2010-10-08]
+# Version 0.6.3 (2010-10-08)
 
 ## Miscellaneous
 
  * Added more internal utility functions for future usage.
 
 
-# Version 0.6.2 [2010-09-24]
+# Version 0.6.2 (2010-09-24)
 
 ## Miscellaneous
 
  * Added more internal utility functions for future usage.
 
 
-# Version 0.6.1 [2010-09-19]
+# Version 0.6.1 (2010-09-19)
 
 ## Miscellaneous
 
  * Added more internal utility functions for future usage.
 
 
-# Version 0.6.0 [2010-09-15]
+# Version 0.6.0 (2010-09-15)
 
 ## Miscellaneous
 
  * Added internal utility functions for future usage.
 
 
-# Version 0.5.2 [2010-08-04]
+# Version 0.5.2 (2010-08-04)
 
 ## New Features
 
@@ -724,7 +724,7 @@
    The defaults is to do this correction.
 
 
-# Version 0.5.1 [2010-07-25]
+# Version 0.5.1 (2010-07-25)
 
 ## Significant Changes
 
@@ -732,7 +732,7 @@
    estimated as `XX` from chr X.
 
 
-# Version 0.5.0 [2010-05-14]
+# Version 0.5.0 (2010-05-14)
 
 ## Miscellaneous
 
@@ -745,7 +745,7 @@
  * Package pass `R CMD check` on R v2.11.0 and v2.12.0 devel.
 
 
-# Version 0.4.7 [2010-04-04]
+# Version 0.4.7 (2010-04-04)
 
 ## Significant Changes
 
@@ -754,7 +754,7 @@
    to **aroma.light** v1.5.3.
 
 
-# Version 0.4.6 [2010-03-18]
+# Version 0.4.6 (2010-03-18)
 
 ## Bug Fixes
 
@@ -762,7 +762,7 @@
    NaN:s if `betaN` was exactly zero or exactly one.
 
 
-# Version 0.4.5 [2010-01-14]
+# Version 0.4.5 (2010-01-14)
 
 ## New Features
 
@@ -773,7 +773,7 @@
    `MultiSourceCopyNumberNormalization`.
 
 
-# Version 0.4.4 [2010-01-05]
+# Version 0.4.4 (2010-01-05)
 
 ## New Features
 
@@ -787,7 +787,7 @@
    files, not just the ones matching the input set.
 
 
-# Version 0.4.3 [2010-01-01]
+# Version 0.4.3 (2010-01-01)
 
 ## Miscellaneous
 
@@ -798,7 +798,7 @@
    the case where `"max == 0"` was not handled correctly.
 
 
-# Version 0.4.2 [2009-12-09]
+# Version 0.4.2 (2009-12-09)
 
 ## Significant Changes
 
@@ -806,7 +806,7 @@
    if used then no `"flavor"` tag is added.
 
 
-# Version 0.4.1 [2009-11-03]
+# Version 0.4.1 (2009-11-03)
 
 ## New Features
 
@@ -824,7 +824,7 @@
    had to be at least the smallest possible double.
 
 
-# Version 0.4.0 [2009-11-01]
+# Version 0.4.0 (2009-11-01)
 
 ## Miscellaneous
 
@@ -836,7 +836,7 @@
  * Package passes `R CMD check` on R v2.10.0.
 
 
-# Version 0.3.8 [2009-10-10]
+# Version 0.3.8 (2009-10-10)
 
 ## New Features
 
@@ -847,14 +847,14 @@
  * Added `RawGenotypeCalls`.
 
 
-# Version 0.3.7 [2009-10-02]
+# Version 0.3.7 (2009-10-02)
 
 ## Miscellaneous
 
  * CLEAN UP: Updated to use `byPath()` instead `fromFiles()`.
 
 
-# Version 0.3.6 [2009-09-30]
+# Version 0.3.6 (2009-09-30)
 
 ## Significant Changes
 
@@ -878,7 +878,7 @@
    "tagB")`.
 
 
-# Version 0.3.5 [2009-07-15]
+# Version 0.3.5 (2009-07-15)
 
 ## New Features
 
@@ -891,14 +891,14 @@
    of the tumor-normal pair.
 
 
-# Version 0.3.4 [2009-07-08]
+# Version 0.3.4 (2009-07-08)
 
 ## New Features
 
  * Added low-level `callNaiveGenotype()` and `normalizeTumorBoost()`.
 
 
-# Version 0.3.3 [2009-07-02]
+# Version 0.3.3 (2009-07-02)
 
 ## New Features
 
@@ -909,7 +909,7 @@
    is an extension of last weeks model flavor.
 
 
-# Version 0.3.2 [2009-06-23]
+# Version 0.3.2 (2009-06-23)
 
 ## New Features
 
@@ -918,7 +918,7 @@
    adjusting the correction factor.  Use argument `flavor = "v2"`.
 
 
-# Version 0.3.1 [2009-06-08]
+# Version 0.3.1 (2009-06-08)
 
 ## Significant Changes
 
@@ -928,7 +928,7 @@
    solution.
 
 
-# Version 0.3.0 [2009-05-29]
+# Version 0.3.0 (2009-05-29)
    
 ## New Features
    
@@ -973,14 +973,14 @@
  * Package passes `R CMD check` and all redundancy tests.
 
 
-# Version 0.2.2 [2009-02-23]
+# Version 0.2.2 (2009-02-23)
 
 ## Miscellaneous
 
  * Minor update in order to work with new `RawGenomicSignals`.
 
 
-# Version 0.2.1 [2009-02-12]
+# Version 0.2.1 (2009-02-12)
 
 ## Miscellaneous
 
@@ -989,7 +989,7 @@
  * Further cleanup.  Some functions are now in **aroma.light**.
 
 
-# Version 0.2.0 [2009-01-26]
+# Version 0.2.0 (2009-01-26)
 
 ## Significant Changes
 
@@ -1000,21 +1000,21 @@
  * Adopted the package to the new classes of **aroma.core**.
 
 
-# Version 0.1.7 [2008-10-07]
+# Version 0.1.7 (2008-10-07)
 
 ## New Features
 
  * ALPHA: Added `backtransformPrincipalCurve()`.
 
 
-# Version 0.1.6 [2008-08-18]
+# Version 0.1.6 (2008-08-18)
 
 ## New Features
 
  * Added alpha version of `MultiSourceCopyNumberNormalization`.
 
 
-# Version 0.1.5 [2008-07-30]
+# Version 0.1.5 (2008-07-30)
 
 ## Miscellaneous
 
@@ -1022,7 +1022,7 @@
    check` on R v2.7.1 and v2.8.0.
 
 
-# Version 0.1.4 [2008-06-12]
+# Version 0.1.4 (2008-06-12)
 
 ## New Features
 
@@ -1031,14 +1031,14 @@
    chipType, and the fullname of the source file.
 
 
-# Version 0.1.3 [2008-05-28]
+# Version 0.1.3 (2008-05-28)
 
 ## New Features
 
  * ALPHA: Added `normalizePrincipalCurve()` and `fitPrincipalCurve()`.
 
 
-# Version 0.1.2 [2008-05-22]
+# Version 0.1.2 (2008-05-22)
 
 ## New Features
 
@@ -1047,7 +1047,7 @@
  * ALPHA: Added `TotalCnSmoothing`.
 
 
-# Version 0.1.1 [2008-05-18]
+# Version 0.1.1 (2008-05-18)
 
 ## New Features
 
@@ -1058,6 +1058,6 @@
    plotting data along chromosomes.
 
 
-# Version 0.1.0 [2008-05-09]
+# Version 0.1.0 (2008-05-09)
 
  * Created.

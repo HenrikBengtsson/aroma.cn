@@ -1,5 +1,5 @@
 Package: aroma.cn
-Version: 1.6.1-9003
+Version: 1.7.0
 Depends:
   R (>= 3.1.2),
   R.utils (>= 2.11.0),
