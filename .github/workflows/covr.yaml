@@ -78,5 +78,5 @@ jobs:
           ##    https://github.com/<org>/<repo>/settings/environments/
           coverage <- covr::package_coverage()
           print(coverage)
-          covr::codecov(coverage = coverage, token="${{secrets.CODECOV_TOKEN}}")
+          covr::codecov(coverage = coverage)
         shell: Rscript {0}
