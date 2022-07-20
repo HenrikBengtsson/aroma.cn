@@ -10,3 +10,7 @@
 .dll
 .Rproj.user
 *.Rproj*
+revdep/checks
+revdep/library
+revdep/data.sqlite
+
