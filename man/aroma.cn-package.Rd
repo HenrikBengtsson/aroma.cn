@@ -46,8 +46,7 @@
 }
 
 \references{
-
-Please cite aroma.cn one or more of approprite reference below
+ Please cite aroma.cn one or more of approprite reference below
 
   H. Bengtsson, P. Neuvial and T.P. Speed. TumorBoost: Normalization of
   allele-specific tumor copy numbers from a single pair of tumor-normal
@@ -69,6 +68,5 @@ Please cite aroma.cn one or more of approprite reference below
 To see these entries in BibTeX format, use 'print(<citation>,
 bibtex=TRUE)', 'toBibtex(.)', or set
 'options(citation.bibtex.max=999)'.
-
 }
 \keyword{package}

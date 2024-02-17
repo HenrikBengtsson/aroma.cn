@@ -723,7 +723,6 @@ setMethodS3("getPrincipalCurveEstimator", "MultiSourceCopyNumberNormalization", 
 # @synopsis
 #
 # \arguments{
-#   \item{name}{A @character string specifying the sample name of interest.}
 #   \item{...}{Not used.}
 #   \item{force}{If @FALSE, cached model fits are returned, otherwise not.}
 #   \item{verbose}{See @see "R.utils::Verbose".}

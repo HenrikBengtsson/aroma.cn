@@ -24,7 +24,6 @@
 }
 
 \arguments{
-  \item{name}{A \code{\link[base]{character}} string specifying the sample name of interest.}
   \item{...}{Not used.}
   \item{force}{If \code{\link[base:logical]{FALSE}}, cached model fits are returned, otherwise not.}
   \item{verbose}{See \code{\link[R.utils]{Verbose}}.}
