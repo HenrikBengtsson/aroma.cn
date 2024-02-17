@@ -1,19 +1,47 @@
-citHeader("Please cite aroma.cn one or more of approprite reference below");
+utils::bibentry(
+  header = "Please cite PSCBS using one or more of the following references:",
 
-citEntry(
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # BibTeX entry:
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  entry = "Article",
-  author = "H. Bengtsson and Pierre Neuvial and Terence P Speed",
-  title = "TumorBoost: Normalization of allele-specific tumor copy numbers from a single pair of tumor-normal genotyping microarrays",
+  bibtype = "Article",
+  author  = "Adam B. Olshen and Henrik Bengtsson and Pierre Neuvial and Paul Spellman and Richard A. Olshen and Venkatraman E. Seshan",
+  title   = "Parent-specific copy number in paired tumor-normal studies using circular binary segmentation",
+  journal = "Bioinformatics",
+  year    = "2011",
+  volume  = "27",
+  number  = "15",
+  doi     = "10.1093/bioinformatics/btr329",
+  url     = "https://doi.org/10.1093/bioinformatics/btr329",
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # Plain-text citation:
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  textVersion = paste(sep="",
+    "A.B. Olshen, H. Bengtsson, P. Neuvial, P.T. Spellman, R.A. Olshen, V.E. Seshan. ",
+    "Parent-specific copy number in paired tumor-normal studies using circular binary segmentation, ",
+    "Bioinformatics, ",
+    "2011"
+  )
+)
+
+
+utils::bibentry(
+  header = "Please cite PSCBS using one or more of the following references:",
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # BibTeX entry:
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  bibtype = "Article",
+  author  = "H. Bengtsson and Pierre Neuvial and Terence P Speed",
+  title   = "TumorBoost: Normalization of allele-specific tumor copy numbers from a single pair of tumor-normal genotyping microarrays",
   journal = "BMC Bioinformatics",
-  year = "2010",
-  month = "May",
-  volume = "11",
-  number = "245",
-  doi = "10.1186/1471-2105-11-245",
-  url = "https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-11-245",
+  year    = "2010",
+  month   = "May",
+  volume  = "11",
+  number  = "245",
+  doi     = "10.1186/1471-2105-11-245",
+  url     = "https://doi.org/10.1186/1471-2105-11-245",
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
@@ -24,22 +52,23 @@ citEntry(
     "BMC Bioinformatics, ",
     "2010"
   )
-);
+)
 
 
-citEntry(
+
+utils::bibentry(
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # BibTeX entry:
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  entry = "Article",
-  author = "Henrik Bengtsson and Amrita Ray and Paul Spellman and Terence P Speed",
-  title = "A single-sample method for normalizing and combining full-resolutioncopy numbers from multiple platforms, labs and analysis methods",
+  bibtype = "Article",
+  author  = "Henrik Bengtsson and Amrita Ray and Paul Spellman and Terence P Speed",
+  title   = "A single-sample method for normalizing and combining full-resolutioncopy numbers from multiple platforms, labs and analysis methods",
   journal = "Bioinformatics",
-  year = "2009",
-  volume = "25",
-  number = "7",
-  doi = "10.1093/bioinformatics/btp074",
-  url = "https://academic.oup.com/bioinformatics/article/25/7/861/210486",
+  year    = "2009",
+  volume  = "25",
+  number  = "7",
+  doi     = "10.1093/bioinformatics/btp074",
+  url     = "https://academic.oup.com/bioinformatics/article/25/7/861/210486",
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
@@ -50,21 +79,20 @@ citEntry(
     "Bioinformatics, ",
     "2009"
   )
-);
+)
 
 
-citEntry(
+utils::bibentry(
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # BibTeX entry:
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  entry="TechReport",
-  author = "H. Bengtsson and K. Simpson and J. Bullard and K. Hansen",
-  title = "{aroma.affymetrix}: A generic framework in {R} for analyzing small
-	to very large {Affymetrix} data sets in bounded memory",
+  bibtype     = "TechReport",
+  author      = "H. Bengtsson and K. Simpson and J. Bullard and K. Hansen",
+  title       = "{aroma.affymetrix}: A generic framework in {R} for analyzing small to very large {Affymetrix} data sets in bounded memory",
   institution = "Department of Statistics, University of California, Berkeley",
-  year = "2008",
-  month = "February",
-  number = "745",
+  year        = "2008",
+  month       = "February",
+  number      = "745",
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
@@ -76,21 +104,21 @@ citEntry(
     "Department of Statistics, University of California, Berkeley, ",
     "February 2008"
   )
-);
+)
 
 
-citEntry(
+utils::bibentry(
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # BibTeX entry:
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  entry="Article",
-  author = "Henrik Bengtsson and R. Irizarry and B. Carvalho and T.P. Speed",
-  title = "Estimation and assessment of raw copy numbers at the single locus level",
+  bibtype = "Article",
+  author  = "Henrik Bengtsson and R. Irizarry and B. Carvalho and T.P. Speed",
+  title   = "Estimation and assessment of raw copy numbers at the single locus level",
   journal = "Bioinformatics",
-  year = "2008",
-  volume = "24",
-  number = "6",
-  url = "https://academic.oup.com/bioinformatics/article/24/6/759/193223",
+  year    = "2008",
+  volume  = "24",
+  number  = "6",
+  url     = "https://academic.oup.com/bioinformatics/article/24/6/759/193223",
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Plain-text citation:
@@ -101,4 +129,4 @@ citEntry(
     "Bioinformatics, ",
     "2008"
   )
-);
+)
