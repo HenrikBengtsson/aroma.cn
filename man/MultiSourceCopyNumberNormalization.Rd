@@ -69,13 +69,13 @@ MultiSourceCopyNumberNormalization(dsList=NULL, fitUgp=NULL, subsetToFit=NULL,
 \section{Fields and Methods}{
  \bold{Methods:}\cr
 \tabular{rll}{
- \tab \code{\link[aroma.cn:getAllNames.MultiSourceCopyNumberNormalization]{getAllNames}} \tab Gets the names of all unique samples across all sources.\cr
+ \tab \code{getAllNames} \tab  -\cr
  \tab \code{getAsteriskTags} \tab  -\cr
- \tab \code{\link[aroma.cn:getInputDataSets.MultiSourceCopyNumberNormalization]{getInputDataSets}} \tab Gets the list of data sets to be normalized.\cr
+ \tab \code{getInputDataSets} \tab  -\cr
  \tab \code{getOutputDataSets} \tab  -\cr
  \tab \code{getTags} \tab  -\cr
  \tab \code{nbrOfDataSets} \tab  -\cr
- \tab \code{\link[aroma.cn:process.MultiSourceCopyNumberNormalization]{process}} \tab Normalizes all samples.\cr
+ \tab \code{process} \tab  -\cr
 }
 
 
